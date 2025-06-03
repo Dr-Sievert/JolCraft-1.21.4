@@ -1,0 +1,21 @@
+{
+  "structures": [
+    {
+      "structure": "jolcraft:forge_entrance",
+      "weight": 1
+    }
+  ],
+  "placement": {
+
+    "salt": 615487274646,
+
+    "spacing": 9,
+
+
+    "separation": 8,
+
+    "type": "minecraft:random_spread"
+
+
+  }
+}
