@@ -1,5 +1,13 @@
 package net.sievert.jolcraft;
 
+import com.mojang.serialization.MapCodec;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.world.level.levelgen.structure.Structure;
+import net.minecraft.world.level.levelgen.structure.StructureType;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import net.sievert.jolcraft.structures.ForgeStructure;
+import net.sievert.jolcraft.structures.JolCraftStructures;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -48,6 +56,9 @@ public class JolCraft
 
         // Register our mod's ModConfigSpec so that FML can create and load the config file for us
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+
+        // For registration and init stuff.
+        JolCraftStructures.DEFERRED_REGISTRY_STRUCTURE.register(modEventBus);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event)

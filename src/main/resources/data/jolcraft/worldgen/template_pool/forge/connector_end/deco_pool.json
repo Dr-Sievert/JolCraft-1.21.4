@@ -3,7 +3,7 @@
   "fallback": "minecraft:empty",
   "elements": [
     {
-      "weight": 1,
+      "weight": 2,
       "element": {
         "location": "jolcraft:forge/connector_end/chest",
         "processors": "minecraft:empty",
@@ -12,7 +12,7 @@
       }
     },
     {
-      "weight": 1,
+      "weight": 3,
       "element": {
         "location": "jolcraft:forge/connector_end/barrels",
         "processors": "minecraft:empty",
@@ -21,7 +21,7 @@
       }
     },
     {
-      "weight": 1,
+      "weight": 3,
       "element": {
         "location": "jolcraft:forge/connector_end/iron_furnace",
         "processors": "minecraft:empty",
@@ -30,7 +30,7 @@
       }
     },
     {
-      "weight": 1,
+      "weight": 2,
       "element": {
         "location": "jolcraft:forge/connector_end/gold_furnace",
         "processors": "minecraft:empty",
@@ -48,7 +48,7 @@
       }
     },
     {
-      "weight": 1,
+      "weight": 5,
       "element": {
         "location": "jolcraft:forge/connector_end/plants",
         "processors": "minecraft:empty",
@@ -57,7 +57,7 @@
       }
     },
     {
-      "weight": 1,
+      "weight": 5,
       "element": {
         "location": "jolcraft:forge/connector_end/pot",
         "processors": "minecraft:empty",
@@ -66,7 +66,7 @@
       }
     },
     {
-      "weight": 1,
+      "weight": 7,
       "element": {
         "location": "jolcraft:forge/connector_end/deco_1",
         "processors": "minecraft:empty",
@@ -75,7 +75,7 @@
       }
     },
     {
-      "weight": 1,
+      "weight": 7,
       "element": {
         "location": "jolcraft:forge/connector_end/deco_2",
         "processors": "minecraft:empty",
@@ -84,7 +84,7 @@
       }
     },
     {
-      "weight": 1,
+      "weight": 7,
       "element": {
         "location": "jolcraft:forge/connector_end/deco_3",
         "processors": "minecraft:empty",
@@ -93,7 +93,7 @@
       }
     },
     {
-      "weight": 1,
+      "weight": 40,
       "element": {
         "element_type": "minecraft:empty_pool_element"
       }
