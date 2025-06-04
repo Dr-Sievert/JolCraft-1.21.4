@@ -5,11 +5,11 @@
 
   "start_pool": "jolcraft:forge/entrance_pool",
 
-  "size": 10,
+  "size": 15,
 
   "liquid_settings": "ignore_waterlogging",
 
-  "max_distance_from_center": 127,
+  "max_distance_from_center": 128,
 
   "step": "underground_decoration",
 
