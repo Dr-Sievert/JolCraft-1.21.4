@@ -1,6 +1,7 @@
 package net.sievert.jolcraft;
 
 
+import net.sievert.jolcraft.structures.JolCraftStructures;
 import org.slf4j.Logger;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
@@ -49,7 +50,7 @@ public class JolCraft
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
 
         // For registration and init stuff.
-        //JolCraftStructures.DEFERRED_REGISTRY_STRUCTURE.register(modEventBus);
+        JolCraftStructures.DEFERRED_REGISTRY_STRUCTURE.register(modEventBus);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event)

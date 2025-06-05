@@ -1,5 +1,5 @@
 {
-  "type": "minecraft:jigsaw",
+  "type": "jolcraft:forge",
 
   "biomes": "#jolcraft:has_structure/forge",
 
