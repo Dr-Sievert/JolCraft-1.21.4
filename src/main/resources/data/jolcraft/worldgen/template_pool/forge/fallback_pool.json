@@ -3,7 +3,7 @@
   "fallback": "minecraft:empty",
   "elements": [
     {
-      "weight": 4,
+      "weight": 9,
       "element": {
         "location": "jolcraft:forge/forge_connector_empty",
         "processors": "minecraft:empty",

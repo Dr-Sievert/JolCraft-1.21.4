@@ -12,9 +12,12 @@
       }
     },
     {
-      "weight": 19,
+      "weight": 9,
       "element": {
-        "element_type": "minecraft:empty_pool_element"
+        "location": "jolcraft:forge/forge_backroom_empty",
+        "processors": "minecraft:empty",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
       }
     }
   ]

@@ -48,7 +48,7 @@
       }
     },
     {
-      "weight": 3,
+      "weight": 2,
       "element": {
         "location": "jolcraft:forge/forge_room_1",
         "processors": "minecraft:empty",
@@ -57,7 +57,7 @@
       }
     },
     {
-      "weight": 2,
+      "weight": 1,
       "element": {
         "location": "jolcraft:forge/forge_room_2",
         "processors": "minecraft:empty",
@@ -66,7 +66,7 @@
       }
     },
     {
-      "weight": 1,
+      "weight": 2,
       "element": {
         "location": "jolcraft:forge/forge_room_3",
         "processors": "minecraft:empty",
@@ -84,18 +84,12 @@
       }
     },
     {
-      "weight": 10,
+      "weight": 1,
       "element": {
         "location": "jolcraft:forge/forge_connector_empty",
         "processors": "minecraft:empty",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
-      }
-    },
-    {
-      "weight": 1,
-      "element": {
-        "element_type": "minecraft:empty_pool_element"
       }
     }
   ]
