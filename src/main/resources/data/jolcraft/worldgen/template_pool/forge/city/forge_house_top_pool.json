@@ -1,20 +1,20 @@
 {
-  "name": "jolcraft:forge/backroom_pool",
+  "name": "jolcraft:forge/city/forge_house_top_pool",
   "fallback": "minecraft:empty",
   "elements": [
     {
       "weight": 1,
       "element": {
-        "location": "jolcraft:forge/forge_backroom",
+        "location": "jolcraft:forge/city/forge_house_roof",
         "processors": "minecraft:empty",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }
     },
     {
-      "weight": 19,
+      "weight": 1,
       "element": {
-        "location": "jolcraft:forge/forge_backroom_empty",
+        "location": "jolcraft:forge/city/forge_house_extension",
         "processors": "minecraft:empty",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"

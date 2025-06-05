@@ -1,11 +1,11 @@
 {
-  "name": "jolcraft:forge/city_main_pool",
+  "name": "jolcraft:forge/city/forge_city_corner_pool",
   "fallback": "minecraft:empty",
   "elements": [
     {
       "weight": 1,
       "element": {
-        "location": "jolcraft:forge/forge_city",
+        "location": "jolcraft:forge/city/forge_house_stairs",
         "processors": "minecraft:empty",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
