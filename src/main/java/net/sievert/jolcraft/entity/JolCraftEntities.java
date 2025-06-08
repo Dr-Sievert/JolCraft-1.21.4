@@ -21,7 +21,7 @@ public class JolCraftEntities {
 
     public static final Supplier<EntityType<DwarfEntity>> DWARF =
             ENTITY_TYPES.register("dwarf", () -> EntityType.Builder.of(DwarfEntity::new, MobCategory.CREATURE)
-                    .sized(1.0f, 1.0f).build(DWARF_KEY));
+                    .sized(0.65f, 1.7f).build(DWARF_KEY));
 
     public static void register(IEventBus eventBus) {
         ENTITY_TYPES.register(eventBus);

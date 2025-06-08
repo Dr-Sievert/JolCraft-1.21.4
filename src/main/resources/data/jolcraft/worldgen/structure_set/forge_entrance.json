@@ -2,7 +2,7 @@
   "structures": [
     {
       "structure": "jolcraft:forge_entrance",
-      "weight": 1
+      "weight": 3
     }
   ],
   "placement": {

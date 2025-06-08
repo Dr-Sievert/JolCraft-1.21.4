@@ -6,6 +6,7 @@ import net.minecraft.world.item.CreativeModeTabs;
 import net.sievert.jolcraft.entity.JolCraftEntities;
 import net.sievert.jolcraft.entity.client.DwarfRenderer;
 import net.sievert.jolcraft.item.JolCraftItems;
+import net.sievert.jolcraft.sound.JolCraftSounds;
 import net.sievert.jolcraft.structures.JolCraftStructures;
 import org.slf4j.Logger;
 import com.mojang.logging.LogUtils;
@@ -51,6 +52,7 @@ public class JolCraft
         // For registration and init stuff.
         JolCraftItems.register(modEventBus);
         JolCraftEntities.register(modEventBus);
+        JolCraftSounds.register(modEventBus);
         JolCraftStructures.DEFERRED_REGISTRY_STRUCTURE.register(modEventBus);
 
 

@@ -1,65 +1,205 @@
 package net.sievert.jolcraft.entity.custom;
 
+import com.google.common.collect.ImmutableMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.Util;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.stats.Stats;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
-import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
+import net.minecraft.world.entity.npc.VillagerTrades;
+import net.minecraft.world.entity.npc.WanderingTrader;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.trading.MerchantOffers;
+import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.sievert.jolcraft.entity.JolCraftEntities;
+import net.sievert.jolcraft.entity.ai.goal.*;
+import net.sievert.jolcraft.sound.JolCraftSounds;
+import net.sievert.jolcraft.villager.JolCraftVillagerTrades;
 import org.jetbrains.annotations.Nullable;
 
-public class DwarfEntity extends Animal {
+import java.util.Optional;
+
+public class DwarfEntity extends AbstractDwarfEntity {
+
+
+    private static final EntityDataAccessor<Boolean> ATTACKING =
+            SynchedEntityData.defineId(DwarfEntity.class, EntityDataSerializers.BOOLEAN);
 
     public final AnimationState idleAnimationState = new AnimationState();
     private int idleAnimationTimeout = 0;
 
+    public final AnimationState attackAnimationState = new AnimationState();
+    private int attackAnimationTimeout = 0;
+
     private static final EntityDataAccessor<Integer> VARIANT =
             SynchedEntityData.defineId(DwarfEntity.class, EntityDataSerializers.INT);
 
-    public DwarfEntity(EntityType<? extends Animal> entityType, Level level) {
+    public DwarfEntity(EntityType<? extends WanderingTrader> entityType, Level level) {
         super(entityType, level);
+        ((GroundPathNavigation)this.getNavigation()).setCanOpenDoors(true);
     }
 
-    //General
+    public static final Int2ObjectMap<VillagerTrades.ItemListing[]> TRADES = toIntMap(
+            ImmutableMap.of(
+                    1,
+                    new VillagerTrades.ItemListing[]{
+                            new JolCraftVillagerTrades.ItemsForGold(Items.SEA_PICKLE, 2, 1, 5, 1),
+                            new JolCraftVillagerTrades.GoldForItems(Items.SLIME_BALL, 4, 1, 5, 1)
+                    },
+                    2,
+                    new VillagerTrades.ItemListing[]{
+                            new JolCraftVillagerTrades.ItemsForGold(Items.GUNPOWDER, 1, 1, 8, 1),
+                            new JolCraftVillagerTrades.GoldForItems(Items.PODZOL, 3, 3, 6, 1)
+                    }
+            )
+    );
+
+    private static Int2ObjectMap<VillagerTrades.ItemListing[]> toIntMap(ImmutableMap<Integer, VillagerTrades.ItemListing[]> pMap) {
+
+        return new Int2ObjectOpenHashMap<>(pMap);
+    }
+
+    @Override
+    protected void updateTrades() {
+        VillagerTrades.ItemListing[] trades1 = TRADES.get(1);
+        VillagerTrades.ItemListing[] trades2 = TRADES.get(2);
+        if (trades1 != null && trades2 != null) {
+            MerchantOffers offers = this.getOffers();
+            this.addOffersFromItemListings(offers, trades1, 5);
+            this.addOffersFromItemListings(offers, trades2, 2);
+        }
+    }
 
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
-
-        this.goalSelector.addGoal(1, new PanicGoal(this, 2.0));
-        this.goalSelector.addGoal(2, new BreedGoal(this, 1.0));
-        this.goalSelector.addGoal(3, new TemptGoal(this, 1.25, stack -> stack.is(Items.GOLD_INGOT), false));
-
-        this.goalSelector.addGoal(4, new FollowParentGoal(this, 1.25));
-
-        this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 1.0));
-        this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 6.0F));
-        this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(1, new FirePanicGoal(this, 1.3));
+        this.targetSelector.addGoal(2, new HurtByNonPlayerTargetGoal(this).setAlertOthers());
+        this.goalSelector.addGoal(2, new DwarfAttackGoal(this, 1.2D, true));
+        this.goalSelector.addGoal(3, new DwarfRevengeGoal(this));
+        this.goalSelector.addGoal(3, new TradeWithPlayerGoal(this));
+        this.goalSelector.addGoal(4, new LookAtTradingPlayerGoal(this));
+        this.goalSelector.addGoal(5, new DwarfBreedGoal(this, 1.0));
+        this.goalSelector.addGoal(6, new TemptGoal(this, 1.25, stack -> stack.is(Items.GOLD_INGOT), false));
+        this.goalSelector.addGoal(6, new DwarfFollowParentGoal(this, 1.25));
+        this.goalSelector.addGoal(6, new OpenDoorGoal(this, true));
+        this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 6.0F));
+        this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1.0));
+        this.goalSelector.addGoal(8, new InteractGoal(this, Player.class, 3.0F, 1.0F));
+        this.goalSelector.addGoal(9, new RandomLookAroundGoal(this));
     }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return Animal.createLivingAttributes()
-                .add(Attributes.MAX_HEALTH, 50d)
-                .add(Attributes.MOVEMENT_SPEED, 0.5D)
+        return DwarfEntity.createLivingAttributes()
+                .add(Attributes.MAX_HEALTH, 30d)
+                .add(Attributes.MOVEMENT_SPEED, 0.2D)
                 .add(Attributes.FOLLOW_RANGE, 24D)
-                .add(Attributes.TEMPT_RANGE, 16d);
+                .add(Attributes.TEMPT_RANGE, 16d)
+                .add(Attributes.ATTACK_DAMAGE, 3.0D);
     }
 
     @Override
-    public boolean isFood(ItemStack itemStack) {
-        return itemStack.is(Items.GOLD_INGOT);
+    public InteractionResult mobInteract(Player player, InteractionHand hand) {
+        ItemStack itemstack = player.getItemInHand(hand);
+        if (this.isFood(itemstack)) {
+            int i = this.getAge();
+            if (!this.level().isClientSide && i == 0 && this.canFallInLove()) {
+                this.usePlayerItem(player, hand, itemstack);
+                this.setInLove(player);
+                this.playEatingSound();
+                return InteractionResult.SUCCESS_SERVER;
+            }
+
+            if (this.isBaby()) {
+                this.usePlayerItem(player, hand, itemstack);
+                this.ageUp(getSpeedUpSecondsWhenFeeding(-i), true);
+                this.playEatingSound();
+                return InteractionResult.SUCCESS;
+            }
+
+            if (this.level().isClientSide) {
+                return InteractionResult.CONSUME;
+            }
+        }
+        else
+        if (!itemstack.is(Items.VILLAGER_SPAWN_EGG) && this.isAlive() && !this.isTrading() && !this.isBaby() && !this.isFood(itemstack)) {
+            if (hand == InteractionHand.MAIN_HAND) {
+                player.awardStat(Stats.TALKED_TO_VILLAGER);
+            }
+
+            if (!this.level().isClientSide) {
+                if (this.getOffers().isEmpty()) {
+                    return InteractionResult.CONSUME;
+                }
+                this.setTradingPlayer(player);
+                this.openTradingScreen(player, this.getDisplayName(), 1);
+            }
+            return InteractionResult.SUCCESS;
+        } else {
+            return super.mobInteract(player, hand);
+        }
+        return super.mobInteract(player, hand);
+    }
+
+    public boolean canMate(DwarfEntity partner) {
+        if (partner == this) {
+            return false;
+        } else {
+            return partner.getClass() != this.getClass() ? false : this.isInLove() && partner.isInLove();
+        }
+    }
+
+    public void spawnChildFromBreeding(ServerLevel level, DwarfEntity partner) {
+        AgeableMob ageablemob = this.getBreedOffspring(level, partner);
+        final net.neoforged.neoforge.event.entity.living.BabyEntitySpawnEvent event = new net.neoforged.neoforge.event.entity.living.BabyEntitySpawnEvent(this, partner, ageablemob);
+        final boolean cancelled = net.neoforged.neoforge.common.NeoForge.EVENT_BUS.post(event).isCanceled();
+        ageablemob = event.getChild();
+        if (cancelled) {
+            this.setAge(6000);
+            partner.setAge(6000);
+            this.resetLove();
+            partner.resetLove();
+            return;
+        }
+        if (ageablemob != null) {
+            ageablemob.setBaby(true);
+            ageablemob.moveTo(this.getX(), this.getY(), this.getZ(), 0.0F, 0.0F);
+            this.finalizeSpawnChildFromBreeding(level, partner, ageablemob);
+            level.addFreshEntityWithPassengers(ageablemob);
+        }
+    }
+
+    public void finalizeSpawnChildFromBreeding(ServerLevel level, DwarfEntity dwarf, @javax.annotation.Nullable AgeableMob baby) {
+        Optional.ofNullable(this.getLoveCause()).or(() -> Optional.ofNullable(dwarf.getLoveCause())).ifPresent(serverPlayer -> {
+            serverPlayer.awardStat(Stats.ANIMALS_BRED);
+//            CriteriaTriggers.BRED_ANIMALS.trigger(serverPlayer, this, dwarf, baby);
+        });
+        this.setAge(6000);
+        dwarf.setAge(6000);
+        this.resetLove();
+        dwarf.resetLove();
+        level.broadcastEntityEvent(this, (byte)18);
+        if (level.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
+            level.addFreshEntity(new ExperienceOrb(level, this.getX(), this.getY(), this.getZ(), this.getRandom().nextInt(7) + 1));
+        }
     }
 
     @Nullable
@@ -71,22 +211,12 @@ public class DwarfEntity extends Animal {
         return baby;
     }
 
-    private void setupAnimationStates() {
-        if(this.idleAnimationTimeout <= 0) {
-            this.idleAnimationTimeout = 83;
-            this.idleAnimationState.start(this.tickCount);
-        } else {
-            --this.idleAnimationTimeout;
-        }
+    public void setAttacking(boolean attacking) {
+        this.entityData.set(ATTACKING, attacking);
     }
 
-    @Override
-    public void tick() {
-        super.tick();
-
-        if(this.level().isClientSide()) {
-            this.setupAnimationStates();
-        }
+    public boolean isAttacking() {
+        return this.entityData.get(ATTACKING);
     }
 
     // Variant
@@ -94,6 +224,7 @@ public class DwarfEntity extends Animal {
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
         builder.define(VARIANT, 0);
+        builder.define(ATTACKING, false);
     }
 
     private int getTypeVariant() {
@@ -118,8 +249,6 @@ public class DwarfEntity extends Animal {
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.entityData.set(VARIANT, compound.getInt("Variant"));
-        //this.entityData.set(VARIANT, compound.getInt("Variant").get());
-
     }
 
     @Override
@@ -127,6 +256,60 @@ public class DwarfEntity extends Animal {
         DwarfVariant variant = Util.getRandom(DwarfVariant.values(), this.random);
         this.setVariant(variant);
         return super.finalizeSpawn(level, difficulty, spawnType, spawnGroupData);
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getAmbientSound() {
+        return JolCraftSounds.DWARF_AMBIENT.get();
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getHurtSound(DamageSource damageSource) {
+        return JolCraftSounds.DWARF_HURT.get();
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getDeathSound() {
+        return JolCraftSounds.DWARF_DEATH.get();
+    }
+
+    @Override
+    public SoundEvent getNotifyTradeSound() {
+        return JolCraftSounds.DWARF_YES.get();
+    }
+
+    protected SoundEvent getTradeUpdatedSound(boolean isYesSound) {
+        return isYesSound ? JolCraftSounds.DWARF_YES.get() : JolCraftSounds.DWARF_NO.get();
+    }
+
+    private void setupAnimationStates() {
+        if(this.idleAnimationTimeout <= 0) {
+            this.idleAnimationTimeout = 83;
+            this.idleAnimationState.start(this.tickCount);
+        } else {
+            --this.idleAnimationTimeout;
+        }
+        if(this.isAttacking() && attackAnimationTimeout <= 0) {
+            attackAnimationTimeout = 10;
+            attackAnimationState.start(this.tickCount);
+        } else {
+            --this.attackAnimationTimeout;
+        }
+
+        if(!this.isAttacking()) {
+            attackAnimationState.stop();
+        }
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+        if(this.level().isClientSide()) {
+            this.setupAnimationStates();
+        }
     }
 
 }

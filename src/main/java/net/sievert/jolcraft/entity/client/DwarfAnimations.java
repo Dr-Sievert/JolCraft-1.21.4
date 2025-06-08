@@ -150,4 +150,29 @@ public class DwarfAnimations {
                                     AnimationChannel.Interpolations.LINEAR),
                             new Keyframe(1f, KeyframeAnimations.degreeVec(0f, 0f, 0f),
                                     AnimationChannel.Interpolations.LINEAR))).build();
+    public static final AnimationDefinition DWARF_ATTACK = AnimationDefinition.Builder.withLength(0.5f)
+            .addAnimation("right_arm",
+                    new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                            new Keyframe(0f, KeyframeAnimations.degreeVec(0f, 0f, 0f),
+                                    AnimationChannel.Interpolations.LINEAR),
+                            new Keyframe(0.16766666f, KeyframeAnimations.degreeVec(-82.42f, -4.62f, -1.92f),
+                                    AnimationChannel.Interpolations.LINEAR),
+                            new Keyframe(0.3433333f, KeyframeAnimations.degreeVec(-22.42f, -4.62f, -1.92f),
+                                    AnimationChannel.Interpolations.LINEAR)))
+            .addAnimation("right_eyebrow",
+                    new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                            new Keyframe(0f, KeyframeAnimations.degreeVec(0f, 0f, 0f),
+                                    AnimationChannel.Interpolations.LINEAR),
+                            new Keyframe(0.041676664f, KeyframeAnimations.degreeVec(0f, 0f, 22.5f),
+                                    AnimationChannel.Interpolations.LINEAR),
+                            new Keyframe(0.4167667f, KeyframeAnimations.degreeVec(0f, 0f, 0f),
+                                    AnimationChannel.Interpolations.LINEAR)))
+            .addAnimation("left_eyebrow",
+                    new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                            new Keyframe(0f, KeyframeAnimations.degreeVec(0f, 0f, 0f),
+                                    AnimationChannel.Interpolations.LINEAR),
+                            new Keyframe(0.041676664f, KeyframeAnimations.degreeVec(0f, 0f, -22.5f),
+                                    AnimationChannel.Interpolations.LINEAR),
+                            new Keyframe(0.4167667f, KeyframeAnimations.degreeVec(0f, 0f, 0f),
+                                    AnimationChannel.Interpolations.LINEAR))).build();
 }
