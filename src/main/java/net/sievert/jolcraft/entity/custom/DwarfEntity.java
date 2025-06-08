@@ -6,7 +6,10 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -18,6 +21,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.sievert.jolcraft.entity.JolCraftEntities;
+import net.sievert.jolcraft.sound.JolCraftSounds;
 import org.jetbrains.annotations.Nullable;
 
 public class DwarfEntity extends Animal {
@@ -51,8 +55,8 @@ public class DwarfEntity extends Animal {
 
     public static AttributeSupplier.Builder createAttributes() {
         return Animal.createLivingAttributes()
-                .add(Attributes.MAX_HEALTH, 50d)
-                .add(Attributes.MOVEMENT_SPEED, 0.5D)
+                .add(Attributes.MAX_HEALTH, 30d)
+                .add(Attributes.MOVEMENT_SPEED, 0.2D)
                 .add(Attributes.FOLLOW_RANGE, 24D)
                 .add(Attributes.TEMPT_RANGE, 16d);
     }
@@ -129,4 +133,23 @@ public class DwarfEntity extends Animal {
         return super.finalizeSpawn(level, difficulty, spawnType, spawnGroupData);
     }
 
+
+
+    @Nullable
+    @Override
+    protected SoundEvent getAmbientSound() {
+        return JolCraftSounds.DWARF_AMBIENT.get();
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getHurtSound(DamageSource damageSource) {
+        return JolCraftSounds.DWARF_HURT.get();
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getDeathSound() {
+        return JolCraftSounds.DWARF_DEATH.get();
+    }
 }

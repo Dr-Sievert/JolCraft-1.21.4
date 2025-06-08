@@ -155,9 +155,9 @@ public class ForgeStructure extends Structure {
 
             ) {}*/
 
-        for (int spawnableheight = 63; spawnableheight < 140; spawnableheight++) {
+        for (int spawnableheight = 50; spawnableheight < 70; spawnableheight++) {
             if (context.chunkGenerator().getFirstOccupiedHeight(
-                    chunkpos.getMinBlockX() - 7,
+                    chunkpos.getMinBlockX() - 3,
                     chunkpos.getMinBlockZ(),
                     Heightmap.Types.WORLD_SURFACE_WG,
                     context.heightAccessor(),
@@ -166,8 +166,8 @@ public class ForgeStructure extends Structure {
                     &&
 
                     context.chunkGenerator().getFirstOccupiedHeight(
-                            chunkpos.getMinBlockX() - 7,
-                            chunkpos.getMinBlockZ() + 7,
+                            chunkpos.getMinBlockX() - 3,
+                            chunkpos.getMinBlockZ() + 3,
                             Heightmap.Types.WORLD_SURFACE_WG,
                             context.heightAccessor(),
                             context.randomState()) == spawnableheight
@@ -176,7 +176,7 @@ public class ForgeStructure extends Structure {
 
                     context.chunkGenerator().getFirstOccupiedHeight(
                             chunkpos.getMinBlockX(),
-                            chunkpos.getMinBlockZ() + 7,
+                            chunkpos.getMinBlockZ() + 3,
                             Heightmap.Types.WORLD_SURFACE_WG,
                             context.heightAccessor(),
                             context.randomState()) == spawnableheight

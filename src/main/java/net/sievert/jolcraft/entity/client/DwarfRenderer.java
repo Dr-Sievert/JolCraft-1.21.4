@@ -24,10 +24,16 @@ public class DwarfRenderer extends MobRenderer<DwarfEntity, DwarfRenderState, Dw
                         ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "textures/entity/dwarf/dwarf_green.png"));
                 map.put(DwarfVariant.RED,
                         ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "textures/entity/dwarf/dwarf_red.png"));
+                map.put(DwarfVariant.PURPLE,
+                        ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "textures/entity/dwarf/dwarf_purple.png"));
+                map.put(DwarfVariant.WHITE,
+                        ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "textures/entity/dwarf/dwarf_white.png"));
+                map.put(DwarfVariant.YELLOW,
+                        ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "textures/entity/dwarf/dwarf_yellow.png"));
             });
 
     public DwarfRenderer(EntityRendererProvider.Context context) {
-        super(context, new DwarfModel(context.bakeLayer(DwarfModel.LAYER_LOCATION)), 1.0f);
+        super(context, new DwarfModel(context.bakeLayer(DwarfModel.LAYER_LOCATION)), 0.4f);
     }
 
     @Override

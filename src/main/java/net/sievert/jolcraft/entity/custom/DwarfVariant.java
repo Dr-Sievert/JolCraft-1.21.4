@@ -7,7 +7,10 @@ public enum DwarfVariant {
     GREY(0),
     BLUE(1),
     GREEN(2),
-    RED(3);
+    RED(3),
+    PURPLE(4),
+    WHITE(5),
+    YELLOW(6),;
 
     private static final DwarfVariant[] BY_ID = Arrays.stream(values()).sorted(
             Comparator.comparingInt(DwarfVariant::getId)).toArray(DwarfVariant[]::new);

@@ -1,0 +1,41 @@
+{
+  "dwarf_ambient": {
+    "sounds": [
+      {
+        "name": "jolcraft:entity/dwarf/ambient1"
+      },
+      {
+        "name": "jolcraft:entity/dwarf/ambient2"
+      },
+      {
+        "name": "jolcraft:entity/dwarf/ambient3"
+      }
+    ],
+    "subtitle": "sounds.jolcraft.dwarf_ambient"
+  },
+  "dwarf_hurt": {
+    "sounds": [
+      {
+        "name": "jolcraft:entity/dwarf/hurt1"
+      },
+      {
+        "name": "jolcraft:entity/dwarf/hurt2"
+      },
+      {
+        "name": "jolcraft:entity/dwarf/hurt3"
+      },
+      {
+        "name": "jolcraft:entity/dwarf/hurt4"
+      }
+    ],
+    "subtitle": "sounds.jolcraft.dwarf_hit"
+  },
+  "dwarf_death": {
+    "sounds": [
+      {
+        "name": "jolcraft:entity/dwarf/death"
+      }
+    ],
+    "subtitle": "sounds.jolcraft.dwarf_death"
+  }
+}
