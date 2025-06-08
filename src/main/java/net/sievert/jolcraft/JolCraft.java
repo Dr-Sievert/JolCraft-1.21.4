@@ -1,6 +1,11 @@
 package net.sievert.jolcraft;
 
 
+import net.minecraft.client.renderer.entity.EntityRenderers;
+import net.minecraft.world.item.CreativeModeTabs;
+import net.sievert.jolcraft.entity.JolCraftEntities;
+import net.sievert.jolcraft.entity.client.DwarfRenderer;
+import net.sievert.jolcraft.item.JolCraftItems;
 import net.sievert.jolcraft.structures.JolCraftStructures;
 import org.slf4j.Logger;
 import com.mojang.logging.LogUtils;
@@ -43,14 +48,20 @@ public class JolCraft
         // Do not add this line if there are no @SubscribeEvent-annotated functions in this class, like onServerStarting() below.
         NeoForge.EVENT_BUS.register(this);
 
+        // For registration and init stuff.
+        JolCraftItems.register(modEventBus);
+        JolCraftEntities.register(modEventBus);
+        JolCraftStructures.DEFERRED_REGISTRY_STRUCTURE.register(modEventBus);
+
+
         // Register the item to a creative tab
         modEventBus.addListener(this::addCreative);
 
         // Register our mod's ModConfigSpec so that FML can create and load the config file for us
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
 
-        // For registration and init stuff.
-        JolCraftStructures.DEFERRED_REGISTRY_STRUCTURE.register(modEventBus);
+
+
     }
 
     private void commonSetup(final FMLCommonSetupEvent event)
@@ -69,7 +80,8 @@ public class JolCraft
     // Add the example block item to the building blocks tab
     private void addCreative(BuildCreativeModeTabContentsEvent event)
     {
-
+        if (event.getTabKey() == CreativeModeTabs.SPAWN_EGGS)
+            event.accept(JolCraftItems.DWARF_SPAWN_EGG);
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call
@@ -87,6 +99,7 @@ public class JolCraft
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event)
         {
+            EntityRenderers.register(JolCraftEntities.DWARF.get(), DwarfRenderer::new);
             // Some client setup code
             LOGGER.info("HELLO FROM CLIENT SETUP");
             LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
