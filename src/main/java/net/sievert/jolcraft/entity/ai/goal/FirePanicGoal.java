@@ -8,13 +8,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import net.sievert.jolcraft.entity.custom.AbstractDwarfEntity;
-
-import java.util.Comparator;
 import java.util.EnumSet;
 
-/**
- * Author: MrCrayfish
- */
 public class FirePanicGoal extends Goal
 {
     private static final int HORIZONTAL_SEARCH_RANGE = 5;

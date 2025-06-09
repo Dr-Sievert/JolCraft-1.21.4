@@ -32,16 +32,27 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.sievert.jolcraft.entity.JolCraftEntities;
 import net.sievert.jolcraft.entity.ai.goal.*;
 import net.sievert.jolcraft.sound.JolCraftSounds;
-import net.sievert.jolcraft.villager.JolCraftVillagerTrades;
+import net.sievert.jolcraft.villager.JolCraftDwarfTrades;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
 public class DwarfEntity extends AbstractDwarfEntity {
 
+    public DwarfEntity(EntityType<? extends WanderingTrader> entityType, Level level) {
+        super(entityType, level);
+        ((GroundPathNavigation)this.getNavigation()).setCanOpenDoors(true);
+    }
+
+    //EntityDataAccessors
 
     private static final EntityDataAccessor<Boolean> ATTACKING =
             SynchedEntityData.defineId(DwarfEntity.class, EntityDataSerializers.BOOLEAN);
+
+    private static final EntityDataAccessor<Integer> VARIANT =
+            SynchedEntityData.defineId(DwarfEntity.class, EntityDataSerializers.INT);
+
+    //Animations
 
     public final AnimationState idleAnimationState = new AnimationState();
     private int idleAnimationTimeout = 0;
@@ -49,25 +60,49 @@ public class DwarfEntity extends AbstractDwarfEntity {
     public final AnimationState attackAnimationState = new AnimationState();
     private int attackAnimationTimeout = 0;
 
-    private static final EntityDataAccessor<Integer> VARIANT =
-            SynchedEntityData.defineId(DwarfEntity.class, EntityDataSerializers.INT);
 
-    public DwarfEntity(EntityType<? extends WanderingTrader> entityType, Level level) {
-        super(entityType, level);
-        ((GroundPathNavigation)this.getNavigation()).setCanOpenDoors(true);
+    private void setupAnimationStates() {
+        if(this.idleAnimationTimeout <= 0) {
+            this.idleAnimationTimeout = 83;
+            this.idleAnimationState.start(this.tickCount);
+        } else {
+            --this.idleAnimationTimeout;
+        }
+        if(this.isAttacking() && attackAnimationTimeout <= 0) {
+            attackAnimationTimeout = 10;
+            attackAnimationState.start(this.tickCount);
+        } else {
+            --this.attackAnimationTimeout;
+        }
+
+        if(!this.isAttacking()) {
+            attackAnimationState.stop();
+        }
     }
+
+    @Override
+    public void tick() {
+        super.tick();
+        if(this.level().isClientSide()) {
+            this.setupAnimationStates();
+        }
+    }
+
+
+    //Trades
+
 
     public static final Int2ObjectMap<VillagerTrades.ItemListing[]> TRADES = toIntMap(
             ImmutableMap.of(
                     1,
                     new VillagerTrades.ItemListing[]{
-                            new JolCraftVillagerTrades.ItemsForGold(Items.SEA_PICKLE, 2, 1, 5, 1),
-                            new JolCraftVillagerTrades.GoldForItems(Items.SLIME_BALL, 4, 1, 5, 1)
+                            new JolCraftDwarfTrades.ItemsForGold(Items.SEA_PICKLE, 2, 1, 5, 1),
+                            new JolCraftDwarfTrades.GoldForItems(Items.SLIME_BALL, 4, 1, 5, 1)
                     },
                     2,
                     new VillagerTrades.ItemListing[]{
-                            new JolCraftVillagerTrades.ItemsForGold(Items.GUNPOWDER, 1, 1, 8, 1),
-                            new JolCraftVillagerTrades.GoldForItems(Items.PODZOL, 3, 3, 6, 1)
+                            new JolCraftDwarfTrades.ItemsForGold(Items.GUNPOWDER, 1, 1, 8, 1),
+                            new JolCraftDwarfTrades.GoldForItems(Items.PODZOL, 3, 3, 6, 1)
                     }
             )
     );
@@ -88,6 +123,8 @@ public class DwarfEntity extends AbstractDwarfEntity {
         }
     }
 
+    //Goals
+
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
@@ -107,6 +144,8 @@ public class DwarfEntity extends AbstractDwarfEntity {
         this.goalSelector.addGoal(9, new RandomLookAroundGoal(this));
     }
 
+    //Attributes
+
     public static AttributeSupplier.Builder createAttributes() {
         return DwarfEntity.createLivingAttributes()
                 .add(Attributes.MAX_HEALTH, 30d)
@@ -115,6 +154,8 @@ public class DwarfEntity extends AbstractDwarfEntity {
                 .add(Attributes.TEMPT_RANGE, 16d)
                 .add(Attributes.ATTACK_DAMAGE, 3.0D);
     }
+
+    //Interaction and babies
 
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
@@ -211,6 +252,8 @@ public class DwarfEntity extends AbstractDwarfEntity {
         return baby;
     }
 
+    //Attacking and variants
+
     public void setAttacking(boolean attacking) {
         this.entityData.set(ATTACKING, attacking);
     }
@@ -258,6 +301,8 @@ public class DwarfEntity extends AbstractDwarfEntity {
         return super.finalizeSpawn(level, difficulty, spawnType, spawnGroupData);
     }
 
+    //Sounds
+
     @Nullable
     @Override
     protected SoundEvent getAmbientSound() {
@@ -283,33 +328,6 @@ public class DwarfEntity extends AbstractDwarfEntity {
 
     protected SoundEvent getTradeUpdatedSound(boolean isYesSound) {
         return isYesSound ? JolCraftSounds.DWARF_YES.get() : JolCraftSounds.DWARF_NO.get();
-    }
-
-    private void setupAnimationStates() {
-        if(this.idleAnimationTimeout <= 0) {
-            this.idleAnimationTimeout = 83;
-            this.idleAnimationState.start(this.tickCount);
-        } else {
-            --this.idleAnimationTimeout;
-        }
-        if(this.isAttacking() && attackAnimationTimeout <= 0) {
-            attackAnimationTimeout = 10;
-            attackAnimationState.start(this.tickCount);
-        } else {
-            --this.attackAnimationTimeout;
-        }
-
-        if(!this.isAttacking()) {
-            attackAnimationState.stop();
-        }
-    }
-
-    @Override
-    public void tick() {
-        super.tick();
-        if(this.level().isClientSide()) {
-            this.setupAnimationStates();
-        }
     }
 
 }

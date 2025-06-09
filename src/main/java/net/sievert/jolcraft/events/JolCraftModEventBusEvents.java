@@ -15,15 +15,22 @@ import net.sievert.jolcraft.entity.custom.DwarfEntity;
 
 @EventBusSubscriber(modid = JolCraft.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class JolCraftModEventBusEvents {
+
+   //Register Model Layers
+
     @SubscribeEvent
     public static void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(DwarfModel.LAYER_LOCATION, DwarfModel::createBodyLayer);
     }
 
+    //Register Attributes
+
     @SubscribeEvent
     public static void registerAttributes(EntityAttributeCreationEvent event) {
         event.put(JolCraftEntities.DWARF.get(), DwarfEntity.createAttributes().build());
     }
+
+    //Spawning
 
     @SubscribeEvent
     public static void registerSpawnPlacements(RegisterSpawnPlacementsEvent event) {

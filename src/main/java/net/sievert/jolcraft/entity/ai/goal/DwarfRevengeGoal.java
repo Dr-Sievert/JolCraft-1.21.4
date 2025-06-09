@@ -7,9 +7,7 @@ import net.sievert.jolcraft.entity.custom.DwarfEntity;
 
 import java.util.EnumSet;
 
-/**
- * Author: MrCrayfish
- */
+
 public class DwarfRevengeGoal extends Goal
 {
     private final DwarfEntity entity;

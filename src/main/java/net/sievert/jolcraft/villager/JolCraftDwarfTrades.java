@@ -17,7 +17,7 @@ import net.minecraft.world.level.block.Block;
 
 import java.util.Optional;
 
-public class JolCraftVillagerTrades extends VillagerTrades {
+public class JolCraftDwarfTrades extends VillagerTrades {
 
     //Buying
 
