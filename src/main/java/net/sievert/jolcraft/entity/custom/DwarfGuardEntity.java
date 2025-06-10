@@ -45,8 +45,6 @@ public class DwarfGuardEntity extends DwarfEntity {
     private int attackAnimationTimeout = 0;
 
     public final AnimationState blockAnimationState = new AnimationState();
-    private int blockAnimationTimeout = 0;
-    private boolean isBlocking;
     private boolean hasStartedBlockAnimation = false;
 
     private void setupAnimationStates() {
@@ -97,16 +95,7 @@ public class DwarfGuardEntity extends DwarfEntity {
         this.goalSelector.addGoal(1, new DwarfBlockGoal(this));
         this.goalSelector.addGoal(2, new DwarfAttackGoal(this, 1.2D, true));
         this.goalSelector.addGoal(3, new DwarfRevengeGoal(this));
-        this.goalSelector
-                .addGoal(
-                        4,
-                        new UseItemGoal<>(
-                                this,
-                                PotionContents.createItemStack(Items.POTION, Potions.STRONG_HEALING),
-                                SoundEvents.PLAYER_BURP,
-                                p_390272_ -> this.getHealth() < 20F
-                        )
-                );
+        this.goalSelector.addGoal(4, new DwarfUseItemGoal<>(this, PotionContents.createItemStack(Items.POTION, Potions.STRONG_HEALING), SoundEvents.PLAYER_BURP, mob -> mob.getHealth() < mob.getMaxHealth(), 100));
         this.goalSelector.addGoal(5, new TemptGoal(this, 1.25, stack -> stack.is(Items.GOLD_INGOT), false));
         this.goalSelector.addGoal(6, new OpenDoorGoal(this, true));
         this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 6.0F));
@@ -115,13 +104,6 @@ public class DwarfGuardEntity extends DwarfEntity {
         this.targetSelector.addGoal(1, new HurtByNonPlayerTargetGoal(this).setAlertOthers());
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Monster.class, false));
     }
-
-
-    /*
-    this.goalSelector.addGoal(3, new DwarfBreedGoal(this, 1.0));
-    this.goalSelector.addGoal(5, new DwarfFollowParentGoal(this, 1.25));
-     */
-
 
     //Attributes
 
@@ -194,6 +176,7 @@ public class DwarfGuardEntity extends DwarfEntity {
     @Override
     @Nullable
     protected SoundEvent getHurtSound(DamageSource damageSource) {
+
         // Suppress if blocking
         if (this.isBlockCooldownReady()) {
             return null;
