@@ -1,5 +1,7 @@
 package net.sievert.jolcraft.entity.client;
 
+
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
@@ -7,6 +9,7 @@ import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.HumanoidArm;
 import net.sievert.jolcraft.JolCraft;
 
 public class DwarfGuardModel extends HumanoidModel<DwarfRenderState> {
@@ -130,6 +133,16 @@ public class DwarfGuardModel extends HumanoidModel<DwarfRenderState> {
         headPitch = Mth.clamp(headPitch, -25f, 45);
         this.head.yRot = headYaw * ((float)Math.PI / 180f);
         this.head.xRot = headPitch *  ((float)Math.PI / 180f);
+    }
+
+    @Override
+    public void translateToHand(HumanoidArm side, PoseStack poseStack) {
+        this.root.translateAndRotate(poseStack);
+        this.getArm(side).translateAndRotate(poseStack);
+    }
+
+    protected ModelPart getArm(HumanoidArm side) {
+        return side == HumanoidArm.LEFT ? this.left_arm : this.right_arm;
     }
 
 

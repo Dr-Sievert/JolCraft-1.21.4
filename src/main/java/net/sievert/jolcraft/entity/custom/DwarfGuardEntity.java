@@ -4,6 +4,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
@@ -17,6 +18,8 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.npc.WanderingTrader;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.alchemy.PotionContents;
+import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.Level;
 import net.sievert.jolcraft.entity.ai.goal.*;
 import net.sievert.jolcraft.sound.JolCraftSounds;
@@ -93,12 +96,22 @@ public class DwarfGuardEntity extends DwarfEntity {
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new DwarfBlockGoal(this));
         this.goalSelector.addGoal(2, new DwarfAttackGoal(this, 1.2D, true));
-        this.goalSelector.addGoal(2, new DwarfRevengeGoal(this));
-        this.goalSelector.addGoal(3, new TemptGoal(this, 1.25, stack -> stack.is(Items.GOLD_INGOT), false));
-        this.goalSelector.addGoal(4, new OpenDoorGoal(this, true));
-        this.goalSelector.addGoal(5, new LookAtPlayerGoal(this, Player.class, 6.0F));
-        this.goalSelector.addGoal(6, new WaterAvoidingRandomStrollGoal(this, 1.0));
-        this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(3, new DwarfRevengeGoal(this));
+        this.goalSelector
+                .addGoal(
+                        4,
+                        new UseItemGoal<>(
+                                this,
+                                PotionContents.createItemStack(Items.POTION, Potions.STRONG_HEALING),
+                                SoundEvents.PLAYER_BURP,
+                                p_390272_ -> this.getHealth() < 20F
+                        )
+                );
+        this.goalSelector.addGoal(5, new TemptGoal(this, 1.25, stack -> stack.is(Items.GOLD_INGOT), false));
+        this.goalSelector.addGoal(6, new OpenDoorGoal(this, true));
+        this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 6.0F));
+        this.goalSelector.addGoal(8, new WaterAvoidingRandomStrollGoal(this, 1.0));
+        this.goalSelector.addGoal(9, new RandomLookAroundGoal(this));
         this.targetSelector.addGoal(1, new HurtByNonPlayerTargetGoal(this).setAlertOthers());
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Monster.class, false));
     }
