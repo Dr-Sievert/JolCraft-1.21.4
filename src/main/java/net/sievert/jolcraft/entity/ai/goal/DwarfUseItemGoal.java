@@ -19,6 +19,7 @@ public class DwarfUseItemGoal<T extends Mob> extends Goal {
 
     private final int cooldownTicks;
     private int cooldownTimer = 0;
+    private ItemStack previousMainHandItem = ItemStack.EMPTY;
 
     public DwarfUseItemGoal(T mob, ItemStack item, @Nullable SoundEvent finishUsingSound, Predicate<? super T> canUseSelector, int cooldownTicks) {
         this.mob = mob;
@@ -44,17 +45,20 @@ public class DwarfUseItemGoal<T extends Mob> extends Goal {
 
     @Override
     public void start() {
+        this.previousMainHandItem = this.mob.getItemBySlot(EquipmentSlot.MAINHAND).copy(); // Save previous item
         this.mob.setItemSlot(EquipmentSlot.MAINHAND, this.item.copy());
         this.mob.startUsingItem(InteractionHand.MAIN_HAND);
     }
 
     @Override
     public void stop() {
-        this.mob.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
+        this.mob.setItemSlot(EquipmentSlot.MAINHAND, this.previousMainHandItem); // Restore old item
         if (this.finishUsingSound != null) {
             this.mob.playSound(this.finishUsingSound, 1.0F, this.mob.getRandom().nextFloat() * 0.2F + 0.9F);
         }
         this.cooldownTimer = cooldownTicks; // start cooldown after use
+        this.previousMainHandItem = ItemStack.EMPTY; // Clear to avoid keeping stale reference
+
     }
 
 }

@@ -11,6 +11,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.HumanoidArm;
 import net.sievert.jolcraft.JolCraft;
+import net.sievert.jolcraft.entity.custom.DwarfGuardEntity;
 
 public class DwarfGuardModel extends HumanoidModel<DwarfRenderState> {
 

@@ -3,12 +3,12 @@ package net.sievert.jolcraft.entity.client;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.entity.MobRenderer;
+import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.entity.custom.DwarfGuardEntity;
 
-public class DwarfGuardRenderer extends MobRenderer<DwarfGuardEntity, DwarfRenderState, DwarfGuardModel> {
+public class DwarfGuardRenderer extends HumanoidMobRenderer<DwarfGuardEntity, DwarfRenderState, DwarfGuardModel> {
 
     public DwarfGuardRenderer(EntityRendererProvider.Context context) {
         super(context, new DwarfGuardModel(context.bakeLayer(DwarfGuardModel.LAYER_LOCATION)), 0.4f);
@@ -23,6 +23,7 @@ public class DwarfGuardRenderer extends MobRenderer<DwarfGuardEntity, DwarfRende
     public void render(DwarfRenderState renderState, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
         poseStack.scale(1.0f, 1.0f, 1.0f);
         super.render(renderState, poseStack, bufferSource, packedLight);
+
     }
 
     @Override
@@ -36,6 +37,9 @@ public class DwarfGuardRenderer extends MobRenderer<DwarfGuardEntity, DwarfRende
         reusedState.idleAnimationState.copyFrom(entity.idleAnimationState);
         reusedState.attackAnimationState.copyFrom(entity.attackAnimationState);
         reusedState.blockAnimationState.copyFrom(entity.blockAnimationState);
+        reusedState.useItemHand = entity.getUsedItemHand();
+        reusedState.ticksUsingItem = entity.getTicksUsingItem();
+        reusedState.isUsingItem = entity.isUsingItem();
     }
 
 }
