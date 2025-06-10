@@ -1,5 +1,7 @@
 package net.sievert.jolcraft.entity.ai.goal;
 
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.sievert.jolcraft.entity.custom.DwarfGuardEntity;
 
@@ -8,9 +10,7 @@ import java.util.EnumSet;
 public class DwarfBlockGoal extends Goal {
 
     private final DwarfGuardEntity dwarf;
-    private int cooldown = 0;
     private int blockTicks = 0;
-    private int lastRecordedHurtTick = -1;
 
     public DwarfBlockGoal(DwarfGuardEntity dwarf) {
         this.dwarf = dwarf;
@@ -19,18 +19,12 @@ public class DwarfBlockGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        if (cooldown > 0) {
-            cooldown--;
+        if (!dwarf.isBlockCooldownReady()) {
             return false;
         }
 
-        int hurtTick = dwarf.getLastHurtByMobTimestamp(); // or getLastHurtByPlayerTime() if you prefer
-        int currentTick = dwarf.tickCount;
-
-        // Check if new hurt event just occurred
-        if (hurtTick != lastRecordedHurtTick) {
-            lastRecordedHurtTick = hurtTick;
-            return dwarf.getTarget() != null && !dwarf.isBlocking();
+        if (dwarf.getTarget() != null && dwarf.consumeBlockFlag()) {
+            return true;
         }
 
         return false;
@@ -44,13 +38,14 @@ public class DwarfBlockGoal extends Goal {
     @Override
     public void start() {
         dwarf.setBlocking(true);
+        dwarf.level().playSound(null, dwarf.blockPosition(), SoundEvents.SHIELD_BLOCK, SoundSource.HOSTILE, 1.0F, 1.0F);
         blockTicks = 15; // block for 15 ticks
     }
 
     @Override
     public void stop() {
         dwarf.setBlocking(false);
-        cooldown = 60; // 3 second cooldown
+        dwarf.setBlockCooldown(60); // Cooldown now tracked in entity
     }
 
     @Override

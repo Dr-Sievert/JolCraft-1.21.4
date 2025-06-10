@@ -3,8 +3,10 @@ package net.sievert.jolcraft.entity.custom;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -17,6 +19,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.sievert.jolcraft.entity.ai.goal.*;
+import net.sievert.jolcraft.sound.JolCraftSounds;
+import org.jetbrains.annotations.Nullable;
 
 public class DwarfGuardEntity extends DwarfEntity {
 
@@ -40,7 +44,6 @@ public class DwarfGuardEntity extends DwarfEntity {
     public final AnimationState blockAnimationState = new AnimationState();
     private int blockAnimationTimeout = 0;
     private boolean isBlocking;
-    private int lastBlockAnimationTick = -20; // negative offset to ensure it's ready on first use
     private boolean hasStartedBlockAnimation = false;
 
     private void setupAnimationStates() {
@@ -80,6 +83,7 @@ public class DwarfGuardEntity extends DwarfEntity {
         if(this.level().isClientSide()) {
             this.setupAnimationStates();
         }
+
     }
 
     //Goals
@@ -140,5 +144,51 @@ public class DwarfGuardEntity extends DwarfEntity {
         super.defineSynchedData(builder);
         builder.define(BLOCKING, false);
     }
+    private boolean shouldStartBlocking = false;
+
+    public void markForBlocking() {
+        this.shouldStartBlocking = true;
+    }
+
+    public boolean consumeBlockFlag() {
+        if (this.shouldStartBlocking) {
+            this.shouldStartBlocking = false;
+            return true;
+        }
+        return false;
+    }
+
+    public int blockCooldown = 0;
+
+    public boolean isBlockCooldownReady() {
+        return blockCooldown <= 0;
+    }
+
+    public void setBlockCooldown(int ticks) {
+        this.blockCooldown = ticks;
+    }
+
+    public void tickBlockCooldown() {
+        if (blockCooldown > 0) blockCooldown--;
+    }
+
+    @Override
+    public void aiStep() {
+        super.aiStep();
+        tickBlockCooldown();
+    }
+
+    @Override
+    @Nullable
+    protected SoundEvent getHurtSound(DamageSource damageSource) {
+        // Suppress if blocking
+        if (this.isBlockCooldownReady()) {
+            return null;
+        }
+
+        return JolCraftSounds.DWARF_HURT.get();
+    }
+
+
 
 }

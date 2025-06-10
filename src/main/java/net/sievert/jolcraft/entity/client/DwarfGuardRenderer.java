@@ -37,4 +37,5 @@ public class DwarfGuardRenderer extends MobRenderer<DwarfGuardEntity, DwarfRende
         reusedState.attackAnimationState.copyFrom(entity.attackAnimationState);
         reusedState.blockAnimationState.copyFrom(entity.blockAnimationState);
     }
+
 }

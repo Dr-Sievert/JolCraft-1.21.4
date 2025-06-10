@@ -1,7 +1,7 @@
 package net.sievert.jolcraft.events;
 
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
@@ -14,16 +14,16 @@ public class JolCraftEvents {
     //Hurting living entities
 
     @SubscribeEvent
-    public static void onLivingHurt(LivingDamageEvent.Pre event) {
-        if(event.getEntity() instanceof DwarfGuardEntity dwarf && dwarf.isBlocking()) {
-            // Cancel the damage
-            event.setNewDamage(0F);
-            // Suppress knockback and hurt effect
-            dwarf.hurtMarked = false;
-            // Optional: feedback (sound/particles)
-            dwarf.level().playSound(null, dwarf.blockPosition(), SoundEvents.SHIELD_BLOCK, SoundSource.HOSTILE, 1.0F, 1.0F);
-            dwarf.level().broadcastEntityEvent(dwarf, (byte) 29);
+    public static void onLivingDamage(LivingDamageEvent.Pre event) {
+        if (event.getEntity() instanceof DwarfGuardEntity dwarf && dwarf.isBlockCooldownReady() && event.getSource().getEntity() instanceof Monster) {
+            dwarf.markForBlocking();
+            event.setNewDamage(0.0F);
         }
+    }
+
+    @SubscribeEvent
+    public static void onLivingDamagePost(LivingDamageEvent.Post event) {
 
     }
+
 }
