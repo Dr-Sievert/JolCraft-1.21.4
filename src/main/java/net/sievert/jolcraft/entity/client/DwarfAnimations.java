@@ -249,8 +249,6 @@ public class DwarfAnimations {
                                     AnimationChannel.Interpolations.LINEAR),
                             new Keyframe(0.33333f, KeyframeAnimations.degreeVec(0f, 0f, 0f),
                                     AnimationChannel.Interpolations.LINEAR))).build();
-
-
     public static final AnimationDefinition DWARF_BLOCK = AnimationDefinition.Builder.withLength(0.75f)
             .addAnimation("body",
                     new AnimationChannel(AnimationChannel.Targets.ROTATION,
@@ -320,16 +318,55 @@ public class DwarfAnimations {
                     new AnimationChannel(AnimationChannel.Targets.POSITION,
                             new Keyframe(0f, KeyframeAnimations.posVec(0f, 0f, 0f),
                                     AnimationChannel.Interpolations.LINEAR),
-                            new Keyframe(0.08343333f, KeyframeAnimations.posVec(-3f, -1f, 1f),
+                            new Keyframe(0.08333f, KeyframeAnimations.posVec(-3f, -1f, 1f),
                                     AnimationChannel.Interpolations.LINEAR),
-                            new Keyframe(0.6766666f, KeyframeAnimations.posVec(0f, 0f, 0f),
+                            new Keyframe(0.66667f, KeyframeAnimations.posVec(0f, 0f, 0f),
                                     AnimationChannel.Interpolations.LINEAR)))
             .addAnimation("shield",
                     new AnimationChannel(AnimationChannel.Targets.ROTATION,
                             new Keyframe(0f, KeyframeAnimations.degreeVec(0f, 0f, 0f),
                                     AnimationChannel.Interpolations.LINEAR),
-                            new Keyframe(0.08343333f, KeyframeAnimations.degreeVec(0f, 0f, 50f),
+                            new Keyframe(0.08333f, KeyframeAnimations.degreeVec(0f, 0f, 50f),
                                     AnimationChannel.Interpolations.LINEAR),
-                            new Keyframe(0.6766666f, KeyframeAnimations.degreeVec(0f, 0f, 0f),
+                            new Keyframe(0.66667f, KeyframeAnimations.degreeVec(0f, 0f, 0f),
+                                    AnimationChannel.Interpolations.LINEAR))).build();
+    public static final AnimationDefinition DWARF_DRINK = AnimationDefinition.Builder.withLength(2f)
+            .addAnimation("right_arm",
+                    new AnimationChannel(AnimationChannel.Targets.POSITION,
+                            new Keyframe(0f, KeyframeAnimations.posVec(0f, 0f, 0f),
+                                    AnimationChannel.Interpolations.LINEAR),
+                            new Keyframe(0.25f, KeyframeAnimations.posVec(0f, -2f, 0f),
+                                    AnimationChannel.Interpolations.LINEAR),
+                            new Keyframe(1.75f, KeyframeAnimations.posVec(0f, -2f, 0f),
+                                    AnimationChannel.Interpolations.LINEAR),
+                            new Keyframe(1.9583433f, KeyframeAnimations.posVec(0f, 0f, 0f),
+                                    AnimationChannel.Interpolations.LINEAR)))
+            .addAnimation("right_arm",
+                    new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                            new Keyframe(0f, KeyframeAnimations.degreeVec(0f, 0f, 0f),
+                                    AnimationChannel.Interpolations.LINEAR),
+                            new Keyframe(0.25f, KeyframeAnimations.degreeVec(-70.67f, -27.3f, 14.33f),
+                                    AnimationChannel.Interpolations.LINEAR),
+                            new Keyframe(0.5f, KeyframeAnimations.degreeVec(-65.67f, -27.3f, 14.33f),
+                                    AnimationChannel.Interpolations.LINEAR),
+                            new Keyframe(0.75f, KeyframeAnimations.degreeVec(-70.67f, -27.3f, 14.33f),
+                                    AnimationChannel.Interpolations.LINEAR),
+                            new Keyframe(1f, KeyframeAnimations.degreeVec(-65.67f, -27.3f, 14.33f),
+                                    AnimationChannel.Interpolations.LINEAR),
+                            new Keyframe(1.25f, KeyframeAnimations.degreeVec(-70.67f, -27.3f, 14.33f),
+                                    AnimationChannel.Interpolations.LINEAR),
+                            new Keyframe(1.5f, KeyframeAnimations.degreeVec(-65.67f, -27.3f, 14.33f),
+                                    AnimationChannel.Interpolations.LINEAR),
+                            new Keyframe(1.75f, KeyframeAnimations.degreeVec(-65.67f, -27.3f, 14.33f),
+                                    AnimationChannel.Interpolations.LINEAR),
+                            new Keyframe(1.9583433f, KeyframeAnimations.degreeVec(0f, 0f, 0f),
+                                    AnimationChannel.Interpolations.LINEAR)))
+            .addAnimation("head",
+                    new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                            new Keyframe(0f, KeyframeAnimations.degreeVec(0f, 0f, 0f),
+                                    AnimationChannel.Interpolations.LINEAR),
+                            new Keyframe(0.25f, KeyframeAnimations.degreeVec(0f, 10f, 0f),
+                                    AnimationChannel.Interpolations.LINEAR),
+                            new Keyframe(1.9583433f, KeyframeAnimations.degreeVec(0f, 0f, 0f),
                                     AnimationChannel.Interpolations.LINEAR))).build();
 }

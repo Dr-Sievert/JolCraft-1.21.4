@@ -3,15 +3,11 @@ package net.sievert.jolcraft.entity.custom;
 import com.google.common.collect.ImmutableMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import net.minecraft.Util;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.stats.Stats;
-import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
@@ -26,16 +22,11 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.trading.MerchantOffers;
-import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.ServerLevelAccessor;
-import net.sievert.jolcraft.entity.JolCraftEntities;
 import net.sievert.jolcraft.entity.ai.goal.*;
 import net.sievert.jolcraft.sound.JolCraftSounds;
 import net.sievert.jolcraft.villager.JolCraftDwarfTrades;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Optional;
 
 public class DwarfEntity extends AbstractDwarfEntity {
 
@@ -48,9 +39,6 @@ public class DwarfEntity extends AbstractDwarfEntity {
 
     private static final EntityDataAccessor<Boolean> ATTACKING =
             SynchedEntityData.defineId(DwarfEntity.class, EntityDataSerializers.BOOLEAN);
-
-    private static final EntityDataAccessor<Integer> VARIANT =
-            SynchedEntityData.defineId(DwarfEntity.class, EntityDataSerializers.INT);
 
     //Animations
 
@@ -158,27 +146,6 @@ public class DwarfEntity extends AbstractDwarfEntity {
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
-        if (this.isFood(itemstack)) {
-            int i = this.getAge();
-            if (!this.level().isClientSide && i == 0 && this.canFallInLove()) {
-                this.usePlayerItem(player, hand, itemstack);
-                this.setInLove(player);
-                this.playEatingSound();
-                return InteractionResult.SUCCESS_SERVER;
-            }
-
-            if (this.isBaby()) {
-                this.usePlayerItem(player, hand, itemstack);
-                this.ageUp(getSpeedUpSecondsWhenFeeding(-i), true);
-                this.playEatingSound();
-                return InteractionResult.SUCCESS;
-            }
-
-            if (this.level().isClientSide) {
-                return InteractionResult.CONSUME;
-            }
-        }
-        else
         if (!itemstack.is(Items.VILLAGER_SPAWN_EGG) && this.isAlive() && !this.isTrading() && !this.isBaby() && !this.isFood(itemstack)) {
             if (hand == InteractionHand.MAIN_HAND) {
                 player.awardStat(Stats.TALKED_TO_VILLAGER);
@@ -195,59 +162,6 @@ public class DwarfEntity extends AbstractDwarfEntity {
         } else {
             return super.mobInteract(player, hand);
         }
-        return super.mobInteract(player, hand);
-    }
-
-    public boolean canMate(DwarfEntity partner) {
-        if (partner == this) {
-            return false;
-        } else {
-            return partner.getClass() != this.getClass() ? false : this.isInLove() && partner.isInLove();
-        }
-    }
-
-    public void spawnChildFromBreeding(ServerLevel level, DwarfEntity partner) {
-        AgeableMob ageablemob = this.getBreedOffspring(level, partner);
-        final net.neoforged.neoforge.event.entity.living.BabyEntitySpawnEvent event = new net.neoforged.neoforge.event.entity.living.BabyEntitySpawnEvent(this, partner, ageablemob);
-        final boolean cancelled = net.neoforged.neoforge.common.NeoForge.EVENT_BUS.post(event).isCanceled();
-        ageablemob = event.getChild();
-        if (cancelled) {
-            this.setAge(6000);
-            partner.setAge(6000);
-            this.resetLove();
-            partner.resetLove();
-            return;
-        }
-        if (ageablemob != null) {
-            ageablemob.setBaby(true);
-            ageablemob.moveTo(this.getX(), this.getY(), this.getZ(), 0.0F, 0.0F);
-            this.finalizeSpawnChildFromBreeding(level, partner, ageablemob);
-            level.addFreshEntityWithPassengers(ageablemob);
-        }
-    }
-
-    public void finalizeSpawnChildFromBreeding(ServerLevel level, DwarfEntity dwarf, @javax.annotation.Nullable AgeableMob baby) {
-        Optional.ofNullable(this.getLoveCause()).or(() -> Optional.ofNullable(dwarf.getLoveCause())).ifPresent(serverPlayer -> {
-//            serverPlayer.awardStat(Stats.ANIMALS_BRED);
-//            CriteriaTriggers.BRED_ANIMALS.trigger(serverPlayer, this, dwarf, baby);
-        });
-        this.setAge(6000);
-        dwarf.setAge(6000);
-        this.resetLove();
-        dwarf.resetLove();
-        level.broadcastEntityEvent(this, (byte)18);
-        if (level.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
-            level.addFreshEntity(new ExperienceOrb(level, this.getX(), this.getY(), this.getZ(), this.getRandom().nextInt(7) + 1));
-        }
-    }
-
-    @Nullable
-    @Override
-    public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob otherParent) {
-        DwarfVariant variant = Util.getRandom(DwarfVariant.values(), this.random);
-        DwarfEntity baby = JolCraftEntities.DWARF.get().create(level, EntitySpawnReason.BREEDING);
-        baby.setVariant(variant);
-        return baby;
     }
 
     //Attacking and variants
@@ -264,39 +178,7 @@ public class DwarfEntity extends AbstractDwarfEntity {
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
-        builder.define(VARIANT, 0);
         builder.define(ATTACKING, false);
-    }
-
-    private int getTypeVariant() {
-        return this.entityData.get(VARIANT);
-    }
-
-    public DwarfVariant getVariant() {
-        return DwarfVariant.byId(this.getTypeVariant() & 255);
-    }
-
-    private void setVariant(DwarfVariant variant) {
-        this.entityData.set(VARIANT, variant.getId() & 255);
-    }
-
-    @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
-        super.addAdditionalSaveData(compound);
-        compound.putInt("Variant", this.getTypeVariant());
-    }
-
-    @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
-        super.readAdditionalSaveData(compound);
-        this.entityData.set(VARIANT, compound.getInt("Variant"));
-    }
-
-    @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, EntitySpawnReason spawnType, @Nullable SpawnGroupData spawnGroupData) {
-        DwarfVariant variant = Util.getRandom(DwarfVariant.values(), this.random);
-        this.setVariant(variant);
-        return super.finalizeSpawn(level, difficulty, spawnType, spawnGroupData);
     }
 
     //Sounds

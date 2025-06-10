@@ -25,7 +25,6 @@ public class DwarfGuardModel extends HumanoidModel<DwarfRenderState> {
     private final ModelPart left_legwear;
     private final ModelPart right_arm;
     private final ModelPart right_armwear;
-    private final ModelPart iron_axe;
     private final ModelPart right_leg;
     private final ModelPart right_legwear;
     private final ModelPart head;
@@ -47,7 +46,6 @@ public class DwarfGuardModel extends HumanoidModel<DwarfRenderState> {
         this.right_legwear = this.right_leg.getChild("right_legwear");
         this.left_legwear = this.left_leg.getChild("left_legwear");
         this.shield = this.left_arm.getChild("shield");
-        this.iron_axe = this.right_arm.getChild("iron_axe");
         this.head = root.getChild("head");
         this.beard = this.head.getChild("beard");
         this.right_eyebrow = this.head.getChild("right_eyebrow");
@@ -61,7 +59,7 @@ public class DwarfGuardModel extends HumanoidModel<DwarfRenderState> {
 
         PartDefinition body = partdefinition.addOrReplaceChild("body", CubeListBuilder.create().texOffs(30, 33).addBox(-6.0F, -7.0F, -3.0F, 12.0F, 12.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 12.0F, 0.0F));
 
-        PartDefinition right_arm = partdefinition.addOrReplaceChild("right_arm", CubeListBuilder.create().texOffs(32, 51).addBox(-3.8F, 0.0F, -2.0F, 4.0F, 9.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(-6.0F, 5.0F, 0.0F));
+        PartDefinition right_arm = partdefinition.addOrReplaceChild("right_arm", CubeListBuilder.create().texOffs(32, 51).addBox(-3.8F, 0.0F, -2.0F, 4.0F, 9.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-6.0F, 5.0F, 0.0F, -0.5236F, 0.0F, 0.0F));
 
         PartDefinition left_arm = partdefinition.addOrReplaceChild("left_arm", CubeListBuilder.create().texOffs(48, 51).addBox(-0.2F, 0.0F, -2.0F, 4.0F, 9.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(6.0F, 5.0F, 0.0F, -0.7418F, 0.0F, 0.0F));
 
@@ -79,23 +77,8 @@ public class DwarfGuardModel extends HumanoidModel<DwarfRenderState> {
 
         left_leg.addOrReplaceChild("left_legwear", CubeListBuilder.create().texOffs(0, 63).addBox(-3.0F, -0.5F, -2.0F, 5.0F, 7.0F, 4.0F, new CubeDeformation(0.25F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        left_arm.addOrReplaceChild("shield", CubeListBuilder.create().texOffs(44, 105).addBox(-2.0F, -20.0F, -1.0F, 12.0F, 22.0F, 1.0F, new CubeDeformation(0.0F))
-                .texOffs(71, 115).addBox(3.75F, -14.0F, -0.75F, 1.0F, 6.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(4.25F, 11.5F, 10.0F, 1.5708F, 0.0F, -1.5708F));
-
-        right_arm.addOrReplaceChild("iron_axe", CubeListBuilder.create().texOffs(0, 125).addBox(-4.5F, 11.75F, -13.5F, 1.0F, 2.0F, 1.0F, new CubeDeformation(0.0F))
-                .texOffs(4, 124).addBox(-5.5F, 10.75F, -13.5F, 1.0F, 3.0F, 1.0F, new CubeDeformation(0.0F))
-                .texOffs(8, 124).addBox(-6.5F, 9.75F, -13.5F, 1.0F, 3.0F, 1.0F, new CubeDeformation(0.0F))
-                .texOffs(4, 124).addBox(-7.5F, 8.75F, -13.5F, 1.0F, 3.0F, 1.0F, new CubeDeformation(0.0F))
-                .texOffs(8, 124).addBox(-8.5F, 7.75F, -13.5F, 1.0F, 3.0F, 1.0F, new CubeDeformation(0.0F))
-                .texOffs(8, 124).addBox(-9.5F, 6.75F, -13.5F, 1.0F, 3.0F, 1.0F, new CubeDeformation(0.0F))
-                .texOffs(12, 119).addBox(-10.5F, 0.75F, -13.5F, 1.0F, 8.0F, 1.0F, new CubeDeformation(0.0F))
-                .texOffs(16, 119).addBox(-11.5F, -0.25F, -13.5F, 1.0F, 8.0F, 1.0F, new CubeDeformation(0.0F))
-                .texOffs(20, 120).addBox(-12.5F, -0.25F, -13.5F, 1.0F, 7.0F, 1.0F, new CubeDeformation(0.0F))
-                .texOffs(24, 120).addBox(-13.5F, 0.75F, -13.5F, 1.0F, 7.0F, 1.0F, new CubeDeformation(0.0F))
-                .texOffs(28, 122).addBox(-14.5F, 2.75F, -13.5F, 1.0F, 5.0F, 1.0F, new CubeDeformation(0.0F))
-                .texOffs(32, 125).addBox(-15.5F, 4.75F, -13.5F, 1.0F, 2.0F, 1.0F, new CubeDeformation(0.0F))
-                .texOffs(36, 123).addBox(-9.5F, 1.75F, -13.5F, 1.0F, 4.0F, 1.0F, new CubeDeformation(0.0F))
-                .texOffs(40, 125).addBox(-8.5F, 2.75F, -13.5F, 1.0F, 2.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(11.0F, 19.0F, -5.0F, 1.5708F, -0.7418F, 1.5708F));
+        left_arm.addOrReplaceChild("shield", CubeListBuilder.create().texOffs(0, 105).addBox(-2.0F, -20.0F, -1.0F, 12.0F, 22.0F, 1.0F, new CubeDeformation(0.0F))
+                .texOffs(27, 115).addBox(3.75F, -14.0F, -0.75F, 1.0F, 6.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(4.25F, 11.5F, 10.0F, 1.5708F, 0.0F, -1.5708F));
 
         PartDefinition head = partdefinition.addOrReplaceChild("head", CubeListBuilder.create().texOffs(36, 0).addBox(-5.0F, -10.0F, -4.0F, 10.0F, 10.0F, 8.0F, new CubeDeformation(0.0F))
                 .texOffs(30, 20).addBox(-5.0F, -1.0F, -4.0F, 10.0F, 2.0F, 6.0F, new CubeDeformation(0.15F))
@@ -127,6 +110,7 @@ public class DwarfGuardModel extends HumanoidModel<DwarfRenderState> {
         this.animate(state.idleAnimationState, DwarfAnimations.DWARF_IDLE, state.ageInTicks, 1f);
         this.animate(state.attackAnimationState, DwarfAnimations.DWARF_ATTACK_WEAPON, state.ageInTicks, 1f);
         this.animate(state.blockAnimationState, DwarfAnimations.DWARF_BLOCK, state.ageInTicks, 1f);
+        this.animate(state.drinkAnimationState, DwarfAnimations.DWARF_DRINK, state.ageInTicks, 1f);
     }
 
     private void applyHeadRotation(float headYaw, float headPitch) {

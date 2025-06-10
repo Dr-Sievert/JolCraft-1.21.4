@@ -37,6 +37,7 @@ public class DwarfGuardRenderer extends HumanoidMobRenderer<DwarfGuardEntity, Dw
         reusedState.idleAnimationState.copyFrom(entity.idleAnimationState);
         reusedState.attackAnimationState.copyFrom(entity.attackAnimationState);
         reusedState.blockAnimationState.copyFrom(entity.blockAnimationState);
+        reusedState.drinkAnimationState.copyFrom(entity.drinkAnimationState);
         reusedState.useItemHand = entity.getUsedItemHand();
         reusedState.ticksUsingItem = entity.getTicksUsingItem();
         reusedState.isUsingItem = entity.isUsingItem();
