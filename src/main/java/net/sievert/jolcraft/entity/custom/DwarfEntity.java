@@ -69,12 +69,11 @@ public class DwarfEntity extends AbstractDwarfEntity {
             --this.idleAnimationTimeout;
         }
         if(this.isAttacking() && attackAnimationTimeout <= 0) {
-            attackAnimationTimeout = 10;
+            attackAnimationTimeout = 8;
             attackAnimationState.start(this.tickCount);
         } else {
             --this.attackAnimationTimeout;
         }
-
         if(!this.isAttacking()) {
             attackAnimationState.stop();
         }
@@ -90,7 +89,6 @@ public class DwarfEntity extends AbstractDwarfEntity {
 
 
     //Trades
-
 
     public static final Int2ObjectMap<VillagerTrades.ItemListing[]> TRADES = toIntMap(
             ImmutableMap.of(
@@ -230,7 +228,7 @@ public class DwarfEntity extends AbstractDwarfEntity {
 
     public void finalizeSpawnChildFromBreeding(ServerLevel level, DwarfEntity dwarf, @javax.annotation.Nullable AgeableMob baby) {
         Optional.ofNullable(this.getLoveCause()).or(() -> Optional.ofNullable(dwarf.getLoveCause())).ifPresent(serverPlayer -> {
-            serverPlayer.awardStat(Stats.ANIMALS_BRED);
+//            serverPlayer.awardStat(Stats.ANIMALS_BRED);
 //            CriteriaTriggers.BRED_ANIMALS.trigger(serverPlayer, this, dwarf, baby);
         });
         this.setAge(6000);

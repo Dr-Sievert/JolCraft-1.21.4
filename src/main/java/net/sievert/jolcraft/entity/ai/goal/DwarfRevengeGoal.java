@@ -37,7 +37,7 @@ public class DwarfRevengeGoal extends Goal
             }
             else
             {
-                revengeTarget.hurt(this.entity.damageSources().mobAttack(this.entity), 3.0F);
+                revengeTarget.hurt(this.entity.damageSources().mobAttack(this.entity), (float) this.entity.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.ATTACK_DAMAGE).getValue());
                 this.entity.setAttacking(true);
                 this.entity.setLastHurtByMob(null);
             }

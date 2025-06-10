@@ -6,6 +6,7 @@ import net.minecraft.Util;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
+import net.minecraft.client.renderer.entity.layers.WolfArmorLayer;
 import net.minecraft.resources.ResourceLocation;
 import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.entity.custom.DwarfEntity;
@@ -46,7 +47,7 @@ public class DwarfRenderer extends MobRenderer<DwarfEntity, DwarfRenderState, Dw
         if(renderState.isBaby) {
             poseStack.scale(0.45f, 0.45f, 0.45f);
         } else {
-            poseStack.scale(1f, 1f, 1f);
+            poseStack.scale(0.9f, 0.9f, 0.9f);
         }
 
         super.render(renderState, poseStack, bufferSource, packedLight);

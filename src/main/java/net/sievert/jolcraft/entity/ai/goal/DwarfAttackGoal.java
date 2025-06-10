@@ -24,6 +24,8 @@ public class DwarfAttackGoal extends MeleeAttackGoal {
     private static final long COOLDOWN_BETWEEN_CAN_USE_CHECKS = 20L;
     private int failedPathFindingPenalty = 0;
     private final boolean canPenalize = false;
+    private int attackAnimTimer = 0;
+
 
     public DwarfAttackGoal(DwarfEntity mob, double speedModifier, boolean followingTargetEvenIfNotSeen) {
         super(mob, speedModifier, followingTargetEvenIfNotSeen);
@@ -91,7 +93,6 @@ public class DwarfAttackGoal extends MeleeAttackGoal {
         if (!EntitySelector.NO_CREATIVE_OR_SPECTATOR.test(livingentity)) {
             this.mob.setTarget(null);
         }
-
         this.mob.setAggressive(false);
         this.mob.setAttacking(false);
         this.mob.getNavigation().stop();
@@ -147,16 +148,24 @@ public class DwarfAttackGoal extends MeleeAttackGoal {
 
             this.ticksUntilNextAttack = Math.max(this.ticksUntilNextAttack - 1, 0);
             this.checkAndPerformAttack(livingentity);
+            if (attackAnimTimer > 0) {
+                attackAnimTimer--;
+                if (attackAnimTimer == 0) {
+                    mob.setAttacking(false); // Stop animation
+                }
+            }
         }
     }
 
     protected void checkAndPerformAttack(LivingEntity target) {
         if (this.canPerformAttack(target)) {
-            this.resetAttackCooldown();
             this.mob.setAttacking(true);
+            this.attackAnimTimer = 8;
+            this.resetAttackCooldown();
             this.mob.doHurtTarget(getServerLevel(this.mob), target);
         }
     }
+
 
     protected void resetAttackCooldown() {
         this.ticksUntilNextAttack = this.adjustedTickDelay(20);

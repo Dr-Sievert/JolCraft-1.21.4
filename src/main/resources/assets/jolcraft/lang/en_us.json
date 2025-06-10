@@ -1,6 +1,9 @@
 {
   "item.jolcraft.dwarf_spawn_egg": "Dwarf Spawn Egg",
-  "entity.jolcraft.dwarf": "Dwarf",
-  "entity.minecraft.dwarf": "Dwarf"
+  "item.jolcraft.dwarf_guard_spawn_egg": "Dwarf Guard Spawn Egg",
 
+  "entity.jolcraft.dwarf": "Dwarf",
+  "entity.minecraft.dwarf": "Dwarf",
+  "entity.jolcraft.dwarf_guard": "Dwarf Guard",
+  "entity.minecraft.dwarf_guard": "Dwarf Guard"
 }

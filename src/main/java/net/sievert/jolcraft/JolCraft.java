@@ -4,6 +4,7 @@ package net.sievert.jolcraft;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.sievert.jolcraft.entity.JolCraftEntities;
+import net.sievert.jolcraft.entity.client.DwarfGuardRenderer;
 import net.sievert.jolcraft.entity.client.DwarfRenderer;
 import net.sievert.jolcraft.item.JolCraftItems;
 import net.sievert.jolcraft.sound.JolCraftSounds;
@@ -55,7 +56,6 @@ public class JolCraft
         JolCraftSounds.register(modEventBus);
         JolCraftStructures.DEFERRED_REGISTRY_STRUCTURE.register(modEventBus);
 
-
         // Register the item to a creative tab
         modEventBus.addListener(this::addCreative);
 
@@ -82,8 +82,11 @@ public class JolCraft
     // Add the example block item to the building blocks tab
     private void addCreative(BuildCreativeModeTabContentsEvent event)
     {
-        if (event.getTabKey() == CreativeModeTabs.SPAWN_EGGS)
+        if (event.getTabKey() == CreativeModeTabs.SPAWN_EGGS){
             event.accept(JolCraftItems.DWARF_SPAWN_EGG);
+            event.accept(JolCraftItems.DWARF_GUARD_SPAWN_EGG);
+        }
+
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call
@@ -102,6 +105,7 @@ public class JolCraft
         public static void onClientSetup(FMLClientSetupEvent event)
         {
             EntityRenderers.register(JolCraftEntities.DWARF.get(), DwarfRenderer::new);
+            EntityRenderers.register(JolCraftEntities.DWARF_GUARD.get(), DwarfGuardRenderer::new);
             // Some client setup code
             LOGGER.info("HELLO FROM CLIENT SETUP");
             LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());

@@ -15,6 +15,9 @@ public class JolCraftItems {
     public static final DeferredItem<Item> DWARF_SPAWN_EGG = ITEMS.registerItem("dwarf_spawn_egg",
             (properties) -> new SpawnEggItem(JolCraftEntities.DWARF.get(), properties));
 
+    public static final DeferredItem<Item> DWARF_GUARD_SPAWN_EGG = ITEMS.registerItem("dwarf_guard_spawn_egg",
+            (properties) -> new SpawnEggItem(JolCraftEntities.DWARF_GUARD.get(), properties));
+
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);
     }
