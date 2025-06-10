@@ -1,5 +1,7 @@
 package net.sievert.jolcraft.entity.custom;
 
+import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -27,6 +29,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import net.sievert.jolcraft.entity.ai.goal.*;
 import net.sievert.jolcraft.sound.JolCraftSounds;
 import org.jetbrains.annotations.Nullable;
@@ -134,14 +137,54 @@ public class DwarfGuardEntity extends DwarfEntity {
 
     }
 
+    private Vec3 blockParticlePos = null;
+    private int blockParticleTicks = 0;
+
     @Override
     public void tick() {
         super.tick();
-        if(this.level().isClientSide()) {
+        if (this.level().isClientSide()) {
             this.setupAnimationStates();
+
+            if (this.hasStartedBlockAnimation) {
+                if (blockParticlePos == null) {
+                    // Capture particle spawn location at start
+                    Vec3 look = this.getLookAngle().normalize();
+                    double forwardOffset = 1.0D;
+                    double leftOffset = -0.4D;
+                    Vec3 left = new Vec3(-look.z, 0, look.x).normalize();
+
+                    double px = this.getX() + look.x * forwardOffset + left.x * leftOffset;
+                    double py = this.getY() + 1.2D;
+                    double pz = this.getZ() + look.z * forwardOffset + left.z * leftOffset;
+
+                    blockParticlePos = new Vec3(px, py, pz);
+                    blockParticleTicks = 10; // spawn for 10 ticks
+                }
+
+                if (blockParticleTicks-- > 0 && blockParticlePos != null) {
+                    for (int i = 0; i < 5; i++) { // spawn multiple per tick for visual density
+                        double scatterRange = 0.15D; // how far they can spread from center
+
+                        double offsetX = blockParticlePos.x + (this.random.nextDouble() - 0.5) * 2.0 * scatterRange;
+                        double offsetY = blockParticlePos.y + (this.random.nextDouble() - 0.5) * 2.0 * scatterRange;
+                        double offsetZ = blockParticlePos.z + (this.random.nextDouble() - 0.5) * 2.0 * scatterRange;
+
+                        double velocityX = (this.random.nextDouble() - 0.5) * 0.1;
+                        double velocityY = (this.random.nextDouble()) * 0.1; // small upward boost
+                        double velocityZ = (this.random.nextDouble() - 0.5) * 0.1;
+
+                        DustParticleOptions dust = new DustParticleOptions(-2233622, 0.5F);
+                        this.level().addParticle(dust, offsetX, offsetY, offsetZ, velocityX, velocityY, velocityZ);
+                    }
+                }
+            } else {
+                // Reset when animation ends
+                blockParticlePos = null;
+                blockParticleTicks = 0;
+            }
         }
     }
-
 
     //Blocking
 
