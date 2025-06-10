@@ -10,6 +10,7 @@ public class DwarfBlockGoal extends Goal {
     private final DwarfGuardEntity dwarf;
     private int cooldown = 0;
     private int blockTicks = 0;
+    private int lastRecordedHurtTick = -1;
 
     public DwarfBlockGoal(DwarfGuardEntity dwarf) {
         this.dwarf = dwarf;
@@ -22,7 +23,17 @@ public class DwarfBlockGoal extends Goal {
             cooldown--;
             return false;
         }
-        return dwarf.getTarget() != null && !dwarf.isBlocking();
+
+        int hurtTick = dwarf.getLastHurtByMobTimestamp(); // or getLastHurtByPlayerTime() if you prefer
+        int currentTick = dwarf.tickCount;
+
+        // Check if new hurt event just occurred
+        if (hurtTick != lastRecordedHurtTick) {
+            lastRecordedHurtTick = hurtTick;
+            return dwarf.getTarget() != null && !dwarf.isBlocking();
+        }
+
+        return false;
     }
 
     @Override
@@ -46,7 +57,6 @@ public class DwarfBlockGoal extends Goal {
     public void tick() {
         if (dwarf.getTarget() != null) {
             dwarf.getLookControl().setLookAt(dwarf.getTarget(), 10.0F, dwarf.getMaxHeadXRot());
-            dwarf.getNavigation().stop(); // remain still while blocking
         }
     }
 }

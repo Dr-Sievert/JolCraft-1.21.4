@@ -40,6 +40,8 @@ public class DwarfGuardEntity extends DwarfEntity {
     public final AnimationState blockAnimationState = new AnimationState();
     private int blockAnimationTimeout = 0;
     private boolean isBlocking;
+    private int lastBlockAnimationTick = -20; // negative offset to ensure it's ready on first use
+    private boolean hasStartedBlockAnimation = false;
 
     private void setupAnimationStates() {
         if(this.idleAnimationTimeout <= 0) {
@@ -48,7 +50,7 @@ public class DwarfGuardEntity extends DwarfEntity {
         } else {
             --this.idleAnimationTimeout;
         }
-        // Handle attack animation similarly
+
         if (this.isAttacking()) {
             if (attackAnimationTimeout == 0) {
                 attackAnimationTimeout = 10;
@@ -60,18 +62,15 @@ public class DwarfGuardEntity extends DwarfEntity {
             attackAnimationTimeout = 0;
             attackAnimationState.stop();
         }
-        if (this.isBlocking()) {
-            if (blockAnimationTimeout == 0) {
-                blockAnimationTimeout = 15; // 15 ticks = ~0.75s
+
+        if (isBlocking()) {
+            if (!hasStartedBlockAnimation) {
                 blockAnimationState.start(this.tickCount);
-            } else {
-                --blockAnimationTimeout;
+                hasStartedBlockAnimation = true;
             }
         } else {
-            blockAnimationTimeout = 0;
-            blockAnimationState.stop();
+            hasStartedBlockAnimation = false;
         }
-
 
     }
 
@@ -89,7 +88,7 @@ public class DwarfGuardEntity extends DwarfEntity {
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new DwarfBlockGoal(this));
-        this.goalSelector.addGoal(1, new DwarfAttackGoal(this, 1.2D, true));
+        this.goalSelector.addGoal(2, new DwarfAttackGoal(this, 1.2D, true));
         this.goalSelector.addGoal(2, new DwarfRevengeGoal(this));
         this.goalSelector.addGoal(3, new TemptGoal(this, 1.25, stack -> stack.is(Items.GOLD_INGOT), false));
         this.goalSelector.addGoal(4, new OpenDoorGoal(this, true));
