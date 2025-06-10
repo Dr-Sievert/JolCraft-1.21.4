@@ -5,6 +5,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
@@ -225,6 +226,11 @@ public class DwarfGuardEntity extends DwarfEntity {
             if (this.level().isClientSide) {
                 return InteractionResult.CONSUME;
             }
+        }
+        else{
+            this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, this.getVoicePitch());
+            return InteractionResult.FAIL;
+
         }
         return InteractionResult.FAIL;
     }

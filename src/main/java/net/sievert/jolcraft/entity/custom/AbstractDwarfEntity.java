@@ -89,6 +89,8 @@ public class AbstractDwarfEntity extends WanderingTrader {
         if (this.loveCause != null) {
             compound.putUUID("LoveCause", this.loveCause);
         }
+        compound.putInt("Age", this.getAge());
+        compound.putInt("ForcedAge", this.forcedAge);
     }
 
     /**
@@ -100,6 +102,8 @@ public class AbstractDwarfEntity extends WanderingTrader {
         this.inLove = compound.getInt("InLove");
         this.loveCause = compound.hasUUID("LoveCause") ? compound.getUUID("LoveCause") : null;
         this.entityData.set(VARIANT, compound.getInt("Variant"));
+        this.setAge(compound.getInt("Age"));
+        this.forcedAge = compound.getInt("ForcedAge");
     }
 
     private int getTypeVariant() {
@@ -162,7 +166,6 @@ public class AbstractDwarfEntity extends WanderingTrader {
                 return InteractionResult.CONSUME;
             }
         }
-
         return super.mobInteract(player, hand);
     }
 

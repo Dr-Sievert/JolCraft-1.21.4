@@ -1,6 +1,9 @@
 package net.sievert.jolcraft.entity.ai.goal;
 
 import java.util.EnumSet;
+
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -8,6 +11,7 @@ import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.pathfinder.Path;
 import net.sievert.jolcraft.entity.custom.DwarfEntity;
+import net.sievert.jolcraft.sound.JolCraftSounds;
 
 public class DwarfAttackGoal extends MeleeAttackGoal {
     protected final DwarfEntity mob;
@@ -93,6 +97,7 @@ public class DwarfAttackGoal extends MeleeAttackGoal {
         if (!EntitySelector.NO_CREATIVE_OR_SPECTATOR.test(livingentity)) {
             this.mob.setTarget(null);
         }
+        mob.level().playSound(null, mob.blockPosition(), JolCraftSounds.DWARF_YES.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
         this.mob.setAggressive(false);
         this.mob.setAttacking(false);
         this.mob.getNavigation().stop();

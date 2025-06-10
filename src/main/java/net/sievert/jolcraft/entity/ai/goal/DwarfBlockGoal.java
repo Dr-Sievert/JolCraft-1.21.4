@@ -1,8 +1,11 @@
 package net.sievert.jolcraft.entity.ai.goal;
 
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.level.block.Blocks;
 import net.sievert.jolcraft.entity.custom.DwarfGuardEntity;
 
 import java.util.EnumSet;
@@ -39,6 +42,7 @@ public class DwarfBlockGoal extends Goal {
     public void start() {
         dwarf.setBlocking(true);
         dwarf.level().playSound(null, dwarf.blockPosition(), SoundEvents.SHIELD_BLOCK, SoundSource.HOSTILE, 1.0F, 1.0F);
+
         blockTicks = 15; // block for 15 ticks
     }
 
