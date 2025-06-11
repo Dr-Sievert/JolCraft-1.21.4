@@ -12,6 +12,7 @@ public class DwarfGuardRenderer extends HumanoidMobRenderer<DwarfGuardEntity, Dw
 
     public DwarfGuardRenderer(EntityRendererProvider.Context context) {
         super(context, new DwarfGuardModel(context.bakeLayer(DwarfGuardModel.LAYER_LOCATION)), 0.4f);
+
     }
 
     @Override

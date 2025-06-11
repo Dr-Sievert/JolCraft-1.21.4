@@ -94,7 +94,7 @@ public class ForgeStructure extends Structure {
      * Use the biome tags for where to spawn the structure and users can datapack
      * it to spawn in specific biomes that aren't in the dimension they don't like if they wish.
      */
-    private static boolean extraSpawningChecks(Structure.GenerationContext context) {
+    private static boolean extraSpawningChecks(GenerationContext context) {
         // Grabs the chunk position we are at
         ChunkPos chunkpos = context.chunkPos();
 

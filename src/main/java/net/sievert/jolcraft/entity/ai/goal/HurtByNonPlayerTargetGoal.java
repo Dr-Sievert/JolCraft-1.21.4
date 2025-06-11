@@ -30,7 +30,7 @@ public class HurtByNonPlayerTargetGoal extends TargetGoal {
     public HurtByNonPlayerTargetGoal(PathfinderMob mob, Class<?>... toIgnoreDamage) {
         super(mob, true);
         this.toIgnoreDamage = toIgnoreDamage;
-        this.setFlags(EnumSet.of(Goal.Flag.TARGET));
+        this.setFlags(EnumSet.of(Flag.TARGET));
     }
 
     @Override
@@ -59,7 +59,7 @@ public class HurtByNonPlayerTargetGoal extends TargetGoal {
         }
     }
 
-    public net.sievert.jolcraft.entity.ai.goal.HurtByNonPlayerTargetGoal setAlertOthers(Class<?>... reinforcementTypes) {
+    public HurtByNonPlayerTargetGoal setAlertOthers(Class<?>... reinforcementTypes) {
         this.alertSameType = true;
         this.toIgnoreAlert = reinforcementTypes;
         return this;

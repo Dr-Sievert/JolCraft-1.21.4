@@ -21,7 +21,7 @@ public class JolCraftDwarfTrades extends VillagerTrades {
 
     //Buying
 
-    public static class ItemsForGold implements VillagerTrades.ItemListing {
+    public static class ItemsForGold implements ItemListing {
         private final ItemStack itemStack;
         private final int goldCost;
         private final int maxUses;
@@ -97,7 +97,7 @@ public class JolCraftDwarfTrades extends VillagerTrades {
 
     //Selling
 
-    public static class GoldForItems implements VillagerTrades.ItemListing {
+    public static class GoldForItems implements ItemListing {
         private final ItemCost itemStack;
         private final int maxUses;
         private final int villagerXp;

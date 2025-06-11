@@ -25,7 +25,7 @@ public class FirePanicGoal extends Goal
     {
         this.goblin = goblin;
         this.speedModifier = speedModifier;
-        this.setFlags(EnumSet.of(Goal.Flag.MOVE));
+        this.setFlags(EnumSet.of(Flag.MOVE));
     }
 
     @Override

@@ -339,7 +339,7 @@ public class DwarfAnimations {
                                     AnimationChannel.Interpolations.LINEAR),
                             new Keyframe(1.75f, KeyframeAnimations.posVec(0f, -2f, 0f),
                                     AnimationChannel.Interpolations.LINEAR),
-                            new Keyframe(1.9583433f, KeyframeAnimations.posVec(0f, 0f, 0f),
+                            new Keyframe(1.95833f, KeyframeAnimations.posVec(0f, 0f, 0f),
                                     AnimationChannel.Interpolations.LINEAR)))
             .addAnimation("right_arm",
                     new AnimationChannel(AnimationChannel.Targets.ROTATION,
@@ -359,7 +359,7 @@ public class DwarfAnimations {
                                     AnimationChannel.Interpolations.LINEAR),
                             new Keyframe(1.75f, KeyframeAnimations.degreeVec(-65.67f, -27.3f, 14.33f),
                                     AnimationChannel.Interpolations.LINEAR),
-                            new Keyframe(1.9583433f, KeyframeAnimations.degreeVec(0f, 0f, 0f),
+                            new Keyframe(1.95833f, KeyframeAnimations.degreeVec(0f, 0f, 0f),
                                     AnimationChannel.Interpolations.LINEAR)))
             .addAnimation("head",
                     new AnimationChannel(AnimationChannel.Targets.ROTATION,
@@ -367,6 +367,6 @@ public class DwarfAnimations {
                                     AnimationChannel.Interpolations.LINEAR),
                             new Keyframe(0.25f, KeyframeAnimations.degreeVec(0f, 10f, 0f),
                                     AnimationChannel.Interpolations.LINEAR),
-                            new Keyframe(1.9583433f, KeyframeAnimations.degreeVec(0f, 0f, 0f),
+                            new Keyframe(1.95833f, KeyframeAnimations.degreeVec(0f, 0f, 0f),
                                     AnimationChannel.Interpolations.LINEAR))).build();
 }

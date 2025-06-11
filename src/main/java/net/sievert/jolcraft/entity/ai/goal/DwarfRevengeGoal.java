@@ -15,7 +15,7 @@ public class DwarfRevengeGoal extends Goal
     public DwarfRevengeGoal(DwarfEntity entity)
     {
         this.entity = entity;
-        this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
+        this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
     }
 
     @Override

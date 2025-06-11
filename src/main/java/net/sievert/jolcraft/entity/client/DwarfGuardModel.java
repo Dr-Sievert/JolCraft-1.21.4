@@ -9,6 +9,7 @@ import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.HumanoidArm;
 import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.entity.custom.DwarfGuardEntity;
@@ -22,11 +23,12 @@ public class DwarfGuardModel extends HumanoidModel<DwarfRenderState> {
     private final ModelPart left_armwear;
     private final ModelPart shield;
     private final ModelPart left_leg;
-    private final ModelPart left_legwear;
     private final ModelPart right_arm;
     private final ModelPart right_armwear;
     private final ModelPart right_leg;
-    private final ModelPart right_legwear;
+    private final ModelPart legwear;
+    private final ModelPart right_footwear;
+    private final ModelPart left_footwear;
     private final ModelPart head;
     private final ModelPart beard;
     private final ModelPart right_eyebrow;
@@ -43,8 +45,9 @@ public class DwarfGuardModel extends HumanoidModel<DwarfRenderState> {
         this.bodywear = this.body.getChild("bodywear");
         this.right_armwear = this.right_arm.getChild("right_armwear");
         this.left_armwear = this.left_arm.getChild("left_armwear");
-        this.right_legwear = this.right_leg.getChild("right_legwear");
-        this.left_legwear = this.left_leg.getChild("left_legwear");
+        this.legwear = this.body.getChild("legwear");
+        this.right_footwear = this.right_leg.getChild("right_footwear");
+        this.left_footwear = this.left_leg.getChild("left_footwear");
         this.shield = this.left_arm.getChild("shield");
         this.head = root.getChild("head");
         this.beard = this.head.getChild("beard");
@@ -67,15 +70,17 @@ public class DwarfGuardModel extends HumanoidModel<DwarfRenderState> {
 
         PartDefinition left_leg = partdefinition.addOrReplaceChild("left_leg", CubeListBuilder.create().texOffs(14, 47).addBox(-3.0F, -0.5F, -2.0F, 5.0F, 7.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(3.0F, 17.0F, 0.0F));
 
-        body.addOrReplaceChild("bodywear", CubeListBuilder.create().texOffs(0, 0).addBox(-6.0F, 5.0F, -3.0F, 12.0F, 15.0F, 6.0F, new CubeDeformation(0.25F)), PartPose.offset(0.0F, -12.0F, 0.0F));
+        body.addOrReplaceChild("legwear", CubeListBuilder.create().texOffs(0, 0).addBox(-6.0F, 16.25F, -3.0F, 12.0F, 3.75F, 6.0F, new CubeDeformation(0.25F)), PartPose.offset(0.0F, -12.0F, 0.0F));
+
+        body.addOrReplaceChild("bodywear", CubeListBuilder.create().texOffs(0, 0).addBox(-6.0F, 5.0F, -3.0F, 12.0F, 10.75F, 6.0F, new CubeDeformation(0.25F)), PartPose.offset(0.0F, -12.0F, 0.0F));
 
         right_arm.addOrReplaceChild("right_armwear", CubeListBuilder.create().texOffs(2, 54).addBox(-3.8F, 0.0F, -2.0F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.25F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
         left_arm.addOrReplaceChild("left_armwear", CubeListBuilder.create().texOffs(20, 60).addBox(-0.2F, 0.0F, -2.0F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.25F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        right_leg.addOrReplaceChild("right_legwear", CubeListBuilder.create().texOffs(20, 69).addBox(-2.0F, -0.5F, -2.0F, 5.0F, 7.0F, 4.0F, new CubeDeformation(0.25F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+        right_leg.addOrReplaceChild("right_footwear", CubeListBuilder.create().texOffs(20, 69).addBox(-2.0F, -0.5F, -2.0F, 5.0F, 7.0F, 4.0F, new CubeDeformation(0.25F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        left_leg.addOrReplaceChild("left_legwear", CubeListBuilder.create().texOffs(0, 63).addBox(-3.0F, -0.5F, -2.0F, 5.0F, 7.0F, 4.0F, new CubeDeformation(0.25F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+        left_leg.addOrReplaceChild("left_footwear", CubeListBuilder.create().texOffs(0, 63).addBox(-3.0F, -0.5F, -2.0F, 5.0F, 7.0F, 4.0F, new CubeDeformation(0.25F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
         left_arm.addOrReplaceChild("shield", CubeListBuilder.create().texOffs(0, 105).addBox(-2.0F, -20.0F, -1.0F, 12.0F, 22.0F, 1.0F, new CubeDeformation(0.0F))
                 .texOffs(27, 115).addBox(3.75F, -14.0F, -0.75F, 1.0F, 6.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(4.25F, 11.5F, 10.0F, 1.5708F, 0.0F, -1.5708F));
@@ -127,8 +132,50 @@ public class DwarfGuardModel extends HumanoidModel<DwarfRenderState> {
     }
 
     protected ModelPart getArm(HumanoidArm side) {
-        return side == HumanoidArm.LEFT ? this.left_arm : this.right_arm;
+        return side == HumanoidArm.RIGHT ? this.right_arm : this.left_arm;
     }
 
+    public void showOnlyArmor(EquipmentSlot slot) {
+        // Hide everything by default
+        this.head.visible = false;
+        this.hat.visible = false;
+        this.body.visible = false;
+        this.right_arm.visible = false;
+        this.left_arm.visible = false;
+        this.right_leg.visible = false;
+        this.left_leg.visible = false;
+        this.beard.visible = false;
+        this.right_eyebrow.visible = false;
+        this.left_eyebrow.visible = false;
+        this.shield.visible = false;
+
+        this.bodywear.visible = false;
+        this.right_armwear.visible = false;
+        this.left_armwear.visible = false;
+        this.legwear.visible = false;
+        this.right_footwear.visible = false;
+        this.left_footwear.visible = false;
+
+        // Show only the relevant armor layer parts for the given slot
+        switch (slot) {
+            case HEAD -> this.hat.visible = true;
+
+            case CHEST -> {
+                this.bodywear.visible = true;
+                this.right_armwear.visible = true;
+                this.left_armwear.visible = true;
+            }
+
+            case LEGS -> {
+                this.bodywear.visible = true;
+                this.legwear.visible = true;
+            }
+
+            case FEET -> {
+                this.right_footwear.visible = true;
+                this.left_footwear.visible = true;
+            }
+        }
+    }
 
 }

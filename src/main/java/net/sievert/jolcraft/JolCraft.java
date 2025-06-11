@@ -45,23 +45,23 @@ public class JolCraft
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
 
-        // Register ourselves for server and other game events we are interested in.
-        // Note that this is necessary if and only if we want *this* class (ExampleMod) to respond directly to events.
-        // Do not add this line if there are no @SubscribeEvent-annotated functions in this class, like onServerStarting() below.
-        NeoForge.EVENT_BUS.register(this);
-
         // For registration and init stuff.
+        System.out.println("REGISTERING ITEMS!");
         JolCraftItems.register(modEventBus);
         JolCraftEntities.register(modEventBus);
         JolCraftSounds.register(modEventBus);
         JolCraftStructures.DEFERRED_REGISTRY_STRUCTURE.register(modEventBus);
+
+        // Register ourselves for server and other game events we are interested in.
+        // Note that this is necessary if and only if we want *this* class (ExampleMod) to respond directly to events.
+        // Do not add this line if there are no @SubscribeEvent-annotated functions in this class, like onServerStarting() below.
+        NeoForge.EVENT_BUS.register(this);
 
         // Register the item to a creative tab
         modEventBus.addListener(this::addCreative);
 
         // Register our mod's ModConfigSpec so that FML can create and load the config file for us
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
-
 
 
     }
@@ -86,7 +86,10 @@ public class JolCraft
             event.accept(JolCraftItems.DWARF_SPAWN_EGG);
             event.accept(JolCraftItems.DWARF_GUARD_SPAWN_EGG);
         }
-
+        if (event.getTabKey() == CreativeModeTabs.INGREDIENTS){
+            event.accept(JolCraftItems.GOLD_COIN);
+            event.accept(JolCraftItems.CONTRACT_BLANK);
+        }
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call
