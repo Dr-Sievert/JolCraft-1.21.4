@@ -6,6 +6,7 @@ import net.minecraft.world.item.CreativeModeTabs;
 import net.sievert.jolcraft.entity.JolCraftEntities;
 import net.sievert.jolcraft.entity.client.DwarfGuardRenderer;
 import net.sievert.jolcraft.entity.client.DwarfRenderer;
+import net.sievert.jolcraft.item.JolCraftCreativeModeTabs;
 import net.sievert.jolcraft.item.JolCraftItems;
 import net.sievert.jolcraft.sound.JolCraftSounds;
 import net.sievert.jolcraft.structures.JolCraftStructures;
@@ -48,6 +49,7 @@ public class JolCraft
         // For registration and init stuff.
         System.out.println("REGISTERING ITEMS!");
         JolCraftItems.register(modEventBus);
+        JolCraftCreativeModeTabs.register(modEventBus);
         JolCraftEntities.register(modEventBus);
         JolCraftSounds.register(modEventBus);
         JolCraftStructures.DEFERRED_REGISTRY_STRUCTURE.register(modEventBus);
@@ -79,16 +81,12 @@ public class JolCraft
         Config.items.forEach((item) -> LOGGER.info("ITEM >> {}", item.toString()));
     }
 
-    // Add the example block item to the building blocks tab
+    // Add items to creative tabs
     private void addCreative(BuildCreativeModeTabContentsEvent event)
     {
         if (event.getTabKey() == CreativeModeTabs.SPAWN_EGGS){
             event.accept(JolCraftItems.DWARF_SPAWN_EGG);
             event.accept(JolCraftItems.DWARF_GUARD_SPAWN_EGG);
-        }
-        if (event.getTabKey() == CreativeModeTabs.INGREDIENTS){
-            event.accept(JolCraftItems.GOLD_COIN);
-            event.accept(JolCraftItems.CONTRACT_BLANK);
         }
     }
 

@@ -16,9 +16,18 @@ public class JolCraftItems {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(JolCraft.MOD_ID);
 
     //Simple Items
+
     public static final DeferredItem<Item> GOLD_COIN = ITEMS.registerSimpleItem("gold_coin");
 
+    //Contracts
+
     public static final DeferredItem<Item> CONTRACT_BLANK = ITEMS.registerItem("contract_blank",
+            Item::new, new Item.Properties());
+
+    public static final DeferredItem<Item> CONTRACT_WRITTEN = ITEMS.registerItem("contract_written",
+            Item::new, new Item.Properties());
+
+    public static final DeferredItem<Item> CONTRACT_SIGNED = ITEMS.registerItem("contract_signed",
             Item::new, new Item.Properties());
 
     //Eggs
