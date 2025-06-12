@@ -76,7 +76,6 @@ public class DwarfEntity extends AbstractDwarfEntity {
         }
     }
 
-
     //Trades
 
     public static final Int2ObjectMap<VillagerTrades.ItemListing[]> TRADES = toIntMap(

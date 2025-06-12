@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "jolcraft:contract_blank",
+    "minecraft:ink_sac"
+  ],
+  "result": {
+    "count": 1,
+    "id": "jolcraft:contract_written"
+  }
+}

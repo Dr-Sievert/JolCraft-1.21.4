@@ -16,7 +16,6 @@ import net.sievert.jolcraft.entity.custom.DwarfGuardEntity;
 public class JolCraftEvents {
 
     //Hurting living entities
-
     @SubscribeEvent
     public static void onLivingDamage(LivingDamageEvent.Pre event) {
         if (event.getEntity() instanceof DwarfGuardEntity dwarf && dwarf.isBlockCooldownReady() && event.getSource().getEntity() instanceof Monster) {

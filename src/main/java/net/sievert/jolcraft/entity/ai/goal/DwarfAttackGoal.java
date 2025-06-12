@@ -171,7 +171,6 @@ public class DwarfAttackGoal extends MeleeAttackGoal {
         }
     }
 
-
     protected void resetAttackCooldown() {
         this.ticksUntilNextAttack = this.adjustedTickDelay(20);
     }

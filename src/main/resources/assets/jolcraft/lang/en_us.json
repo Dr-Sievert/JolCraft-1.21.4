@@ -1,9 +1,14 @@
 {
   "item.jolcraft.gold_coin": "Gold Coin",
   "item.jolcraft.contract_blank": "Blank Contract",
+  "item.jolcraft.contract_written": "Written Contract",
+  "item.jolcraft.contract_signed": "Signed Contract",
+
 
   "item.jolcraft.dwarf_spawn_egg": "Dwarf Spawn Egg",
   "item.jolcraft.dwarf_guard_spawn_egg": "Dwarf Guard Spawn Egg",
+
+  "itemGroup.jolcraft.jolcraft_items_tab": "JolCraft",
 
   "entity.jolcraft.dwarf": "Dwarf",
   "entity.minecraft.dwarf": "Dwarf",
