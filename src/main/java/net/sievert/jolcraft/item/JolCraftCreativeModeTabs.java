@@ -24,7 +24,7 @@ public class JolCraftCreativeModeTabs {
                         pOutput.accept(JolCraftItems.CONTRACT_BLANK);
                         pOutput.accept(JolCraftItems.CONTRACT_WRITTEN);
                         pOutput.accept(JolCraftItems.CONTRACT_SIGNED);
-
+                        pOutput.accept(JolCraftItems.CONTRACT_GUARD);
                     }).build());
 /*
     public static final Supplier<CreativeModeTab> BLACK_OPAL_BLOCKS_TAB =
