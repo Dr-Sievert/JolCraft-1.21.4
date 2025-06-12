@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.Util;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.WolfArmorLayer;
 import net.minecraft.resources.ResourceLocation;
@@ -14,7 +15,7 @@ import net.sievert.jolcraft.entity.custom.DwarfVariant;
 
 import java.util.Map;
 
-public class DwarfRenderer extends MobRenderer<DwarfEntity, DwarfRenderState, DwarfModel> {
+public class DwarfRenderer extends HumanoidMobRenderer<DwarfEntity, DwarfRenderState, DwarfModel> {
     private static final Map<DwarfVariant, ResourceLocation> LOCATION_BY_VARIANT =
             Util.make(Maps.newEnumMap(DwarfVariant.class), map -> {
                 map.put(DwarfVariant.GREY,
@@ -64,5 +65,8 @@ public class DwarfRenderer extends MobRenderer<DwarfEntity, DwarfRenderState, Dw
         reusedState.idleAnimationState.copyFrom(entity.idleAnimationState);
         reusedState.attackAnimationState.copyFrom(entity.attackAnimationState);
         reusedState.variant = entity.getVariant();
+        reusedState.useItemHand = entity.getUsedItemHand();
+        reusedState.ticksUsingItem = entity.getTicksUsingItem();
+        reusedState.isUsingItem = entity.isUsingItem();
     }
 }

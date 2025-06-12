@@ -283,10 +283,10 @@ public class DwarfGuardEntity extends DwarfEntity {
         }
         else{
             this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, this.getVoicePitch());
-            return InteractionResult.FAIL;
+            return InteractionResult.CONSUME;
 
         }
-        return InteractionResult.FAIL;
+        return InteractionResult.CONSUME;
     }
 
     //Sounds

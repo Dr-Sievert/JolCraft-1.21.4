@@ -14,6 +14,7 @@ import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.sievert.jolcraft.item.JolCraftItems;
 
 import java.util.Optional;
 
@@ -91,7 +92,7 @@ public class JolCraftDwarfTrades extends VillagerTrades {
                                     p_219700_
                             )
                     );
-            return new MerchantOffer(new ItemCost(Items.GOLD_INGOT, this.goldCost), itemstack, this.maxUses, this.villagerXp, this.priceMultiplier);
+            return new MerchantOffer(new ItemCost(JolCraftItems.GOLD_COIN, this.goldCost), itemstack, this.maxUses, this.villagerXp, this.priceMultiplier);
         }
     }
 
@@ -122,7 +123,7 @@ public class JolCraftDwarfTrades extends VillagerTrades {
 
         @Override
         public MerchantOffer getOffer(Entity p_219682_, RandomSource p_219683_) {
-            return new MerchantOffer(this.itemStack, new ItemStack(Items.GOLD_INGOT, this.goldAmount), this.maxUses, this.villagerXp, this.priceMultiplier);
+            return new MerchantOffer(this.itemStack, new ItemStack(JolCraftItems.GOLD_COIN.get(), this.goldAmount), this.maxUses, this.villagerXp, this.priceMultiplier);
         }
     }
 

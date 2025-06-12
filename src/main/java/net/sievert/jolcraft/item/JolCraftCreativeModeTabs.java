@@ -19,6 +19,8 @@ public class JolCraftCreativeModeTabs {
                     .icon(() -> new ItemStack(JolCraftItems.GOLD_COIN.get()))
                     .displayItems((pParameters, pOutput) -> {
                         pOutput.accept(JolCraftItems.GOLD_COIN);
+                        pOutput.accept(JolCraftItems.QUILL_EMPTY);
+                        pOutput.accept(JolCraftItems.QUILL_FULL);
                         pOutput.accept(JolCraftItems.CONTRACT_BLANK);
                         pOutput.accept(JolCraftItems.CONTRACT_WRITTEN);
                         pOutput.accept(JolCraftItems.CONTRACT_SIGNED);

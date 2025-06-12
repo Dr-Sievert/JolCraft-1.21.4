@@ -2,11 +2,11 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    "jolcraft:contract_blank",
-    "#jolcraft:ink_and_quills"
+    "minecraft:feather",
+    "minecraft:glass"
   ],
   "result": {
     "count": 1,
-    "id": "jolcraft:contract_written"
+    "id": "jolcraft:quill_empty"
   }
 }
