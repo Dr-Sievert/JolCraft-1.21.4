@@ -112,4 +112,16 @@ public class DwarfModel extends HumanoidModel<DwarfRenderState>{
         this.head.xRot = headPitch *  ((float)Math.PI / 180f);
     }
 
+    @Override
+    public void translateToHand(HumanoidArm side, PoseStack poseStack) {
+        this.root.translateAndRotate(poseStack);
+        this.getArm(side).translateAndRotate(poseStack);
+        poseStack.translate(-0.05F, -0.15F, 0.05F); // Adjust as needed
+
+    }
+
+    protected ModelPart getArm(HumanoidArm side) {
+        return side == HumanoidArm.RIGHT ? this.rightArm : this.leftArm;
+    }
+
 }

@@ -1,20 +1,19 @@
 package net.sievert.jolcraft.events;
 
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.core.registries.Registries;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
-import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
+import net.neoforged.neoforge.registries.RegisterEvent;
 import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.entity.JolCraftEntities;
 import net.sievert.jolcraft.entity.client.DwarfGuardModel;
 import net.sievert.jolcraft.entity.client.DwarfModel;
 import net.sievert.jolcraft.entity.custom.DwarfEntity;
 import net.sievert.jolcraft.entity.custom.DwarfGuardEntity;
+import net.sievert.jolcraft.item.JolCraftItems;
 
 @EventBusSubscriber(modid = JolCraft.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class JolCraftModEventBusEvents {
@@ -40,4 +39,5 @@ public class JolCraftModEventBusEvents {
     @SubscribeEvent
     public static void registerSpawnPlacements(RegisterSpawnPlacementsEvent event) {
     }
+
 }
