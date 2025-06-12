@@ -1,5 +1,6 @@
 package net.sievert.jolcraft.entity.custom;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -29,6 +30,8 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
 import net.sievert.jolcraft.entity.ai.goal.*;
 import net.sievert.jolcraft.sound.JolCraftSounds;
@@ -69,6 +72,12 @@ public class DwarfGuardEntity extends DwarfEntity {
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 6.0F));
         this.goalSelector.addGoal(9, new WaterAvoidingRandomStrollGoal(this, 1.0));
         this.goalSelector.addGoal(10, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(10, new MoveToBlockGoal(this, 0.8, 8) {
+            @Override
+            protected boolean isValidTarget(LevelReader level, BlockPos pos) {
+                return level.getBlockState(pos).is(Blocks.COBBLED_DEEPSLATE); // Or a custom anchor block
+            }
+        });
         this.targetSelector.addGoal(1, new HurtByNonPlayerTargetGoal(this).setAlertOthers());
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Raider.class, false));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, AbstractSkeleton.class, false));

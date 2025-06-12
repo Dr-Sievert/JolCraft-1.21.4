@@ -3,6 +3,9 @@ package net.sievert.jolcraft.entity.custom;
 import com.google.common.collect.ImmutableMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -14,28 +17,44 @@ import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.npc.VillagerTrades;
-import net.minecraft.world.entity.npc.WanderingTrader;
+import net.minecraft.world.entity.npc.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.item.trading.MerchantOffers;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
 import net.sievert.jolcraft.entity.ai.goal.*;
 import net.sievert.jolcraft.item.JolCraftItems;
 import net.sievert.jolcraft.sound.JolCraftSounds;
 import net.sievert.jolcraft.villager.JolCraftDwarfTrades;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import com.mojang.logging.LogUtils;
 
 public class DwarfEntity extends AbstractDwarfEntity {
+
+    private static final EntityDataAccessor<VillagerData> DATA_VILLAGER_DATA = SynchedEntityData.defineId(DwarfEntity.class, EntityDataSerializers.VILLAGER_DATA);
+
+    @Nullable
+    private Player lastTradedPlayer;
+    private int dwarfXp;
+    private boolean increaseLevelOnUpdate = false;
+    private int updateMerchantTimer = 0;
+    private static final Logger LOGGER = LogUtils.getLogger();
+    private boolean increaseProfessionLevelOnUpdate = false;
+
 
     public DwarfEntity(EntityType<? extends WanderingTrader> entityType, Level level) {
         super(entityType, level);
@@ -48,6 +67,12 @@ public class DwarfEntity extends AbstractDwarfEntity {
 
     private static final EntityDataAccessor<Boolean> ATTACKING =
             SynchedEntityData.defineId(DwarfEntity.class, EntityDataSerializers.BOOLEAN);
+
+    private boolean assignProfessionWhenSpawned;
+    public boolean assignProfessionWhenSpawned() {
+        return this.assignProfessionWhenSpawned;
+    }
+
 
     //Animations
 
@@ -89,18 +114,39 @@ public class DwarfEntity extends AbstractDwarfEntity {
     public static final Int2ObjectMap<VillagerTrades.ItemListing[]> TRADES = toIntMap(
             ImmutableMap.of(
 
-                    //Player buy
+                    //Novice
                     1,
                     new VillagerTrades.ItemListing[]{
-                            new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.CONTRACT_BLANK.get(), 3, 1, 6, 1),
-                            new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.QUILL_EMPTY.get(), 2, 4, 4, 1)
+                            new JolCraftDwarfTrades.ItemsForGold(Items.STICK, 1, 1, 6, 1),
+                            new JolCraftDwarfTrades.GoldForItems(Items.TORCH, 1, 4, 4, 1)
                     },
 
-                    //Player sell
+                    //Apprentice
                     2,
                     new VillagerTrades.ItemListing[]{
-                            new JolCraftDwarfTrades.GoldForItems(Items.DIAMOND, 1, 3, 5, 10),
-                            new JolCraftDwarfTrades.GoldForItems(Items.EMERALD, 1, 3, 5, 5)
+                            new JolCraftDwarfTrades.ItemsForGold(Items.BREAD, 1, 1, 5, 10),
+                            new JolCraftDwarfTrades.GoldForItems(Items.SMITHING_TABLE, 2, 4, 4, 1)
+                    },
+
+                    //Journeyman
+                    3,
+                    new VillagerTrades.ItemListing[]{
+                            new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.CONTRACT_BLANK.get(), 3, 1, 10, 1),
+                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.QUILL_EMPTY.get(), 2, 10, 4, 1)
+                    },
+
+                    //Expert
+                    4,
+                    new VillagerTrades.ItemListing[]{
+                            new JolCraftDwarfTrades.ItemsForGold(Items.DIAMOND, 1, 1, 10, 10),
+                            new JolCraftDwarfTrades.GoldForItems(Items.EMERALD, 1, 10, 10, 1)
+                    },
+
+                    //Master
+                    5,
+                    new VillagerTrades.ItemListing[]{
+                            new JolCraftDwarfTrades.ItemsForGold(Items.NETHERITE_BLOCK, 1, 1, 5, 10),
+                            new JolCraftDwarfTrades.GoldForItems(Items.NETHERITE_SCRAP, 1, 3, 5, 1)
                     }
             )
     );
@@ -112,12 +158,11 @@ public class DwarfEntity extends AbstractDwarfEntity {
 
     @Override
     protected void updateTrades() {
-        VillagerTrades.ItemListing[] trades1 = TRADES.get(1);
-        VillagerTrades.ItemListing[] trades2 = TRADES.get(2);
-        if (trades1 != null && trades2 != null) {
-            MerchantOffers offers = this.getOffers();
-            this.addOffersFromItemListings(offers, trades1, 1);
-            this.addOffersFromItemListings(offers, trades2, 1);
+        int level = this.getVillagerData().getLevel();
+        VillagerTrades.ItemListing[] listings = TRADES.get(level);
+
+        if (listings != null) {
+            this.addOffersFromItemListings(this.getOffers(), listings, 2); // 2 = max trades for that level
         }
     }
 
@@ -147,6 +192,183 @@ public class DwarfEntity extends AbstractDwarfEntity {
         }
     }
 
+    @Override
+    public int getVillagerXp() {
+        return this.dwarfXp;
+    }
+
+    @Override
+    public boolean showProgressBar() {
+        return true;
+    }
+
+    @Override
+    public void addAdditionalSaveData(CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
+        VillagerData.CODEC
+                .encodeStart(NbtOps.INSTANCE, this.getVillagerData())
+                .resultOrPartial(LOGGER::error)
+                .ifPresent(p_35454_ -> compound.put("VillagerData", p_35454_));
+        compound.putInt("Xp", this.dwarfXp);
+        if (this.assignProfessionWhenSpawned) {
+            compound.putBoolean("AssignProfessionWhenSpawned", true);
+        }
+
+    }
+
+    @Override
+    public void readAdditionalSaveData(CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
+        if (compound.contains("VillagerData", 10)) {
+            VillagerData.CODEC
+                    .parse(NbtOps.INSTANCE, compound.get("VillagerData"))
+                    .resultOrPartial(LOGGER::error)
+                    .ifPresent(p_323354_ -> this.entityData.set(DATA_VILLAGER_DATA, p_323354_));
+        }
+        if (compound.contains("Xp", 3)) {
+            this.dwarfXp = compound.getInt("Xp");
+        }
+        if (compound.contains("AssignProfessionWhenSpawned")) {
+            this.assignProfessionWhenSpawned = compound.getBoolean("AssignProfessionWhenSpawned");
+        }
+    }
+
+    private boolean shouldIncreaseLevel() {
+        int i = this.getVillagerData().getLevel();
+        return VillagerData.canLevelUp(i) && this.dwarfXp >= VillagerData.getMaxXpPerLevel(i);
+    }
+
+    @Override
+    protected void rewardTradeXp(MerchantOffer offer) {
+        int i = 3 + this.random.nextInt(4);
+        this.dwarfXp = this.dwarfXp + offer.getXp();
+        this.lastTradedPlayer = this.getTradingPlayer();
+        if (this.shouldIncreaseLevel()) {
+            this.updateMerchantTimer = 40;
+            this.increaseProfessionLevelOnUpdate = true;
+            i += 5;
+        }
+
+        if (offer.shouldRewardExp()) {
+            this.level().addFreshEntity(new ExperienceOrb(this.level(), this.getX(), this.getY() + 0.5, this.getZ(), i));
+        }
+    }
+
+    private static final int[] XP_THRESHOLDS = {0, 10, 50, 100, 150};
+
+    private int getMaxXpPerLevel(int level) {
+        if (level < XP_THRESHOLDS.length) {
+            return XP_THRESHOLDS[level];
+        } else {
+            return XP_THRESHOLDS[XP_THRESHOLDS.length - 1]; // or scale further
+        }
+    }
+
+    @Override
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(ATTACKING, false);
+        builder.define(DATA_VILLAGER_DATA, new VillagerData(VillagerType.PLAINS, VillagerProfession.NONE, 1));
+    }
+
+    public void setVillagerData(VillagerData p_35437_) {
+        VillagerData villagerdata = this.getVillagerData();
+        if (villagerdata.getProfession() != p_35437_.getProfession()) {
+            this.offers = null;
+        }
+
+        this.entityData.set(DATA_VILLAGER_DATA, p_35437_);
+    }
+
+    public VillagerData getVillagerData() {
+        return this.entityData.get(DATA_VILLAGER_DATA);
+    }
+
+
+    private void resendOffersToTradingPlayer() {
+        MerchantOffers merchantoffers = this.getOffers();
+        Player player = this.getTradingPlayer();
+        if (player != null && !merchantoffers.isEmpty()) {
+            player.sendMerchantOffers(
+                    player.containerMenu.containerId,
+                    merchantoffers,
+                    this.getVillagerData().getLevel(),
+                    this.getVillagerXp(),
+                    this.showProgressBar(),
+                    this.canRestock()
+            );
+        }
+    }
+
+
+    protected void increaseMerchantCareer() {
+        int current = this.getVillagerData().getLevel();
+        if (VillagerData.canLevelUp(current)) {
+            int next = current + 1;
+            this.setVillagerData(this.getVillagerData().setLevel(next));
+            this.updateTrades();
+            this.resendOffersToTradingPlayer();
+        }
+    }
+
+    @Override
+    public void customServerAiStep(ServerLevel level) {
+        if (this.assignProfessionWhenSpawned) {
+            this.assignProfessionWhenSpawned = false;
+        }
+
+        if (!this.isTrading() && this.updateMerchantTimer > 0) {
+            this.updateMerchantTimer--;
+            if (this.updateMerchantTimer <= 0) {
+                if (this.increaseProfessionLevelOnUpdate) {
+                    this.increaseMerchantCareer();
+                    this.increaseProfessionLevelOnUpdate = false;
+
+                }
+                this.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 200, 0));
+            }
+        }
+        if (this.shouldRestock()) {
+            this.restock();
+            lastRestockGameTime = this.level().getGameTime(); // Reset timer
+        }
+
+        // Signing logic
+        if (this.signingTicks > 0) {
+            this.signingTicks--;
+
+            if (this.signingTicks == 15 || this.signingTicks == 25) {
+                this.level().playSound(null, this.blockPosition(), SoundEvents.VILLAGER_WORK_CARTOGRAPHER, SoundSource.NEUTRAL, 1.0F, 1.2F);
+            }
+
+            if (this.signingTicks == 0) {
+                this.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
+                this.setNoAi(false);
+
+                if (!this.level().isClientSide && this.signingPlayer != null) {
+                    // Create the contract item
+                    ItemStack contract = new ItemStack(JolCraftItems.CONTRACT_SIGNED.get());
+
+                    // Calculate direction from dwarf to player's center
+                    Vec3 start = this.position().add(0.0, this.getEyeHeight(), 0.0);
+                    Vec3 target = this.signingPlayer.position().add(0.0, this.signingPlayer.getBbHeight() * 0.5, 0.0);
+                    Vec3 velocity = target.subtract(start).normalize().scale(0.4); // tweak speed here
+
+                    // Create and launch item
+                    ItemEntity thrown = new ItemEntity(this.level(), start.x, start.y, start.z, contract);
+                    thrown.setDeltaMovement(velocity);
+                    thrown.setPickUpDelay(10); // small delay to avoid instant pickup
+                    this.level().addFreshEntity(thrown);
+
+                    // Play sound effect on throw
+                    this.level().playSound(null, this.blockPosition(), SoundEvents.SNOWBALL_THROW, SoundSource.PLAYERS, 0.5F, 0.8F);
+                }
+                signingPlayer = null;
+            }
+        }
+        super.customServerAiStep(level);
+    }
+
     //Goals
 
     @Override
@@ -166,6 +388,12 @@ public class DwarfEntity extends AbstractDwarfEntity {
         this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1.0));
         this.goalSelector.addGoal(8, new InteractGoal(this, Player.class, 3.0F, 1.0F));
         this.goalSelector.addGoal(9, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(9, new MoveToBlockGoal(this, 0.8, 8) {
+            @Override
+            protected boolean isValidTarget(LevelReader level, BlockPos pos) {
+                return level.getBlockState(pos).is(Blocks.COBBLED_DEEPSLATE); // Or a custom anchor block
+            }
+        });
     }
 
     //Attributes
@@ -248,7 +476,7 @@ public class DwarfEntity extends AbstractDwarfEntity {
                     return InteractionResult.CONSUME;
                 }
                 this.setTradingPlayer(player);
-                this.openTradingScreen(player, this.getDisplayName(), 1);
+                this.openTradingScreen(player, this.getDisplayName(), this.getVillagerData().getLevel());
             }
             return InteractionResult.SUCCESS;
         }
@@ -264,49 +492,7 @@ public class DwarfEntity extends AbstractDwarfEntity {
         }
     }
 
-    @Override
-    public void aiStep() {
-        super.aiStep();
-        if (this.shouldRestock()) {
-            this.restock();
-            lastRestockGameTime = this.level().getGameTime(); // Reset timer
-        }
-        // Signing logic
-        if (this.signingTicks > 0) {
-            this.signingTicks--;
-
-            if (this.signingTicks == 15 || this.signingTicks == 25) {
-                this.level().playSound(null, this.blockPosition(), SoundEvents.VILLAGER_WORK_CARTOGRAPHER, SoundSource.NEUTRAL, 1.0F, 1.2F);
-            }
-
-            if (this.signingTicks == 0) {
-                this.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
-                this.setNoAi(false);
-
-                if (!this.level().isClientSide && this.signingPlayer != null) {
-                    // Create the contract item
-                    ItemStack contract = new ItemStack(JolCraftItems.CONTRACT_SIGNED.get());
-
-                    // Calculate direction from dwarf to player's center
-                    Vec3 start = this.position().add(0.0, this.getEyeHeight(), 0.0);
-                    Vec3 target = this.signingPlayer.position().add(0.0, this.signingPlayer.getBbHeight() * 0.5, 0.0);
-                    Vec3 velocity = target.subtract(start).normalize().scale(0.4); // tweak speed here
-
-                    // Create and launch item
-                    ItemEntity thrown = new ItemEntity(this.level(), start.x, start.y, start.z, contract);
-                    thrown.setDeltaMovement(velocity);
-                    thrown.setPickUpDelay(10); // small delay to avoid instant pickup
-                    this.level().addFreshEntity(thrown);
-
-                    // Play sound effect on throw
-                    this.level().playSound(null, this.blockPosition(), SoundEvents.SNOWBALL_THROW, SoundSource.PLAYERS, 0.5F, 0.8F);
-                }
-                signingPlayer = null;
-            }
-        }
-    }
-
-    //Attacking and variants
+    //Attacking
 
     public void setAttacking(boolean attacking) {
         this.entityData.set(ATTACKING, attacking);
@@ -314,13 +500,6 @@ public class DwarfEntity extends AbstractDwarfEntity {
 
     public boolean isAttacking() {
         return this.entityData.get(ATTACKING);
-    }
-
-    // Variant
-    @Override
-    protected void defineSynchedData(SynchedEntityData.Builder builder) {
-        super.defineSynchedData(builder);
-        builder.define(ATTACKING, false);
     }
 
     //Sounds
