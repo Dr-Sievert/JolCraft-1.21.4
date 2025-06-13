@@ -3,16 +3,14 @@ package net.sievert.jolcraft.entity.client;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.entity.custom.DwarfGuardEntity;
 
-public class DwarfGuardRenderer extends HumanoidMobRenderer<DwarfGuardEntity, DwarfRenderState, DwarfGuardModel> {
+public class DwarfGuardRenderer extends DwarfRenderer<DwarfGuardEntity> {
 
     public DwarfGuardRenderer(EntityRendererProvider.Context context) {
-        super(context, new DwarfGuardModel(context.bakeLayer(DwarfGuardModel.LAYER_LOCATION)), 0.4f);
-
+        super(context, new DwarfGuardModel(context.bakeLayer(DwarfGuardModel.LAYER_LOCATION)));
     }
 
     @Override

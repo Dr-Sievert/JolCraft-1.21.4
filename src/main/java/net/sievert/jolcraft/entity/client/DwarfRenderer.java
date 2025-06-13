@@ -6,16 +6,23 @@ import net.minecraft.Util;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
-import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.client.renderer.entity.layers.WolfArmorLayer;
 import net.minecraft.resources.ResourceLocation;
 import net.sievert.jolcraft.JolCraft;
-import net.sievert.jolcraft.entity.custom.DwarfEntity;
+import net.sievert.jolcraft.entity.custom.AbstractDwarfEntity;
 import net.sievert.jolcraft.entity.custom.DwarfVariant;
 
 import java.util.Map;
 
-public class DwarfRenderer extends HumanoidMobRenderer<DwarfEntity, DwarfRenderState, DwarfModel> {
+public class DwarfRenderer<T extends AbstractDwarfEntity> extends HumanoidMobRenderer<T, DwarfRenderState, DwarfModel> {
+
+    public DwarfRenderer(EntityRendererProvider.Context context) {
+        this(context, new DwarfModel(context.bakeLayer(DwarfModel.LAYER_LOCATION)));
+    }
+
+    public DwarfRenderer(EntityRendererProvider.Context context, DwarfModel model) {
+        super(context, model, 0.4f);
+    }
+
     private static final Map<DwarfVariant, ResourceLocation> LOCATION_BY_VARIANT =
             Util.make(Maps.newEnumMap(DwarfVariant.class), map -> {
                 map.put(DwarfVariant.GREY,
@@ -33,10 +40,6 @@ public class DwarfRenderer extends HumanoidMobRenderer<DwarfEntity, DwarfRenderS
                 map.put(DwarfVariant.YELLOW,
                         ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "textures/entity/dwarf/dwarf_yellow.png"));
             });
-
-    public DwarfRenderer(EntityRendererProvider.Context context) {
-        super(context, new DwarfModel(context.bakeLayer(DwarfModel.LAYER_LOCATION)), 0.4f);
-    }
 
     @Override
     public ResourceLocation getTextureLocation(DwarfRenderState entity) {
@@ -60,8 +63,8 @@ public class DwarfRenderer extends HumanoidMobRenderer<DwarfEntity, DwarfRenderS
     }
 
     @Override
-    public void extractRenderState(DwarfEntity entity, DwarfRenderState reusedState, float partialTick) {
-        super.extractRenderState(entity, reusedState, partialTick);
+    public void extractRenderState(AbstractDwarfEntity entity, DwarfRenderState reusedState, float partialTick) {
+        super.extractRenderState((T) entity, reusedState, partialTick);
         reusedState.idleAnimationState.copyFrom(entity.idleAnimationState);
         reusedState.attackAnimationState.copyFrom(entity.attackAnimationState);
         reusedState.variant = entity.getVariant();

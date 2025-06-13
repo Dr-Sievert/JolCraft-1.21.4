@@ -55,7 +55,7 @@ public class DwarfGuardEntity extends AbstractDwarfEntity {
                 .add(Attributes.FOLLOW_RANGE, 24D)
                 .add(Attributes.TEMPT_RANGE, 16D)
                 .add(Attributes.ATTACK_DAMAGE, 9.0D)
-                .add(Attributes.ARMOR, 15.0);
+                .add(Attributes.ARMOR, 0.0);
 
     }
 
