@@ -41,32 +41,6 @@ public class DwarfEntity extends AbstractDwarfEntity {
         this.setDropChance(EquipmentSlot.MAINHAND, 1.0F);
     }
 
-    //Animations
-    private void setupAnimationStates() {
-        if(this.idleAnimationTimeout <= 0) {
-            this.idleAnimationTimeout = 83;
-            this.idleAnimationState.start(this.tickCount);
-        } else {
-            --this.idleAnimationTimeout;
-        }
-        if (this.isAttacking()) {
-            if (!hasStartedAttackAnimation) {
-                attackAnimationState.start(this.tickCount);
-                hasStartedAttackAnimation = true;
-            }
-        } else {
-            hasStartedAttackAnimation = false;
-        }
-    }
-
-    @Override
-    public void tick() {
-        super.tick();
-        if(this.level().isClientSide()) {
-            this.setupAnimationStates();
-        }
-    }
-
     //Attributes
     public static AttributeSupplier.Builder createAttributes() {
         return DwarfEntity.createLivingAttributes()
@@ -78,6 +52,11 @@ public class DwarfEntity extends AbstractDwarfEntity {
     }
 
     //Behavior
+    @Override
+    public boolean canTrade() {
+        return true;
+    }
+
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
@@ -103,120 +82,9 @@ public class DwarfEntity extends AbstractDwarfEntity {
         });
     }
 
-
-    @Override
-    public void customServerAiStep(ServerLevel level) {
-        if (this.assignProfessionWhenSpawned) {
-            this.assignProfessionWhenSpawned = false;
-        }
-
-        if (!this.isTrading() && this.updateMerchantTimer > 0) {
-            this.updateMerchantTimer--;
-            if (this.updateMerchantTimer <= 0) {
-                if (this.increaseProfessionLevelOnUpdate) {
-                    this.increaseMerchantCareer();
-                    this.increaseProfessionLevelOnUpdate = false;
-
-                }
-                this.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 200, 0));
-                this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_YES.get(), SoundSource.NEUTRAL, 1.0F, 1.4F);
-            }
-        }
-
-        if (this.shouldRestock()) {
-            this.restock();
-            lastRestockGameTime = this.level().getGameTime(); // Reset timer
-        }
-
-        super.customServerAiStep(level);
-    }
-
-    @Override
-    public void aiStep() {
-        super.aiStep();
-
-        // Signing logic
-        if (this.signingTicks > 0) {
-            this.signingTicks--;
-
-            if (this.signingTicks == 15 || this.signingTicks == 25) {
-                this.level().playSound(null, this.blockPosition(), SoundEvents.VILLAGER_WORK_CARTOGRAPHER, SoundSource.NEUTRAL, 1.0F, 1.2F);
-            }
-
-            if (this.signingTicks == 0) {
-                this.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
-                this.setNoAi(false);
-
-                if (!this.level().isClientSide && this.signingPlayer != null) {
-                    // Create the contract item
-                    ItemStack contract = new ItemStack(JolCraftItems.CONTRACT_SIGNED.get());
-
-                    // Calculate direction from dwarf to player's center
-                    Vec3 start = this.position().add(0.0, this.getEyeHeight(), 0.0);
-                    Vec3 target = this.signingPlayer.position().add(0.0, this.signingPlayer.getBbHeight() * 0.5, 0.0);
-                    Vec3 velocity = target.subtract(start).normalize().scale(0.4); // tweak speed here
-
-                    // Create and launch item
-                    ItemEntity thrown = new ItemEntity(this.level(), start.x, start.y, start.z, contract);
-                    thrown.setDeltaMovement(velocity);
-                    thrown.setPickUpDelay(10); // small delay to avoid instant pickup
-                    this.level().addFreshEntity(thrown);
-
-                    // Play sound effect on throw
-                    this.level().playSound(null, this.blockPosition(), SoundEvents.SNOWBALL_THROW, SoundSource.PLAYERS, 0.5F, 0.8F);
-                }
-                signingPlayer = null;
-            }
-        }
-    }
-
-    //Interaction
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
-
-        //Handle common interactions
-        InteractionResult result = this.handleCommonInteractions(player, hand);
-        ItemStack stack = player.getItemInHand(hand);
-        if (result.consumesAction()) return result;
-
-        // Sign contract
-        if (stack.is(JolCraftItems.CONTRACT_WRITTEN.get()) && !stack.is(Items.VILLAGER_SPAWN_EGG) && this.isAlive() && !this.isTrading() && !this.isBaby()) {
-            if (this.getMainHandItem().isEmpty() && this.isInLove()) {
-                this.setNoAi(true);
-                this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_YES.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
-                this.usePlayerItem(player, hand, stack);
-                this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(JolCraftItems.CONTRACT_WRITTEN.get()));
-                this.signingTicks = 40;
-                this.signingPlayer = player;
-                return InteractionResult.SUCCESS;
-            }
-            return InteractionResult.CONSUME;
-        }
-
-        // Start trading
-        if (!stack.is(Items.VILLAGER_SPAWN_EGG)
-                && this.isAlive()
-                && !this.isTrading()
-                && !this.isBaby()
-                && !stack.is(JolCraftItems.CONTRACT_WRITTEN.get())
-                && !this.isFood(stack)) {
-
-            if (hand == InteractionHand.MAIN_HAND) {
-                player.awardStat(Stats.TALKED_TO_VILLAGER);
-            }
-            if (!this.level().isClientSide) {
-                if (this.getOffers().isEmpty()) {
-                    return InteractionResult.CONSUME;
-                }
-                this.setTradingPlayer(player);
-                this.openTradingScreen(player, this.getDisplayName(), this.getVillagerData().getLevel());
-            }
-            return InteractionResult.SUCCESS;
-        }
-
-        // Fallback sound
-        this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, this.isBaby() ? 1.5F : 1.0F);
-        return InteractionResult.CONSUME;
+        return this.handleCommonInteractions(player, hand);
     }
 
     //Trades

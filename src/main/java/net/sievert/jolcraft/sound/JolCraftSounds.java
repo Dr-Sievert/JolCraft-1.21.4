@@ -13,13 +13,16 @@ public class JolCraftSounds {
     public static final DeferredRegister<SoundEvent> SOUND_EVENTS =
             DeferredRegister.create(BuiltInRegistries.SOUND_EVENT, JolCraft.MOD_ID);
 
-    //Dwarf
 
+    //Dwarf
     public static final Supplier<SoundEvent> DWARF_AMBIENT = registerSoundEvent("dwarf_ambient");
     public static final Supplier<SoundEvent> DWARF_HURT = registerSoundEvent("dwarf_hurt");
     public static final Supplier<SoundEvent> DWARF_DEATH = registerSoundEvent("dwarf_death");
     public static final Supplier<SoundEvent> DWARF_YES = registerSoundEvent("dwarf_yes");
     public static final Supplier<SoundEvent> DWARF_NO = registerSoundEvent("dwarf_no");
+
+
+
 
     private static Supplier<SoundEvent> registerSoundEvent(String name) {
         ResourceLocation id = ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, name);

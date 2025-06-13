@@ -27,17 +27,7 @@ public class JolCraftGameEvents {
 
    @SubscribeEvent
     public static void registerCustomTrades(final VillagerTradesEvent event) {
-        if (event.getType() == VillagerProfession.CARTOGRAPHER){
-            new VillagerTrades.TreasureMapForEmeralds(
-                    13,
-                    JolCraftTags.Structures.ON_FORGE_EXPLORER_MAPS,
-                    "filled_map.jolcraft.forge",
-                    MapDecorationTypes.TARGET_X,
-                    8,
-                    10
-            );
-        }
 
-    }
+        }
 
 }

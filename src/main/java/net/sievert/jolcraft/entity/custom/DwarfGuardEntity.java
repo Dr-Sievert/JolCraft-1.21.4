@@ -1,16 +1,10 @@
 package net.sievert.jolcraft.entity.custom;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.DustParticleOptions;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -29,10 +23,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.phys.Vec3;
 import net.sievert.jolcraft.entity.ai.goal.*;
-import net.sievert.jolcraft.sound.JolCraftSounds;
-import org.jetbrains.annotations.Nullable;
+import net.sievert.jolcraft.item.JolCraftItems;
 
 public class DwarfGuardEntity extends AbstractDwarfEntity {
 
@@ -55,92 +47,6 @@ public class DwarfGuardEntity extends AbstractDwarfEntity {
 
     }
 
-    //Animations and particles
-    private void setupAnimationStates() {
-        if(this.idleAnimationTimeout <= 0) {
-            this.idleAnimationTimeout = 83;
-            this.idleAnimationState.start(this.tickCount);
-        } else {
-            --this.idleAnimationTimeout;
-        }
-
-        if (this.isAttacking()) {
-            if (!hasStartedAttackAnimation) {
-                attackAnimationState.start(this.tickCount);
-                hasStartedAttackAnimation = true;
-            }
-        } else {
-            hasStartedAttackAnimation = false;
-        }
-
-        if (isBlocking()) {
-            if (!hasStartedBlockAnimation) {
-                blockAnimationState.start(this.tickCount);
-                hasStartedBlockAnimation = true;
-            }
-        } else {
-            hasStartedBlockAnimation = false;
-        }
-
-        if (isDrinking()) {
-            if (!hasStartedDrinkAnimation) {
-                drinkAnimationState.start(this.tickCount);
-                hasStartedDrinkAnimation = true;
-            }
-        } else {
-            hasStartedDrinkAnimation = false;
-        }
-    }
-
-    private Vec3 blockParticlePos = null;
-    private int blockParticleTicks = 0;
-
-    @Override
-    public void tick() {
-        super.tick();
-        if (this.level().isClientSide()) {
-            this.setupAnimationStates();
-
-            if (this.hasStartedBlockAnimation) {
-                if (blockParticlePos == null) {
-                    // Capture particle spawn location at start
-                    Vec3 look = this.getLookAngle().normalize();
-                    double forwardOffset = 1.0D;
-                    double leftOffset = -0.4D;
-                    Vec3 left = new Vec3(-look.z, 0, look.x).normalize();
-
-                    double px = this.getX() + look.x * forwardOffset + left.x * leftOffset;
-                    double py = this.getY() + 1.2D;
-                    double pz = this.getZ() + look.z * forwardOffset + left.z * leftOffset;
-
-                    blockParticlePos = new Vec3(px, py, pz);
-                    blockParticleTicks = 10; // spawn for 10 ticks
-                }
-
-                if (blockParticleTicks-- > 0 && blockParticlePos != null) {
-                    for (int i = 0; i < 5; i++) { // spawn multiple per tick for visual density
-                        double scatterRange = 0.15D; // how far they can spread from center
-
-                        double offsetX = blockParticlePos.x + (this.random.nextDouble() - 0.5) * 2.0 * scatterRange;
-                        double offsetY = blockParticlePos.y + (this.random.nextDouble() - 0.5) * 2.0 * scatterRange;
-                        double offsetZ = blockParticlePos.z + (this.random.nextDouble() - 0.5) * 2.0 * scatterRange;
-
-                        double velocityX = (this.random.nextDouble() - 0.5) * 0.1;
-                        double velocityY = (this.random.nextDouble()) * 0.1; // small upward boost
-                        double velocityZ = (this.random.nextDouble() - 0.5) * 0.1;
-
-                        DustParticleOptions dust = new DustParticleOptions(-2233622, 0.5F);
-                        this.level().addParticle(dust, offsetX, offsetY, offsetZ, velocityX, velocityY, velocityZ);
-                    }
-                }
-            } else {
-                // Reset when animation ends
-                blockParticlePos = null;
-                blockParticleTicks = 0;
-            }
-        }
-    }
-
     //Attributes
     public static AttributeSupplier.Builder createAttributes() {
         return DwarfEntity.createLivingAttributes()
@@ -155,6 +61,16 @@ public class DwarfGuardEntity extends AbstractDwarfEntity {
 
     //Behavior
     @Override
+    public boolean canTrade() {
+        return false;
+    }
+
+    @Override
+    public ItemStack getSignedContractItem() {
+        return new ItemStack(JolCraftItems.CONTRACT_GUARD.get());
+    }
+
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new DwarfBlockGoal(this));
@@ -162,7 +78,7 @@ public class DwarfGuardEntity extends AbstractDwarfEntity {
         this.goalSelector.addGoal(3, new DwarfRevengeGoal(this));
         this.goalSelector.addGoal(4, new DwarfUseItemGoal<>(this, PotionContents.createItemStack(Items.POTION, Potions.STRONG_HEALING), SoundEvents.PLAYER_BURP, mob -> mob.getHealth() < mob.getMaxHealth(), 300));
         this.goalSelector.addGoal(5, new DwarfBreedGoal(this, 1.0, AbstractDwarfEntity.class));
-        this.goalSelector.addGoal(6, new TemptGoal(this, 1.25, stack -> stack.is(Items.GOLD_INGOT), false));
+        this.goalSelector.addGoal(6, new TemptGoal(this, 1.25, stack -> stack.is(JolCraftItems.GOLD_COIN), false));
         this.goalSelector.addGoal(7, new OpenDoorGoal(this, true));
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 6.0F));
         this.goalSelector.addGoal(9, new WaterAvoidingRandomStrollGoal(this, 1.0));
@@ -180,57 +96,15 @@ public class DwarfGuardEntity extends AbstractDwarfEntity {
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, AbstractPiglin.class, false));
     }
 
-    //Blocking
-
-    private boolean shouldStartBlocking = false;
-
-    public int blockCooldown = 0;
-
-    public boolean isBlockCooldownReady() {
-        return blockCooldown <= 0;
-    }
-
-    public void setBlockCooldown(int ticks) {
-        this.blockCooldown = ticks;
-    }
-
-    public void tickBlockCooldown() {
-        if (blockCooldown > 0) blockCooldown--;
-    }
-
-    public void markForBlocking() {
-        this.shouldStartBlocking = true;
-    }
-
-    public boolean consumeBlockFlag() {
-        if (this.shouldStartBlocking) {
-            this.shouldStartBlocking = false;
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public void aiStep() {
-        super.aiStep();
-        tickBlockCooldown();
-    }
-
-    //Interaction
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         return this.handleCommonInteractions(player, hand);
     }
 
-    //Sounds
+    //Sound
     @Override
-    @Nullable
-    protected SoundEvent getHurtSound(DamageSource damageSource) {
-        // Suppress if blocking
-        if (this.isBlockCooldownReady()) {
-            return null;
-        }
-        return JolCraftSounds.DWARF_HURT.get();
+    public float getVoicePitch() {
+        return 0.8F; // deeper pitch for guards
     }
 
     //Spawning

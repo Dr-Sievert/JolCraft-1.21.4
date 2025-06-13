@@ -15,11 +15,13 @@ public class JolCraftItems {
 
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(JolCraft.MOD_ID);
 
+
+
     //Simple Items
 
     public static final DeferredItem<Item> GOLD_COIN = ITEMS.registerSimpleItem("gold_coin");
 
-    //Contracts and associated items
+    //Contracts and Associated Items
 
     public static final DeferredItem<Item> CONTRACT_BLANK = ITEMS.registerItem("contract_blank",
             Item::new, new Item.Properties());
@@ -62,6 +64,8 @@ public class JolCraftItems {
 
     public static final DeferredItem<Item> DWARF_GUARD_SPAWN_EGG = ITEMS.registerItem("dwarf_guard_spawn_egg",
             (properties) -> new SpawnEggItem(JolCraftEntities.DWARF_GUARD.get(), properties));
+
+
 
 
     public static void register(IEventBus eventBus) {

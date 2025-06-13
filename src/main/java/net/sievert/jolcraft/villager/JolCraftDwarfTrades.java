@@ -172,7 +172,7 @@ public class JolCraftDwarfTrades extends VillagerTrades {
             BlockPos targetPos;
             try {
                 // Search for the nearest structure matching the tag (radius: 5 chunks)
-                targetPos = serverLevel.findNearestMapStructure(this.destination, trader.blockPosition(), 5, true);
+                targetPos = serverLevel.findNearestMapStructure(this.destination, trader.blockPosition(), 10, true);
             } catch (Exception e) {
                 LOGGER.warn("Failed to locate structure for Forge map trade", e);
                 return null;

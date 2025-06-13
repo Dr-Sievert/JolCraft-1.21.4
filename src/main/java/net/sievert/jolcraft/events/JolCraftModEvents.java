@@ -35,6 +35,7 @@ public class JolCraftModEvents {
 
     @SubscribeEvent
     public static void registerSpawnPlacements(RegisterSpawnPlacementsEvent event) {
+
     }
 
 }
