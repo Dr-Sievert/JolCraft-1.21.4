@@ -18,10 +18,9 @@ public class DwarfUseItemGoal<T extends Mob> extends Goal {
     private final Predicate<? super T> canUseSelector;
     @Nullable
     private final SoundEvent finishUsingSound;
-
+    protected ItemStack previousMainHandItem = ItemStack.EMPTY;
     private final int cooldownTicks;
     private int cooldownTimer = 0;
-    private ItemStack previousMainHandItem = ItemStack.EMPTY;
 
     public DwarfUseItemGoal(T mob, ItemStack item, @Nullable SoundEvent finishUsingSound, Predicate<? super T> canUseSelector, int cooldownTicks) {
         this.mob = mob;
