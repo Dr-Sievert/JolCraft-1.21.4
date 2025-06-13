@@ -289,7 +289,9 @@ public class AbstractDwarfEntity extends WanderingTrader {
     }
 
     public void markForBlocking() {
-        this.shouldStartBlocking = true;
+        if(!this.isDrinking()){
+            this.shouldStartBlocking = true;
+        }
     }
 
     public boolean consumeBlockFlag() {
