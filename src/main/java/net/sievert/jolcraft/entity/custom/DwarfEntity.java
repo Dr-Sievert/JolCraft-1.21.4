@@ -34,9 +34,11 @@ import net.minecraft.world.item.trading.MerchantOffers;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.saveddata.maps.MapDecorationTypes;
 import net.minecraft.world.phys.Vec3;
 import net.sievert.jolcraft.entity.ai.goal.*;
 import net.sievert.jolcraft.item.JolCraftItems;
+import net.sievert.jolcraft.data.JolCraftTags;
 import net.sievert.jolcraft.sound.JolCraftSounds;
 import net.sievert.jolcraft.villager.JolCraftDwarfTrades;
 import org.jetbrains.annotations.Nullable;
@@ -118,14 +120,16 @@ public class DwarfEntity extends AbstractDwarfEntity {
                     1,
                     new VillagerTrades.ItemListing[]{
                             new JolCraftDwarfTrades.ItemsForGold(Items.STICK, 1, 1, 6, 1),
-                            new JolCraftDwarfTrades.GoldForItems(Items.TORCH, 1, 4, 4, 1)
+                            new JolCraftDwarfTrades.GoldForItems(Items.SMITHING_TABLE, 2, 4, 4, 1)
+
                     },
 
                     //Apprentice
                     2,
                     new VillagerTrades.ItemListing[]{
                             new JolCraftDwarfTrades.ItemsForGold(Items.BREAD, 1, 1, 5, 10),
-                            new JolCraftDwarfTrades.GoldForItems(Items.SMITHING_TABLE, 2, 4, 4, 1)
+                            new JolCraftDwarfTrades.TreasureMapForGold(13, JolCraftTags.Structures.ON_FORGE_EXPLORER_MAPS, "filled_map.forge", MapDecorationTypes.TARGET_X, 1, 10)
+
                     },
 
                     //Journeyman
@@ -429,7 +433,7 @@ public class DwarfEntity extends AbstractDwarfEntity {
 
             //Sign contract
             if (playerhand.is(JolCraftItems.CONTRACT_WRITTEN) && !playerhand.is(Items.VILLAGER_SPAWN_EGG) && this.isAlive() && !this.isTrading() && !this.isBaby()) {
-            /* Future achievement?
+            /* Future advancement?
             if (hand == InteractionHand.MAIN_HAND) {
                 player.awardStat(Stats.TALKED_TO_VILLAGER);
             }

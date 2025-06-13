@@ -22,5 +22,7 @@
   "entity.jolcraft.dwarf": "Dwarf",
   "entity.minecraft.dwarf": "Dwarf",
   "entity.jolcraft.dwarf_guard": "Dwarf Guard",
-  "entity.minecraft.dwarf_guard": "Dwarf Guard"
+  "entity.minecraft.dwarf_guard": "Dwarf Guard",
+
+  "filled_map.forge": "Map to a Dwarven Forge"
 }
