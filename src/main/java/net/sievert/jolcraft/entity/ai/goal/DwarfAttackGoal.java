@@ -2,19 +2,17 @@ package net.sievert.jolcraft.entity.ai.goal;
 
 import java.util.EnumSet;
 
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.pathfinder.Path;
-import net.sievert.jolcraft.entity.custom.DwarfEntity;
+import net.sievert.jolcraft.entity.custom.AbstractDwarfEntity;
 import net.sievert.jolcraft.sound.JolCraftSounds;
 
 public class DwarfAttackGoal extends MeleeAttackGoal {
-    protected final DwarfEntity mob;
+    protected final AbstractDwarfEntity mob;
     private final double speedModifier;
     private final boolean followingTargetEvenIfNotSeen;
     private Path path;
@@ -31,7 +29,7 @@ public class DwarfAttackGoal extends MeleeAttackGoal {
     private int attackAnimTimer = 0;
 
 
-    public DwarfAttackGoal(DwarfEntity mob, double speedModifier, boolean followingTargetEvenIfNotSeen) {
+    public DwarfAttackGoal(AbstractDwarfEntity mob, double speedModifier, boolean followingTargetEvenIfNotSeen) {
         super(mob, speedModifier, followingTargetEvenIfNotSeen);
         this.mob = mob;
         this.speedModifier = speedModifier;
