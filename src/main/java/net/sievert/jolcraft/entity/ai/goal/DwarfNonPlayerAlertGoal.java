@@ -10,14 +10,14 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.TamableAnimal;
-import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.target.TargetGoal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.phys.AABB;
+import net.sievert.jolcraft.entity.custom.AbstractDwarfEntity;
 
-public class HurtByNonPlayerTargetGoal extends TargetGoal {
+public class DwarfNonPlayerAlertGoal extends TargetGoal {
     private static final TargetingConditions HURT_BY_TARGETING = TargetingConditions.forCombat().ignoreLineOfSight().ignoreInvisibilityTesting();
     private static final int ALERT_RANGE_Y = 10;
     private boolean alertSameType;
@@ -27,7 +27,7 @@ public class HurtByNonPlayerTargetGoal extends TargetGoal {
     @Nullable
     private Class<?>[] toIgnoreAlert;
 
-    public HurtByNonPlayerTargetGoal(PathfinderMob mob, Class<?>... toIgnoreDamage) {
+    public DwarfNonPlayerAlertGoal(PathfinderMob mob, Class<?>... toIgnoreDamage) {
         super(mob, true);
         this.toIgnoreDamage = toIgnoreDamage;
         this.setFlags(EnumSet.of(Flag.TARGET));
@@ -59,7 +59,7 @@ public class HurtByNonPlayerTargetGoal extends TargetGoal {
         }
     }
 
-    public HurtByNonPlayerTargetGoal setAlertOthers(Class<?>... reinforcementTypes) {
+    public DwarfNonPlayerAlertGoal setAlertOthers(Class<?>... reinforcementTypes) {
         this.alertSameType = true;
         this.toIgnoreAlert = reinforcementTypes;
         return this;
@@ -81,7 +81,7 @@ public class HurtByNonPlayerTargetGoal extends TargetGoal {
     protected void alertOthers() {
         double d0 = this.getFollowDistance();
         AABB aabb = AABB.unitCubeFromLowerCorner(this.mob.position()).inflate(d0, 10.0, d0);
-        List<? extends Mob> list = this.mob.level().getEntitiesOfClass((Class<? extends Mob>)this.mob.getClass(), aabb, EntitySelector.NO_SPECTATORS);
+        List<AbstractDwarfEntity> list = this.mob.level().getEntitiesOfClass(AbstractDwarfEntity.class, aabb, EntitySelector.NO_SPECTATORS);
         Iterator iterator = list.iterator();
 
         while (true) {

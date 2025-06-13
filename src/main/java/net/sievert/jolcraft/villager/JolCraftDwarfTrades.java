@@ -25,7 +25,6 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.saveddata.maps.MapDecorationType;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
 import net.sievert.jolcraft.item.JolCraftItems;
-import org.slf4j.Logger;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
@@ -141,6 +140,8 @@ public class JolCraftDwarfTrades extends VillagerTrades {
         }
     }
 
+
+    //Buying Explorer Maps
 
     public static class TreasureMapForGold implements VillagerTrades.ItemListing {
         private final int goldCost;

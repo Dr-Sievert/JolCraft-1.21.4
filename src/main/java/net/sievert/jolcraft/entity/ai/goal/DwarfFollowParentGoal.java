@@ -7,9 +7,6 @@ import net.minecraft.world.entity.ai.goal.Goal;
 import net.sievert.jolcraft.entity.custom.DwarfEntity;
 
 public class DwarfFollowParentGoal extends Goal {
-    public static final int HORIZONTAL_SCAN_RANGE = 8;
-    public static final int VERTICAL_SCAN_RANGE = 4;
-    public static final int DONT_FOLLOW_IF_CLOSER_THAN = 3;
     private final DwarfEntity dwarf;
     @Nullable
     private DwarfEntity parent;

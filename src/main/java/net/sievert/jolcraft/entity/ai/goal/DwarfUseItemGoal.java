@@ -9,6 +9,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.item.ItemStack;
+import net.sievert.jolcraft.entity.custom.AbstractDwarfEntity;
 import net.sievert.jolcraft.entity.custom.DwarfGuardEntity;
 
 public class DwarfUseItemGoal<T extends Mob> extends Goal {
@@ -46,7 +47,7 @@ public class DwarfUseItemGoal<T extends Mob> extends Goal {
 
     @Override
     public void start() {
-        if (this.mob instanceof DwarfGuardEntity dwarf) {
+        if (this.mob instanceof AbstractDwarfEntity dwarf) {
             dwarf.setDrinking(true);
         }
         this.previousMainHandItem = this.mob.getItemBySlot(EquipmentSlot.MAINHAND).copy(); // Save previous item
@@ -56,7 +57,7 @@ public class DwarfUseItemGoal<T extends Mob> extends Goal {
 
     @Override
     public void stop() {
-        if (this.mob instanceof DwarfGuardEntity dwarf) {
+        if (this.mob instanceof AbstractDwarfEntity dwarf) {
             dwarf.setDrinking(false);
         }
         this.mob.setItemSlot(EquipmentSlot.MAINHAND, this.previousMainHandItem); // Restore old item

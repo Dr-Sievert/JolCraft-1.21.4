@@ -3,16 +3,16 @@ package net.sievert.jolcraft.entity.ai.goal;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.player.Player;
-import net.sievert.jolcraft.entity.custom.DwarfEntity;
+import net.sievert.jolcraft.entity.custom.AbstractDwarfEntity;
 
 import java.util.EnumSet;
 
 
 public class DwarfRevengeGoal extends Goal
 {
-    private final DwarfEntity entity;
+    private final AbstractDwarfEntity entity;
 
-    public DwarfRevengeGoal(DwarfEntity entity)
+    public DwarfRevengeGoal(AbstractDwarfEntity entity)
     {
         this.entity = entity;
         this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
