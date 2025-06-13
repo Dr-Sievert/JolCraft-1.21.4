@@ -2,6 +2,7 @@ package net.sievert.jolcraft;
 
 
 import net.minecraft.client.renderer.entity.EntityRenderers;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.sievert.jolcraft.entity.JolCraftEntities;
 import net.sievert.jolcraft.entity.client.DwarfGuardRenderer;
@@ -30,7 +31,6 @@ import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 
 
-// The value here should match an entry in the META-INF/neoforge.mods.toml file
 @Mod(JolCraft.MOD_ID)
 public class JolCraft
 {
@@ -113,5 +113,9 @@ public class JolCraft
             LOGGER.info("HELLO FROM CLIENT SETUP");
             LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
         }
+    }
+
+    public static ResourceLocation locate(String path) {
+        return ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, path);
     }
 }

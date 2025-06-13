@@ -5,7 +5,7 @@
 
   "start_pool": "jolcraft:forge/entrance_pool",
 
-  "size": 15,
+  "size": 12,
 
   "liquid_settings": "ignore_waterlogging",
 
