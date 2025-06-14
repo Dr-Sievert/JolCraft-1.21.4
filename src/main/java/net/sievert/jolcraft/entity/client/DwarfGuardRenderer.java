@@ -11,6 +11,7 @@ public class DwarfGuardRenderer extends DwarfRenderer<DwarfGuardEntity> {
 
     public DwarfGuardRenderer(EntityRendererProvider.Context context) {
         super(context, new DwarfGuardModel(context.bakeLayer(DwarfGuardModel.LAYER_LOCATION)));
+        addLayer(new DwarfArmorLayer(this));
     }
 
     @Override

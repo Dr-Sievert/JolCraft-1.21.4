@@ -30,20 +30,13 @@ public class DwarfGuardEntity extends AbstractDwarfEntity {
 
     public DwarfGuardEntity(EntityType<? extends AbstractDwarfEntity> entityType, Level level) {
         super(entityType, level);
-        this.setLeftHanded(false);
         // Set default main-hand item to iron axe
         this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_AXE));
-        this.setDropChance(EquipmentSlot.MAINHAND, 0.0F);
         //this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(Items.SHIELD));
-        //this.setDropChance(EquipmentSlot.OFFHAND, 0.0F);
         this.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.IRON_HELMET));
         this.setItemSlot(EquipmentSlot.CHEST, new ItemStack(Items.IRON_CHESTPLATE));
         this.setItemSlot(EquipmentSlot.LEGS, new ItemStack(Items.IRON_LEGGINGS));
         this.setItemSlot(EquipmentSlot.FEET, new ItemStack(Items.IRON_BOOTS));
-        this.setDropChance(EquipmentSlot.HEAD, 0.0F);
-        this.setDropChance(EquipmentSlot.CHEST, 0.0F);
-        this.setDropChance(EquipmentSlot.LEGS, 0.0F);
-        this.setDropChance(EquipmentSlot.FEET, 0.0F);
 
     }
 
