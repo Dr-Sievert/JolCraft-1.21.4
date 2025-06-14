@@ -7,6 +7,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.entity.custom.AbstractDwarfEntity;
 import net.sievert.jolcraft.entity.custom.DwarfVariant;
@@ -17,6 +18,7 @@ public class DwarfRenderer<T extends AbstractDwarfEntity> extends HumanoidMobRen
 
     public DwarfRenderer(EntityRendererProvider.Context context) {
         this(context, new DwarfModel(context.bakeLayer(DwarfModel.LAYER_LOCATION)));
+        this.addLayer(new DwarfArmorLayer(this));
     }
 
     public DwarfRenderer(EntityRendererProvider.Context context, DwarfModel model) {
@@ -67,9 +69,14 @@ public class DwarfRenderer<T extends AbstractDwarfEntity> extends HumanoidMobRen
         super.extractRenderState((T) entity, reusedState, partialTick);
         reusedState.idleAnimationState.copyFrom(entity.idleAnimationState);
         reusedState.attackAnimationState.copyFrom(entity.attackAnimationState);
+        reusedState.dwarf = entity;
         reusedState.variant = entity.getVariant();
         reusedState.useItemHand = entity.getUsedItemHand();
         reusedState.ticksUsingItem = entity.getTicksUsingItem();
         reusedState.isUsingItem = entity.isUsingItem();
+        reusedState.headEquipment = entity.getItemBySlot(EquipmentSlot.HEAD);
+        reusedState.chestEquipment = entity.getItemBySlot(EquipmentSlot.CHEST);
+        reusedState.legsEquipment = entity.getItemBySlot(EquipmentSlot.LEGS);
+        reusedState.feetEquipment = entity.getItemBySlot(EquipmentSlot.FEET);
     }
 }

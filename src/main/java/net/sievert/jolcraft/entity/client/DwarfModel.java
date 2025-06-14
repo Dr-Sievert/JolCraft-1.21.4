@@ -1,6 +1,7 @@
 package net.sievert.jolcraft.entity.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.*;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
@@ -15,22 +16,22 @@ import net.sievert.jolcraft.JolCraft;
 public class DwarfModel extends HumanoidModel<DwarfRenderState>{
 
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "dwarf"), "main");
-    private final ModelPart body;
-    private final ModelPart right_arm;
-    private final ModelPart left_arm;
-    private final ModelPart right_leg;
-    private final ModelPart left_leg;
-    private final ModelPart bodywear;
-    private final ModelPart legwear;
-    private final ModelPart right_armwear;
-    private final ModelPart left_armwear;
-    private final ModelPart right_footwear;
-    private final ModelPart left_footwear;
-    private final ModelPart head;
-    private final ModelPart beard;
-    private final ModelPart right_eyebrow;
-    private final ModelPart left_eyebrow;
-    private final ModelPart hat;
+    public final ModelPart body;
+    public final ModelPart right_arm;
+    public final ModelPart left_arm;
+    public final ModelPart right_leg;
+    public final ModelPart left_leg;
+    public final ModelPart bodywear;
+    public final ModelPart legwear;
+    public final ModelPart right_armwear;
+    public final ModelPart left_armwear;
+    public final ModelPart right_footwear;
+    public final ModelPart left_footwear;
+    public final ModelPart head;
+    public final ModelPart beard;
+    public final ModelPart right_eyebrow;
+    public final ModelPart left_eyebrow;
+    public final ModelPart hat;
 
     public DwarfModel(ModelPart root) {
         super(root);
@@ -109,7 +110,21 @@ public class DwarfModel extends HumanoidModel<DwarfRenderState>{
         this.animate(state.attackAnimationState, DwarfAnimations.DWARF_ATTACK, state.ageInTicks, 1f);
         this.animate(state.blockAnimationState, DwarfAnimations.DWARF_BLOCK, state.ageInTicks, 1f);
         this.animate(state.drinkAnimationState, DwarfAnimations.DWARF_DRINK, state.ageInTicks, 1f);
-      }
+
+        // Helmet
+        this.hat.visible = !state.headEquipment.isEmpty();
+        // Chestplate
+        boolean hasChest = !state.chestEquipment.isEmpty();
+        this.bodywear.visible = hasChest;
+        this.right_armwear.visible = hasChest;
+        this.left_armwear.visible = hasChest;
+        // Leggings
+        this.legwear.visible = !state.legsEquipment.isEmpty();
+        // Boots
+        boolean hasBoots = !state.feetEquipment.isEmpty();
+        this.right_footwear.visible = hasBoots;
+        this.left_footwear.visible = hasBoots;
+    }
 
     @Override
     public void translateToHand(HumanoidArm side, PoseStack poseStack) {

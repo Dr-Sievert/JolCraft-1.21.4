@@ -37,8 +37,12 @@ public class DwarfEntity extends AbstractDwarfEntity {
 
     public DwarfEntity(EntityType<? extends AbstractDwarfEntity> entityType, Level level) {
         super(entityType, level);
-        ((GroundPathNavigation)this.getNavigation()).setCanOpenDoors(true);
         this.setDropChance(EquipmentSlot.MAINHAND, 1.0F);
+        //this.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.IRON_HELMET));
+        //this.setItemSlot(EquipmentSlot.CHEST, new ItemStack(Items.CHAINMAIL_CHESTPLATE));
+        //this.setItemSlot(EquipmentSlot.LEGS, new ItemStack(Items.LEATHER_LEGGINGS));
+        //this.setItemSlot(EquipmentSlot.FEET, new ItemStack(Items.DIAMOND_BOOTS));
+
     }
 
     //Attributes
