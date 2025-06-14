@@ -6,12 +6,14 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.entity.custom.DwarfGuardEntity;
+import net.sievert.jolcraft.entity.client.DwarfBeardLayer;
 
 public class DwarfGuardRenderer extends DwarfRenderer<DwarfGuardEntity> {
 
     public DwarfGuardRenderer(EntityRendererProvider.Context context) {
         super(context, new DwarfGuardModel(context.bakeLayer(DwarfGuardModel.LAYER_LOCATION)));
         addLayer(new DwarfArmorLayer(this));
+        this.addLayer(new DwarfBeardLayer(this));
     }
 
     @Override

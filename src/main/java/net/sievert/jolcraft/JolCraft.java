@@ -10,7 +10,8 @@ import net.sievert.jolcraft.entity.client.DwarfRenderer;
 import net.sievert.jolcraft.item.JolCraftCreativeModeTabs;
 import net.sievert.jolcraft.item.JolCraftItems;
 import net.sievert.jolcraft.sound.JolCraftSounds;
-import net.sievert.jolcraft.structures.JolCraftStructures;
+import net.sievert.jolcraft.world.processor.JolCraftProcessors;
+import net.sievert.jolcraft.world.structure.JolCraftStructures;
 import net.sievert.jolcraft.villager.JolCraftVillagers;
 import org.slf4j.Logger;
 import com.mojang.logging.LogUtils;
@@ -48,13 +49,19 @@ public class JolCraft
         modEventBus.addListener(this::commonSetup);
 
         // For registration and init stuff.
-        System.out.println("REGISTERING ITEMS!");
         JolCraftItems.register(modEventBus);
         JolCraftCreativeModeTabs.register(modEventBus);
+
         JolCraftEntities.register(modEventBus);
-        JolCraftSounds.register(modEventBus);
-        JolCraftStructures.DEFERRED_REGISTRY_STRUCTURE.register(modEventBus);
+
         JolCraftVillagers.register(modEventBus);
+
+        JolCraftSounds.register(modEventBus);
+
+        JolCraftProcessors.register(modEventBus);
+
+        JolCraftStructures.DEFERRED_REGISTRY_STRUCTURE.register(modEventBus);
+
 
         // Register ourselves for server and other game events we are interested in.
         // Note that this is necessary if and only if we want *this* class (ExampleMod) to respond directly to events.

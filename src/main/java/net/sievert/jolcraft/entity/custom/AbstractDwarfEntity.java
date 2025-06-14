@@ -437,6 +437,9 @@ public class AbstractDwarfEntity extends WanderingTrader {
     public static final EntityDataAccessor<Integer> VARIANT =
             SynchedEntityData.defineId(AbstractDwarfEntity.class, EntityDataSerializers.INT);
 
+    public static final EntityDataAccessor<Integer> BEARD =
+            SynchedEntityData.defineId(AbstractDwarfEntity.class, EntityDataSerializers.INT);
+
     public static final EntityDataAccessor<Boolean> ATTACKING =
             SynchedEntityData.defineId(AbstractDwarfEntity.class, EntityDataSerializers.BOOLEAN);
 
@@ -454,6 +457,7 @@ public class AbstractDwarfEntity extends WanderingTrader {
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
         builder.define(VARIANT, 0);
+        builder.define(BEARD, 0);
         builder.define(ATTACKING, false);
         builder.define(BLOCKING, false);
         builder.define(DRINKING, false);
@@ -465,6 +469,7 @@ public class AbstractDwarfEntity extends WanderingTrader {
         super.addAdditionalSaveData(compound);
         compound.putInt("InLove", this.inLove);
         compound.putInt("Variant", this.getTypeVariant());
+        compound.putInt("Beard", this.getTypeBeard());
         if (this.loveCause != null) {
             compound.putUUID("LoveCause", this.loveCause);
         }
@@ -486,6 +491,7 @@ public class AbstractDwarfEntity extends WanderingTrader {
         this.inLove = compound.getInt("InLove");
         this.loveCause = compound.hasUUID("LoveCause") ? compound.getUUID("LoveCause") : null;
         this.entityData.set(VARIANT, compound.getInt("Variant"));
+        this.entityData.set(BEARD, compound.getInt("Beard"));
         this.setAge(compound.getInt("Age"));
         this.forcedAge = compound.getInt("ForcedAge");
         if (compound.contains("VillagerData", 10)) {
@@ -738,20 +744,24 @@ public class AbstractDwarfEntity extends WanderingTrader {
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, EntitySpawnReason spawnType, @org.jetbrains.annotations.Nullable SpawnGroupData spawnGroupData) {
         DwarfVariant variant = Util.getRandom(DwarfVariant.values(), this.random);
+        DwarfBeardColor beard = Util.getRandom(DwarfBeardColor.values(), this.random);
         this.setVariant(variant);
+        this.setBeard(beard);
         return super.finalizeSpawn(level, difficulty, spawnType, spawnGroupData);
     }
 
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob otherParent) {
-        DwarfVariant variant = Util.getRandom(DwarfVariant.values(), this.random);
         DwarfEntity baby = JolCraftEntities.DWARF.get().create(level, EntitySpawnReason.BREEDING);
+        DwarfVariant variant = Util.getRandom(DwarfVariant.values(), this.random);
+        DwarfBeardColor beard = Util.getRandom(DwarfBeardColor.values(), this.random);
         baby.setVariant(variant);
+        baby.setBeard(beard);
         return baby;
     }
 
-    //Variant
+    //Randomized traits
     public int getTypeVariant() {
         return this.entityData.get(VARIANT);
     }
@@ -762,6 +772,18 @@ public class AbstractDwarfEntity extends WanderingTrader {
 
     public void setVariant(DwarfVariant variant) {
         this.entityData.set(VARIANT, variant.getId() & 255);
+    }
+
+    public int getTypeBeard() {
+        return this.entityData.get(BEARD);
+    }
+
+    public DwarfBeardColor getBeard() {
+        return DwarfBeardColor.byId(this.getTypeBeard() & 255);
+    }
+
+    public void setBeard(DwarfBeardColor beard) {
+        this.entityData.set(BEARD, beard.getId() & 255);
     }
 
     //Other

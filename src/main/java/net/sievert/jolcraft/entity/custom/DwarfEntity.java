@@ -3,11 +3,13 @@ package net.sievert.jolcraft.entity.custom;
 import com.google.common.collect.ImmutableMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -24,6 +26,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.saveddata.maps.MapDecorationTypes;
 import net.minecraft.world.phys.Vec3;
@@ -32,6 +35,8 @@ import net.sievert.jolcraft.item.JolCraftItems;
 import net.sievert.jolcraft.data.JolCraftTags;
 import net.sievert.jolcraft.sound.JolCraftSounds;
 import net.sievert.jolcraft.villager.JolCraftDwarfTrades;
+
+import javax.annotation.Nullable;
 
 public class DwarfEntity extends AbstractDwarfEntity {
 
