@@ -1,4 +1,4 @@
-package net.sievert.jolcraft.structures;
+package net.sievert.jolcraft.world.structure;
 
 import com.mojang.serialization.MapCodec;
 import net.sievert.jolcraft.JolCraft;
