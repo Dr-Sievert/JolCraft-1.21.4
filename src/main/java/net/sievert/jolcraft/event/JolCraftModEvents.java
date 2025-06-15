@@ -1,4 +1,4 @@
-package net.sievert.jolcraft.events;
+package net.sievert.jolcraft.event;
 
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;

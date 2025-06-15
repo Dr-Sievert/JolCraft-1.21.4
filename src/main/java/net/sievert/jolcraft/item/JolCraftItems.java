@@ -1,12 +1,15 @@
 package net.sievert.jolcraft.item;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.world.item.*;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.sievert.jolcraft.JolCraft;
+import net.sievert.jolcraft.capability.JolCraftCapabilities;
 import net.sievert.jolcraft.entity.JolCraftEntities;
 import net.minecraft.network.chat.Component;
+import net.sievert.jolcraft.item.custom.DwarvenLexiconItem;
 import net.sievert.jolcraft.item.custom.QuillItem;
 
 import java.util.List;
@@ -17,9 +20,31 @@ public class JolCraftItems {
 
 
 
-    //Simple Items
+    //Core Items
 
-    public static final DeferredItem<Item> GOLD_COIN = ITEMS.registerSimpleItem("gold_coin");
+    // public static final DeferredItem<Item> GOLD_COIN = ITEMS.registerSimpleItem("gold_coin");
+
+    public static final DeferredItem<Item> GOLD_COIN = ITEMS.registerItem("gold_coin",
+            Item::new, new Item.Properties().rarity(Rarity.UNCOMMON));
+
+    public static final DeferredItem<Item> DWARVEN_LEXICON =
+            ITEMS.registerItem("dwarven_lexicon", properties -> new DwarvenLexiconItem(properties) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+                    if (context.level() != null && context.level().isClientSide()) {
+                        if (Minecraft.getInstance().player != null &&
+                                Minecraft.getInstance().player.getCapability(JolCraftCapabilities.DWARVEN_LANGUAGE) != null &&
+                                Minecraft.getInstance().player.getCapability(JolCraftCapabilities.DWARVEN_LANGUAGE).knowsLanguage()) {
+
+                            tooltip.add(Component.translatable("tooltip.jolcraft.dwarven_lexicon.unlocked"));
+                        } else {
+                            tooltip.add(Component.translatable("tooltip.jolcraft.dwarven_lexicon.locked"));
+                        }
+                    }
+
+                    super.appendHoverText(stack, context, tooltip, flag);
+                }
+            }, new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
 
     //Contracts and Associated Items
 
@@ -39,7 +64,7 @@ public class JolCraftItems {
                     pTooltipComponents.add(Component.translatable("tooltip.jolcraft.contract_guard"));
                     super.appendHoverText(pStack, pContext, pTooltipComponents, pTooltipFlag);
                 }
-            }, new Item.Properties());
+            }, new Item.Properties().rarity(Rarity.UNCOMMON));
 
 
     public static final DeferredItem<Item> QUILL_EMPTY =
