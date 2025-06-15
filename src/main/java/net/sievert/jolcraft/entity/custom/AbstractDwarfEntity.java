@@ -38,6 +38,7 @@ import net.minecraft.world.item.trading.MerchantOffers;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.Vec3;
+import net.sievert.jolcraft.capability.JolCraftCapabilities;
 import net.sievert.jolcraft.entity.JolCraftEntities;
 import net.sievert.jolcraft.entity.ai.goal.DwarfBlockGoal;
 import net.sievert.jolcraft.item.JolCraftItems;
@@ -191,6 +192,100 @@ public class AbstractDwarfEntity extends WanderingTrader {
     public ItemStack getSignedContractItem() {
         return new ItemStack(JolCraftItems.CONTRACT_SIGNED.get());
     }
+
+    protected ItemStack previousMainHandItem = ItemStack.EMPTY;
+
+    //Interactions
+    protected InteractionResult handleCommonInteractions(Player player, InteractionHand hand) {
+        ItemStack itemstack = player.getItemInHand(hand);
+
+        //Default
+
+        // Language check
+        if (!player.isCreative()) {
+            var cap = player.getCapability(JolCraftCapabilities.DWARVEN_LANGUAGE);
+            if (cap == null || !cap.knowsLanguage()) {
+                this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
+                return InteractionResult.FAIL;
+            }
+        }
+
+        // Breeding
+        if (this.isFood(itemstack) && !itemstack.is(Items.VILLAGER_SPAWN_EGG) && this.isAlive() && !this.isTrading()) {
+            int age = this.getAge();
+            if(this.isInLove()){
+                this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
+                return InteractionResult.CONSUME;
+            }
+            if (!this.level().isClientSide && age == 0 && this.canFallInLove()) {
+                this.usePlayerItem(player, hand, itemstack);
+                this.setInLove(player);
+                this.playEatingSound();
+                return InteractionResult.SUCCESS_SERVER;
+            }
+            if (this.isBaby()) {
+                this.usePlayerItem(player, hand, itemstack);
+                this.ageUp(getSpeedUpSecondsWhenFeeding(-age), true);
+                this.playEatingSound();
+                return InteractionResult.SUCCESS;
+            }
+            if (this.level().isClientSide) {
+                return InteractionResult.CONSUME;
+            }
+        }
+
+        //Booleans
+
+        // Sign contract
+        if (canSign()) {
+            if (itemstack.is(JolCraftItems.CONTRACT_WRITTEN.get()) && !itemstack.is(Items.VILLAGER_SPAWN_EGG) && this.isAlive() && !this.isTrading() && !this.isBaby()) {
+                if (!this.isInLove()) {
+                    this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_YES.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
+                    return InteractionResult.CONSUME;
+                }
+                if (this.isInLove()) {
+                    this.setNoAi(true);
+                    this.previousMainHandItem = this.getMainHandItem().copy();
+                    this.usePlayerItem(player, hand, itemstack);
+                    this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_YES.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
+                    this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(JolCraftItems.CONTRACT_WRITTEN.get()));
+                    this.signingTicks = 40;
+                    this.signingPlayer = player;
+                    return InteractionResult.SUCCESS;
+                }
+                return InteractionResult.CONSUME;
+            }
+        }
+
+
+        //Trading
+        if (canTrade()) {
+            if (!itemstack.is(Items.VILLAGER_SPAWN_EGG)
+                    && this.isAlive()
+                    && !this.isTrading()
+                    && !this.isBaby()
+                    && !itemstack.is(JolCraftItems.CONTRACT_WRITTEN.get())
+                    && !this.isFood(itemstack)) {
+
+                if (hand == InteractionHand.MAIN_HAND) {
+                    player.awardStat(Stats.TALKED_TO_VILLAGER);
+                }
+                if (!this.level().isClientSide) {
+                    if (this.getOffers().isEmpty()) {
+                        return InteractionResult.CONSUME;
+                    }
+                    this.setTradingPlayer(player);
+                    this.openTradingScreen(player, this.getDisplayName(), this.getVillagerData().getLevel());
+                }
+                return InteractionResult.SUCCESS;
+            }
+        }
+
+        // Fallback sound
+        this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, this.isBaby() ? 1.5F : 1.0F);
+        return InteractionResult.PASS;
+    }
+
 
     @Override
     protected void customServerAiStep(ServerLevel p_376777_) {
@@ -615,86 +710,6 @@ public class AbstractDwarfEntity extends WanderingTrader {
             this.updateTrades();
             this.resendOffersToTradingPlayer();
         }
-    }
-
-    protected ItemStack previousMainHandItem = ItemStack.EMPTY;
-
-    //Interactions
-    protected InteractionResult handleCommonInteractions(Player player, InteractionHand hand) {
-        ItemStack itemstack = player.getItemInHand(hand);
-
-        //Default
-
-        // Breeding
-        if (this.isFood(itemstack)) {
-            int age = this.getAge();
-            if(this.isInLove()){
-                this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
-                return InteractionResult.CONSUME;
-            }
-            if (!this.level().isClientSide && age == 0 && this.canFallInLove()) {
-                this.usePlayerItem(player, hand, itemstack);
-                this.setInLove(player);
-                this.playEatingSound();
-                return InteractionResult.SUCCESS_SERVER;
-            }
-            if (this.isBaby()) {
-                this.usePlayerItem(player, hand, itemstack);
-                this.ageUp(getSpeedUpSecondsWhenFeeding(-age), true);
-                this.playEatingSound();
-                return InteractionResult.SUCCESS;
-            }
-            if (this.level().isClientSide) {
-                return InteractionResult.CONSUME;
-            }
-        }
-
-        //Booleans
-
-        // Sign contract
-        if (canSign()) {
-            if (itemstack.is(JolCraftItems.CONTRACT_WRITTEN.get()) && !itemstack.is(Items.VILLAGER_SPAWN_EGG) && this.isAlive() && !this.isTrading() && !this.isBaby()) {
-                if (this.isInLove()) {
-                    this.setNoAi(true);
-                    this.previousMainHandItem = this.getMainHandItem().copy();
-                    this.usePlayerItem(player, hand, itemstack);
-                    this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_YES.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
-                    this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(JolCraftItems.CONTRACT_WRITTEN.get()));
-                    this.signingTicks = 40;
-                    this.signingPlayer = player;
-                    return InteractionResult.SUCCESS;
-                }
-                return InteractionResult.CONSUME;
-            }
-        }
-
-
-        //Trading
-        if (canTrade()) {
-            if (!itemstack.is(Items.VILLAGER_SPAWN_EGG)
-                    && this.isAlive()
-                    && !this.isTrading()
-                    && !this.isBaby()
-                    && !itemstack.is(JolCraftItems.CONTRACT_WRITTEN.get())
-                    && !this.isFood(itemstack)) {
-
-                if (hand == InteractionHand.MAIN_HAND) {
-                    player.awardStat(Stats.TALKED_TO_VILLAGER);
-                }
-                if (!this.level().isClientSide) {
-                    if (this.getOffers().isEmpty()) {
-                        return InteractionResult.CONSUME;
-                    }
-                    this.setTradingPlayer(player);
-                    this.openTradingScreen(player, this.getDisplayName(), this.getVillagerData().getLevel());
-                }
-                return InteractionResult.SUCCESS;
-            }
-        }
-
-        // Fallback sound
-        this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, this.isBaby() ? 1.5F : 1.0F);
-        return InteractionResult.PASS;
     }
 
     //Sounds

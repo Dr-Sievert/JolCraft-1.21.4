@@ -22,6 +22,8 @@ public class JolCraftStructures {
      */
     public static final DeferredHolder<StructureType<?>, StructureType<ForgeStructure>> FORGE_STRUCTURE = DEFERRED_REGISTRY_STRUCTURE.register("forge", () -> explicitStructureTypeTyping(ForgeStructure.CODEC));
 
+    public static final DeferredHolder<StructureType<?>, StructureType<DwarvenTrailStructure>> DWARVEN_TRAIL_STRUCTURE = DEFERRED_REGISTRY_STRUCTURE.register("dwarven_trail_ruin", () -> explicitStructureTypeTyping(DwarvenTrailStructure.CODEC));
+
     /**
      * Originally, I had a double lambda ()->()-> for the RegistryObject line above, but it turns out that
      * some IDEs cannot resolve the typing correctly. This method explicitly states what the return type

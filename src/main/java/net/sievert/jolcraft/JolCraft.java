@@ -10,6 +10,7 @@ import net.sievert.jolcraft.entity.client.DwarfRenderer;
 import net.sievert.jolcraft.event.JolCraftCapabilityEvents;
 import net.sievert.jolcraft.item.JolCraftCreativeModeTabs;
 import net.sievert.jolcraft.item.JolCraftItems;
+import net.sievert.jolcraft.loot.JolCraftLootModifiers;
 import net.sievert.jolcraft.sound.JolCraftSounds;
 import net.sievert.jolcraft.world.processor.JolCraftProcessors;
 import net.sievert.jolcraft.world.structure.JolCraftStructures;
@@ -54,6 +55,8 @@ public class JolCraft
         JolCraftCreativeModeTabs.register(modEventBus);
 
         JolCraftEntities.register(modEventBus);
+
+        JolCraftLootModifiers.register(modEventBus);
 
         JolCraftVillagers.register(modEventBus);
 
