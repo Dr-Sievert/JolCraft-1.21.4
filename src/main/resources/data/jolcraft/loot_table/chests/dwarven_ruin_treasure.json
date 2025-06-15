@@ -1,0 +1,49 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "rolls": 10,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:paper",
+          "weight": 3,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": 13
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jolcraft:quill_empty",
+          "weight": 2
+        },
+        {
+          "type": "minecraft:empty",
+          "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:lantern",
+          "weight": 2,
+          "functions": []
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jolcraft:gold_coin",
+          "weight": 10,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": 5
+            }
+          ],
+          "conditions": []
+        }
+      ]
+    }
+  ],
+  "functions": []
+}
