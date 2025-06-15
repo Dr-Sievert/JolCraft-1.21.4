@@ -7,6 +7,7 @@ import net.minecraft.world.item.CreativeModeTabs;
 import net.sievert.jolcraft.entity.JolCraftEntities;
 import net.sievert.jolcraft.entity.client.DwarfGuardRenderer;
 import net.sievert.jolcraft.entity.client.DwarfRenderer;
+import net.sievert.jolcraft.event.JolCraftCapabilityEvents;
 import net.sievert.jolcraft.item.JolCraftCreativeModeTabs;
 import net.sievert.jolcraft.item.JolCraftItems;
 import net.sievert.jolcraft.sound.JolCraftSounds;
@@ -70,6 +71,10 @@ public class JolCraft
 
         // Register the item to a creative tab
         modEventBus.addListener(this::addCreative);
+
+
+        modEventBus.addListener(JolCraftCapabilityEvents::register);
+
 
         // Register our mod's ModConfigSpec so that FML can create and load the config file for us
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);

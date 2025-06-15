@@ -1,6 +1,6 @@
 {
   "required": true,
-  "package": "net.sievert.jolcraft.mixins",
+  "package": "net.sievert.jolcraft.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "StructurePoolMixin"

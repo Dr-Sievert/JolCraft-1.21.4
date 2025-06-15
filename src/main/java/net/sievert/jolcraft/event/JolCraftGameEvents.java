@@ -1,17 +1,16 @@
-package net.sievert.jolcraft.events;
+package net.sievert.jolcraft.event;
 
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.npc.VillagerProfession;
-import net.minecraft.world.entity.npc.VillagerTrades;
-import net.minecraft.world.level.saveddata.maps.MapDecorationTypes;
+import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.village.VillagerTradesEvent;
 import net.sievert.jolcraft.JolCraft;
-import net.sievert.jolcraft.data.JolCraftTags;
+import net.sievert.jolcraft.capability.DwarvenLanguage;
+import net.sievert.jolcraft.capability.JolCraftCapabilities;
 import net.sievert.jolcraft.entity.custom.DwarfGuardEntity;
-import net.sievert.jolcraft.villager.JolCraftVillagers;
 
 @EventBusSubscriber(modid = JolCraft.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public class JolCraftGameEvents {
@@ -22,6 +21,19 @@ public class JolCraftGameEvents {
         if (event.getEntity() instanceof DwarfGuardEntity dwarf && dwarf.isBlockCooldownReady() && event.getSource().getEntity() instanceof Monster) {
             dwarf.markForBlocking();
             event.setNewDamage(0.2F);
+        }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerClone(PlayerEvent.Clone event) {
+        if (!event.isWasDeath()) return;
+
+        DwarvenLanguage oldCap = event.getOriginal().getCapability(JolCraftCapabilities.DWARVEN_LANGUAGE);
+        DwarvenLanguage newCap = event.getEntity().getCapability(JolCraftCapabilities.DWARVEN_LANGUAGE);
+
+        if (oldCap != null && newCap != null) {
+            var tag = oldCap.serializeNBT(event.getOriginal().level().registryAccess());
+            newCap.deserializeNBT(event.getEntity().level().registryAccess(), tag);
         }
     }
 
