@@ -4,8 +4,10 @@ package net.sievert.jolcraft;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTabs;
+import net.sievert.jolcraft.components.JolCraftDataComponents;
 import net.sievert.jolcraft.entity.JolCraftEntities;
 import net.sievert.jolcraft.entity.client.DwarfGuardRenderer;
+import net.sievert.jolcraft.entity.client.DwarfHistorianRenderer;
 import net.sievert.jolcraft.entity.client.DwarfRenderer;
 import net.sievert.jolcraft.event.JolCraftCapabilityEvents;
 import net.sievert.jolcraft.item.JolCraftCreativeModeTabs;
@@ -53,6 +55,8 @@ public class JolCraft
         // For registration and init stuff.
         JolCraftItems.register(modEventBus);
         JolCraftCreativeModeTabs.register(modEventBus);
+
+        JolCraftDataComponents.register(modEventBus);
 
         JolCraftEntities.register(modEventBus);
 
@@ -104,6 +108,7 @@ public class JolCraft
         if (event.getTabKey() == CreativeModeTabs.SPAWN_EGGS){
             event.accept(JolCraftItems.DWARF_SPAWN_EGG);
             event.accept(JolCraftItems.DWARF_GUARD_SPAWN_EGG);
+            event.accept(JolCraftItems.DWARF_HISTORIAN_SPAWN_EGG);
         }
     }
 
@@ -124,6 +129,8 @@ public class JolCraft
         {
             EntityRenderers.register(JolCraftEntities.DWARF.get(), DwarfRenderer::new);
             EntityRenderers.register(JolCraftEntities.DWARF_GUARD.get(), DwarfGuardRenderer::new);
+            EntityRenderers.register(JolCraftEntities.DWARF_HISTORIAN.get(), DwarfHistorianRenderer::new);
+
             // Some client setup code
             LOGGER.info("HELLO FROM CLIENT SETUP");
             LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());

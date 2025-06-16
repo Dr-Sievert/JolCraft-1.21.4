@@ -59,7 +59,6 @@ public class DwarfRenderer<T extends AbstractDwarfEntity> extends HumanoidMobRen
         } else {
             poseStack.scale(0.9f, 0.9f, 0.9f);
         }
-
         super.render(renderState, poseStack, bufferSource, packedLight);
     }
 

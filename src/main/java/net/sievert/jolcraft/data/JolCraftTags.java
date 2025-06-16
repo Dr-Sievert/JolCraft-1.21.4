@@ -13,7 +13,10 @@ import static net.sievert.jolcraft.JolCraft.locate;
 public class JolCraftTags {
 
     public final class Items {
+
         public static final TagKey<Item> INK_AND_QUILLS = createTag("ink_and_quills");
+        public static final TagKey<Item> GEMS = createTag("gems");
+
 
         private static TagKey<Item> createTag(String name) {
             return ItemTags.create(ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, name));

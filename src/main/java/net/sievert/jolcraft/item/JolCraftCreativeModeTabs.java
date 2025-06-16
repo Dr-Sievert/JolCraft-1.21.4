@@ -20,12 +20,30 @@ public class JolCraftCreativeModeTabs {
                     .displayItems((pParameters, pOutput) -> {
                         pOutput.accept(JolCraftItems.DWARVEN_LEXICON);
                         pOutput.accept(JolCraftItems.GOLD_COIN);
+
                         pOutput.accept(JolCraftItems.QUILL_EMPTY);
                         pOutput.accept(JolCraftItems.QUILL_FULL);
+
                         pOutput.accept(JolCraftItems.CONTRACT_BLANK);
                         pOutput.accept(JolCraftItems.CONTRACT_WRITTEN);
                         pOutput.accept(JolCraftItems.CONTRACT_SIGNED);
                         pOutput.accept(JolCraftItems.CONTRACT_GUARD);
+
+                        pOutput.accept(JolCraftItems.AEGISCORE);
+                        pOutput.accept(JolCraftItems.ASHFANG);
+                        pOutput.accept(JolCraftItems.DEEPMARROW);
+                        pOutput.accept(JolCraftItems.EARTHBLOOD);
+                        pOutput.accept(JolCraftItems.EMBERGLASS);
+                        pOutput.accept(JolCraftItems.FROSTVEIN);
+                        pOutput.accept(JolCraftItems.GRIMSTONE);
+                        pOutput.accept(JolCraftItems.IRONHEART);
+                        pOutput.accept(JolCraftItems.LUMIERE);
+                        pOutput.accept(JolCraftItems.MOONSHARD);
+                        pOutput.accept(JolCraftItems.SKYBURROW);
+                        pOutput.accept(JolCraftItems.SUNGLEAM);
+                        pOutput.accept(JolCraftItems.VERDANITE);
+                        pOutput.accept(JolCraftItems.WOECRYSTAL);
+
                     }).build());
 /*
     public static final Supplier<CreativeModeTab> BLACK_OPAL_BLOCKS_TAB =
