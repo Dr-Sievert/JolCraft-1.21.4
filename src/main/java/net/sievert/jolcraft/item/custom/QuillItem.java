@@ -21,8 +21,19 @@ public class QuillItem extends Item {
     public InteractionResult interactLivingEntity(ItemStack stack, Player player, LivingEntity target, InteractionHand hand) {
         if (target.getType() == EntityType.SQUID && !stack.is(JolCraftItems.QUILL_FULL)) {
             if (!player.level().isClientSide) {
-                stack.shrink(1);
-                player.addItem(new ItemStack(JolCraftItems.QUILL_FULL.get()));
+                ItemStack fullQuill = new ItemStack(JolCraftItems.QUILL_FULL.get());
+
+                if (stack.getCount() == 1) {
+                    // Replace directly in hand if it's the last empty quill
+                    player.setItemInHand(hand, fullQuill);
+                } else {
+                    // Normal case: shrink and add
+                    stack.shrink(1);
+                    boolean added = player.addItem(fullQuill);
+                    if (!added) {
+                        player.drop(fullQuill, false);
+                    }
+                }
                 player.level().playSound(null, player.blockPosition(), SoundEvents.BOTTLE_FILL, SoundSource.PLAYERS, 1.0F, 1.5F);
             }
             return InteractionResult.SUCCESS;

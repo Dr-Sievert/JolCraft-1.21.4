@@ -39,6 +39,7 @@ public class JolCraftCreativeModeTabs {
                         pOutput.accept(JolCraftItems.IRONHEART);
                         pOutput.accept(JolCraftItems.LUMIERE);
                         pOutput.accept(JolCraftItems.MOONSHARD);
+                        pOutput.accept(JolCraftItems.RUSTAGATE);
                         pOutput.accept(JolCraftItems.SKYBURROW);
                         pOutput.accept(JolCraftItems.SUNGLEAM);
                         pOutput.accept(JolCraftItems.VERDANITE);
