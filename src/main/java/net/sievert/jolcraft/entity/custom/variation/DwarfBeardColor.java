@@ -1,4 +1,4 @@
-package net.sievert.jolcraft.entity.custom;
+package net.sievert.jolcraft.entity.custom.variation;
 
 
 import java.util.Arrays;

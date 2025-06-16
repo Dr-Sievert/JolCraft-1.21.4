@@ -10,8 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.entity.custom.AbstractDwarfEntity;
-import net.sievert.jolcraft.entity.custom.DwarfVariant;
-import net.sievert.jolcraft.entity.client.DwarfBeardLayer;
+import net.sievert.jolcraft.entity.custom.variation.DwarfVariant;
 
 import java.util.Map;
 
@@ -21,6 +20,7 @@ public class DwarfRenderer<T extends AbstractDwarfEntity> extends HumanoidMobRen
         this(context, new DwarfModel(context.bakeLayer(DwarfModel.LAYER_LOCATION)));
         this.addLayer(new DwarfArmorLayer(this));
         this.addLayer(new DwarfBeardLayer(this));
+        this.addLayer(new DwarfEyeLayer(this));
     }
 
     public DwarfRenderer(EntityRendererProvider.Context context, DwarfModel model) {
@@ -76,6 +76,7 @@ public class DwarfRenderer<T extends AbstractDwarfEntity> extends HumanoidMobRen
         reusedState.dwarf = entity;
         reusedState.variant = entity.getVariant();
         reusedState.beard = entity.getBeard();
+        reusedState.eye = entity.getEye();
         reusedState.useItemHand = entity.getUsedItemHand();
         reusedState.ticksUsingItem = entity.getTicksUsingItem();
         reusedState.isUsingItem = entity.isUsingItem();
