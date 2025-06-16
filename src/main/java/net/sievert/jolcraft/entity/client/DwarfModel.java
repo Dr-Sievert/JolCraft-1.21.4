@@ -32,6 +32,8 @@ public class DwarfModel extends HumanoidModel<DwarfRenderState>{
     public final ModelPart right_eyebrow;
     public final ModelPart left_eyebrow;
     public final ModelPart hat;
+    private final ModelPart right_eye;
+    private final ModelPart left_eye;
 
     public DwarfModel(ModelPart root) {
         super(root);
@@ -51,6 +53,8 @@ public class DwarfModel extends HumanoidModel<DwarfRenderState>{
         this.right_eyebrow = this.head.getChild("right_eyebrow");
         this.left_eyebrow = this.head.getChild("left_eyebrow");
         this.hat = this.head.getChild("hat");
+        this.right_eye = this.head.getChild("right_eye");
+        this.left_eye = this.head.getChild("left_eye");
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -96,6 +100,10 @@ public class DwarfModel extends HumanoidModel<DwarfRenderState>{
         head.addOrReplaceChild("left_eyebrow", CubeListBuilder.create().texOffs(0, 2).addBox(0.0F, -1.0F, -0.01F, 3.0F, 1.0F, 0.01F, new CubeDeformation(0.0F)), PartPose.offset(1.0F, -5.0F, -4.0F));
 
         head.addOrReplaceChild("hat", CubeListBuilder.create().texOffs(0, 21).addBox(-5.0F, -5.0F, -4.0F, 10.0F, 10.0F, 8.0F, new CubeDeformation(0.25F)), PartPose.offset(0.0F, -5.0F, 0.0F));
+
+        head.addOrReplaceChild("right_eye", CubeListBuilder.create().texOffs(46, 13).addBox(-3.0F, -5.0F, -4.01F, 2.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+
+        head.addOrReplaceChild("left_eye", CubeListBuilder.create().texOffs(50, 13).addBox(1.0F, -5.0F, -4.01F, 2.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
         return LayerDefinition.create(meshdefinition, 128, 128);
     }

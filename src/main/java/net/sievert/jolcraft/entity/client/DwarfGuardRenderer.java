@@ -6,7 +6,6 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.entity.custom.DwarfGuardEntity;
-import net.sievert.jolcraft.entity.client.DwarfBeardLayer;
 
 public class DwarfGuardRenderer extends DwarfRenderer<DwarfGuardEntity> {
 
@@ -14,6 +13,7 @@ public class DwarfGuardRenderer extends DwarfRenderer<DwarfGuardEntity> {
         super(context, new DwarfGuardModel(context.bakeLayer(DwarfGuardModel.LAYER_LOCATION)));
         addLayer(new DwarfArmorLayer(this));
         this.addLayer(new DwarfBeardLayer(this));
+        this.addLayer(new DwarfEyeLayer(this));
     }
 
     @Override
@@ -40,9 +40,6 @@ public class DwarfGuardRenderer extends DwarfRenderer<DwarfGuardEntity> {
         reusedState.attackAnimationState.copyFrom(entity.attackAnimationState);
         reusedState.blockAnimationState.copyFrom(entity.blockAnimationState);
         reusedState.drinkAnimationState.copyFrom(entity.drinkAnimationState);
-        reusedState.useItemHand = entity.getUsedItemHand();
-        reusedState.ticksUsingItem = entity.getTicksUsingItem();
-        reusedState.isUsingItem = entity.isUsingItem();
     }
 
 }

@@ -2,15 +2,15 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "#": "minecraft:paper"
+    "B": "minecraft:paper"
   },
   "pattern": [
-    "##",
-    "##",
-    "##"
+    "BB",
+    "BB",
+    "BB"
   ],
   "result": {
-    "count": 3,
+    "count": 1,
     "id": "jolcraft:contract_blank"
   }
 }

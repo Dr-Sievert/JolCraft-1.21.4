@@ -41,6 +41,9 @@ import net.minecraft.world.phys.Vec3;
 import net.sievert.jolcraft.capability.JolCraftCapabilities;
 import net.sievert.jolcraft.entity.JolCraftEntities;
 import net.sievert.jolcraft.entity.ai.goal.DwarfBlockGoal;
+import net.sievert.jolcraft.entity.custom.variation.DwarfBeardColor;
+import net.sievert.jolcraft.entity.custom.variation.DwarfEyeColor;
+import net.sievert.jolcraft.entity.custom.variation.DwarfVariant;
 import net.sievert.jolcraft.item.JolCraftItems;
 import net.sievert.jolcraft.sound.JolCraftSounds;
 import org.slf4j.Logger;
@@ -532,7 +535,10 @@ public class AbstractDwarfEntity extends WanderingTrader {
     public static final EntityDataAccessor<Integer> VARIANT =
             SynchedEntityData.defineId(AbstractDwarfEntity.class, EntityDataSerializers.INT);
 
-    public static final EntityDataAccessor<Integer> BEARD =
+    public static final EntityDataAccessor<Integer> BEARD_COLOR =
+            SynchedEntityData.defineId(AbstractDwarfEntity.class, EntityDataSerializers.INT);
+
+    public static final EntityDataAccessor<Integer> EYE_COLOR =
             SynchedEntityData.defineId(AbstractDwarfEntity.class, EntityDataSerializers.INT);
 
     public static final EntityDataAccessor<Boolean> ATTACKING =
@@ -552,7 +558,8 @@ public class AbstractDwarfEntity extends WanderingTrader {
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
         builder.define(VARIANT, 0);
-        builder.define(BEARD, 0);
+        builder.define(BEARD_COLOR, 0);
+        builder.define(EYE_COLOR, 0);
         builder.define(ATTACKING, false);
         builder.define(BLOCKING, false);
         builder.define(DRINKING, false);
@@ -565,6 +572,7 @@ public class AbstractDwarfEntity extends WanderingTrader {
         compound.putInt("InLove", this.inLove);
         compound.putInt("Variant", this.getTypeVariant());
         compound.putInt("Beard", this.getTypeBeard());
+        compound.putInt("Eye", this.getTypeEye());
         if (this.loveCause != null) {
             compound.putUUID("LoveCause", this.loveCause);
         }
@@ -586,7 +594,8 @@ public class AbstractDwarfEntity extends WanderingTrader {
         this.inLove = compound.getInt("InLove");
         this.loveCause = compound.hasUUID("LoveCause") ? compound.getUUID("LoveCause") : null;
         this.entityData.set(VARIANT, compound.getInt("Variant"));
-        this.entityData.set(BEARD, compound.getInt("Beard"));
+        this.entityData.set(BEARD_COLOR, compound.getInt("Beard"));
+        this.entityData.set(EYE_COLOR, compound.getInt("Eye"));
         this.setAge(compound.getInt("Age"));
         this.forcedAge = compound.getInt("ForcedAge");
         if (compound.contains("VillagerData", 10)) {
@@ -760,8 +769,10 @@ public class AbstractDwarfEntity extends WanderingTrader {
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, EntitySpawnReason spawnType, @org.jetbrains.annotations.Nullable SpawnGroupData spawnGroupData) {
         DwarfVariant variant = Util.getRandom(DwarfVariant.values(), this.random);
         DwarfBeardColor beard = Util.getRandom(DwarfBeardColor.values(), this.random);
+        DwarfEyeColor eye = Util.getRandom(DwarfEyeColor.values(), this.random);
         this.setVariant(variant);
         this.setBeard(beard);
+        this.setEye(eye);
         return super.finalizeSpawn(level, difficulty, spawnType, spawnGroupData);
     }
 
@@ -771,8 +782,10 @@ public class AbstractDwarfEntity extends WanderingTrader {
         DwarfEntity baby = JolCraftEntities.DWARF.get().create(level, EntitySpawnReason.BREEDING);
         DwarfVariant variant = Util.getRandom(DwarfVariant.values(), this.random);
         DwarfBeardColor beard = Util.getRandom(DwarfBeardColor.values(), this.random);
+        DwarfEyeColor eye = Util.getRandom(DwarfEyeColor.values(), this.random);
         baby.setVariant(variant);
         baby.setBeard(beard);
+        baby.setEye(eye);
         return baby;
     }
 
@@ -790,7 +803,7 @@ public class AbstractDwarfEntity extends WanderingTrader {
     }
 
     public int getTypeBeard() {
-        return this.entityData.get(BEARD);
+        return this.entityData.get(BEARD_COLOR);
     }
 
     public DwarfBeardColor getBeard() {
@@ -798,7 +811,19 @@ public class AbstractDwarfEntity extends WanderingTrader {
     }
 
     public void setBeard(DwarfBeardColor beard) {
-        this.entityData.set(BEARD, beard.getId() & 255);
+        this.entityData.set(BEARD_COLOR, beard.getId() & 255);
+    }
+
+    public int getTypeEye() {
+        return this.entityData.get(EYE_COLOR);
+    }
+
+    public DwarfEyeColor getEye() {
+        return DwarfEyeColor.byId(this.getTypeEye() & 255);
+    }
+
+    public void setEye(DwarfEyeColor eye) {
+        this.entityData.set(EYE_COLOR, eye.getId() & 255);
     }
 
     //Other
