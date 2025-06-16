@@ -23,6 +23,24 @@ public class JolCraftItemTagProvider extends ItemTagsProvider {
                 .add(JolCraftItems.QUILL_FULL.get())
                 .add(JolCraftItems.QUILL_HALF.get())
                 .add(JolCraftItems.QUILL_SMALL.get());
+
+        tag(JolCraftTags.Items.GEMS)
+                .add(JolCraftItems.AEGISCORE.get())
+                .add(JolCraftItems.ASHFANG.get())
+                .add(JolCraftItems.DEEPMARROW.get())
+                .add(JolCraftItems.EARTHBLOOD.get())
+                .add(JolCraftItems.EMBERGLASS.get())
+                .add(JolCraftItems.FROSTVEIN.get())
+                .add(JolCraftItems.GRIMSTONE.get())
+                .add(JolCraftItems.IRONHEART.get())
+                .add(JolCraftItems.LUMIERE.get())
+                .add(JolCraftItems.MOONSHARD.get())
+                .add(JolCraftItems.SKYBURROW.get())
+                .add(JolCraftItems.SUNGLEAM.get())
+                .add(JolCraftItems.VERDANITE.get())
+                .add(JolCraftItems.WOECRYSTAL.get());
+
+
     }
 
 

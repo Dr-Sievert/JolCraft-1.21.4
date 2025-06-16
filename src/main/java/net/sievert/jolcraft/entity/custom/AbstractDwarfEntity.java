@@ -831,4 +831,9 @@ public class AbstractDwarfEntity extends WanderingTrader {
     protected int getBaseExperienceReward(ServerLevel p_376688_) {
         return 1 + this.random.nextInt(3);
     }
+
+    @Override
+    public HumanoidArm getMainArm() {
+        return HumanoidArm.RIGHT;
+    }
 }

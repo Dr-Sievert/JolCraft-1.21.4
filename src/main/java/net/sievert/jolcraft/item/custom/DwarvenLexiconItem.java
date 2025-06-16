@@ -25,7 +25,7 @@ public class DwarvenLexiconItem extends Item {
             if (lang != null) {
                 if (!lang.knowsLanguage()) {
                     lang.setKnowsLanguage(true);
-                    level.playSound(null, player.blockPosition(), SoundEvents.BOOK_PAGE_TURN, SoundSource.PLAYERS, 1.0f, 0.7f);
+                    level.playSound(null, player.blockPosition(), SoundEvents.BOOK_PAGE_TURN, SoundSource.PLAYERS, 2.0f, 0.7f);
                     serverPlayer.displayClientMessage(Component.literal("You have learned to understand the dwarven language"), true);
                 } else {
                     serverPlayer.displayClientMessage(Component.literal("You already understand the dwarven language"), true);

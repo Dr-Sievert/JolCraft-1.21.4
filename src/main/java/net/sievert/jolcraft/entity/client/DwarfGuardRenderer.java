@@ -23,7 +23,7 @@ public class DwarfGuardRenderer extends DwarfRenderer<DwarfGuardEntity> {
 
     @Override
     public void render(DwarfRenderState renderState, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
-        poseStack.scale(1.0f, 1.0f, 1.0f);
+        poseStack.scale(1.1f, 1.1f, 1.1f);
         super.render(renderState, poseStack, bufferSource, packedLight);
 
     }
