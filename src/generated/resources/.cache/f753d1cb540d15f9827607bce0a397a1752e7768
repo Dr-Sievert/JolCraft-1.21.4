@@ -1,4 +1,4 @@
-// 1.21.4	2025-06-16T07:17:35.2514215	Model Definitions - jolcraft
+// 1.21.4	2025-06-16T17:45:02.1331995	Model Definitions - jolcraft
 514fa4af6796c2d245487e0f0d0268286013059c assets/jolcraft/items/aegiscore.json
 b949c867dd45b7a402abd9d29cbb4517f22e9b49 assets/jolcraft/items/ashfang.json
 ef5f9c453c0528eb7ba590f545287d2fe4dc8725 assets/jolcraft/items/contract_blank.json
@@ -27,6 +27,7 @@ aef41892a5c1da5cef56ffc85a754454c930f181 assets/jolcraft/items/ironheart.json
 dac39654410d9542c3b7f445fcef72f0c27ace9d assets/jolcraft/items/quill_full.json
 d4ece8d7821c57f450dabeea628efceef3281d31 assets/jolcraft/items/quill_half.json
 30bdd47c6b25eed774fa92d810b9f2613aa4203f assets/jolcraft/items/quill_small.json
+0ae24bbf5e46497ea6dad1a852efc906bb1219da assets/jolcraft/items/rustagate.json
 082e930bc224f09e41bc7d051c21788f3d690890 assets/jolcraft/items/skyburrow.json
 35d90f0394c0b28f78f54a6012ca2bd9bbc624fb assets/jolcraft/items/sungleam.json
 7fc56949e69bb8c892c5b1101c07869c2ce62c1b assets/jolcraft/items/verdanite.json
@@ -56,6 +57,7 @@ d88c7f683cc02c0fb94eb93e63f31553d7cc1e53 assets/jolcraft/models/item/moonshard.j
 5e55810c0cd13f43e9f475ae7c4ae0418aa671df assets/jolcraft/models/item/quill_full.json
 1676a6adddc301ebfab4701d2c8bbb1097a90d21 assets/jolcraft/models/item/quill_half.json
 4e57bdf06a16278be6557bfb31ad1deefae71ca6 assets/jolcraft/models/item/quill_small.json
+845f892f2d7d732aa67e52ca96892793048e0a8e assets/jolcraft/models/item/rustagate.json
 c5ff1e24a56e1215b69c633a8df2b1895ee61ea6 assets/jolcraft/models/item/skyburrow.json
 9fe8be3c995ca8b88874d9d1a372f9ea47027786 assets/jolcraft/models/item/sungleam.json
 b03fc32199b4b447788ca7501669d2ac80877253 assets/jolcraft/models/item/verdanite.json

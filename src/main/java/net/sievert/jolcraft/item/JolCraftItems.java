@@ -21,12 +21,10 @@ public class JolCraftItems {
 
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(JolCraft.MOD_ID);
 
-
-
-    //Core Items
-
+    //Clutter
     // public static final DeferredItem<Item> GOLD_COIN = ITEMS.registerSimpleItem("gold_coin");
 
+    //Core Items
     public static final DeferredItem<Item> GOLD_COIN = ITEMS.registerItem("gold_coin",
             Item::new, new Item.Properties().rarity(Rarity.UNCOMMON));
 
@@ -125,6 +123,9 @@ public class JolCraftItems {
             Item::new, new Item.Properties());
 
     public static final DeferredItem<Item> MOONSHARD = ITEMS.registerItem("moonshard",
+            Item::new, new Item.Properties());
+
+    public static final DeferredItem<Item> RUSTAGATE = ITEMS.registerItem("rustagate",
             Item::new, new Item.Properties());
 
     public static final DeferredItem<Item> SKYBURROW = ITEMS.registerItem("skyburrow",

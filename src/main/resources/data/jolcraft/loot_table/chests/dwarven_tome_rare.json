@@ -11,7 +11,7 @@
             {
               "function": "minecraft:set_components",
               "components": {
-                "jolcraft:lore_line_id": "The Fourteen Gemlines and Their Bearers"
+                "jolcraft:lore_line_id": "The Fifteen Gemlines and Their Bearers"
               }
             }
           ]

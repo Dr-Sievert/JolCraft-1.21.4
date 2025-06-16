@@ -35,6 +35,7 @@ public class JolCraftItemTagProvider extends ItemTagsProvider {
                 .add(JolCraftItems.IRONHEART.get())
                 .add(JolCraftItems.LUMIERE.get())
                 .add(JolCraftItems.MOONSHARD.get())
+                .add(JolCraftItems.RUSTAGATE.get())
                 .add(JolCraftItems.SKYBURROW.get())
                 .add(JolCraftItems.SUNGLEAM.get())
                 .add(JolCraftItems.VERDANITE.get())
