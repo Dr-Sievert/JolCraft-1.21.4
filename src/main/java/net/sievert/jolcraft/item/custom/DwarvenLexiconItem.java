@@ -9,6 +9,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
+import net.sievert.jolcraft.advancement.JolCraftCriteriaTriggers;
 import net.sievert.jolcraft.capability.DwarvenLanguage;
 import net.sievert.jolcraft.capability.JolCraftCapabilities;
 
@@ -25,6 +26,8 @@ public class DwarvenLexiconItem extends Item {
             if (lang != null) {
                 if (!lang.knowsLanguage()) {
                     lang.setKnowsLanguage(true);
+                    // ✅ Trigger advancement
+                    JolCraftCriteriaTriggers.HAS_DWARVEN_LANGUAGE.trigger(serverPlayer);
                     level.playSound(null, player.blockPosition(), SoundEvents.BOOK_PAGE_TURN, SoundSource.PLAYERS, 2.0f, 0.7f);
                     serverPlayer.displayClientMessage(Component.literal("You have learned to understand the dwarven language"), true);
                 } else {

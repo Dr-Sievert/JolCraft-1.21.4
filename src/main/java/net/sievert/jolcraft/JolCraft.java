@@ -4,6 +4,7 @@ package net.sievert.jolcraft;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTabs;
+import net.sievert.jolcraft.advancement.JolCraftCriteriaTriggers;
 import net.sievert.jolcraft.components.JolCraftDataComponents;
 import net.sievert.jolcraft.entity.JolCraftEntities;
 import net.sievert.jolcraft.entity.client.DwarfGuardRenderer;
@@ -79,6 +80,7 @@ public class JolCraft
         // Register the item to a creative tab
         modEventBus.addListener(this::addCreative);
 
+        modEventBus.addListener(JolCraftCriteriaTriggers::register);
 
         modEventBus.addListener(JolCraftCapabilityEvents::register);
 

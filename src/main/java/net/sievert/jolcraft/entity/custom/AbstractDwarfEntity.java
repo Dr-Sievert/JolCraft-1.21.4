@@ -38,6 +38,7 @@ import net.minecraft.world.item.trading.MerchantOffers;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.Vec3;
+import net.sievert.jolcraft.advancement.JolCraftCriteriaTriggers;
 import net.sievert.jolcraft.capability.JolCraftCapabilities;
 import net.sievert.jolcraft.entity.JolCraftEntities;
 import net.sievert.jolcraft.entity.ai.goal.DwarfBlockGoal;
@@ -836,4 +837,17 @@ public class AbstractDwarfEntity extends WanderingTrader {
     public HumanoidArm getMainArm() {
         return HumanoidArm.RIGHT;
     }
+
+    @Override
+    public void notifyTrade(MerchantOffer offer) {
+        Player player = this.getTradingPlayer();
+        if (player instanceof ServerPlayer serverPlayer) {
+            player.awardStat(Stats.TRADED_WITH_VILLAGER);
+            JolCraftCriteriaTriggers.TRADE_WITH_DWARF.trigger(serverPlayer);
+        }
+    }
+
+
+
+
 }

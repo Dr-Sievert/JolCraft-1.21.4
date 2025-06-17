@@ -48,13 +48,18 @@
   "tooltip.jolcraft.dwarven_tome.locked": "The pages are filled with unfamiliar symbols",
   "tooltip.jolcraft.dwarven_tome.unlocked": "A dwarven tome",
 
+  "advancement.jolcraft.read_lexicon.title": "Bilingual",
+  "advancement.jolcraft.read_lexicon.description": "Learn to understand the dwarven language",
+
+  "advancement.jolcraft.trade_with_dwarf.title": "Dwarven Commerce",
+  "advancement.jolcraft.trade_with_dwarf.description": "Trade with a dwarf",
+
   "entity.jolcraft.dwarf": "Dwarf",
   "entity.minecraft.dwarf": "Dwarf",
   "entity.jolcraft.dwarf_guard": "Dwarf Guard",
   "entity.minecraft.dwarf_guard": "Dwarf Guard",
   "entity.jolcraft.dwarf_historian": "Dwarf Historian",
   "entity.minecraft.dwarf_historian": "Dwarf Historian",
-
 
   "filled_map.forge": "Map to a Dwarven Forge"
 }
