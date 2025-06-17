@@ -17,7 +17,7 @@ import java.util.Map;
 public class DwarfRenderer<T extends AbstractDwarfEntity> extends HumanoidMobRenderer<T, DwarfRenderState, DwarfModel> {
 
     public DwarfRenderer(EntityRendererProvider.Context context) {
-        this(context, new DwarfModel(context.bakeLayer(DwarfModel.LAYER_LOCATION)));
+        super(context, new DwarfModel(context.bakeLayer(DwarfModel.LAYER_LOCATION)), 0.4f);
         this.addLayer(new DwarfArmorLayer(this));
         this.addLayer(new DwarfBeardLayer(this));
         this.addLayer(new DwarfEyeLayer(this));

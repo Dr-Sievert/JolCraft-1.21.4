@@ -57,8 +57,8 @@ public class DwarfArmorLayer extends RenderLayer<DwarfRenderState, DwarfModel> {
             // Hide all armor-wear parts only
             model.getHead().getChild("hat").visible = slot == EquipmentSlot.HEAD;
             model.body.getChild("bodywear").visible = slot == EquipmentSlot.CHEST;
-            model.rightArm.getChild("right_armwear").visible = slot == EquipmentSlot.CHEST;
-            model.leftArm.getChild("left_armwear").visible = slot == EquipmentSlot.CHEST;
+            model.right_arm.getChild("right_armwear").visible = slot == EquipmentSlot.CHEST;
+            model.left_arm.getChild("left_armwear").visible = slot == EquipmentSlot.CHEST;
             model.body.getChild("legwear").visible = slot == EquipmentSlot.LEGS;
             model.right_leg.getChild("right_footwear").visible = slot == EquipmentSlot.FEET;
             model.left_leg.getChild("left_footwear").visible = slot == EquipmentSlot.FEET;
