@@ -9,11 +9,12 @@ import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.capability.JolCraftCapabilities;
-import net.sievert.jolcraft.components.JolCraftDataComponents;
+import net.sievert.jolcraft.component.JolCraftDataComponents;
 import net.sievert.jolcraft.entity.JolCraftEntities;
 import net.minecraft.network.chat.Component;
 import net.sievert.jolcraft.item.custom.DwarvenLexiconItem;
 import net.sievert.jolcraft.item.custom.QuillItem;
+import net.sievert.jolcraft.item.custom.SpannerItem;
 
 import java.util.List;
 
@@ -37,9 +38,9 @@ public class JolCraftItems {
                                 Minecraft.getInstance().player.getCapability(JolCraftCapabilities.DWARVEN_LANGUAGE) != null &&
                                 Minecraft.getInstance().player.getCapability(JolCraftCapabilities.DWARVEN_LANGUAGE).knowsLanguage()) {
 
-                            tooltip.add(Component.translatable("tooltip.jolcraft.dwarven_lexicon.unlocked"));
+                            tooltip.add(Component.translatable("tooltip.jolcraft.dwarven_lexicon.unlocked").withStyle(ChatFormatting.GRAY));
                         } else {
-                            tooltip.add(Component.translatable("tooltip.jolcraft.dwarven_lexicon.locked"));
+                            tooltip.add(Component.translatable("tooltip.jolcraft.dwarven_lexicon.locked").withStyle(ChatFormatting.GRAY));
                         }
                     }
 
@@ -62,7 +63,7 @@ public class JolCraftItems {
             ITEMS.registerItem("contract_guard", properties -> new Item(properties) {
                 @Override
                 public void appendHoverText(ItemStack pStack, TooltipContext pContext, List<Component> pTooltipComponents, TooltipFlag pTooltipFlag) {
-                    pTooltipComponents.add(Component.translatable("tooltip.jolcraft.contract_guard"));
+                    pTooltipComponents.add(Component.translatable("tooltip.jolcraft.contract_guard").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
                     super.appendHoverText(pStack, pContext, pTooltipComponents, pTooltipFlag);
                 }
             }, new Item.Properties().rarity(Rarity.UNCOMMON));
@@ -144,7 +145,7 @@ public class JolCraftItems {
     public static final DeferredItem<Item> DWARVEN_TOME = ITEMS.registerSimpleItem("dwarven_tome");
 
     public static final DeferredItem<Item> DWARVEN_TOME_COMMON =
-            ITEMS.registerItem("dwarven_tome_common", properties -> new DwarvenLexiconItem(properties) {
+            ITEMS.registerItem("dwarven_tome_common", properties -> new Item(properties) {
                 @Override
                 public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
                     if (context.level() != null && context.level().isClientSide()) {
@@ -157,10 +158,10 @@ public class JolCraftItems {
                             if (loreKey != null && !loreKey.isEmpty()) {
                                 tooltip.add(Component.translatable(loreKey).withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
                             } else {
-                                tooltip.add(Component.translatable("tooltip.jolcraft.dwarven_tome.unlocked"));
+                                tooltip.add(Component.translatable("tooltip.jolcraft.dwarven_tome.unlocked").withStyle(ChatFormatting.GRAY));
                             }
                         } else {
-                            tooltip.add(Component.translatable("tooltip.jolcraft.dwarven_tome.locked"));
+                            tooltip.add(Component.translatable("tooltip.jolcraft.dwarven_tome.locked").withStyle(ChatFormatting.GRAY));
                         }
                     }
 
@@ -169,7 +170,7 @@ public class JolCraftItems {
             }, new Item.Properties().stacksTo(1).rarity(Rarity.COMMON));
 
     public static final DeferredItem<Item> DWARVEN_TOME_UNCOMMON =
-            ITEMS.registerItem("dwarven_tome_uncommon", properties -> new DwarvenLexiconItem(properties) {
+            ITEMS.registerItem("dwarven_tome_uncommon", properties -> new Item(properties) {
                 @Override
                 public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
                     if (context.level() != null && context.level().isClientSide()) {
@@ -182,10 +183,10 @@ public class JolCraftItems {
                             if (loreKey != null && !loreKey.isEmpty()) {
                                 tooltip.add(Component.translatable(loreKey).withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
                             } else {
-                                tooltip.add(Component.translatable("tooltip.jolcraft.dwarven_tome.unlocked"));
+                                tooltip.add(Component.translatable("tooltip.jolcraft.dwarven_tome.unlocked").withStyle(ChatFormatting.GRAY));
                             }
                         } else {
-                            tooltip.add(Component.translatable("tooltip.jolcraft.dwarven_tome.locked"));
+                            tooltip.add(Component.translatable("tooltip.jolcraft.dwarven_tome.locked").withStyle(ChatFormatting.GRAY));
                         }
                     }
 
@@ -194,7 +195,7 @@ public class JolCraftItems {
             }, new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
 
     public static final DeferredItem<Item> DWARVEN_TOME_RARE =
-            ITEMS.registerItem("dwarven_tome_rare", properties -> new DwarvenLexiconItem(properties) {
+            ITEMS.registerItem("dwarven_tome_rare", properties -> new Item(properties) {
                 @Override
                 public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
                     if (context.level() != null && context.level().isClientSide()) {
@@ -207,10 +208,10 @@ public class JolCraftItems {
                             if (loreKey != null && !loreKey.isEmpty()) {
                                 tooltip.add(Component.translatable(loreKey).withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
                             } else {
-                                tooltip.add(Component.translatable("tooltip.jolcraft.dwarven_tome.unlocked"));
+                                tooltip.add(Component.translatable("tooltip.jolcraft.dwarven_tome.unlocked").withStyle(ChatFormatting.GRAY));
                             }
                         } else {
-                            tooltip.add(Component.translatable("tooltip.jolcraft.dwarven_tome.locked"));
+                            tooltip.add(Component.translatable("tooltip.jolcraft.dwarven_tome.locked").withStyle(ChatFormatting.GRAY));
                         }
                     }
 
@@ -219,7 +220,7 @@ public class JolCraftItems {
             }, new Item.Properties().stacksTo(1).rarity(Rarity.RARE));
 
     public static final DeferredItem<Item> DWARVEN_TOME_EPIC =
-            ITEMS.registerItem("dwarven_tome_epic", properties -> new DwarvenLexiconItem(properties) {
+            ITEMS.registerItem("dwarven_tome_epic", properties -> new Item(properties) {
                 @Override
                 public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
                     if (context.level() != null && context.level().isClientSide()) {
@@ -232,16 +233,130 @@ public class JolCraftItems {
                             if (loreKey != null && !loreKey.isEmpty()) {
                                 tooltip.add(Component.translatable(loreKey).withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
                             } else {
-                                tooltip.add(Component.translatable("tooltip.jolcraft.dwarven_tome.unlocked"));
+                                tooltip.add(Component.translatable("tooltip.jolcraft.dwarven_tome.unlocked").withStyle(ChatFormatting.GRAY));
                             }
                         } else {
-                            tooltip.add(Component.translatable("tooltip.jolcraft.dwarven_tome.locked"));
+                            tooltip.add(Component.translatable("tooltip.jolcraft.dwarven_tome.locked").withStyle(ChatFormatting.GRAY));
                         }
                     }
 
                     super.appendHoverText(stack, context, tooltip, flag);
                 }
             }, new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
+
+    //Tools
+    public static final DeferredItem<Item> COPPER_SPANNER =
+            ITEMS.registerItem("copper_spanner", properties -> new SpannerItem(properties) {
+                @Override
+                public void appendHoverText(ItemStack pStack, TooltipContext pContext, List<Component> pTooltipComponents, TooltipFlag pTooltipFlag) {
+                    pTooltipComponents.add(Component.translatable("tooltip.jolcraft.spanner").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
+                    super.appendHoverText(pStack, pContext, pTooltipComponents, pTooltipFlag);
+                }
+            }, new Item.Properties().durability(64).stacksTo(1));
+
+    public static final DeferredItem<Item> IRON_SPANNER =
+            ITEMS.registerItem("iron_spanner", properties -> new SpannerItem(properties) {
+                @Override
+                public void appendHoverText(ItemStack pStack, TooltipContext pContext, List<Component> pTooltipComponents, TooltipFlag pTooltipFlag) {
+                    pTooltipComponents.add(Component.translatable("tooltip.jolcraft.spanner").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
+                    super.appendHoverText(pStack, pContext, pTooltipComponents, pTooltipFlag);
+                }
+            }, new Item.Properties().durability(64).stacksTo(1));
+
+
+    //Scrap
+    public static final DeferredItem<Item> SCRAP = ITEMS.registerSimpleItem("scrap");
+    public static final DeferredItem<Item> SCRAP_HEAP = ITEMS.registerSimpleItem("scrap_heap");
+
+    public static final DeferredItem<Item> BROKEN_PICKAXE =
+            ITEMS.registerItem("broken_pickaxe", properties -> new Item(properties) {
+                @Override
+                public void appendHoverText(ItemStack pStack, TooltipContext pContext, List<Component> pTooltipComponents, TooltipFlag pTooltipFlag) {
+                    pTooltipComponents.add(Component.translatable("tooltip.jolcraft.salvage").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
+                    super.appendHoverText(pStack, pContext, pTooltipComponents, pTooltipFlag);
+                }
+            }, new Item.Properties());
+
+    public static final DeferredItem<Item> BROKEN_AMULET =
+            ITEMS.registerItem("broken_amulet", properties -> new Item(properties) {
+                @Override
+                public void appendHoverText(ItemStack pStack, TooltipContext pContext, List<Component> pTooltipComponents, TooltipFlag pTooltipFlag) {
+                    pTooltipComponents.add(Component.translatable("tooltip.jolcraft.salvage").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
+                    super.appendHoverText(pStack, pContext, pTooltipComponents, pTooltipFlag);
+                }
+            }, new Item.Properties());
+
+    public static final DeferredItem<Item> BROKEN_BELT =
+            ITEMS.registerItem("broken_belt", properties -> new Item(properties) {
+                @Override
+                public void appendHoverText(ItemStack pStack, TooltipContext pContext, List<Component> pTooltipComponents, TooltipFlag pTooltipFlag) {
+                    pTooltipComponents.add(Component.translatable("tooltip.jolcraft.salvage").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
+                    super.appendHoverText(pStack, pContext, pTooltipComponents, pTooltipFlag);
+                }
+            }, new Item.Properties());
+
+    public static final DeferredItem<Item> BROKEN_COINS =
+            ITEMS.registerItem("broken_coins", properties -> new Item(properties) {
+                @Override
+                public void appendHoverText(ItemStack pStack, TooltipContext pContext, List<Component> pTooltipComponents, TooltipFlag pTooltipFlag) {
+                    pTooltipComponents.add(Component.translatable("tooltip.jolcraft.salvage").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
+                    super.appendHoverText(pStack, pContext, pTooltipComponents, pTooltipFlag);
+                }
+            }, new Item.Properties());
+
+    public static final DeferredItem<Item> DEEPSLATE_MUG =
+            ITEMS.registerItem("deepslate_mug", properties -> new Item(properties) {
+                @Override
+                public void appendHoverText(ItemStack pStack, TooltipContext pContext, List<Component> pTooltipComponents, TooltipFlag pTooltipFlag) {
+                    pTooltipComponents.add(Component.translatable("tooltip.jolcraft.salvage").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
+                    super.appendHoverText(pStack, pContext, pTooltipComponents, pTooltipFlag);
+                }
+            }, new Item.Properties());
+
+    public static final DeferredItem<Item> EXPIRED_POTION =
+            ITEMS.registerItem("expired_potion", properties -> new Item(properties) {
+                @Override
+                public void appendHoverText(ItemStack pStack, TooltipContext pContext, List<Component> pTooltipComponents, TooltipFlag pTooltipFlag) {
+                    pTooltipComponents.add(Component.translatable("tooltip.jolcraft.salvage").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
+                    super.appendHoverText(pStack, pContext, pTooltipComponents, pTooltipFlag);
+                }
+            }, new Item.Properties());
+
+    public static final DeferredItem<Item> INGOT_MOULD =
+            ITEMS.registerItem("ingot_mould", properties -> new Item(properties) {
+                @Override
+                public void appendHoverText(ItemStack pStack, TooltipContext pContext, List<Component> pTooltipComponents, TooltipFlag pTooltipFlag) {
+                    pTooltipComponents.add(Component.translatable("tooltip.jolcraft.salvage").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
+                    super.appendHoverText(pStack, pContext, pTooltipComponents, pTooltipFlag);
+                }
+            }, new Item.Properties());
+
+    public static final DeferredItem<Item> MITHRIL_SALVAGE =
+            ITEMS.registerItem("mithril_salvage", properties -> new Item(properties) {
+                @Override
+                public void appendHoverText(ItemStack pStack, TooltipContext pContext, List<Component> pTooltipComponents, TooltipFlag pTooltipFlag) {
+                    pTooltipComponents.add(Component.translatable("tooltip.jolcraft.salvage").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
+                    super.appendHoverText(pStack, pContext, pTooltipComponents, pTooltipFlag);
+                }
+            }, new Item.Properties());
+
+    public static final DeferredItem<Item> OLD_FABRIC =
+            ITEMS.registerItem("old_fabric", properties -> new Item(properties) {
+                @Override
+                public void appendHoverText(ItemStack pStack, TooltipContext pContext, List<Component> pTooltipComponents, TooltipFlag pTooltipFlag) {
+                    pTooltipComponents.add(Component.translatable("tooltip.jolcraft.salvage").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
+                    super.appendHoverText(pStack, pContext, pTooltipComponents, pTooltipFlag);
+                }
+            }, new Item.Properties());
+
+    public static final DeferredItem<Item> RUSTY_TONGS =
+            ITEMS.registerItem("rusty_tongs", properties -> new Item(properties) {
+                @Override
+                public void appendHoverText(ItemStack pStack, TooltipContext pContext, List<Component> pTooltipComponents, TooltipFlag pTooltipFlag) {
+                    pTooltipComponents.add(Component.translatable("tooltip.jolcraft.salvage").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
+                    super.appendHoverText(pStack, pContext, pTooltipComponents, pTooltipFlag);
+                }
+            }, new Item.Properties());
 
 
     public static void register(IEventBus eventBus) {

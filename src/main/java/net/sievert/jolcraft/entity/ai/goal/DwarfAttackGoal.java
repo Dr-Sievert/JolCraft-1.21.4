@@ -8,7 +8,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.pathfinder.Path;
-import net.sievert.jolcraft.entity.custom.AbstractDwarfEntity;
+import net.sievert.jolcraft.entity.custom.dwarf.AbstractDwarfEntity;
 import net.sievert.jolcraft.sound.JolCraftSounds;
 
 public class DwarfAttackGoal extends MeleeAttackGoal {

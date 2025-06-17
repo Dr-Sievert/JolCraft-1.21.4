@@ -9,9 +9,9 @@ import net.minecraft.world.entity.MobCategory;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.sievert.jolcraft.JolCraft;
-import net.sievert.jolcraft.entity.custom.DwarfEntity;
-import net.sievert.jolcraft.entity.custom.DwarfGuardEntity;
-import net.sievert.jolcraft.entity.custom.DwarfHistorianEntity;
+import net.sievert.jolcraft.entity.custom.dwarf.DwarfEntity;
+import net.sievert.jolcraft.entity.custom.dwarf.DwarfGuardEntity;
+import net.sievert.jolcraft.entity.custom.dwarf.DwarfHistorianEntity;
 
 import java.util.function.Supplier;
 

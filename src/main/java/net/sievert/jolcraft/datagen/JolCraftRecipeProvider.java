@@ -68,7 +68,12 @@ public class JolCraftRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_feather", has(Items.FEATHER))
                 .save(output);
 
-
+        nineBlockStorageRecipes(
+                RecipeCategory.MISC,
+                JolCraftItems.SCRAP.get(), //Ingredient
+                RecipeCategory.MISC,
+                JolCraftItems.SCRAP_HEAP.get() //Block
+        );
 
 
 

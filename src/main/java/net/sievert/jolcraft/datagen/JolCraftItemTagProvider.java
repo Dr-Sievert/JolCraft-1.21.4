@@ -1,9 +1,9 @@
 package net.sievert.jolcraft.datagen;
 
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.data.JolCraftTags;
@@ -41,6 +41,68 @@ public class JolCraftItemTagProvider extends ItemTagsProvider {
                 .add(JolCraftItems.VERDANITE.get())
                 .add(JolCraftItems.WOECRYSTAL.get());
 
+        tag(JolCraftTags.Items.GENERAL_SCRAP)
+                .add(Items.TRIPWIRE_HOOK)
+                .add(Items.FLINT_AND_STEEL)
+                .add(Items.SHIELD)
+                .add(Items.FILLED_MAP)
+                .add(JolCraftItems.DEEPSLATE_MUG.get())
+                .add(JolCraftItems.EXPIRED_POTION.get());
+
+        tag(JolCraftTags.Items.TEXTILE_SCRAP)
+                .add(Items.LEATHER_HELMET)
+                .add(Items.LEATHER_CHESTPLATE)
+                .add(Items.LEATHER_LEGGINGS)
+                .add(Items.LEATHER_BOOTS)
+                .add(JolCraftItems.OLD_FABRIC.get());
+
+        tag(JolCraftTags.Items.REDSTONE_SCRAP)
+                .add(Items.COMPASS)
+                .add(Items.CLOCK)
+                .add(Items.REPEATER)
+                .add(Items.COMPARATOR);
+
+        tag(JolCraftTags.Items.IRON_SCRAP)
+                .add(Items.IRON_SWORD)
+                .add(Items.IRON_PICKAXE)
+                .add(Items.IRON_SHOVEL)
+                .add(Items.IRON_AXE)
+                .add(Items.IRON_HOE)
+                .add(Items.IRON_HELMET)
+                .add(Items.IRON_CHESTPLATE)
+                .add(Items.IRON_LEGGINGS)
+                .add(Items.IRON_BOOTS)
+                .add(Items.IRON_HORSE_ARMOR)
+                .add(Items.SHEARS)
+                .add(JolCraftItems.BROKEN_PICKAXE.get())
+                .add(JolCraftItems.BROKEN_AMULET.get())
+                .add(JolCraftItems.RUSTY_TONGS.get())
+                .add(JolCraftItems.INGOT_MOULD.get());
+
+        tag(JolCraftTags.Items.GOLD_SCRAP)
+                .add(Items.GOLDEN_SWORD)
+                .add(Items.GOLDEN_PICKAXE)
+                .add(Items.GOLDEN_SHOVEL)
+                .add(Items.GOLDEN_AXE)
+                .add(Items.GOLDEN_HOE)
+                .add(Items.GOLDEN_HELMET)
+                .add(Items.GOLDEN_CHESTPLATE)
+                .add(Items.GOLDEN_LEGGINGS)
+                .add(Items.GOLDEN_BOOTS)
+                .add(Items.GOLDEN_HORSE_ARMOR)
+                .add(JolCraftItems.BROKEN_BELT.get())
+                .add(JolCraftItems.BROKEN_COINS.get());
+
+        tag(JolCraftTags.Items.MITHRIL_SCRAP)
+                .add(JolCraftItems.MITHRIL_SALVAGE.get());
+
+        tag(JolCraftTags.Items.GLOBAL_SCRAP)
+                .addTag(JolCraftTags.Items.GENERAL_SCRAP)
+                .addTag(JolCraftTags.Items.TEXTILE_SCRAP)
+                .addTag(JolCraftTags.Items.REDSTONE_SCRAP)
+                .addTag(JolCraftTags.Items.IRON_SCRAP)
+                .addTag(JolCraftTags.Items.GOLD_SCRAP)
+                .addTag(JolCraftTags.Items.MITHRIL_SCRAP);
 
     }
 

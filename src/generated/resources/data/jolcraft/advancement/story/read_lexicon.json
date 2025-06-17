@@ -1,11 +1,11 @@
 {
+  "parent": "jolcraft:story/root",
   "criteria": {
     "knows_dwarvish": {
       "trigger": "jolcraft:has_dwarven_language"
     }
   },
   "display": {
-    "background": "jolcraft:textures/gui/advancements/backgrounds/jolcraft.png",
     "description": {
       "translate": "advancement.jolcraft.read_lexicon.description"
     },

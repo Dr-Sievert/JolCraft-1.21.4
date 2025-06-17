@@ -38,21 +38,41 @@
   "item.jolcraft.dwarven_tome_rare": "Dwarven Tome",
   "item.jolcraft.dwarven_tome_epic": "Dwarven Tome",
 
+  "item.jolcraft.copper_spanner": "Copper Spanner",
+  "item.jolcraft.iron_spanner": "Iron Spanner",
+
+  "item.jolcraft.scrap": "Scrap",
+  "item.jolcraft.scrap_heap": "Heap of Scrap",
+  "item.jolcraft.broken_pickaxe": "Broken Pickaxe",
+  "item.jolcraft.broken_amulet": "Broken Amulet",
+  "item.jolcraft.broken_belt": "Broken Belt",
+  "item.jolcraft.broken_coins": "Broken Coins",
+  "item.jolcraft.deepslate_mug": "Deepslate Mug",
+  "item.jolcraft.expired_potion": "Expired Potion",
+  "item.jolcraft.ingot_mould": "Ingot Mould",
+  "item.jolcraft.mithril_salvage": "Mithril Salvage",
+  "item.jolcraft.old_fabric": "Old Fabric",
+  "item.jolcraft.rusty_tongs": "Rusty Forge Tongs",
+
   "itemGroup.jolcraft.jolcraft_items_tab": "JolCraft",
 
-  "tooltip.jolcraft.contract_guard": "The contract echoes with duty",
+  "tooltip.jolcraft.contract_guard": "The contract echoes with duty.",
 
-  "tooltip.jolcraft.dwarven_lexicon.locked": "The pages are filled with unfamiliar symbols",
-  "tooltip.jolcraft.dwarven_lexicon.unlocked": "The key to dwarven speech lies within",
+  "tooltip.jolcraft.dwarven_lexicon.locked": "The pages are filled with unfamiliar symbols.",
+  "tooltip.jolcraft.dwarven_lexicon.unlocked": "The key to dwarven speech lies within.",
 
-  "tooltip.jolcraft.dwarven_tome.locked": "The pages are filled with unfamiliar symbols",
-  "tooltip.jolcraft.dwarven_tome.unlocked": "A dwarven tome",
+  "tooltip.jolcraft.dwarven_tome.locked": "The pages are filled with unfamiliar symbols.",
+  "tooltip.jolcraft.dwarven_tome.unlocked": "An ancient tome.",
 
+  "tooltip.jolcraft.spanner": "Can be used to produce scrap from salvage.",
+  "tooltip.jolcraft.salvage": "Salvagable",
+
+  "advancement.jolcraft.root.title": "The Dwarven Path",
+  "advancement.jolcraft.root.description": "A journey through dwarven halls.",
   "advancement.jolcraft.read_lexicon.title": "Bilingual",
-  "advancement.jolcraft.read_lexicon.description": "Learn to understand the dwarven language",
-
+  "advancement.jolcraft.read_lexicon.description": "Learn to understand the dwarven language.",
   "advancement.jolcraft.trade_with_dwarf.title": "Dwarven Commerce",
-  "advancement.jolcraft.trade_with_dwarf.description": "Trade with a dwarf",
+  "advancement.jolcraft.trade_with_dwarf.description": "Trade with a dwarf.",
 
   "entity.jolcraft.dwarf": "Dwarf",
   "entity.minecraft.dwarf": "Dwarf",

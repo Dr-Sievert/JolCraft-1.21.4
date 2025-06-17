@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "jolcraft:scrap_heap"
+  ],
+  "result": {
+    "count": 9,
+    "id": "jolcraft:scrap"
+  }
+}

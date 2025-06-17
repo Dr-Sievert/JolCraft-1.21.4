@@ -14,9 +14,19 @@ public class JolCraftTags {
 
     public final class Items {
 
+        //Core
         public static final TagKey<Item> INK_AND_QUILLS = createTag("ink_and_quills");
+
         public static final TagKey<Item> GEMS = createTag("gems");
 
+        //Scrap
+        public static final TagKey<Item> GLOBAL_SCRAP = createTag("global_scrap");
+        public static final TagKey<Item> GENERAL_SCRAP = createTag("general_scrap");
+        public static final TagKey<Item> TEXTILE_SCRAP = createTag("textile_scrap");
+        public static final TagKey<Item> REDSTONE_SCRAP = createTag("redstone_scrap");
+        public static final TagKey<Item> IRON_SCRAP = createTag("iron_scrap");
+        public static final TagKey<Item> GOLD_SCRAP = createTag("gold_scrap");
+        public static final TagKey<Item> MITHRIL_SCRAP = createTag("mithril_scrap");
 
         private static TagKey<Item> createTag(String name) {
             return ItemTags.create(ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, name));

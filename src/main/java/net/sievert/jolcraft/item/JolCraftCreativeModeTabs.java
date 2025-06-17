@@ -45,6 +45,29 @@ public class JolCraftCreativeModeTabs {
                         pOutput.accept(JolCraftItems.VERDANITE);
                         pOutput.accept(JolCraftItems.WOECRYSTAL);
 
+                        pOutput.accept(JolCraftItems.DWARVEN_TOME_COMMON);
+                        pOutput.accept(JolCraftItems.DWARVEN_TOME_UNCOMMON);
+                        pOutput.accept(JolCraftItems.DWARVEN_TOME_RARE);
+                        pOutput.accept(JolCraftItems.DWARVEN_TOME_EPIC);
+
+                        pOutput.accept(JolCraftItems.COPPER_SPANNER);
+                        pOutput.accept(JolCraftItems.IRON_SPANNER);
+
+                        pOutput.accept(JolCraftItems.SCRAP);
+                        pOutput.accept(JolCraftItems.SCRAP_HEAP);
+                        pOutput.accept(JolCraftItems.BROKEN_PICKAXE);
+                        pOutput.accept(JolCraftItems.BROKEN_AMULET);
+                        pOutput.accept(JolCraftItems.BROKEN_BELT);
+                        pOutput.accept(JolCraftItems.BROKEN_COINS);
+                        pOutput.accept(JolCraftItems.DEEPSLATE_MUG);
+                        pOutput.accept(JolCraftItems.EXPIRED_POTION);
+                        pOutput.accept(JolCraftItems.INGOT_MOULD);
+                        pOutput.accept(JolCraftItems.MITHRIL_SALVAGE);
+                        pOutput.accept(JolCraftItems.OLD_FABRIC);
+                        pOutput.accept(JolCraftItems.RUSTY_TONGS);
+
+
+
                     }).build());
 /*
     public static final Supplier<CreativeModeTab> BLACK_OPAL_BLOCKS_TAB =

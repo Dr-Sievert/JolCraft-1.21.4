@@ -3,7 +3,7 @@ package net.sievert.jolcraft.entity.ai.goal;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.player.Player;
-import net.sievert.jolcraft.entity.custom.AbstractDwarfEntity;
+import net.sievert.jolcraft.entity.custom.dwarf.AbstractDwarfEntity;
 
 import java.util.EnumSet;
 

@@ -3,7 +3,7 @@ package net.sievert.jolcraft.entity.ai.goal;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.sievert.jolcraft.entity.custom.DwarfGuardEntity;
+import net.sievert.jolcraft.entity.custom.dwarf.DwarfGuardEntity;
 
 
 import java.util.EnumSet;

@@ -4,7 +4,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.sievert.jolcraft.entity.custom.DwarfEntity;
+import net.sievert.jolcraft.entity.custom.dwarf.DwarfEntity;
 
 public class DwarfFollowParentGoal extends Goal {
     private final DwarfEntity dwarf;

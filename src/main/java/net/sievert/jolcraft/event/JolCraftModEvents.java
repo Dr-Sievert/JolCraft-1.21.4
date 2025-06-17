@@ -7,12 +7,12 @@ import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
 import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.entity.JolCraftEntities;
-import net.sievert.jolcraft.entity.client.DwarfGuardModel;
-import net.sievert.jolcraft.entity.client.DwarfHistorianModel;
-import net.sievert.jolcraft.entity.client.DwarfModel;
-import net.sievert.jolcraft.entity.custom.DwarfEntity;
-import net.sievert.jolcraft.entity.custom.DwarfGuardEntity;
-import net.sievert.jolcraft.entity.custom.DwarfHistorianEntity;
+import net.sievert.jolcraft.entity.client.model.DwarfGuardModel;
+import net.sievert.jolcraft.entity.client.model.DwarfHistorianModel;
+import net.sievert.jolcraft.entity.client.model.DwarfModel;
+import net.sievert.jolcraft.entity.custom.dwarf.DwarfEntity;
+import net.sievert.jolcraft.entity.custom.dwarf.DwarfGuardEntity;
+import net.sievert.jolcraft.entity.custom.dwarf.DwarfHistorianEntity;
 
 @EventBusSubscriber(modid = JolCraft.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class JolCraftModEvents {
@@ -36,10 +36,15 @@ public class JolCraftModEvents {
     }
 
     //Spawning
-
     @SubscribeEvent
     public static void registerSpawnPlacements(RegisterSpawnPlacementsEvent event) {
 
     }
+
+
+
+
+
+
 
 }

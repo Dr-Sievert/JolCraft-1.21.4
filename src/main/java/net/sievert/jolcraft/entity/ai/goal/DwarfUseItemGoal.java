@@ -9,8 +9,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.item.ItemStack;
-import net.sievert.jolcraft.entity.custom.AbstractDwarfEntity;
-import net.sievert.jolcraft.entity.custom.DwarfGuardEntity;
+import net.sievert.jolcraft.entity.custom.dwarf.AbstractDwarfEntity;
 
 public class DwarfUseItemGoal<T extends Mob> extends Goal {
     private final T mob;
