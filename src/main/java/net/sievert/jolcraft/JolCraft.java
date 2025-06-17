@@ -10,6 +10,7 @@ import net.sievert.jolcraft.entity.JolCraftEntities;
 import net.sievert.jolcraft.entity.client.render.DwarfGuardRenderer;
 import net.sievert.jolcraft.entity.client.render.DwarfHistorianRenderer;
 import net.sievert.jolcraft.entity.client.render.DwarfRenderer;
+import net.sievert.jolcraft.entity.client.render.DwarfScrapperRenderer;
 import net.sievert.jolcraft.event.JolCraftCapabilityEvents;
 import net.sievert.jolcraft.item.JolCraftCreativeModeTabs;
 import net.sievert.jolcraft.item.JolCraftItems;
@@ -111,6 +112,7 @@ public class JolCraft
             event.accept(JolCraftItems.DWARF_SPAWN_EGG);
             event.accept(JolCraftItems.DWARF_GUARD_SPAWN_EGG);
             event.accept(JolCraftItems.DWARF_HISTORIAN_SPAWN_EGG);
+            event.accept(JolCraftItems.DWARF_SCRAPPER_SPAWN_EGG);
         }
     }
 
@@ -132,6 +134,7 @@ public class JolCraft
             EntityRenderers.register(JolCraftEntities.DWARF.get(), DwarfRenderer::new);
             EntityRenderers.register(JolCraftEntities.DWARF_GUARD.get(), DwarfGuardRenderer::new);
             EntityRenderers.register(JolCraftEntities.DWARF_HISTORIAN.get(), DwarfHistorianRenderer::new);
+            EntityRenderers.register(JolCraftEntities.DWARF_SCRAPPER.get(), DwarfScrapperRenderer::new);
 
             // Some client setup code
             LOGGER.info("HELLO FROM CLIENT SETUP");

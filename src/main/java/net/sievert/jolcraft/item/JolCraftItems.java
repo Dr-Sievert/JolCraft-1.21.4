@@ -95,6 +95,9 @@ public class JolCraftItems {
     public static final DeferredItem<Item> DWARF_HISTORIAN_SPAWN_EGG = ITEMS.registerItem("dwarf_historian_spawn_egg",
             (properties) -> new SpawnEggItem(JolCraftEntities.DWARF_HISTORIAN.get(), properties));
 
+    public static final DeferredItem<Item> DWARF_SCRAPPER_SPAWN_EGG = ITEMS.registerItem("dwarf_scrapper_spawn_egg",
+            (properties) -> new SpawnEggItem(JolCraftEntities.DWARF_SCRAPPER.get(), properties));
+
     //Gems
     public static final DeferredItem<Item> AEGISCORE = ITEMS.registerItem("aegiscore",
             Item::new, new Item.Properties());
@@ -252,7 +255,7 @@ public class JolCraftItems {
                     pTooltipComponents.add(Component.translatable("tooltip.jolcraft.spanner").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
                     super.appendHoverText(pStack, pContext, pTooltipComponents, pTooltipFlag);
                 }
-            }, new Item.Properties().durability(64).stacksTo(1));
+            }, new Item.Properties().durability(64).stacksTo(1).enchantable(10).repairable(Items.COPPER_INGOT));
 
     public static final DeferredItem<Item> IRON_SPANNER =
             ITEMS.registerItem("iron_spanner", properties -> new SpannerItem(properties) {
@@ -261,7 +264,7 @@ public class JolCraftItems {
                     pTooltipComponents.add(Component.translatable("tooltip.jolcraft.spanner").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
                     super.appendHoverText(pStack, pContext, pTooltipComponents, pTooltipFlag);
                 }
-            }, new Item.Properties().durability(64).stacksTo(1));
+            }, new Item.Properties().durability(64).stacksTo(1).enchantable(10).repairable(Items.IRON_INGOT));
 
 
     //Scrap

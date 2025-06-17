@@ -1,4 +1,4 @@
-// 1.21.4	2025-06-17T11:26:51.4369566	Model Definitions - jolcraft
+// 1.21.4	2025-06-17T12:44:07.7231399	Model Definitions - jolcraft
 514fa4af6796c2d245487e0f0d0268286013059c assets/jolcraft/items/aegiscore.json
 b949c867dd45b7a402abd9d29cbb4517f22e9b49 assets/jolcraft/items/ashfang.json
 2f0a64f049f126971d97fcd174214da1d6bd2be0 assets/jolcraft/items/broken_amulet.json
@@ -14,6 +14,7 @@ d7859d5373168fa7e4e15578fb88ec39a71f9ded assets/jolcraft/items/contract_written.
 de65094368fea64287bea784d2587165850d9783 assets/jolcraft/items/deepslate_mug.json
 63f5313ed92108a8915a860be35025ee9ae9c256 assets/jolcraft/items/dwarf_guard_spawn_egg.json
 11a9f44b88760d5ee09fea95347ef37aed81edb2 assets/jolcraft/items/dwarf_historian_spawn_egg.json
+325d281cc8d2d7160561cc8cc99959adc1565ada assets/jolcraft/items/dwarf_scrapper_spawn_egg.json
 24cd6ae2d33acb7f6c5f176439171fd9cc5a3676 assets/jolcraft/items/dwarf_spawn_egg.json
 1b66b50bfde59a65cbcf2fb3e1d777e80d91af3d assets/jolcraft/items/dwarven_lexicon.json
 8718cdecc3d0c287eb9ac0f5ab227262d774f4b6 assets/jolcraft/items/dwarven_tome.json

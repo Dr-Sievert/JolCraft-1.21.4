@@ -7,11 +7,11 @@
           {
             "block_entity_modifier": {
               "type": "minecraft:append_loot",
-              "loot_table": "jolcraft:archaeology/dwarven_trail_ruin"
+              "loot_table": "jolcraft:archaeology/dwarven_trail_ruin_common"
             },
             "input_predicate": {
               "block": "minecraft:gravel",
-              "probability": 0.4,
+              "probability": 0.3,
               "predicate_type": "minecraft:random_block_match"
             },
             "location_predicate": {
@@ -27,6 +27,35 @@
         ]
       },
       "limit": 5,
+      "processor_type": "minecraft:capped"
+    },
+    {
+      "delegate": {
+        "processor_type": "minecraft:rule",
+        "rules": [
+          {
+            "block_entity_modifier": {
+              "type": "minecraft:append_loot",
+              "loot_table": "jolcraft:archaeology/dwarven_trail_ruin_rare"
+            },
+            "input_predicate": {
+              "block": "minecraft:gravel",
+              "probability": 0.3,
+              "predicate_type": "minecraft:random_block_match"
+            },
+            "location_predicate": {
+              "predicate_type": "minecraft:always_true"
+            },
+            "output_state": {
+              "Name": "minecraft:suspicious_gravel",
+              "Properties": {
+                "dusted": "0"
+              }
+            }
+          }
+        ]
+      },
+      "limit": 2,
       "processor_type": "minecraft:capped"
     },
     {

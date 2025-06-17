@@ -161,7 +161,7 @@ public class DwarfAnimations {
                                     AnimationChannel.Interpolations.LINEAR),
                             new Keyframe(0.16766666f, KeyframeAnimations.degreeVec(-82.42f, -4.62f, -1.92f),
                                     AnimationChannel.Interpolations.LINEAR),
-                            new Keyframe(0.3433333f, KeyframeAnimations.degreeVec(-22.42f, -4.62f, -1.92f),
+                            new Keyframe(0.3433333f, KeyframeAnimations.degreeVec(0f, 0f, 0f),
                                     AnimationChannel.Interpolations.LINEAR)))
             .addAnimation("right_eyebrow",
                     new AnimationChannel(AnimationChannel.Targets.ROTATION,

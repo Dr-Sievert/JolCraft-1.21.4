@@ -94,6 +94,12 @@ public class JolCraftModelProvider extends ModelProvider {
                 -4355214,
                 -8807323
         );
+        itemModels.generateSpawnEgg(
+                JolCraftItems.DWARF_SCRAPPER_SPAWN_EGG.get(),
+                -4355214,
+                -3380960
+        );
+
 
 
     }
