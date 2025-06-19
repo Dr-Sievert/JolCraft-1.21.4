@@ -29,6 +29,14 @@ public class JolCraftItemTagProvider extends ItemTagsProvider {
                 .add(JolCraftItems.QUILL_HALF.get())
                 .add(JolCraftItems.QUILL_SMALL.get());
 
+
+        tag(JolCraftTags.Items.SPAWN_EGGS)
+                .add(JolCraftItems.DWARF_SPAWN_EGG.get())
+                .add(JolCraftItems.DWARF_GUARD_SPAWN_EGG.get())
+                .add(JolCraftItems.DWARF_HISTORIAN_SPAWN_EGG.get())
+                .add(JolCraftItems.DWARF_SCRAPPER_SPAWN_EGG.get())
+                .add(JolCraftItems.DWARF_MERCHANT_SPAWN_EGG.get());
+
         tag(JolCraftTags.Items.GEMS)
                 .add(JolCraftItems.AEGISCORE.get())
                 .add(JolCraftItems.ASHFANG.get())

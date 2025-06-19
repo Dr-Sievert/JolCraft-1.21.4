@@ -1,6 +1,8 @@
-// 1.21.4	2025-06-17T12:44:07.7231399	Model Definitions - jolcraft
+// 1.21.4	2025-06-18T15:04:47.1537241	Model Definitions - jolcraft
 514fa4af6796c2d245487e0f0d0268286013059c assets/jolcraft/items/aegiscore.json
 b949c867dd45b7a402abd9d29cbb4517f22e9b49 assets/jolcraft/items/ashfang.json
+38f30432e8ce23fd9725a5acbc3fcc9f7cebee8b assets/jolcraft/items/bounty.json
+8042dc26c21da7805320614b88f3ea33b134eac3 assets/jolcraft/items/bounty_crate.json
 2f0a64f049f126971d97fcd174214da1d6bd2be0 assets/jolcraft/items/broken_amulet.json
 98824535550fa761556cc4cc4a0625595855732e assets/jolcraft/items/broken_belt.json
 741b997b2f77530946ebbfd3e55a4c3aa8be1d4a assets/jolcraft/items/broken_coins.json
@@ -14,6 +16,7 @@ d7859d5373168fa7e4e15578fb88ec39a71f9ded assets/jolcraft/items/contract_written.
 de65094368fea64287bea784d2587165850d9783 assets/jolcraft/items/deepslate_mug.json
 63f5313ed92108a8915a860be35025ee9ae9c256 assets/jolcraft/items/dwarf_guard_spawn_egg.json
 11a9f44b88760d5ee09fea95347ef37aed81edb2 assets/jolcraft/items/dwarf_historian_spawn_egg.json
+25519222e3e0c4ba4e21b243c2355bd3377a9722 assets/jolcraft/items/dwarf_merchant_spawn_egg.json
 325d281cc8d2d7160561cc8cc99959adc1565ada assets/jolcraft/items/dwarf_scrapper_spawn_egg.json
 24cd6ae2d33acb7f6c5f176439171fd9cc5a3676 assets/jolcraft/items/dwarf_spawn_egg.json
 1b66b50bfde59a65cbcf2fb3e1d777e80d91af3d assets/jolcraft/items/dwarven_lexicon.json
@@ -35,10 +38,16 @@ d71be6c8e67364ebd1b6380d19b2de0143b05baa assets/jolcraft/items/iron_spanner.json
 0d9f55193615ac79a57c4d4bb5e48cd4773aea1b assets/jolcraft/items/mithril_salvage.json
 2512373bddb5400a11664c97301a3fde0a0948be assets/jolcraft/items/moonshard.json
 bca448c7a156cf844324c33f79883ab5b3938be8 assets/jolcraft/items/old_fabric.json
+cdd748c8420823c4098ee5880d48aab079984ed6 assets/jolcraft/items/parchment.json
 0a425220b6083034dea42d281ddcd062512ed3eb assets/jolcraft/items/quill_empty.json
 dac39654410d9542c3b7f445fcef72f0c27ace9d assets/jolcraft/items/quill_full.json
 d4ece8d7821c57f450dabeea628efceef3281d31 assets/jolcraft/items/quill_half.json
 30bdd47c6b25eed774fa92d810b9f2613aa4203f assets/jolcraft/items/quill_small.json
+80f79c4be275faad549d939c84fcf5b111e08fad assets/jolcraft/items/reputation_tablet_0.json
+37f4bea593d51d4c21bb69d992aa1d95e7852912 assets/jolcraft/items/reputation_tablet_1.json
+ea2a3a1c6d94f14d9ba1b3a3d90a3628aab8f434 assets/jolcraft/items/reputation_tablet_2.json
+cb2bb171a1886320df0ba5b07c2924d89234a67e assets/jolcraft/items/reputation_tablet_3.json
+1f2e2395f5f11175cec5dbc5f40a3d17fd45c421 assets/jolcraft/items/reputation_tablet_4.json
 0ae24bbf5e46497ea6dad1a852efc906bb1219da assets/jolcraft/items/rustagate.json
 7cad4c9923f52ccd46491c3c7ed875a01d9ff030 assets/jolcraft/items/rusty_tongs.json
 5ad74c3071835e605b71f0ee7b29e43b463fa880 assets/jolcraft/items/scrap.json
@@ -49,6 +58,8 @@ dd656a2bc5eea169f3d545581ba025fd3b4a8e8c assets/jolcraft/items/scrap_heap.json
 88299e24a47eb4f7d2151e5afa1a6605495d8fb3 assets/jolcraft/items/woecrystal.json
 0b29a86c84ea36cb1d33609a357710f78091ec97 assets/jolcraft/models/item/aegiscore.json
 9251ea4ccc62d66bc9c1adda4e90e82cc372db47 assets/jolcraft/models/item/ashfang.json
+5a0cd2c6c0ce2441ae8dfc214d420d4cad73689f assets/jolcraft/models/item/bounty.json
+ece4ae61715573a31289cf72479bf5227f7f1601 assets/jolcraft/models/item/bounty_crate.json
 b61f0458a3a51b234859a06da25eb6bc35b162f6 assets/jolcraft/models/item/broken_amulet.json
 526951fae1ecdc20b19e4e4afd220192b2eba968 assets/jolcraft/models/item/broken_belt.json
 cddc2070f6ec52f77c97443a1745d6ad230a7704 assets/jolcraft/models/item/broken_coins.json
@@ -79,10 +90,16 @@ e91ed010d458a2e324678aae8f1bad631bc94c98 assets/jolcraft/models/item/lumiere.jso
 42b8b00a28b0a31a5cc3386077196b3856eaae77 assets/jolcraft/models/item/mithril_salvage.json
 d88c7f683cc02c0fb94eb93e63f31553d7cc1e53 assets/jolcraft/models/item/moonshard.json
 15dda9cac59028d5489ce2775e8ea467f158ca65 assets/jolcraft/models/item/old_fabric.json
+6914ec8dcb46366d3a31f81a4d57969ae2139a23 assets/jolcraft/models/item/parchment.json
 1ecd1a0da39f14cd822306df2af4a45e334080ac assets/jolcraft/models/item/quill_empty.json
 5e55810c0cd13f43e9f475ae7c4ae0418aa671df assets/jolcraft/models/item/quill_full.json
 1676a6adddc301ebfab4701d2c8bbb1097a90d21 assets/jolcraft/models/item/quill_half.json
 4e57bdf06a16278be6557bfb31ad1deefae71ca6 assets/jolcraft/models/item/quill_small.json
+96aecf87b867224dd79d6dcb490c508a88447443 assets/jolcraft/models/item/reputation_tablet_0.json
+974643cb84139262186b39f02ac1d2ecad2f8a84 assets/jolcraft/models/item/reputation_tablet_1.json
+ee1a30c3ca1a96ad4cfb8c54f1eb4a55af59a5c4 assets/jolcraft/models/item/reputation_tablet_2.json
+746b45ef0f2ffafefa1e80338d15d47ab22cc3b1 assets/jolcraft/models/item/reputation_tablet_3.json
+aaeb94f200ffb2a81599b69dff28630966e70ada assets/jolcraft/models/item/reputation_tablet_4.json
 845f892f2d7d732aa67e52ca96892793048e0a8e assets/jolcraft/models/item/rustagate.json
 1a472a0dd3ebdbf55bef2f07cd215ce92ad6ec71 assets/jolcraft/models/item/rusty_tongs.json
 aa1bd34f7990b9a19ce09826ca28bc3e079779a1 assets/jolcraft/models/item/scrap.json

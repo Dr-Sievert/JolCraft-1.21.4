@@ -1,12 +1,14 @@
 package net.sievert.jolcraft.entity.custom.dwarf;
 
 import com.mojang.logging.LogUtils;
+import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -25,10 +27,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.npc.VillagerData;
-import net.minecraft.world.entity.npc.VillagerProfession;
-import net.minecraft.world.entity.npc.VillagerType;
-import net.minecraft.world.entity.npc.WanderingTrader;
+import net.minecraft.world.entity.npc.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -38,8 +37,10 @@ import net.minecraft.world.item.trading.MerchantOffers;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.Vec3;
+import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.advancement.JolCraftCriteriaTriggers;
-import net.sievert.jolcraft.capability.JolCraftCapabilities;
+import net.sievert.jolcraft.capability.JolCraftAttachments;
+import net.sievert.jolcraft.data.JolCraftTags;
 import net.sievert.jolcraft.entity.JolCraftEntities;
 import net.sievert.jolcraft.entity.ai.goal.DwarfBlockGoal;
 import net.sievert.jolcraft.entity.custom.dwarf.variation.DwarfBeardColor;
@@ -52,9 +53,9 @@ import org.slf4j.Logger;
 import javax.annotation.Nullable;
 import java.util.UUID;
 
-public class AbstractDwarfEntity extends WanderingTrader {
+public class AbstractDwarfEntity extends AbstractVillager {
 
-    public AbstractDwarfEntity(EntityType<? extends WanderingTrader> entityType, Level level) {
+    public AbstractDwarfEntity(EntityType<? extends AbstractVillager> entityType, Level level) {
         super(entityType, level);
         ((GroundPathNavigation)this.getNavigation()).setCanOpenDoors(true);
         this.setPathfindingMalus(PathType.DANGER_FIRE, 16.0F);
@@ -68,9 +69,6 @@ public class AbstractDwarfEntity extends WanderingTrader {
         this.setDropChance(EquipmentSlot.OFFHAND, 0.0F);
 
     }
-
-    protected int signingTicks = 0;
-    protected Player signingPlayer;
 
     //Animations
     public final AnimationState idleAnimationState = new AnimationState();
@@ -185,6 +183,11 @@ public class AbstractDwarfEntity extends WanderingTrader {
     }
 
     //Behavior
+
+    protected ItemStack previousMainHandItem = ItemStack.EMPTY;
+    protected int signingTicks = 0;
+    protected Player signingPlayer;
+
     public boolean canTrade() {
         return false;
     }
@@ -193,103 +196,165 @@ public class AbstractDwarfEntity extends WanderingTrader {
         return true;
     }
 
+    // Flag to track if the dwarf is performing an action (e.g., processing a bounty crate)
+    private boolean performingAction = false;
+
+    // Getter and Setter for performingAction
+    public boolean isPerformingAction() {
+        return performingAction;
+    }
+
+    public void setPerformingAction(boolean performingAction) {
+        this.performingAction = performingAction;
+    }
+
+
     public ItemStack getSignedContractItem() {
         return new ItemStack(JolCraftItems.CONTRACT_SIGNED.get());
     }
 
-    protected ItemStack previousMainHandItem = ItemStack.EMPTY;
+    //Blocks dwarf state
+    protected boolean blacklistedProperties() {
+        return !this.isAlive() || this.isTrading();
+    }
 
-    //Interactions
-    protected InteractionResult handleCommonInteractions(Player player, InteractionHand hand) {
+    //Blocks all interactions globally (e.g., spawn eggs)
+    protected boolean isGloballyBlacklistedItem(ItemStack stack) {
+        return stack.is(JolCraftTags.Items.SPAWN_EGGS);
+    }
+
+
+    // Items handled in the abstract class (e.g., contract, food)
+    protected boolean isCommonHandledItem(ItemStack stack) {
+        return stack.is(JolCraftItems.CONTRACT_WRITTEN.get()) ||
+                this.isFood(stack);
+    }
+
+    // Items *delegated* to subclass (e.g., bounty crate, bounty scroll)
+    protected boolean isSubclassHandledItem(ItemStack stack) {
+        return stack.is(JolCraftItems.BOUNTY.get())
+                || stack.is(JolCraftItems.BOUNTY_CRATE.get());
+    }
+
+    @Override
+    public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
 
-        //Default
+        // 🧠 Language check - ensures only players who know the Dwarvish language can interact
+        boolean client = this.level().isClientSide;
+        boolean knowsLanguage = client
+                ? net.sievert.jolcraft.client.data.MyClientLanguageData.knowsLanguage()
+                : player.getData(JolCraftAttachments.DWARVEN_LANGUAGE) != null &&
+                player.getData(JolCraftAttachments.DWARVEN_LANGUAGE).knowsLanguage();
 
-        // Language check
-        if (!player.isCreative()) {
-            var cap = player.getCapability(JolCraftCapabilities.DWARVEN_LANGUAGE);
-            if (cap == null || !cap.knowsLanguage()) {
-                this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
-                return InteractionResult.FAIL;
+        // ❌ Block interaction if language check fails
+        if (!knowsLanguage) {
+            this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
+
+            if (client) {
+                player.displayClientMessage(
+                        Component.translatable("chat.jolcraft.dwarf_interact.locked").withStyle(ChatFormatting.GRAY), true
+                );
+                return InteractionResult.CONSUME; // ✅ Allow client visuals
             }
+
+            return InteractionResult.FAIL; // ✅ Block server interaction
         }
 
-        // Breeding
-        if (this.isFood(itemstack) && !itemstack.is(Items.VILLAGER_SPAWN_EGG) && this.isAlive() && !this.isTrading()) {
-            int age = this.getAge();
-            if(this.isInLove()){
-                this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
-                return InteractionResult.CONSUME;
-            }
-            if (!this.level().isClientSide && age == 0 && this.canFallInLove()) {
+        // 🛑 Block if dwarf is dead, trading, holding a spawn egg, or performing an action
+        if (blacklistedProperties() || isGloballyBlacklistedItem(itemstack) || isPerformingAction()) {
+            return InteractionResult.FAIL; // ❌ Block interaction if any condition is met
+        }
+
+        // 🔄 Delegate to subclass for specific item handling (e.g., bounty crates, etc.)
+        if (isSubclassHandledItem(itemstack)) {
+            return InteractionResult.CONSUME; // ✅ Subclass consumes the interaction, no further action
+        }
+
+        // 🍞 Breeding or feeding dwarf (based on itemstack)
+        if (this.isFood(itemstack)) {
+            int i = this.getAge();
+
+            // 🐺 Start love mode if dwarf is an adult and can fall in love
+            if (!client && i == 0 && this.canFallInLove()) {
                 this.usePlayerItem(player, hand, itemstack);
                 this.setInLove(player);
                 this.playEatingSound();
-                return InteractionResult.SUCCESS_SERVER;
+                return InteractionResult.SUCCESS_SERVER; // ✅ Valid breeding initiated on the server
             }
+
+            // 👶 If the dwarf is a baby, age it up and trigger eating sound
             if (this.isBaby()) {
                 this.usePlayerItem(player, hand, itemstack);
-                this.ageUp(getSpeedUpSecondsWhenFeeding(-age), true);
+                this.ageUp(getSpeedUpSecondsWhenFeeding(-i), true);
                 this.playEatingSound();
-                return InteractionResult.SUCCESS;
+                return InteractionResult.SUCCESS; // ✅ Client handles particles/sound
             }
-            if (this.level().isClientSide) {
+
+            // ✅ Client side consumes the item and displays the correct animation
+            if (client) {
                 return InteractionResult.CONSUME;
             }
+
+            // ❌ If the dwarf is neither in love nor a baby, play sound indicating invalid action
+            this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, this.isBaby() ? 1.5F : 1.0F);
         }
 
-        //Booleans
-
-        // Sign contract
-        if (canSign()) {
-            if (itemstack.is(JolCraftItems.CONTRACT_WRITTEN.get()) && !itemstack.is(Items.VILLAGER_SPAWN_EGG) && this.isAlive() && !this.isTrading() && !this.isBaby()) {
-                if (!this.isInLove()) {
-                    this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_YES.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
-                    return InteractionResult.CONSUME;
-                }
-                if (this.isInLove()) {
-                    this.setNoAi(true);
-                    this.previousMainHandItem = this.getMainHandItem().copy();
-                    this.usePlayerItem(player, hand, itemstack);
-                    this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_YES.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
-                    this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(JolCraftItems.CONTRACT_WRITTEN.get()));
-                    this.signingTicks = 40;
-                    this.signingPlayer = player;
-                    return InteractionResult.SUCCESS;
-                }
-                return InteractionResult.CONSUME;
-            }
-        }
-
-
-        //Trading
-        if (canTrade()) {
-            if (!itemstack.is(Items.VILLAGER_SPAWN_EGG)
-                    && this.isAlive()
-                    && !this.isTrading()
-                    && !this.isBaby()
-                    && !itemstack.is(JolCraftItems.CONTRACT_WRITTEN.get())
-                    && !this.isFood(itemstack)) {
-
-                if (hand == InteractionHand.MAIN_HAND) {
-                    player.awardStat(Stats.TALKED_TO_VILLAGER);
-                }
-                if (!this.level().isClientSide) {
-                    if (this.getOffers().isEmpty()) {
-                        return InteractionResult.CONSUME;
-                    }
-                    this.setTradingPlayer(player);
-                    this.openTradingScreen(player, this.getDisplayName(), this.getVillagerData().getLevel());
-                }
-                return InteractionResult.SUCCESS;
-            }
-        }
-
-        // Fallback sound
-        this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, this.isBaby() ? 1.5F : 1.0F);
-        return InteractionResult.PASS;
+        // 🔇 Fallback to generic common interaction logic
+        return handleCommonInteractions(player, hand);
     }
 
+
+    // ✅ Common interactions (if nothing else is handled)
+    public InteractionResult handleCommonInteractions(Player player, InteractionHand hand) {
+        // Check if the dwarf is currently performing an action (like processing a bounty crate)
+        if (this.isPerformingAction()) {
+            return InteractionResult.FAIL; // Block any interactions if an action is in progress
+        }
+
+        ItemStack itemstack = player.getItemInHand(hand);
+
+        // 🛑 Common interactions if none of above interactions were triggered
+
+        // 🖊️ Contract signing
+        if (itemstack.is(JolCraftItems.CONTRACT_WRITTEN.get())) {
+            if (!canSign() || !this.isInLove() || this.signingTicks > 0 || this.signingPlayer != null) {
+                this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
+                return InteractionResult.SUCCESS; // Block fallback trade
+            }
+
+            this.setNoAi(true);
+            this.previousMainHandItem = this.getMainHandItem().copy();
+            this.usePlayerItem(player, hand, itemstack);
+            this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_YES.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
+            this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(JolCraftItems.CONTRACT_WRITTEN.get()));
+            this.signingTicks = 40;
+            this.signingPlayer = player;
+            return InteractionResult.SUCCESS_SERVER;
+        }
+
+        // 💼 Trade (only if hand empty and a baby)
+        if (canTrade() && itemstack.isEmpty() && !this.isBaby()) {
+
+            if (hand == InteractionHand.MAIN_HAND) {
+                player.awardStat(Stats.TALKED_TO_VILLAGER);
+            }
+
+            if (!this.level().isClientSide) {
+                if (this.getOffers().isEmpty()) {
+                    return InteractionResult.FAIL;
+                }
+
+                this.setTradingPlayer(player);
+                this.openTradingScreen(player, this.getDisplayName(), this.getVillagerData().getLevel());
+            }
+
+            return InteractionResult.SUCCESS;
+        }
+
+        this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, this.isBaby() ? 1.5F : 1.0F);
+        return InteractionResult.FAIL; // ❌ Block any fallback actions
+    }
 
     @Override
     protected void customServerAiStep(ServerLevel p_376777_) {
@@ -325,6 +390,23 @@ public class AbstractDwarfEntity extends WanderingTrader {
     public void aiStep() {
         super.aiStep();
         tickBlockCooldown();
+
+
+        if (this.level().isClientSide) {
+            if (this.forcedAgeTimer > 0) {
+                if (this.forcedAgeTimer % 4 == 0) {
+                    this.level().addParticle(
+                            ParticleTypes.HAPPY_VILLAGER,
+                            this.getRandomX(1.0),
+                            this.getRandomY() + 0.5,
+                            this.getRandomZ(1.0),
+                            0.0, 0.0, 0.0
+                    );
+                }
+                this.forcedAgeTimer--;
+            }
+        }
+
         if (this.getAge() != 0) {
             this.inLove = 0;
         }
@@ -473,6 +555,7 @@ public class AbstractDwarfEntity extends WanderingTrader {
         }
     }
 
+
     @Override
     public void handleEntityEvent(byte p_27562_) {
         if (p_27562_ == 18) {
@@ -613,6 +696,36 @@ public class AbstractDwarfEntity extends WanderingTrader {
         }
     }
 
+    // Particles
+    protected void spawnColoredParticles(float r, float g, float b, float scale, int count, double scatter) {
+        if (!this.level().isClientSide()) return;
+
+        int rgb = ((int)(r * 255) << 16) | ((int)(g * 255) << 8) | (int)(b * 255);
+        DustParticleOptions dust = new DustParticleOptions(rgb, scale);
+
+        Vec3 forward = this.getLookAngle().normalize(); // Get the direction the dwarf is facing
+        // Position particles above the dwarf's head and slightly back in their looking direction
+        double baseX = this.getX() + forward.x * 0.6;  // Move back by half a block (smaller scale)
+        double baseY = this.getY() + 1.8D; // Raised height (above the dwarf's head)
+        double baseZ = this.getZ() + forward.z * 0.5;  // Move back by half a block (smaller scale)
+
+        // Spawn particles in a scattered cloud
+        for (int i = 0; i < count; i++) {
+            // Apply randomness to x, y, z positions to scatter particles in a cloud
+            double offsetX = baseX + (this.random.nextDouble() - 0.5D) * scatter; // Spread in X direction
+            double offsetY = baseY + (this.random.nextDouble() - 0.5D) * scatter; // Spread in Y direction (vertical)
+            double offsetZ = baseZ + (this.random.nextDouble() - 0.5D) * scatter; // Spread in Z direction
+
+            // Random velocity for particles
+            double velocityX = (this.random.nextDouble() - 0.5D) * 0.1D;
+            double velocityY = this.random.nextDouble() * 0.1D;
+            double velocityZ = (this.random.nextDouble() - 0.5D) * 0.1D;
+
+            // Add the particle to the world
+            this.level().addParticle(dust, offsetX, offsetY, offsetZ, velocityX, velocityY, velocityZ);
+        }
+    }
+
     //Trading and Villager Data
     public long lastRestockGameTime = 0L;
     public static final long RESTOCK_INTERVAL_TICKS = 6000L;
@@ -626,6 +739,11 @@ public class AbstractDwarfEntity extends WanderingTrader {
     public boolean assignProfessionWhenSpawned;
     public boolean assignProfessionWhenSpawned() {
         return this.assignProfessionWhenSpawned;
+    }
+
+    @Override
+    protected void updateTrades() {
+        // No default trades at base level
     }
 
     @Override
@@ -841,10 +959,14 @@ public class AbstractDwarfEntity extends WanderingTrader {
     @Override
     public void notifyTrade(MerchantOffer offer) {
         Player player = this.getTradingPlayer();
+        offer.increaseUses();
+        this.ambientSoundTime = -this.getAmbientSoundInterval();
+        this.rewardTradeXp(offer);
         if (player instanceof ServerPlayer serverPlayer) {
             player.awardStat(Stats.TRADED_WITH_VILLAGER);
             JolCraftCriteriaTriggers.TRADE_WITH_DWARF.trigger(serverPlayer);
         }
+        net.neoforged.neoforge.common.NeoForge.EVENT_BUS.post(new net.neoforged.neoforge.event.entity.player.TradeWithVillagerEvent(this.lastTradedPlayer, offer, this));
     }
 
 

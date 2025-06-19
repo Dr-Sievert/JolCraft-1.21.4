@@ -2,6 +2,10 @@
   "item.jolcraft.gold_coin": "Gold Coin",
   "item.jolcraft.dwarven_lexicon": "Dwarven Lexicon",
 
+  "item.jolcraft.parchment": "Parchment",
+  "item.jolcraft.bounty": "Bounty",
+  "item.jolcraft.bounty_crate": "Bounty Crate",
+
   "item.jolcraft.quill_full": "Ink and Quill",
   "item.jolcraft.quill_half": "Ink and Quill",
   "item.jolcraft.quill_small": "Ink and Quill",
@@ -16,6 +20,7 @@
   "item.jolcraft.dwarf_guard_spawn_egg": "Dwarf Guard Spawn Egg",
   "item.jolcraft.dwarf_historian_spawn_egg": "Dwarf Historian Spawn Egg",
   "item.jolcraft.dwarf_scrapper_spawn_egg": "Dwarf Scrapper Spawn Egg",
+  "item.jolcraft.dwarf_merchant_spawn_egg": "Dwarf Merchant Spawn Egg",
 
   "item.jolcraft.aegiscore": "Aegiscore",
   "item.jolcraft.ashfang": "Ashfang",
@@ -32,6 +37,13 @@
   "item.jolcraft.sungleam": "Sungleam",
   "item.jolcraft.verdanite": "Verdanite",
   "item.jolcraft.woecrystal": "Woecrystal",
+
+  "item.jolcraft.reputation_tablet_0": "Reputation Tablet",
+  "item.jolcraft.reputation_tablet_1": "Reputation Tablet",
+  "item.jolcraft.reputation_tablet_2": "Reputation Tablet",
+  "item.jolcraft.reputation_tablet_3": "Reputation Tablet",
+  "item.jolcraft.reputation_tablet_4": "Reputation Tablet",
+
 
   "item.jolcraft.dwarven_tome": "Dwarven Tome",
   "item.jolcraft.dwarven_tome_common": "Dwarven Tome",
@@ -55,7 +67,7 @@
   "item.jolcraft.old_fabric": "Old Fabric",
   "item.jolcraft.rusty_tongs": "Rusty Forge Tongs",
 
-  "itemGroup.jolcraft.jolcraft_items_tab": "JolCraft",
+  "chat.jolcraft.dwarf_interact.locked": "You do not understand each other.",
 
   "tooltip.jolcraft.contract_guard": "The contract echoes with duty.",
 
@@ -65,8 +77,40 @@
   "tooltip.jolcraft.dwarven_tome.locked": "The pages are filled with unfamiliar symbols.",
   "tooltip.jolcraft.dwarven_tome.unlocked": "An ancient tome.",
 
+  "tooltip.jolcraft.tablet.locked": "The stone is marked with unfamiliar symbols.",
+
+  "tooltip.jolcraft.bounty.locked": "Bounty info locked",
+  "tooltip.jolcraft.bounty.invalid": "Bounty Tier: Invalid",
+  "tooltip.jolcraft.bounty.tier": "Bounty Tier: %d",
+
+  "tooltip.jolcraft.bounty_crate.target": "Target: ",
+  "tooltip.jolcraft.bounty_crate.count": "Required: %s",
+  "tooltip.jolcraft.bounty_crate.tier": "Tier: %s",
+  "tooltip.jolcraft.bounty_crate.invalid": "Invalid bounty data",
+  "tooltip.jolcraft.bounty_crate.locked": "The crate is marked with unfamiliar symbols.",
+  "tooltip.jolcraft.bounty_crate.filled": "The crate is already full.",
+  "tooltip.jolcraft.bounty_crate.filled_some": "Added %s items to the crate.",
+  "tooltip.jolcraft.bounty_crate.no_items": "You don't have any items to fill the crate.",
+  "tooltip.jolcraft.bounty_crate.complete": "Ready to be turned in.",
+  "tooltip.jolcraft.bounty_crate.not_complete": "This bounty has not been completed.",
+
+
   "tooltip.jolcraft.spanner": "Can be used to produce scrap from salvage.",
   "tooltip.jolcraft.salvage": "Salvagable",
+
+  "jolcraft.reputation_tier.0": "Stranger",
+  "jolcraft.reputation_tier.1": "Known Face",
+  "jolcraft.reputation_tier.2": "Trusted",
+  "jolcraft.reputation_tier.3": "Respected",
+  "jolcraft.reputation_tier.4": "Blood-Kin",
+
+  "tooltip.jolcraft.rep_owner": "Granted to: %s",
+  "tooltip.jolcraft.reputation_tier": "Reputation: ",
+  "tooltip.jolcraft.endorsement_count": "Endorsements: %s",
+
+  "itemGroup.jolcraft.jolcraft_items_tab": "JolCraft",
+  "itemGroup.jolcraft.jolcraft_egg_tab": "JolCraft Spawn Eggs",
+
 
   "advancement.jolcraft.root.title": "The Dwarven Path",
   "advancement.jolcraft.root.description": "A journey through dwarven halls.",
@@ -79,6 +123,7 @@
   "entity.jolcraft.dwarf_guard": "Guard",
   "entity.jolcraft.dwarf_historian": "Historian",
   "entity.jolcraft.dwarf_scrapper": "Scrapper",
+  "entity.jolcraft.dwarf_merchant": "Merchant",
 
   "filled_map.forge": "Map to a Dwarven Forge"
 }

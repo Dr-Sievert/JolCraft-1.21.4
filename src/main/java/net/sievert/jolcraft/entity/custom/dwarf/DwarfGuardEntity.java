@@ -42,14 +42,14 @@ public class DwarfGuardEntity extends AbstractDwarfEntity {
 
     //Attributes
     public static AttributeSupplier.Builder createAttributes() {
-        return DwarfEntity.createLivingAttributes()
+        return DwarfGuardEntity.createLivingAttributes()
                 .add(Attributes.MAX_HEALTH, 30D)
-                .add(Attributes.MOVEMENT_SPEED, 0.2D)
+                .add(Attributes.MOVEMENT_SPEED, 0.25D)
                 .add(Attributes.FOLLOW_RANGE, 24D)
                 .add(Attributes.TEMPT_RANGE, 16D)
                 .add(Attributes.ATTACK_DAMAGE, 9.0D)
-                .add(Attributes.ARMOR, 0.0);
-
+                .add(Attributes.ARMOR, 0.0)
+                .add(Attributes.KNOCKBACK_RESISTANCE, 0.2);
     }
 
     //Behavior
@@ -87,11 +87,6 @@ public class DwarfGuardEntity extends AbstractDwarfEntity {
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, AbstractSkeleton.class, false));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Zombie.class, false));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, AbstractPiglin.class, false));
-    }
-
-    @Override
-    public InteractionResult mobInteract(Player player, InteractionHand hand) {
-        return this.handleCommonInteractions(player, hand);
     }
 
     //Sound

@@ -9,10 +9,7 @@ import net.minecraft.world.entity.MobCategory;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.sievert.jolcraft.JolCraft;
-import net.sievert.jolcraft.entity.custom.dwarf.DwarfEntity;
-import net.sievert.jolcraft.entity.custom.dwarf.DwarfGuardEntity;
-import net.sievert.jolcraft.entity.custom.dwarf.DwarfHistorianEntity;
-import net.sievert.jolcraft.entity.custom.dwarf.DwarfScrapperEntity;
+import net.sievert.jolcraft.entity.custom.dwarf.*;
 
 import java.util.function.Supplier;
 
@@ -26,6 +23,7 @@ public class JolCraftEntities {
     public static ResourceKey<EntityType<?>> DWARF_GUARD_KEY = ResourceKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID,"dwarf_guard"));
     public static ResourceKey<EntityType<?>> DWARF_HISTORIAN_KEY = ResourceKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID,"dwarf_historian"));
     public static ResourceKey<EntityType<?>> DWARF_SCRAPPER_KEY = ResourceKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID,"dwarf_scrapper"));
+    public static ResourceKey<EntityType<?>> DWARF_MERCHANT_KEY = ResourceKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID,"dwarf_merchant"));
 
     public static final Supplier<EntityType<DwarfEntity>> DWARF =
             ENTITY_TYPES.register("dwarf", () -> EntityType.Builder.of(DwarfEntity::new, MobCategory.CREATURE)
@@ -42,6 +40,10 @@ public class JolCraftEntities {
     public static final Supplier<EntityType<DwarfScrapperEntity>> DWARF_SCRAPPER =
             ENTITY_TYPES.register("dwarf_scrapper", () -> EntityType.Builder.of(DwarfScrapperEntity::new, MobCategory.CREATURE)
                     .sized(0.5f, 1.6f).build(DWARF_SCRAPPER_KEY));
+
+    public static final Supplier<EntityType<DwarfMerchantEntity>> DWARF_MERCHANT =
+            ENTITY_TYPES.register("dwarf_merchant", () -> EntityType.Builder.of(DwarfMerchantEntity::new, MobCategory.CREATURE)
+                    .sized(0.5f, 1.6f).build(DWARF_MERCHANT_KEY));
 
 
 

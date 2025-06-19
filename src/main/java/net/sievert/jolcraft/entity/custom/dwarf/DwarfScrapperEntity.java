@@ -18,6 +18,8 @@ import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.trading.MerchantOffer;
+import net.minecraft.world.item.trading.MerchantOffers;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -26,17 +28,18 @@ import net.sievert.jolcraft.entity.ai.goal.*;
 import net.sievert.jolcraft.item.JolCraftItems;
 import net.sievert.jolcraft.villager.JolCraftDwarfTrades;
 
+import java.util.*;
+
 public class DwarfScrapperEntity extends AbstractDwarfEntity {
 
     public DwarfScrapperEntity(EntityType<? extends AbstractDwarfEntity> entityType, Level level) {
         super(entityType, level);
-        //this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_AXE));
         this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(JolCraftItems.COPPER_SPANNER.get()));
     }
 
     //Attributes
     public static AttributeSupplier.Builder createAttributes() {
-        return DwarfEntity.createLivingAttributes()
+        return DwarfScrapperEntity.createLivingAttributes()
                 .add(Attributes.MAX_HEALTH, 30D)
                 .add(Attributes.MOVEMENT_SPEED, 0.2D)
                 .add(Attributes.FOLLOW_RANGE, 24D)
@@ -81,66 +84,100 @@ public class DwarfScrapperEntity extends AbstractDwarfEntity {
         });
     }
 
-    @Override
-    public InteractionResult mobInteract(Player player, InteractionHand hand) {
-        return this.handleCommonInteractions(player, hand);
-    }
 
     //Trades
-    public static final Int2ObjectMap<VillagerTrades.ItemListing[]> TRADES = toIntMap(
+    public static final Int2ObjectMap<VillagerTrades.ItemListing[]> MAIN_TRADES = toIntMap(
             ImmutableMap.of(
 
                     //Novice
                     1,
                     new VillagerTrades.ItemListing[]{
-                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.DEEPSLATE_MUG.get(), 1, 3, 5, 2),
                             new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.COPPER_SPANNER.get(), 10, 1, 3, 10)
                     },
 
                     //Apprentice
                     2,
                     new VillagerTrades.ItemListing[]{
-                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.SCRAP.get(), 2, 16, 5, 1),
-                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.OLD_FABRIC.get(), 1, 3, 12, 3)
+                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.SCRAP.get(), 2, 32, 5, 1)
                     },
 
                     //Journeyman
                     3,
                     new VillagerTrades.ItemListing[]{
-                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.DWARVEN_TOME_RARE.get(), 1, 1, 75, 10),
-                            new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.QUILL_EMPTY.get(), 2, 1, 6, 8)
+                            new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.IRON_SPANNER.get(), 30, 1, 1, 40)
                     },
 
                     //Expert
                     4,
                     new VillagerTrades.ItemListing[]{
-                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.DWARVEN_TOME_EPIC.get(), 1, 1, 125, 25),
-                            new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.IRON_SPANNER.get(), 30, 1, 1, 125)
+                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.SCRAP_HEAP.get(), 1, 32, 10, 4)
+
                     },
 
                     //Master
                     5,
                     new VillagerTrades.ItemListing[]{
-                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.DEEPMARROW.get(), 1, 3, 0, 32),
-                            new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.CONTRACT_WRITTEN.get(), 2, 1, 6, 0)
+                            new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.SCRAP_HEAP.get(), 1, 15, JolCraftItems.RUSTAGATE.get(), 1, 1, 0, 0.05F)
                     }
             )
     );
+
+    public static final Int2ObjectMap<VillagerTrades.ItemListing[]> SALVAGE_TRADES = toIntMap(
+            ImmutableMap.of(
+
+                    // Novice
+                    1, new VillagerTrades.ItemListing[]{
+                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.DEEPSLATE_MUG.get(), 1, 5, 3, 3),
+                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.EXPIRED_POTION.get(), 1, 5, 3, 3),
+                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.OLD_FABRIC.get(), 1, 5, 3, 3),
+                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.BROKEN_PICKAXE.get(), 1, 5, 3, 3),
+                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.BROKEN_AMULET.get(), 1, 5, 3, 3),
+                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.BROKEN_BELT.get(), 1, 5, 3, 3),
+                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.BROKEN_COINS.get(), 1, 5, 3, 3),
+                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.RUSTY_TONGS.get(), 1, 5, 3, 3),
+                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.INGOT_MOULD.get(), 1, 5, 3, 3)
+
+                    }
+            )
+    );
+
 
     private static Int2ObjectMap<VillagerTrades.ItemListing[]> toIntMap(ImmutableMap<Integer, VillagerTrades.ItemListing[]> pMap) {
 
         return new Int2ObjectOpenHashMap<>(pMap);
     }
 
+
     @Override
     protected void updateTrades() {
         int level = this.getVillagerData().getLevel();
-        VillagerTrades.ItemListing[] listings = TRADES.get(level);
+        MerchantOffers offers = this.getOffers();
+
+        // Add 1 main trade for this level
+        VillagerTrades.ItemListing[] listings = MAIN_TRADES.get(level);
         if (listings != null) {
-            this.addOffersFromItemListings(this.getOffers(), listings, 2); // 2 = max trades for that level
+            this.addOffersFromItemListings(offers, listings, 1);
+        }
+
+        // Add 2 new unique salvage trades per level-up
+        VillagerTrades.ItemListing[] salvagePoolArray = SALVAGE_TRADES.get(1);
+        if (salvagePoolArray != null) {
+            List<VillagerTrades.ItemListing> shuffled = new ArrayList<>(List.of(salvagePoolArray));
+            Collections.shuffle(shuffled, new Random(this.random.nextLong()));
+
+            int added = 0;
+            for (VillagerTrades.ItemListing salvage : shuffled) {
+                if (added >= 2) break;
+
+                MerchantOffer offer = salvage.getOffer(this, this.random);
+                if (offer != null && offers.stream().noneMatch(existing ->
+                        ItemStack.isSameItemSameComponents(existing.getBaseCostA(), offer.getBaseCostA()))) {
+                    offers.add(offer);
+                    added++;
+                }
+            }
         }
     }
-
     //Sound
     @Override
     public float getVoicePitch() {

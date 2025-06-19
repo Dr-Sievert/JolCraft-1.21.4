@@ -36,6 +36,13 @@ public class JolCraftRecipeProvider extends RecipeProvider {
     @Override
     protected void buildRecipes() {
 
+        shaped(RecipeCategory.MISC, JolCraftItems.PARCHMENT.get())
+                .pattern("B")
+                .pattern("B")
+                .pattern("B")
+                .define('B', Items.PAPER)
+                .unlockedBy("has_paper", has(Items.PAPER)).save(output);
+
         shaped(RecipeCategory.MISC, JolCraftItems.CONTRACT_BLANK.get())
                 .pattern("BB")
                 .pattern("BB")
@@ -67,7 +74,6 @@ public class JolCraftRecipeProvider extends RecipeProvider {
                 .requires(Items.FEATHER)
                 .unlockedBy("has_feather", has(Items.FEATHER))
                 .save(output);
-
         nineBlockStorageRecipes(
                 RecipeCategory.MISC,
                 JolCraftItems.SCRAP.get(), //Ingredient

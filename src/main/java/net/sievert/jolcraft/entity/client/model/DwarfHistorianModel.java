@@ -68,7 +68,7 @@ public class DwarfHistorianModel extends DwarfModel{
 
         head.addOrReplaceChild("left_eye", CubeListBuilder.create().texOffs(73, 10).addBox(1.0F, -5.0F, -4.01F, 2.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 2.0F, 2.0F));
 
-        head.addOrReplaceChild("glasses", CubeListBuilder.create().texOffs(76, 10).addBox(-3.0F, -3.75F, -4.76F, 2.0F, 1.0F, 0.0F, new CubeDeformation(0.0F))
+        head.addOrReplaceChild("glasses", CubeListBuilder.create().texOffs(76, 10).addBox(-3.0F, -3.75F, -4.76F, 2.0F, 1.0F, 0.01F, new CubeDeformation(0.0F))
                 .texOffs(78, 10).addBox(1.0F, -3.75F, -4.76F, 2.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 2.0F, 2.0F));
 
         return LayerDefinition.create(meshdefinition, 128, 128);

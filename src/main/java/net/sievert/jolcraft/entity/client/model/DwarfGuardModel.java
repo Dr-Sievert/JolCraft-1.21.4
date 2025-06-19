@@ -1,11 +1,13 @@
 package net.sievert.jolcraft.entity.client.model;
 
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.HumanoidArm;
 import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.entity.client.dwarf.DwarfRenderState;
 import net.sievert.jolcraft.entity.client.dwarf.DwarfAnimations;
@@ -92,4 +94,13 @@ public class DwarfGuardModel extends DwarfModel{
         this.animate(state.blockAnimationState, DwarfAnimations.DWARF_BLOCK, state.ageInTicks, 1f);
         this.animate(state.drinkAnimationState, DwarfAnimations.DWARF_DRINK, state.ageInTicks, 1f);
     }
+
+    @Override
+    public void translateToHand(HumanoidArm side, PoseStack poseStack) {
+        this.root.translateAndRotate(poseStack);
+        this.getArm(side).translateAndRotate(poseStack);
+        poseStack.translate(-0.05F, -0.03F, 0.13F);
+
+    }
+
 }

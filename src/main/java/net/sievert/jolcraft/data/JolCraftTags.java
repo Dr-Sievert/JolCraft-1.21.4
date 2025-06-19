@@ -15,6 +15,8 @@ public class JolCraftTags {
     public final class Items {
 
         //Core
+        public static final TagKey<Item> SPAWN_EGGS = createTag("spawn_eggs");
+
         public static final TagKey<Item> INK_AND_QUILLS = createTag("ink_and_quills");
 
         public static final TagKey<Item> GEMS = createTag("gems");

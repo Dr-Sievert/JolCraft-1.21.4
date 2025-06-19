@@ -1,20 +1,20 @@
 package net.sievert.jolcraft;
 
 
+import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.sievert.jolcraft.advancement.JolCraftCriteriaTriggers;
+import net.sievert.jolcraft.capability.JolCraftAttachments;
 import net.sievert.jolcraft.component.JolCraftDataComponents;
 import net.sievert.jolcraft.entity.JolCraftEntities;
-import net.sievert.jolcraft.entity.client.render.DwarfGuardRenderer;
-import net.sievert.jolcraft.entity.client.render.DwarfHistorianRenderer;
-import net.sievert.jolcraft.entity.client.render.DwarfRenderer;
-import net.sievert.jolcraft.entity.client.render.DwarfScrapperRenderer;
+import net.sievert.jolcraft.entity.client.render.*;
 import net.sievert.jolcraft.event.JolCraftCapabilityEvents;
 import net.sievert.jolcraft.item.JolCraftCreativeModeTabs;
 import net.sievert.jolcraft.item.JolCraftItems;
 import net.sievert.jolcraft.loot.JolCraftLootModifiers;
+import net.sievert.jolcraft.network.JolCraftNetworking;
 import net.sievert.jolcraft.sound.JolCraftSounds;
 import net.sievert.jolcraft.world.processor.JolCraftProcessors;
 import net.sievert.jolcraft.world.structure.JolCraftStructures;
@@ -70,6 +70,8 @@ public class JolCraft
 
         JolCraftProcessors.register(modEventBus);
 
+        JolCraftAttachments.register(modEventBus);
+
         JolCraftStructures.DEFERRED_REGISTRY_STRUCTURE.register(modEventBus);
 
 
@@ -81,9 +83,12 @@ public class JolCraft
         // Register the item to a creative tab
         modEventBus.addListener(this::addCreative);
 
+        modEventBus.addListener(JolCraftNetworking::register);
+
         modEventBus.addListener(JolCraftCriteriaTriggers::register);
 
         modEventBus.addListener(JolCraftCapabilityEvents::register);
+
 
 
         // Register our mod's ModConfigSpec so that FML can create and load the config file for us
@@ -108,12 +113,15 @@ public class JolCraft
     // Add items to creative tabs
     private void addCreative(BuildCreativeModeTabContentsEvent event)
     {
+        /*
         if (event.getTabKey() == CreativeModeTabs.SPAWN_EGGS){
             event.accept(JolCraftItems.DWARF_SPAWN_EGG);
             event.accept(JolCraftItems.DWARF_GUARD_SPAWN_EGG);
             event.accept(JolCraftItems.DWARF_HISTORIAN_SPAWN_EGG);
             event.accept(JolCraftItems.DWARF_SCRAPPER_SPAWN_EGG);
+            event.accept(JolCraftItems.DWARF_MERCHANT_SPAWN_EGG);
         }
+        */
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call
@@ -135,6 +143,7 @@ public class JolCraft
             EntityRenderers.register(JolCraftEntities.DWARF_GUARD.get(), DwarfGuardRenderer::new);
             EntityRenderers.register(JolCraftEntities.DWARF_HISTORIAN.get(), DwarfHistorianRenderer::new);
             EntityRenderers.register(JolCraftEntities.DWARF_SCRAPPER.get(), DwarfScrapperRenderer::new);
+            EntityRenderers.register(JolCraftEntities.DWARF_MERCHANT.get(), DwarfMerchantRenderer::new);
 
             // Some client setup code
             LOGGER.info("HELLO FROM CLIENT SETUP");

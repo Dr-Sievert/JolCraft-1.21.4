@@ -1,20 +1,14 @@
 package net.sievert.jolcraft.item;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.sievert.jolcraft.JolCraft;
-import net.sievert.jolcraft.capability.JolCraftCapabilities;
-import net.sievert.jolcraft.component.JolCraftDataComponents;
 import net.sievert.jolcraft.entity.JolCraftEntities;
 import net.minecraft.network.chat.Component;
-import net.sievert.jolcraft.item.custom.DwarvenLexiconItem;
-import net.sievert.jolcraft.item.custom.QuillItem;
-import net.sievert.jolcraft.item.custom.SpannerItem;
+import net.sievert.jolcraft.item.custom.*;
 
 import java.util.List;
 
@@ -22,31 +16,22 @@ public class JolCraftItems {
 
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(JolCraft.MOD_ID);
 
-    //Clutter
-    // public static final DeferredItem<Item> GOLD_COIN = ITEMS.registerSimpleItem("gold_coin");
+    //Bounty
+    public static final DeferredItem<Item> PARCHMENT = ITEMS.registerSimpleItem("parchment");
+
+    public static final DeferredItem<Item> BOUNTY = ITEMS.registerItem("bounty",
+            BountyItem::new, new Item.Properties().stacksTo(1));
+
+    public static final DeferredItem<Item> BOUNTY_CRATE = ITEMS.registerItem("bounty_crate",
+            BountyCrateItem::new, new Item.Properties().stacksTo(1));
 
     //Core Items
     public static final DeferredItem<Item> GOLD_COIN = ITEMS.registerItem("gold_coin",
             Item::new, new Item.Properties().rarity(Rarity.UNCOMMON));
 
     public static final DeferredItem<Item> DWARVEN_LEXICON =
-            ITEMS.registerItem("dwarven_lexicon", properties -> new DwarvenLexiconItem(properties) {
-                @Override
-                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-                    if (context.level() != null && context.level().isClientSide()) {
-                        if (Minecraft.getInstance().player != null &&
-                                Minecraft.getInstance().player.getCapability(JolCraftCapabilities.DWARVEN_LANGUAGE) != null &&
-                                Minecraft.getInstance().player.getCapability(JolCraftCapabilities.DWARVEN_LANGUAGE).knowsLanguage()) {
-
-                            tooltip.add(Component.translatable("tooltip.jolcraft.dwarven_lexicon.unlocked").withStyle(ChatFormatting.GRAY));
-                        } else {
-                            tooltip.add(Component.translatable("tooltip.jolcraft.dwarven_lexicon.locked").withStyle(ChatFormatting.GRAY));
-                        }
-                    }
-
-                    super.appendHoverText(stack, context, tooltip, flag);
-                }
-            }, new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
+            ITEMS.registerItem("dwarven_lexicon", DwarvenLexiconItem::new,
+                    new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
 
     //Contracts and Associated Items
 
@@ -98,6 +83,9 @@ public class JolCraftItems {
     public static final DeferredItem<Item> DWARF_SCRAPPER_SPAWN_EGG = ITEMS.registerItem("dwarf_scrapper_spawn_egg",
             (properties) -> new SpawnEggItem(JolCraftEntities.DWARF_SCRAPPER.get(), properties));
 
+    public static final DeferredItem<Item> DWARF_MERCHANT_SPAWN_EGG = ITEMS.registerItem("dwarf_merchant_spawn_egg",
+            (properties) -> new SpawnEggItem(JolCraftEntities.DWARF_MERCHANT.get(), properties));
+
     //Gems
     public static final DeferredItem<Item> AEGISCORE = ITEMS.registerItem("aegiscore",
             Item::new, new Item.Properties());
@@ -144,108 +132,57 @@ public class JolCraftItems {
     public static final DeferredItem<Item> WOECRYSTAL = ITEMS.registerItem("woecrystal",
             Item::new, new Item.Properties());
 
-    //Tomes
+    private String getTierName(int tier) {
+        return switch (tier) {
+            case 0 -> "Stranger";
+            case 1 -> "Known Face";
+            case 2 -> "Trusted";
+            case 3 -> "Respected";
+            case 4 -> "Blood-Kin";
+            default -> "Unknown";
+        };
+    }
+
+    //Reputation
+    public static final DeferredItem<Item> REPUTATION_TABLET_0 =
+            ITEMS.registerItem("reputation_tablet_0", ReputationTabletItem::new,
+                    new Item.Properties().stacksTo(1).rarity(Rarity.COMMON));
+
+    public static final DeferredItem<Item> REPUTATION_TABLET_1 =
+            ITEMS.registerItem("reputation_tablet_1", ReputationTabletItem::new,
+                    new Item.Properties().stacksTo(1).rarity(Rarity.COMMON));
+
+    public static final DeferredItem<Item> REPUTATION_TABLET_2 =
+            ITEMS.registerItem("reputation_tablet_2", ReputationTabletItem::new,
+                    new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
+
+    public static final DeferredItem<Item> REPUTATION_TABLET_3 =
+            ITEMS.registerItem("reputation_tablet_3", ReputationTabletItem::new,
+                    new Item.Properties().stacksTo(1).rarity(Rarity.RARE));
+
+    public static final DeferredItem<Item> REPUTATION_TABLET_4 =
+            ITEMS.registerItem("reputation_tablet_4", ReputationTabletItem::new,
+                    new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
+
+    // Tomes
     public static final DeferredItem<Item> DWARVEN_TOME = ITEMS.registerSimpleItem("dwarven_tome");
 
     public static final DeferredItem<Item> DWARVEN_TOME_COMMON =
-            ITEMS.registerItem("dwarven_tome_common", properties -> new Item(properties) {
-                @Override
-                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-                    if (context.level() != null && context.level().isClientSide()) {
-                        Player player = Minecraft.getInstance().player;
-                        if (player != null &&
-                                player.getCapability(JolCraftCapabilities.DWARVEN_LANGUAGE) != null &&
-                                player.getCapability(JolCraftCapabilities.DWARVEN_LANGUAGE).knowsLanguage()) {
-
-                            String loreKey = stack.get(JolCraftDataComponents.LORE_LINE_ID.get());
-                            if (loreKey != null && !loreKey.isEmpty()) {
-                                tooltip.add(Component.translatable(loreKey).withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
-                            } else {
-                                tooltip.add(Component.translatable("tooltip.jolcraft.dwarven_tome.unlocked").withStyle(ChatFormatting.GRAY));
-                            }
-                        } else {
-                            tooltip.add(Component.translatable("tooltip.jolcraft.dwarven_tome.locked").withStyle(ChatFormatting.GRAY));
-                        }
-                    }
-
-                    super.appendHoverText(stack, context, tooltip, flag);
-                }
+            ITEMS.registerItem("dwarven_tome_common", properties -> new DwarvenTomeItem(properties) {
             }, new Item.Properties().stacksTo(1).rarity(Rarity.COMMON));
 
     public static final DeferredItem<Item> DWARVEN_TOME_UNCOMMON =
-            ITEMS.registerItem("dwarven_tome_uncommon", properties -> new Item(properties) {
-                @Override
-                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-                    if (context.level() != null && context.level().isClientSide()) {
-                        Player player = Minecraft.getInstance().player;
-                        if (player != null &&
-                                player.getCapability(JolCraftCapabilities.DWARVEN_LANGUAGE) != null &&
-                                player.getCapability(JolCraftCapabilities.DWARVEN_LANGUAGE).knowsLanguage()) {
-
-                            String loreKey = stack.get(JolCraftDataComponents.LORE_LINE_ID.get());
-                            if (loreKey != null && !loreKey.isEmpty()) {
-                                tooltip.add(Component.translatable(loreKey).withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
-                            } else {
-                                tooltip.add(Component.translatable("tooltip.jolcraft.dwarven_tome.unlocked").withStyle(ChatFormatting.GRAY));
-                            }
-                        } else {
-                            tooltip.add(Component.translatable("tooltip.jolcraft.dwarven_tome.locked").withStyle(ChatFormatting.GRAY));
-                        }
-                    }
-
-                    super.appendHoverText(stack, context, tooltip, flag);
-                }
+            ITEMS.registerItem("dwarven_tome_uncommon", properties -> new DwarvenTomeItem(properties) {
             }, new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
 
     public static final DeferredItem<Item> DWARVEN_TOME_RARE =
-            ITEMS.registerItem("dwarven_tome_rare", properties -> new Item(properties) {
-                @Override
-                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-                    if (context.level() != null && context.level().isClientSide()) {
-                        Player player = Minecraft.getInstance().player;
-                        if (player != null &&
-                                player.getCapability(JolCraftCapabilities.DWARVEN_LANGUAGE) != null &&
-                                player.getCapability(JolCraftCapabilities.DWARVEN_LANGUAGE).knowsLanguage()) {
-
-                            String loreKey = stack.get(JolCraftDataComponents.LORE_LINE_ID.get());
-                            if (loreKey != null && !loreKey.isEmpty()) {
-                                tooltip.add(Component.translatable(loreKey).withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
-                            } else {
-                                tooltip.add(Component.translatable("tooltip.jolcraft.dwarven_tome.unlocked").withStyle(ChatFormatting.GRAY));
-                            }
-                        } else {
-                            tooltip.add(Component.translatable("tooltip.jolcraft.dwarven_tome.locked").withStyle(ChatFormatting.GRAY));
-                        }
-                    }
-
-                    super.appendHoverText(stack, context, tooltip, flag);
-                }
+            ITEMS.registerItem("dwarven_tome_rare", properties -> new DwarvenTomeItem(properties) {
             }, new Item.Properties().stacksTo(1).rarity(Rarity.RARE));
 
     public static final DeferredItem<Item> DWARVEN_TOME_EPIC =
-            ITEMS.registerItem("dwarven_tome_epic", properties -> new Item(properties) {
-                @Override
-                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-                    if (context.level() != null && context.level().isClientSide()) {
-                        Player player = Minecraft.getInstance().player;
-                        if (player != null &&
-                                player.getCapability(JolCraftCapabilities.DWARVEN_LANGUAGE) != null &&
-                                player.getCapability(JolCraftCapabilities.DWARVEN_LANGUAGE).knowsLanguage()) {
-
-                            String loreKey = stack.get(JolCraftDataComponents.LORE_LINE_ID.get());
-                            if (loreKey != null && !loreKey.isEmpty()) {
-                                tooltip.add(Component.translatable(loreKey).withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
-                            } else {
-                                tooltip.add(Component.translatable("tooltip.jolcraft.dwarven_tome.unlocked").withStyle(ChatFormatting.GRAY));
-                            }
-                        } else {
-                            tooltip.add(Component.translatable("tooltip.jolcraft.dwarven_tome.locked").withStyle(ChatFormatting.GRAY));
-                        }
-                    }
-
-                    super.appendHoverText(stack, context, tooltip, flag);
-                }
+            ITEMS.registerItem("dwarven_tome_epic", properties -> new DwarvenTomeItem(properties) {
             }, new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
+
 
     //Tools
     public static final DeferredItem<Item> COPPER_SPANNER =

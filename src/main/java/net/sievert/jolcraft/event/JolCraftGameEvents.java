@@ -1,10 +1,12 @@
 package net.sievert.jolcraft.event;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.npc.VillagerProfession;
@@ -14,6 +16,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.item.trading.MerchantOffer;
+import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -22,13 +25,15 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.village.VillagerTradesEvent;
 import net.sievert.jolcraft.JolCraft;
-import net.sievert.jolcraft.capability.DwarvenLanguage;
-import net.sievert.jolcraft.capability.JolCraftCapabilities;
+import net.sievert.jolcraft.capability.DwarvenLanguageImpl;
+import net.sievert.jolcraft.capability.JolCraftAttachments;
 import net.sievert.jolcraft.data.JolCraftTags;
 import net.sievert.jolcraft.entity.custom.dwarf.DwarfGuardEntity;
 import net.sievert.jolcraft.item.JolCraftItems;
 import net.sievert.jolcraft.item.custom.SpannerItem;
 import net.sievert.jolcraft.loot.SalvageLootHelper;
+import net.sievert.jolcraft.network.JolCraftNetworking;
+import net.sievert.jolcraft.network.packet.ClientboundSyncLanguagePacket;
 
 import java.util.List;
 
@@ -44,20 +49,8 @@ public class JolCraftGameEvents {
         }
     }
 
+
     @SubscribeEvent
-    public static void onPlayerClone(PlayerEvent.Clone event) {
-        if (!event.isWasDeath()) return;
-
-        DwarvenLanguage oldCap = event.getOriginal().getCapability(JolCraftCapabilities.DWARVEN_LANGUAGE);
-        DwarvenLanguage newCap = event.getEntity().getCapability(JolCraftCapabilities.DWARVEN_LANGUAGE);
-
-        if (oldCap != null && newCap != null) {
-            var tag = oldCap.serializeNBT(event.getOriginal().level().registryAccess());
-            newCap.deserializeNBT(event.getEntity().level().registryAccess(), tag);
-        }
-    }
-
-   @SubscribeEvent
     public static void registerCustomTrades(final VillagerTradesEvent event) {
        if(event.getType() == VillagerProfession.LIBRARIAN) {
            Int2ObjectMap<List<VillagerTrades.ItemListing>> trades = event.getTrades();
@@ -102,7 +95,49 @@ public class JolCraftGameEvents {
         event.setCanceled(true);
     }
 
+    @SubscribeEvent
+    public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
+        Player player = event.getEntity();
+        var cap = player.getData(JolCraftAttachments.DWARVEN_LANGUAGE);
 
+        if (cap != null) {
+            // 🧠 Grant temp access if joining in creative
+            if (player.isCreative() && !cap.knowsLanguage()) {
+                if (cap instanceof DwarvenLanguageImpl impl) {
+                    impl.grantTemporaryCreativeLanguage();
+                }
+            }
+
+            // ✅ Sync to client
+            if (player instanceof ServerPlayer serverPlayer) {
+                JolCraftNetworking.sendToClient(serverPlayer, new ClientboundSyncLanguagePacket(cap.knowsLanguage()));
+                System.out.println("[SERVER] Sync packet on join: " + cap.knowsLanguage());
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onGameModeChange(PlayerEvent.PlayerChangeGameModeEvent event) {
+        Player player = event.getEntity();
+        var cap = player.getData(JolCraftAttachments.DWARVEN_LANGUAGE);
+
+        if (cap instanceof DwarvenLanguageImpl impl) {
+            if (event.getNewGameMode() == GameType.CREATIVE && event.getCurrentGameMode() != GameType.CREATIVE) {
+                // 🟢 Entering creative — grant temp language if needed
+                if (!impl.knowsLanguage()) {
+                    impl.grantTemporaryCreativeLanguage();
+                }
+            } else if (event.getCurrentGameMode() == GameType.CREATIVE && event.getNewGameMode() != GameType.CREATIVE) {
+                // 🔴 Leaving creative — revoke temp language if it was granted this way
+                impl.revokeCreativeLanguage();
+            }
+
+            // ✅ Sync to client
+            if (player instanceof ServerPlayer serverPlayer) {
+                JolCraftNetworking.sendToClient(serverPlayer, new ClientboundSyncLanguagePacket(impl.knowsLanguage()));
+            }
+        }
+    }
 
 
 }

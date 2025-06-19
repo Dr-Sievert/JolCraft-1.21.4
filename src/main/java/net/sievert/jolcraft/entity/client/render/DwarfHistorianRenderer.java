@@ -10,6 +10,7 @@ import net.sievert.jolcraft.entity.client.dwarf.DwarfEyeLayer;
 import net.sievert.jolcraft.entity.client.model.DwarfHistorianModel;
 import net.sievert.jolcraft.entity.client.dwarf.DwarfRenderState;
 import net.sievert.jolcraft.entity.custom.dwarf.DwarfHistorianEntity;
+import net.sievert.jolcraft.entity.custom.dwarf.DwarfMerchantEntity;
 
 
 public class DwarfHistorianRenderer extends DwarfRenderer<DwarfHistorianEntity> {

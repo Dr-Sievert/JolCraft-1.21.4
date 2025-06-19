@@ -25,6 +25,7 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.saveddata.maps.MapDecorationType;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
 import net.sievert.jolcraft.item.JolCraftItems;
+import net.sievert.jolcraft.util.BountyHelper;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
@@ -108,6 +109,137 @@ public class JolCraftDwarfTrades extends VillagerTrades {
             return new MerchantOffer(new ItemCost(JolCraftItems.GOLD_COIN, this.goldCost), itemstack, this.maxUses, this.villagerXp, this.priceMultiplier);
         }
     }
+
+    public static class ItemsAndGoldToItems implements VillagerTrades.ItemListing {
+        private final ItemCost fromItem;
+        private final int goldCost;
+        private final ItemStack toItem;
+        private final int maxUses;
+        private final int villagerXp;
+        private final float priceMultiplier;
+        private final Optional<ResourceKey<EnchantmentProvider>> enchantmentProvider;
+
+        public ItemsAndGoldToItems(ItemLike fromItem, int fromItemCount, int goldCost, Item toItem, int toItemCount, int maxUses, int villagerXp, float priceMultiplier) {
+            this(fromItem, fromItemCount, goldCost, new ItemStack(toItem), toItemCount, maxUses, villagerXp, priceMultiplier);
+        }
+
+        public ItemsAndGoldToItems(
+                ItemLike fromItem, int fromItemCount, int goldCost, ItemStack toItem, int toItemCount, int maxUses, int villagerXp, float priceMultiplier
+        ) {
+            this(new ItemCost(fromItem, fromItemCount), goldCost, toItem.copyWithCount(toItemCount), maxUses, villagerXp, priceMultiplier, Optional.empty());
+        }
+
+        public ItemsAndGoldToItems(
+                ItemLike fromItem,
+                int fromItemAmount,
+                int goldCost,
+                ItemLike toItem,
+                int toItemCount,
+                int maxUses,
+                int villagerXp,
+                float priceMultiplier,
+                ResourceKey<EnchantmentProvider> enchantmentProvider
+        ) {
+            this(new ItemCost(fromItem, fromItemAmount), goldCost, new ItemStack(toItem, toItemCount), maxUses, villagerXp, priceMultiplier, Optional.of(enchantmentProvider));
+        }
+
+        public ItemsAndGoldToItems(
+                ItemCost fromItem,
+                int goldCost,
+                ItemStack toItem,
+                int maxUses,
+                int villagerXp,
+                float priceMultiplier,
+                Optional<ResourceKey<EnchantmentProvider>> enchantmentProvider
+        ) {
+            this.fromItem = fromItem;
+            this.goldCost = goldCost;
+            this.toItem = toItem;
+            this.maxUses = maxUses;
+            this.villagerXp = villagerXp;
+            this.priceMultiplier = priceMultiplier;
+            this.enchantmentProvider = enchantmentProvider;
+        }
+
+        @Nullable
+        @Override
+        public MerchantOffer getOffer(Entity p_219696_, RandomSource p_219697_) {
+            ItemStack itemstack = this.toItem.copy();
+            Level level = p_219696_.level();
+            this.enchantmentProvider
+                    .ifPresent(
+                            p_348335_ -> EnchantmentHelper.enchantItemFromProvider(
+                                    itemstack,
+                                    level.registryAccess(),
+                                    (ResourceKey<EnchantmentProvider>)p_348335_,
+                                    level.getCurrentDifficultyAt(p_219696_.blockPosition()),
+                                    p_219697_
+                            )
+                    );
+            return new MerchantOffer(
+                    new ItemCost(JolCraftItems.GOLD_COIN.get(), this.goldCost), Optional.of(this.fromItem), itemstack, 0, this.maxUses, this.villagerXp, this.priceMultiplier
+            );
+        }
+
+    }
+
+    //Exchanging
+    public static class ItemForItem implements VillagerTrades.ItemListing {
+        private final ItemStack input;
+        private final ItemStack output;
+        private final int maxUses;
+        private final int villagerXp;
+        private final float priceMultiplier;
+
+        public ItemForItem(ItemLike input, int inputCount, ItemLike output, int outputCount, int maxUses, int villagerXp) {
+            this.input = new ItemStack(input, inputCount);
+            this.output = new ItemStack(output, outputCount);
+            this.maxUses = maxUses;
+            this.villagerXp = villagerXp;
+            this.priceMultiplier = 0.05F;
+        }
+
+        @Nullable
+        @Override
+        public MerchantOffer getOffer(Entity entity, RandomSource random) {
+            return new MerchantOffer(new ItemCost(this.input.getItem(), this.input.getCount()), this.output, this.maxUses, this.villagerXp, this.priceMultiplier);
+        }
+    }
+
+    public static class BountyItemForItem extends JolCraftDwarfTrades.ItemForItem {
+        private final int bountyTier;
+
+        public BountyItemForItem(
+                ItemLike input, int inputCount,
+                ItemLike output, int outputCount,
+                int maxUses, int villagerXp,
+                int bountyTier
+        ) {
+            super(input, inputCount, output, outputCount, maxUses, villagerXp);
+            this.bountyTier = bountyTier;
+        }
+
+        @Nullable
+        @Override
+        public MerchantOffer getOffer(Entity entity, RandomSource random) {
+            MerchantOffer offer = super.getOffer(entity, random);
+            if (offer == null) return null;
+
+            ItemStack result = offer.getResult().copy();
+            BountyHelper.setBountyTier(result, bountyTier);
+
+            return new MerchantOffer(
+                    offer.getItemCostA(),
+                    offer.getItemCostB(),
+                    result,
+                    offer.getMaxUses(),
+                    offer.getXp(),
+                    offer.getPriceMultiplier()
+            );
+        }
+
+    }
+
 
     //Selling
 

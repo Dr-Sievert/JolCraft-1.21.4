@@ -138,8 +138,7 @@ public class DwarfModel extends HumanoidModel<DwarfRenderState>{
     public void translateToHand(HumanoidArm side, PoseStack poseStack) {
         this.root.translateAndRotate(poseStack);
         this.getArm(side).translateAndRotate(poseStack);
-        poseStack.translate(-0.05F, -0.15F, 0.05F); // Adjust as needed
-
+        poseStack.translate(-0.05F, -0.15F, 0.05F);
     }
 
     protected void applyHeadRotation(float headYaw, float headPitch) {

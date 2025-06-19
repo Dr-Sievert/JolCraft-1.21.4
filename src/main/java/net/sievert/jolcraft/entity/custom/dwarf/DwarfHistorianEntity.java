@@ -30,13 +30,12 @@ public class DwarfHistorianEntity extends AbstractDwarfEntity {
 
     public DwarfHistorianEntity(EntityType<? extends AbstractDwarfEntity> entityType, Level level) {
         super(entityType, level);
-        //this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_AXE));
         this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(JolCraftItems.DWARVEN_TOME.get()));
     }
 
     //Attributes
     public static AttributeSupplier.Builder createAttributes() {
-        return DwarfEntity.createLivingAttributes()
+        return DwarfHistorianEntity.createLivingAttributes()
                 .add(Attributes.MAX_HEALTH, 30D)
                 .add(Attributes.MOVEMENT_SPEED, 0.2D)
                 .add(Attributes.FOLLOW_RANGE, 24D)
@@ -81,10 +80,6 @@ public class DwarfHistorianEntity extends AbstractDwarfEntity {
         });
     }
 
-    @Override
-    public InteractionResult mobInteract(Player player, InteractionHand hand) {
-        return this.handleCommonInteractions(player, hand);
-    }
 
     //Trades
     public static final Int2ObjectMap<VillagerTrades.ItemListing[]> TRADES = toIntMap(
@@ -94,7 +89,8 @@ public class DwarfHistorianEntity extends AbstractDwarfEntity {
                     1,
                     new VillagerTrades.ItemListing[]{
                             new JolCraftDwarfTrades.GoldForItems(JolCraftItems.DWARVEN_TOME_COMMON.get(), 1, 5, 5, 3),
-                            new JolCraftDwarfTrades.ItemsForGold(Items.BOOK, 2, 1, 12, 1)
+                            new JolCraftDwarfTrades.ItemsAndGoldToItems(Items.CHISELED_DEEPSLATE, 1, 10, JolCraftItems.REPUTATION_TABLET_0.get(), 1, 1, 0, 0.05F)
+                            //new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.PARCHMENT.get(), 1, 1, 6, 1)
 
                     },
 
@@ -117,14 +113,14 @@ public class DwarfHistorianEntity extends AbstractDwarfEntity {
                     4,
                     new VillagerTrades.ItemListing[]{
                             new JolCraftDwarfTrades.GoldForItems(JolCraftItems.DWARVEN_TOME_EPIC.get(), 1, 1, 125, 25),
-                            new JolCraftDwarfTrades.ItemsForGold(Items.INK_SAC, 2, 1, 6, 15)
+                            new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.CONTRACT_BLANK.get(), 3, 1, 5, 15)
                     },
 
                     //Master
                     5,
                     new VillagerTrades.ItemListing[]{
                             new JolCraftDwarfTrades.GoldForItems(JolCraftItems.DEEPMARROW.get(), 1, 3, 0, 32),
-                            new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.CONTRACT_WRITTEN.get(), 2, 1, 6, 0)
+                            new JolCraftDwarfTrades.ItemsAndGoldToItems(Items.CHISELED_DEEPSLATE, 1, 10, JolCraftItems.REPUTATION_TABLET_0.get(), 1, 1, 0, 0.05F)
                     }
             )
     );
