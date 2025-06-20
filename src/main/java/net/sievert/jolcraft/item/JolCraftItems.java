@@ -44,6 +44,12 @@ public class JolCraftItems {
     public static final DeferredItem<Item> CONTRACT_SIGNED = ITEMS.registerItem("contract_signed",
             Item::new, new Item.Properties());
 
+    public static final DeferredItem<Item> GUILD_SIGIL = ITEMS.registerItem("guild_sigil",
+            Item::new, new Item.Properties());
+
+    public static final DeferredItem<Item> CONTRACT_GUILDMASTER = ITEMS.registerItem("contract_guildmaster",
+            Item::new, new Item.Properties().rarity(Rarity.UNCOMMON));
+
 
     //Tier 1
     public static final DeferredItem<Item> CONTRACT_MERCHANT = ITEMS.registerItem("contract_merchant",

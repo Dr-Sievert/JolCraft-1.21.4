@@ -57,7 +57,7 @@ public class DwarfScrapperEntity extends AbstractDwarfEntity {
 
     @Override
     public ItemStack getSignedContractItem() {
-        return new ItemStack(JolCraftItems.CONTRACT_SIGNED.get());
+        return new ItemStack(JolCraftItems.CONTRACT_SCRAPPER.get());
     }
 
     @Override
@@ -184,20 +184,6 @@ public class DwarfScrapperEntity extends AbstractDwarfEntity {
     public float getVoicePitch() {
         return 1.5F; // lower pitch for scrapper
     }
-
-    //Spawning
-    @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, EntitySpawnReason spawnType, @org.jetbrains.annotations.Nullable SpawnGroupData spawnGroupData) {
-        this.setLeftHanded(false);
-        return super.finalizeSpawn(level, difficulty, spawnType, spawnGroupData);
-    }
-
-    //Unused
-
-   /* @Override
-    protected void defineSynchedData(SynchedEntityData.Builder builder) {
-        super.defineSynchedData(builder);
-    } */
 
 
 }

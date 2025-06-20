@@ -87,12 +87,13 @@ public class DwarfGuardModel extends DwarfModel{
     public void setupAnim(DwarfRenderState state) {
         super.setupAnim(state);
         this.root().getAllParts().forEach(ModelPart::resetPose);
-        this.applyHeadRotation(state.yRot, state.xRot);
         this.animateWalk(DwarfAnimations.DWARF_WALK, state.walkAnimationPos, state.walkAnimationSpeed, 2f, 2.5f);
         this.animate(state.idleAnimationState, DwarfAnimations.DWARF_IDLE, state.ageInTicks, 1f);
         this.animate(state.attackAnimationState, DwarfAnimations.DWARF_ATTACK_WEAPON, state.ageInTicks, 1f);
-        this.animate(state.blockAnimationState, DwarfAnimations.DWARF_BLOCK, state.ageInTicks, 1f);
+        this.animate(state.inspectingAnimationState, DwarfAnimations.DWARF_INSPECT, state.ageInTicks, 1f);
+        this.animate(state.blockingAnimationState, DwarfAnimations.DWARF_BLOCK, state.ageInTicks, 1f);
         this.animate(state.drinkAnimationState, DwarfAnimations.DWARF_DRINK, state.ageInTicks, 1f);
+
     }
 
     @Override

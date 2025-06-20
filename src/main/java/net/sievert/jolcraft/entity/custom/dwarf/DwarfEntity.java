@@ -30,11 +30,6 @@ public class DwarfEntity extends AbstractDwarfEntity {
 
     public DwarfEntity(EntityType<? extends AbstractDwarfEntity> entityType, Level level) {
         super(entityType, level);
-        this.setDropChance(EquipmentSlot.MAINHAND, 1.0F);
-        //this.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.IRON_HELMET));
-        //this.setItemSlot(EquipmentSlot.CHEST, new ItemStack(Items.CHAINMAIL_CHESTPLATE));
-        //this.setItemSlot(EquipmentSlot.LEGS, new ItemStack(Items.LEATHER_LEGGINGS));
-        //this.setItemSlot(EquipmentSlot.FEET, new ItemStack(Items.DIAMOND_BOOTS));
 
     }
 
@@ -86,7 +81,7 @@ public class DwarfEntity extends AbstractDwarfEntity {
                     //Novice
                     1,
                     new VillagerTrades.ItemListing[]{
-                            new JolCraftDwarfTrades.ItemsForGold(Items.STICK, 1, 1, 6, 1),
+                            new JolCraftDwarfTrades.ItemsForGold(Items.STICK, 1, 1, 6, 500),
                             new JolCraftDwarfTrades.GoldForItems(Items.SMITHING_TABLE, 2, 4, 4, 1)
 
                     },
@@ -117,7 +112,7 @@ public class DwarfEntity extends AbstractDwarfEntity {
                     5,
                     new VillagerTrades.ItemListing[]{
                             new JolCraftDwarfTrades.ItemsForGold(Items.NETHERITE_BLOCK, 1, 1, 5, 10),
-                            new JolCraftDwarfTrades.GoldForItems(Items.NETHERITE_SCRAP, 1, 3, 5, 1)
+                            new JolCraftDwarfTrades.ItemsAndGoldToItems(Items.PURPLE_DYE, 1, 30, JolCraftItems.GUILD_SIGIL.get(), 1, 1, 0, 0.05F)
                     }
             )
     );
@@ -135,24 +130,5 @@ public class DwarfEntity extends AbstractDwarfEntity {
             this.addOffersFromItemListings(this.getOffers(), listings, 2); // 2 = max trades for that level
         }
     }
-
-    //Unused
-
-/*
-    @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
-        super.addAdditionalSaveData(compound);
-    }
-
-    @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
-        super.readAdditionalSaveData(compound);
-    }
-
-    @Override
-    protected void defineSynchedData(SynchedEntityData.Builder builder) {
-        super.defineSynchedData(builder);
-    }
-*/
 
 }

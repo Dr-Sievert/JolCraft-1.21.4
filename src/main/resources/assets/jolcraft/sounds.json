@@ -65,5 +65,33 @@
       }
     ],
     "subtitle": "sounds.jolcraft.dwarf_no"
+  },
+  "dwarf_trade": {
+    "sounds": [
+      {
+        "name": "jolcraft:entity/dwarf/trade1"
+      },
+      {
+        "name": "jolcraft:entity/dwarf/trade2"
+      },
+      {
+        "name": "jolcraft:entity/dwarf/trade3"
+      }
+    ],
+    "subtitle": "sounds.jolcraft.dwarf_trade"
+  },
+  "poof": {
+    "sounds": [
+      {
+        "name": "jolcraft:random/poof1"
+      },
+      {
+        "name": "jolcraft:random/poof2"
+      },
+      {
+        "name": "jolcraft:random/poof3"
+      }
+    ],
+    "subtitle": "sounds.jolcraft.poof"
   }
 }

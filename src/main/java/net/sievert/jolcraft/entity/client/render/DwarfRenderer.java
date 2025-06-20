@@ -77,6 +77,9 @@ public class DwarfRenderer<T extends AbstractDwarfEntity> extends HumanoidMobRen
         super.extractRenderState((T) entity, reusedState, partialTick);
         reusedState.idleAnimationState.copyFrom(entity.idleAnimationState);
         reusedState.attackAnimationState.copyFrom(entity.attackAnimationState);
+        reusedState.inspectingAnimationState.copyFrom(entity.inspectingAnimationState);
+        reusedState.blockingAnimationState.copyFrom(entity.blockingAnimationState);
+        reusedState.drinkAnimationState.copyFrom(entity.drinkAnimationState);
         reusedState.dwarf = entity;
         reusedState.variant = entity.getVariant();
         reusedState.beard = entity.getBeard();

@@ -22,18 +22,14 @@ public class JolCraftCreativeModeTabs {
                         pOutput.accept(JolCraftItems.DWARVEN_LEXICON);
                         pOutput.accept(JolCraftItems.GOLD_COIN);
 
-                        pOutput.accept(JolCraftItems.PARCHMENT);
-                        pOutput.accept(JolCraftItems.CONTRACT_BLANK);
-
-                        pOutput.accept(JolCraftItems.BOUNTY);
-                        pOutput.accept(JolCraftItems.BOUNTY_CRATE);
-
                         pOutput.accept(JolCraftItems.QUILL_EMPTY);
                         pOutput.accept(JolCraftItems.QUILL_FULL);
-
+                        pOutput.accept(JolCraftItems.PARCHMENT);
+                        pOutput.accept(JolCraftItems.CONTRACT_BLANK);
                         pOutput.accept(JolCraftItems.CONTRACT_WRITTEN);
                         pOutput.accept(JolCraftItems.CONTRACT_SIGNED);
-
+                        pOutput.accept(JolCraftItems.GUILD_SIGIL);
+                        pOutput.accept(JolCraftItems.CONTRACT_GUILDMASTER);
                         pOutput.accept(JolCraftItems.CONTRACT_MERCHANT);
                         pOutput.accept(JolCraftItems.CONTRACT_HISTORIAN);
                         pOutput.accept(JolCraftItems.CONTRACT_SCRAPPER);
@@ -50,6 +46,15 @@ public class JolCraftCreativeModeTabs {
                         pOutput.accept(JolCraftItems.CONTRACT_BLACKSMITH);
                         pOutput.accept(JolCraftItems.CONTRACT_SMELTER);
 
+                        pOutput.accept(JolCraftItems.REPUTATION_TABLET_0);
+                        pOutput.accept(JolCraftItems.REPUTATION_TABLET_1);
+                        pOutput.accept(JolCraftItems.REPUTATION_TABLET_2);
+                        pOutput.accept(JolCraftItems.REPUTATION_TABLET_3);
+                        pOutput.accept(JolCraftItems.REPUTATION_TABLET_4);
+
+                        pOutput.accept(JolCraftItems.BOUNTY);
+                        pOutput.accept(JolCraftItems.BOUNTY_CRATE);
+
                         pOutput.accept(JolCraftItems.AEGISCORE);
                         pOutput.accept(JolCraftItems.ASHFANG);
                         pOutput.accept(JolCraftItems.DEEPMARROW);
@@ -65,12 +70,6 @@ public class JolCraftCreativeModeTabs {
                         pOutput.accept(JolCraftItems.SUNGLEAM);
                         pOutput.accept(JolCraftItems.VERDANITE);
                         pOutput.accept(JolCraftItems.WOECRYSTAL);
-
-                        pOutput.accept(JolCraftItems.REPUTATION_TABLET_0);
-                        pOutput.accept(JolCraftItems.REPUTATION_TABLET_1);
-                        pOutput.accept(JolCraftItems.REPUTATION_TABLET_2);
-                        pOutput.accept(JolCraftItems.REPUTATION_TABLET_3);
-                        pOutput.accept(JolCraftItems.REPUTATION_TABLET_4);
 
                         pOutput.accept(JolCraftItems.DWARVEN_TOME_COMMON);
                         pOutput.accept(JolCraftItems.DWARVEN_TOME_UNCOMMON);

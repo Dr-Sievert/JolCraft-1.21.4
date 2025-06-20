@@ -1,5 +1,6 @@
 {
   "values": [
+    "jolcraft:contract_guildmaster",
     "jolcraft:contract_merchant",
     "jolcraft:contract_historian",
     "jolcraft:contract_scrapper",

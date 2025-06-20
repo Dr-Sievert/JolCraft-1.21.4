@@ -41,10 +41,6 @@ public class DwarfGuardRenderer extends DwarfRenderer<DwarfGuardEntity> {
     @Override
     public void extractRenderState(DwarfGuardEntity entity, DwarfRenderState reusedState, float partialTick) {
         super.extractRenderState(entity, reusedState, partialTick);
-        reusedState.idleAnimationState.copyFrom(entity.idleAnimationState);
-        reusedState.attackAnimationState.copyFrom(entity.attackAnimationState);
-        reusedState.blockAnimationState.copyFrom(entity.blockAnimationState);
-        reusedState.drinkAnimationState.copyFrom(entity.drinkAnimationState);
     }
 
 }

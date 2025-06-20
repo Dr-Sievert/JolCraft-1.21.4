@@ -38,7 +38,6 @@ public class DwarfGuildmasterRenderer extends DwarfRenderer<DwarfGuildmasterEnti
     @Override
     public void extractRenderState(DwarfGuildmasterEntity entity, DwarfRenderState reusedState, float partialTick) {
         super.extractRenderState(entity, reusedState, partialTick);
-        reusedState.drinkAnimationState.copyFrom(entity.drinkAnimationState);
     }
 
 }

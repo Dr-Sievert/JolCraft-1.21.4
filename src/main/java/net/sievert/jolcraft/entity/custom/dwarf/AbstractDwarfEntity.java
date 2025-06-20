@@ -29,6 +29,7 @@ import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.npc.*;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.UseRemainder;
@@ -37,7 +38,6 @@ import net.minecraft.world.item.trading.MerchantOffers;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.Vec3;
-import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.advancement.JolCraftCriteriaTriggers;
 import net.sievert.jolcraft.capability.JolCraftAttachments;
 import net.sievert.jolcraft.client.data.MyClientLanguageData;
@@ -52,6 +52,8 @@ import net.sievert.jolcraft.sound.JolCraftSounds;
 import org.slf4j.Logger;
 
 import javax.annotation.Nullable;
+import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 public class AbstractDwarfEntity extends AbstractVillager {
@@ -84,8 +86,17 @@ public class AbstractDwarfEntity extends AbstractVillager {
         return this.entityData.get(ATTACKING);
     }
 
-    public final AnimationState blockAnimationState = new AnimationState();
-    public boolean hasStartedBlockAnimation = false;
+    public final AnimationState inspectingAnimationState = new AnimationState();
+    public boolean hasStartedInspectingAnimation = false;
+    public void setInspecting(boolean inspecting) {
+        this.entityData.set(INSPECTING, inspecting);
+    }
+    public boolean isInspecting() {
+        return this.entityData.get(INSPECTING);
+    }
+
+    public final AnimationState blockingAnimationState = new AnimationState();
+    public boolean hasStartedBlockingAnimation = false;
     public void setBlocking(boolean blocking) {
         this.entityData.set(BLOCKING, blocking);
     }
@@ -104,11 +115,12 @@ public class AbstractDwarfEntity extends AbstractVillager {
 
     protected void setupAnimationStates() {
         if(this.idleAnimationTimeout <= 0) {
-            this.idleAnimationTimeout = 83;
+            this.idleAnimationTimeout = 90;
             this.idleAnimationState.start(this.tickCount);
         } else {
             --this.idleAnimationTimeout;
         }
+
         if (this.isAttacking()) {
             if (!hasStartedAttackAnimation) {
                 attackAnimationState.start(this.tickCount);
@@ -117,14 +129,16 @@ public class AbstractDwarfEntity extends AbstractVillager {
         } else {
             hasStartedAttackAnimation = false;
         }
+
         if (isBlocking()) {
-            if (!hasStartedBlockAnimation) {
-                blockAnimationState.start(this.tickCount);
-                hasStartedBlockAnimation = true;
+            if (!hasStartedBlockingAnimation) {
+                blockingAnimationState.start(this.tickCount);
+                hasStartedBlockingAnimation = true;
             }
         } else {
-            hasStartedBlockAnimation = false;
+            hasStartedBlockingAnimation = false;
         }
+
         if (isDrinking()) {
             if (!hasStartedDrinkAnimation) {
                 drinkAnimationState.start(this.tickCount);
@@ -133,6 +147,16 @@ public class AbstractDwarfEntity extends AbstractVillager {
         } else {
             hasStartedDrinkAnimation = false;
         }
+
+        if (isInspecting()) {
+            if (!hasStartedInspectingAnimation) {
+                inspectingAnimationState.start(this.tickCount);
+                hasStartedInspectingAnimation = true;
+            }
+        } else {
+            hasStartedInspectingAnimation = false;
+        }
+
     }
 
     private Vec3 blockParticlePos = null;
@@ -143,7 +167,9 @@ public class AbstractDwarfEntity extends AbstractVillager {
         super.tick();
         if(this.level().isClientSide()) {
             this.setupAnimationStates();
-            if (this.hasStartedBlockAnimation) {
+
+            //Blocking particles
+            if (this.hasStartedBlockingAnimation) {
                 if (blockParticlePos == null) {
                     // Capture particle spawn location at start
                     Vec3 look = this.getLookAngle().normalize();
@@ -180,7 +206,26 @@ public class AbstractDwarfEntity extends AbstractVillager {
                 blockParticlePos = null;
                 blockParticleTicks = 0;
             }
+
+            //Transformation particles
+            if (this.inspectingTicks == 39) {
+                // First subtle gray poof
+                this.spawnColoredParticles(0.35F, 0.35F, 0.35F, 0.7F, 16, 0.5D);
+            }
+            if (this.inspectingTicks == 20) {
+                // Second, slightly bigger gray poof
+                this.spawnColoredParticles(0.35F, 0.35F, 0.35F, 0.8F, 24, 0.7D);
+            }
+            if (this.inspectingTicks == 2) {
+                // Final: big gray cloud
+                this.spawnColoredParticles(0.35F, 0.35F, 0.35F, 1.25F, 64, 2.5D);
+            }
+
+
+
         }
+
+
     }
 
     //Behavior
@@ -188,6 +233,8 @@ public class AbstractDwarfEntity extends AbstractVillager {
     protected ItemStack previousMainHandItem = ItemStack.EMPTY;
     protected int signingTicks = 0;
     protected Player signingPlayer;
+    protected int inspectingTicks = 0;
+    protected Player inspectingPlayer ;
 
     public boolean canTrade() {
         return false;
@@ -317,9 +364,18 @@ public class AbstractDwarfEntity extends AbstractVillager {
 
         // 🛑 Common interactions if none of above interactions were triggered
 
+        //Paid
+        if (itemstack.is(JolCraftItems.GOLD_COIN.get()) && this.canBePaid()) {
+            this.setPaid(player);
+            this.level().playSound(null, this.blockPosition(), SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.NEUTRAL, 1.0F, 1.4F);
+            this.usePlayerItem(player, hand, itemstack);
+            return InteractionResult.SUCCESS;
+        }
+
+
         // 🖊️ Contract signing
-        if (itemstack.is(JolCraftItems.CONTRACT_WRITTEN.get())) {
-            if (!canSign() || !this.isInLove() || this.signingTicks > 0 || this.signingPlayer != null) {
+        if (itemstack.is(JolCraftItems.CONTRACT_WRITTEN.get()) && !this.isBaby()) {
+            if (!canSign() || !this.isPaid() || this.signingTicks > 0 || this.signingPlayer != null) {
                 this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
                 return InteractionResult.SUCCESS; // Block fallback trade
             }
@@ -331,6 +387,24 @@ public class AbstractDwarfEntity extends AbstractVillager {
             this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(JolCraftItems.CONTRACT_WRITTEN.get()));
             this.signingTicks = 40;
             this.signingPlayer = player;
+            return InteractionResult.SUCCESS_SERVER;
+        }
+
+        // 🪄 Profession Promotion with Signed Contract
+        if (itemstack.is(JolCraftTags.Items.SIGNED_CONTRACTS) && !this.isBaby()) {
+            if (!canPromoteToProfession() || !this.isPaid() || this.inspectingTicks > 0 || this.inspectingPlayer != null) {
+                this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
+                return InteractionResult.SUCCESS;
+            }
+            this.setNoAi(true);
+            this.previousMainHandItem = itemstack.copy();              // Save the correct contract used for transform
+            this.usePlayerItem(player, hand, itemstack);               // Remove one contract from player hand
+            this.setItemSlot(EquipmentSlot.MAINHAND, itemstack.copy()); // Dwarf visibly holds contract for animation
+            this.level().playSound(null, this.blockPosition(), SoundEvents.EVOKER_CAST_SPELL, SoundSource.NEUTRAL, 1.0F, 1.5F);
+            this.inspectingTicks = 40;
+            this.inspectingPlayer = player;
+            this.setInspecting(true);  // For animation
+
             return InteractionResult.SUCCESS_SERVER;
         }
 
@@ -421,6 +495,16 @@ public class AbstractDwarfEntity extends AbstractVillager {
             }
         }
 
+        // Paid mode ticking
+        if (this.paidTicks > 0) {
+            this.paidTicks--;
+            // Every 30 ticks, spawn a little gold sparkle/coin effect
+            if (this.paidTicks % 30 == 0) {
+                this.spawnColoredParticles(1.0F, 0.84F, 0.0F, 1.0F, 3, 0.4D);
+            }
+        }
+
+
         // Signing logic
         if (this.signingTicks > 0) {
             this.signingTicks--;
@@ -454,6 +538,115 @@ public class AbstractDwarfEntity extends AbstractVillager {
                     this.previousMainHandItem = ItemStack.EMPTY;
                 }
                 signingPlayer = null;
+                this.resetPaid(); // Use up paid mode!
+            }
+        }
+
+        //Contract logic
+        if (this.inspectingTicks > 0) {
+            if (!this.hasStartedInspectingAnimation) {
+                this.inspectingAnimationState.start(this.tickCount);
+                this.hasStartedInspectingAnimation = true;
+            }
+            --this.inspectingTicks;
+
+            if (this.inspectingTicks == 20) {
+                this.level().playSound(null, this.blockPosition(), SoundEvents.EVOKER_CAST_SPELL, SoundSource.NEUTRAL, 1.0F, 1.5F);
+            }
+
+            if (this.inspectingTicks == 2) {
+                this.level().playSound(null, this.blockPosition(), JolCraftSounds.POOF.get(), SoundSource.NEUTRAL, 1.5F, 1.0F);
+
+            }
+
+            if (this.inspectingTicks == 0 && !this.level().isClientSide && this.inspectingPlayer != null) {
+                this.transformToProfession();
+
+                this.setInspecting(false);
+                this.hasStartedInspectingAnimation = false;
+                this.inspectingPlayer = null;
+                this.setNoAi(false);
+            }
+        } else {
+            if (this.hasStartedInspectingAnimation) {
+                this.inspectingAnimationState.stop();
+                this.hasStartedInspectingAnimation = false;
+                this.setInspecting(false);
+            }
+        }
+
+    }
+
+    public static final Set<EntityType<?>> PROMOTABLE_DWARF_TYPES = Set.of(JolCraftEntities.DWARF.get());
+
+
+    public boolean canPromoteToProfession() {
+        return PROMOTABLE_DWARF_TYPES.contains(this.getType()) && this.isAlive() && !this.isBaby();
+    }
+
+    @Nullable
+    public EntityType<? extends AbstractDwarfEntity> resolveProfessionType(ItemStack contractStack) {
+        if (contractStack == null || contractStack.isEmpty()) return null;
+        return CONTRACT_TO_PROFESSION.get(contractStack.getItem());
+    }
+
+    public static final Map<Item, EntityType<? extends AbstractDwarfEntity>> CONTRACT_TO_PROFESSION = Map.ofEntries(
+            Map.entry(JolCraftItems.CONTRACT_GUILDMASTER.get(), JolCraftEntities.DWARF_GUILDMASTER.get()),
+            // Tier 1
+            Map.entry(JolCraftItems.CONTRACT_MERCHANT.get(), JolCraftEntities.DWARF_MERCHANT.get()),
+            Map.entry(JolCraftItems.CONTRACT_HISTORIAN.get(), JolCraftEntities.DWARF_HISTORIAN.get()),
+            Map.entry(JolCraftItems.CONTRACT_SCRAPPER.get(), JolCraftEntities.DWARF_SCRAPPER.get()),
+            // Tier 2
+            Map.entry(JolCraftItems.CONTRACT_GUARD.get(), JolCraftEntities.DWARF_GUARD.get())
+
+           /*
+            Map.entry(JolCraftItems.CONTRACT_BREWMASTER.get(), JolCraftEntities.DWARF_BREWMASTER.get()),
+            Map.entry(JolCraftItems.CONTRACT_KEEPER.get(), JolCraftEntities.DWARF_KEEPER.get()),
+            // Tier 3
+            Map.entry(JolCraftItems.CONTRACT_MINER.get(), JolCraftEntities.DWARF_MINER.get()),
+            Map.entry(JolCraftItems.CONTRACT_EXPLORER.get(), JolCraftEntities.DWARF_EXPLORER.get()),
+            Map.entry(JolCraftItems.CONTRACT_ALCHEMIST.get(), JolCraftEntities.DWARF_ALCHEMIST.get()),
+            // Tier 4
+            Map.entry(JolCraftItems.CONTRACT_ARCANIST.get(), JolCraftEntities.DWARF_ARCANIST.get()),
+            Map.entry(JolCraftItems.CONTRACT_PRIEST.get(), JolCraftEntities.DWARF_PRIEST.get()),
+            Map.entry(JolCraftItems.CONTRACT_ARTISAN.get(), JolCraftEntities.DWARF_ARTISAN.get()),
+            // Tier 5
+            Map.entry(JolCraftItems.CONTRACT_CHAMPION.get(), JolCraftEntities.DWARF_CHAMPION.get()),
+            Map.entry(JolCraftItems.CONTRACT_BLACKSMITH.get(), JolCraftEntities.DWARF_BLACKSMITH.get()),
+            Map.entry(JolCraftItems.CONTRACT_SMELTER.get(), JolCraftEntities.DWARF_SMELTER.get())
+
+            */
+
+    );
+
+    public void transformToProfession() {
+        if (!this.level().isClientSide) {
+            ServerLevel serverLevel = (ServerLevel) this.level();
+
+            EntityType<? extends AbstractDwarfEntity> professionType = resolveProfessionType(this.previousMainHandItem);
+
+
+            if (professionType != null) {
+                // This is the best usage for NeoForge 1.21.x
+                Entity entity = professionType.create(
+                        serverLevel,
+                        null, // Consumer<T>
+                        this.blockPosition(),
+                        EntitySpawnReason.CONVERSION,
+                        false, // shouldOffsetY
+                        false  // shouldOffsetYMore
+                );
+
+                if (entity instanceof AbstractDwarfEntity newDwarf) {
+                    newDwarf.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), this.getXRot());
+
+                    //Preserve data
+                    newDwarf.setBeard(this.getBeard());
+                    newDwarf.setEye(this.getEye());
+
+                    serverLevel.addFreshEntity(newDwarf);
+                    this.discard();
+                }
             }
         }
     }
@@ -558,16 +751,21 @@ public class AbstractDwarfEntity extends AbstractVillager {
 
 
     @Override
-    public void handleEntityEvent(byte p_27562_) {
-        if (p_27562_ == 18) {
+    public void handleEntityEvent(byte id) {
+        if (id == 18) {
             for (int i = 0; i < 7; i++) {
                 double d0 = this.random.nextGaussian() * 0.02;
                 double d1 = this.random.nextGaussian() * 0.02;
                 double d2 = this.random.nextGaussian() * 0.02;
                 this.level().addParticle(ParticleTypes.HEART, this.getRandomX(1.0), this.getRandomY() + 0.5, this.getRandomZ(1.0), d0, d1, d2);
             }
-        } else {
-            super.handleEntityEvent(p_27562_);
+        }
+        if (id == 19) {
+            // Gold coins or sparkle (paid)
+            this.spawnColoredParticles(1.0F, 0.84F, 0.0F, 1.0F, 7, 0.5D);
+        }
+        else {
+            super.handleEntityEvent(id);
         }
     }
 
@@ -629,6 +827,9 @@ public class AbstractDwarfEntity extends AbstractVillager {
     public static final EntityDataAccessor<Boolean> ATTACKING =
             SynchedEntityData.defineId(AbstractDwarfEntity.class, EntityDataSerializers.BOOLEAN);
 
+    public static final EntityDataAccessor<Boolean> INSPECTING =
+            SynchedEntityData.defineId(AbstractDwarfEntity.class, EntityDataSerializers.BOOLEAN);
+
     private static final EntityDataAccessor<Boolean> BLOCKING =
             SynchedEntityData.defineId(AbstractDwarfEntity.class, EntityDataSerializers.BOOLEAN);
 
@@ -646,6 +847,7 @@ public class AbstractDwarfEntity extends AbstractVillager {
         builder.define(BEARD_COLOR, 0);
         builder.define(EYE_COLOR, 0);
         builder.define(ATTACKING, false);
+        builder.define(INSPECTING, false);
         builder.define(BLOCKING, false);
         builder.define(DRINKING, false);
         builder.define(DATA_VILLAGER_DATA, new VillagerData(VillagerType.PLAINS, VillagerProfession.NONE, 1));
@@ -660,6 +862,11 @@ public class AbstractDwarfEntity extends AbstractVillager {
         compound.putInt("Eye", this.getTypeEye());
         if (this.loveCause != null) {
             compound.putUUID("LoveCause", this.loveCause);
+        }
+        // 🪙 Paid status
+        compound.putInt("PaidTicks", this.paidTicks);
+        if (this.paidCause != null) {
+            compound.putUUID("PaidCause", this.paidCause);
         }
         compound.putInt("Age", this.getAge());
         compound.putInt("ForcedAge", this.forcedAge);
@@ -678,6 +885,9 @@ public class AbstractDwarfEntity extends AbstractVillager {
         super.readAdditionalSaveData(compound);
         this.inLove = compound.getInt("InLove");
         this.loveCause = compound.hasUUID("LoveCause") ? compound.getUUID("LoveCause") : null;
+        // 🪙 Paid status
+        this.paidTicks = compound.getInt("PaidTicks");
+        this.paidCause = compound.hasUUID("PaidCause") ? compound.getUUID("PaidCause") : null;
         this.entityData.set(VARIANT, compound.getInt("Variant"));
         this.entityData.set(BEARD_COLOR, compound.getInt("Beard"));
         this.entityData.set(EYE_COLOR, compound.getInt("Eye"));
@@ -695,6 +905,44 @@ public class AbstractDwarfEntity extends AbstractVillager {
         if (compound.contains("AssignProfessionWhenSpawned")) {
             this.assignProfessionWhenSpawned = compound.getBoolean("AssignProfessionWhenSpawned");
         }
+    }
+
+    //Paying
+    protected int paidTicks;
+    @Nullable
+    protected UUID paidCause;
+    public static final int MAX_PAID_TICKS = 20 * 60; // 1 min
+
+    public boolean isPaid() {
+        return this.paidTicks > 0;
+    }
+
+    public void setPaid(@Nullable Player player) {
+        this.paidTicks = MAX_PAID_TICKS;
+        if (player != null) {
+            this.paidCause = player.getUUID();
+        }
+        this.level().broadcastEntityEvent(this, (byte)19); // 19 = custom code for "paid"
+    }
+
+    public void resetPaid() {
+        this.paidTicks = 0;
+        this.paidCause = null;
+    }
+
+    public boolean canBePaid() {
+        return this.paidTicks <= 0;
+    }
+
+    public int getPaidTicks() {
+        return this.paidTicks;
+    }
+
+    @Nullable
+    public ServerPlayer getPaidCause() {
+        if (this.paidCause == null) return null;
+        Player player = this.level().getPlayerByUUID(this.paidCause);
+        return player instanceof ServerPlayer ? (ServerPlayer)player : null;
     }
 
     // Particles
@@ -726,6 +974,42 @@ public class AbstractDwarfEntity extends AbstractVillager {
             this.level().addParticle(dust, offsetX, offsetY, offsetZ, velocityX, velocityY, velocityZ);
         }
     }
+
+    //Loot
+
+    // Helper: check for quest/contract items
+    private boolean isSpecialDropItem(ItemStack stack) {
+        return stack.is(JolCraftItems.CONTRACT_WRITTEN.get()) || stack.is(JolCraftItems.CONTRACT_SIGNED.get()) || stack.is(JolCraftItems.BOUNTY.get()) || stack.is(JolCraftItems.BOUNTY_CRATE.get());
+    }
+
+    // Helper: allow only certain gear to drop
+    private boolean shouldDropEquipment(ItemStack stack) {
+        // Only drop iron axes
+        return stack.is(Items.DIAMOND);
+    }
+
+    @Override
+    protected void dropCustomDeathLoot(ServerLevel level, DamageSource source, boolean recentlyHit) {
+        // Handle MAINHAND item
+        ItemStack mainHand = this.getMainHandItem();
+
+        if (!mainHand.isEmpty()) {
+            if (isSpecialDropItem(mainHand)) {
+                // Always drop special quest items (contract, bounty crate, etc)
+                this.spawnAtLocation(level, mainHand);
+            } else if (shouldDropEquipment(mainHand)) {
+                // Drop only certain equipment (iron axe, etc)
+                this.spawnAtLocation(level, mainHand);
+            }
+            // Otherwise: do not drop (e.g., remove from world)
+            // Clear mainhand slot to avoid duplicate drops
+            this.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
+        }
+
+        // Optionally: call super to handle other drops (armor, offhand, etc) as usual
+        super.dropCustomDeathLoot(level, source, recentlyHit);
+    }
+
 
     //Trading and Villager Data
     public long lastRestockGameTime = 0L;
@@ -847,7 +1131,7 @@ public class AbstractDwarfEntity extends AbstractVillager {
     @Nullable
     @Override
     protected SoundEvent getAmbientSound() {
-        return JolCraftSounds.DWARF_AMBIENT.get();
+            return this.isTrading() ? JolCraftSounds.DWARF_TRADE.get() : JolCraftSounds.DWARF_AMBIENT.get();
     }
 
     @Nullable
@@ -877,6 +1161,13 @@ public class AbstractDwarfEntity extends AbstractVillager {
     protected SoundEvent getTradeUpdatedSound(boolean isYesSound) {
         return isYesSound ? JolCraftSounds.DWARF_YES.get() : JolCraftSounds.DWARF_NO.get();
     }
+
+    @Nullable
+    @Override
+    public void playCelebrateSound() {
+        this.makeSound(JolCraftSounds.DWARF_YES.get());
+    }
+
 
     //Spawning
     @Override

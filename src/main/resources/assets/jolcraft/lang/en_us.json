@@ -14,7 +14,8 @@
   "item.jolcraft.contract_blank": "Blank Contract",
   "item.jolcraft.contract_written": "Written Contract",
   "item.jolcraft.contract_signed": "Signed Contract",
-
+  "item.jolcraft.guild_sigil": "Guild Sigil",
+  "item.jolcraft.contract_guildmaster": "Guildmaster Contract",
   "item.jolcraft.contract_merchant": "Merchant Contract",
   "item.jolcraft.contract_historian": "Historian Contract",
   "item.jolcraft.contract_scrapper": "Scrapper Contract",

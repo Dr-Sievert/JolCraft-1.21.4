@@ -30,14 +30,11 @@ public class DwarfGuardEntity extends AbstractDwarfEntity {
 
     public DwarfGuardEntity(EntityType<? extends AbstractDwarfEntity> entityType, Level level) {
         super(entityType, level);
-        // Set default main-hand item to iron axe
         this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_AXE));
-        //this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(Items.SHIELD));
         this.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.IRON_HELMET));
         this.setItemSlot(EquipmentSlot.CHEST, new ItemStack(Items.IRON_CHESTPLATE));
         this.setItemSlot(EquipmentSlot.LEGS, new ItemStack(Items.IRON_LEGGINGS));
         this.setItemSlot(EquipmentSlot.FEET, new ItemStack(Items.IRON_BOOTS));
-
     }
 
     //Attributes
@@ -99,16 +96,13 @@ public class DwarfGuardEntity extends AbstractDwarfEntity {
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, EntitySpawnReason spawnType, @org.jetbrains.annotations.Nullable SpawnGroupData spawnGroupData) {
         this.setLeftHanded(false);
-        this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_AXE));
+//        this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_AXE));
+//        this.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.IRON_HELMET));
+//        this.setItemSlot(EquipmentSlot.CHEST, new ItemStack(Items.IRON_CHESTPLATE));
+//        this.setItemSlot(EquipmentSlot.LEGS, new ItemStack(Items.IRON_LEGGINGS));
+//        this.setItemSlot(EquipmentSlot.FEET, new ItemStack(Items.IRON_BOOTS));
         return super.finalizeSpawn(level, difficulty, spawnType, spawnGroupData);
     }
-
-    //Unused
-
-   /* @Override
-    protected void defineSynchedData(SynchedEntityData.Builder builder) {
-        super.defineSynchedData(builder);
-    } */
 
 
 }

@@ -56,6 +56,12 @@ public class JolCraftRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_contract_blank", has(JolCraftItems.CONTRACT_BLANK.get()))
                 .save(output);
 
+        shapeless(RecipeCategory.MISC, JolCraftItems.CONTRACT_GUILDMASTER.get())
+                .requires(JolCraftItems.GUILD_SIGIL.get())
+                .requires(JolCraftItems.CONTRACT_SIGNED.get())
+                .unlockedBy("has_contract_signed", has(JolCraftItems.CONTRACT_SIGNED.get()))
+                .save(output);
+
         shapeless(RecipeCategory.MISC, JolCraftItems.QUILL_FULL.get())
                 .requires(Items.GLASS)
                 .requires(Items.FEATHER)
@@ -74,6 +80,7 @@ public class JolCraftRecipeProvider extends RecipeProvider {
                 .requires(Items.FEATHER)
                 .unlockedBy("has_feather", has(Items.FEATHER))
                 .save(output);
+
         nineBlockStorageRecipes(
                 RecipeCategory.MISC,
                 JolCraftItems.SCRAP.get(), //Ingredient

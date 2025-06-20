@@ -1,4 +1,4 @@
-// 1.21.4	2025-06-20T03:01:33.042423	Model Definitions - jolcraft
+// 1.21.4	2025-06-20T13:02:51.8617834	Model Definitions - jolcraft
 514fa4af6796c2d245487e0f0d0268286013059c assets/jolcraft/items/aegiscore.json
 b949c867dd45b7a402abd9d29cbb4517f22e9b49 assets/jolcraft/items/ashfang.json
 38f30432e8ce23fd9725a5acbc3fcc9f7cebee8b assets/jolcraft/items/bounty.json
@@ -16,6 +16,7 @@ ef5f9c453c0528eb7ba590f545287d2fe4dc8725 assets/jolcraft/items/contract_blank.js
 a4b80b78d2e49d76353fb8d7ee90e167d50ec79e assets/jolcraft/items/contract_champion.json
 dd6811ef8a76aed5cd8372df3f3808f403b364c9 assets/jolcraft/items/contract_explorer.json
 362a8ade4c6ff24f7e932513c338ff70c6b43be3 assets/jolcraft/items/contract_guard.json
+8f41f9afc7c3129640db9828112e7eed04440861 assets/jolcraft/items/contract_guildmaster.json
 b4ed0f7519ac542b24de81732a1d1b0548441129 assets/jolcraft/items/contract_historian.json
 86ad3e250acc4147df3bdd771784275e04d8fd2d assets/jolcraft/items/contract_keeper.json
 4afccc8f5ef1c789c7c0b2f918612574992f513d assets/jolcraft/items/contract_merchant.json
@@ -46,6 +47,7 @@ b8f4876eb89c6dd14d9e6e7f017d58bfe54fbc91 assets/jolcraft/items/earthblood.json
 74b2f1d8976e207af37009265782c67c5ac4e388 assets/jolcraft/items/frostvein.json
 d118affbc6974ddb63331ecadbf5104539a22e2c assets/jolcraft/items/gold_coin.json
 288d33f8c593ee149a3bed69e14e5e68fe50ae12 assets/jolcraft/items/grimstone.json
+d7f635f874b1e4445a5aa2fb22dfde995bc87bba assets/jolcraft/items/guild_sigil.json
 07fd8daba6e1d58df3dda33ecbb4049e4b09d120 assets/jolcraft/items/ingot_mould.json
 aef41892a5c1da5cef56ffc85a754454c930f181 assets/jolcraft/items/ironheart.json
 d71be6c8e67364ebd1b6380d19b2de0143b05baa assets/jolcraft/items/iron_spanner.json
@@ -88,6 +90,7 @@ e0673d36d954b5e2a48fa184bde2675d8e6231ad assets/jolcraft/models/item/contract_bl
 84ddf7c5052119c9f23aa7044561474a8bb3bf66 assets/jolcraft/models/item/contract_champion.json
 8649c35536cc93f24b0ac2da01d3124bc6684fca assets/jolcraft/models/item/contract_explorer.json
 8f973b18c27f31602b23d3bee42a50692ee1bc74 assets/jolcraft/models/item/contract_guard.json
+c38afd9016c55df930f0f61f6e7858f2c6e48d2b assets/jolcraft/models/item/contract_guildmaster.json
 5f5fffebb2850b4772300dd29592c8eb2a4b0c88 assets/jolcraft/models/item/contract_historian.json
 f650b2d4b99d79fa6e6453184641192192b896e1 assets/jolcraft/models/item/contract_keeper.json
 ffae6f16124ae8036b0d39cb8f5c89f68453398b assets/jolcraft/models/item/contract_merchant.json
@@ -112,6 +115,7 @@ af290eb0e410bff8e6bcc534855dbff8dc323a44 assets/jolcraft/models/item/expired_pot
 2157da712cdbc7601dfde417f7b1628d0cd052f2 assets/jolcraft/models/item/frostvein.json
 f73610af65d4521fb243b9b93bc5a57d19209561 assets/jolcraft/models/item/gold_coin.json
 a3ed122d72b135bdc041ffb9d2125462b7becde1 assets/jolcraft/models/item/grimstone.json
+eb5e5861eb21fd0d26001467b450d2a4a46b8cbe assets/jolcraft/models/item/guild_sigil.json
 11d92480eb49f9f8724758fe1ec5036728cc5691 assets/jolcraft/models/item/ingot_mould.json
 ee520522f18aeee297a4b10b8a149ea3503c3167 assets/jolcraft/models/item/ironheart.json
 e3b58081e9446242dfaddf61e2f0c4445ea1a003 assets/jolcraft/models/item/iron_spanner.json

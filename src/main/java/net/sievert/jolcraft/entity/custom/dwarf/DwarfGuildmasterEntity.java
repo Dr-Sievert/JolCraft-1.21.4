@@ -48,6 +48,11 @@ public class DwarfGuildmasterEntity extends AbstractDwarfEntity {
     }
 
     @Override
+    public ItemStack getSignedContractItem() {
+        return new ItemStack(JolCraftItems.CONTRACT_GUILDMASTER.get());
+    }
+
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new FirePanicGoal(this, 1.3));

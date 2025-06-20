@@ -118,6 +118,7 @@ public class JolCraftItemTagProvider extends ItemTagsProvider {
                 .addTag(JolCraftTags.Items.MITHRIL_SCRAP);
 
         tag(JolCraftTags.Items.SIGNED_CONTRACTS)
+                .add(JolCraftItems.CONTRACT_GUILDMASTER.get())
                 .add(JolCraftItems.CONTRACT_MERCHANT.get())
                 .add(JolCraftItems.CONTRACT_HISTORIAN.get())
                 .add(JolCraftItems.CONTRACT_SCRAPPER.get())

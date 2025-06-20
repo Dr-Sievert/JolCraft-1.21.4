@@ -73,7 +73,7 @@ public class DwarfMerchantEntity extends AbstractDwarfEntity {
 
     @Override
     public ItemStack getSignedContractItem() {
-        return new ItemStack(JolCraftItems.CONTRACT_SIGNED.get());
+        return new ItemStack(JolCraftItems.CONTRACT_MERCHANT.get());
     }
 
     @Override
@@ -312,7 +312,7 @@ public class DwarfMerchantEntity extends AbstractDwarfEntity {
                             this.getX(),
                             this.getY() + 1.0D,
                             this.getZ(),
-                            SoundEvents.FIREWORK_ROCKET_LARGE_BLAST,
+                            SoundEvents.FIREWORK_ROCKET_TWINKLE_FAR,
                             SoundSource.NEUTRAL,
                             1.0F,
                             1.2F,
@@ -583,15 +583,6 @@ public class DwarfMerchantEntity extends AbstractDwarfEntity {
     public float getVoicePitch() {
         return 1.0F;
     }
-
-    //Spawning
-    @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, EntitySpawnReason spawnType, @org.jetbrains.annotations.Nullable SpawnGroupData spawnGroupData) {
-        this.setLeftHanded(false);
-        return super.finalizeSpawn(level, difficulty, spawnType, spawnGroupData);
-    }
-
-
 
 
 }

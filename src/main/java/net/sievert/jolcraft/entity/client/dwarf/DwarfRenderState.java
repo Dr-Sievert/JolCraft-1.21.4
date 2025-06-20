@@ -10,7 +10,8 @@ import net.sievert.jolcraft.entity.custom.dwarf.variation.DwarfVariant;
 public class DwarfRenderState extends HumanoidRenderState {
     public final AnimationState idleAnimationState = new AnimationState();
     public final AnimationState attackAnimationState = new AnimationState();
-    public final AnimationState blockAnimationState = new AnimationState();
+    public final AnimationState inspectingAnimationState = new AnimationState();
+    public final AnimationState blockingAnimationState = new AnimationState();
     public final AnimationState drinkAnimationState = new AnimationState();
     public AbstractDwarfEntity dwarf;
     public DwarfVariant variant;
