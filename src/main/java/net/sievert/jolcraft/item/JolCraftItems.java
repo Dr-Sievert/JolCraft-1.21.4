@@ -44,14 +44,56 @@ public class JolCraftItems {
     public static final DeferredItem<Item> CONTRACT_SIGNED = ITEMS.registerItem("contract_signed",
             Item::new, new Item.Properties());
 
-    public static final DeferredItem<Item> CONTRACT_GUARD =
-            ITEMS.registerItem("contract_guard", properties -> new Item(properties) {
-                @Override
-                public void appendHoverText(ItemStack pStack, TooltipContext pContext, List<Component> pTooltipComponents, TooltipFlag pTooltipFlag) {
-                    pTooltipComponents.add(Component.translatable("tooltip.jolcraft.contract_guard").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
-                    super.appendHoverText(pStack, pContext, pTooltipComponents, pTooltipFlag);
-                }
-            }, new Item.Properties().rarity(Rarity.UNCOMMON));
+
+    //Tier 1
+    public static final DeferredItem<Item> CONTRACT_MERCHANT = ITEMS.registerItem("contract_merchant",
+            ContractItem::new, new Item.Properties().rarity(Rarity.UNCOMMON));
+
+    public static final DeferredItem<Item> CONTRACT_HISTORIAN = ITEMS.registerItem("contract_historian",
+            ContractItem::new, new Item.Properties().rarity(Rarity.UNCOMMON));
+
+    public static final DeferredItem<Item> CONTRACT_SCRAPPER = ITEMS.registerItem("contract_scrapper",
+            ContractItem::new, new Item.Properties().rarity(Rarity.UNCOMMON));
+
+    //Tier 2
+    public static final DeferredItem<Item> CONTRACT_GUARD = ITEMS.registerItem("contract_guard",
+            ContractItem::new, new Item.Properties().rarity(Rarity.UNCOMMON));
+
+    public static final DeferredItem<Item> CONTRACT_BREWMASTER = ITEMS.registerItem("contract_brewmaster",
+            ContractItem::new, new Item.Properties().rarity(Rarity.UNCOMMON));
+
+    public static final DeferredItem<Item> CONTRACT_KEEPER = ITEMS.registerItem("contract_keeper",
+            ContractItem::new, new Item.Properties().rarity(Rarity.UNCOMMON));
+
+    //Tier 3
+    public static final DeferredItem<Item> CONTRACT_MINER = ITEMS.registerItem("contract_miner",
+            ContractItem::new, new Item.Properties().rarity(Rarity.UNCOMMON));
+
+    public static final DeferredItem<Item> CONTRACT_EXPLORER = ITEMS.registerItem("contract_explorer",
+            ContractItem::new, new Item.Properties().rarity(Rarity.UNCOMMON));
+
+    public static final DeferredItem<Item> CONTRACT_ALCHEMIST = ITEMS.registerItem("contract_alchemist",
+            ContractItem::new, new Item.Properties().rarity(Rarity.UNCOMMON));
+
+    //Tier 4
+    public static final DeferredItem<Item> CONTRACT_ARCANIST = ITEMS.registerItem("contract_arcanist",
+            ContractItem::new, new Item.Properties().rarity(Rarity.UNCOMMON));
+
+    public static final DeferredItem<Item> CONTRACT_PRIEST = ITEMS.registerItem("contract_priest",
+            ContractItem::new, new Item.Properties().rarity(Rarity.UNCOMMON));
+
+    public static final DeferredItem<Item> CONTRACT_ARTISAN = ITEMS.registerItem("contract_artisan",
+            ContractItem::new, new Item.Properties().rarity(Rarity.UNCOMMON));
+
+    //Tier 5
+    public static final DeferredItem<Item> CONTRACT_CHAMPION = ITEMS.registerItem("contract_champion",
+            ContractItem::new, new Item.Properties().rarity(Rarity.UNCOMMON));
+
+    public static final DeferredItem<Item> CONTRACT_BLACKSMITH = ITEMS.registerItem("contract_blacksmith",
+            ContractItem::new, new Item.Properties().rarity(Rarity.UNCOMMON));
+
+    public static final DeferredItem<Item> CONTRACT_SMELTER = ITEMS.registerItem("contract_smelter",
+            ContractItem::new, new Item.Properties().rarity(Rarity.UNCOMMON));
 
 
     public static final DeferredItem<Item> QUILL_EMPTY =
@@ -73,6 +115,9 @@ public class JolCraftItems {
 
     public static final DeferredItem<Item> DWARF_SPAWN_EGG = ITEMS.registerItem("dwarf_spawn_egg",
             (properties) -> new SpawnEggItem(JolCraftEntities.DWARF.get(), properties));
+
+    public static final DeferredItem<Item> DWARF_GUILDMASTER_SPAWN_EGG = ITEMS.registerItem("dwarf_guildmaster_spawn_egg",
+            (properties) -> new SpawnEggItem(JolCraftEntities.DWARF_GUILDMASTER.get(), properties));
 
     public static final DeferredItem<Item> DWARF_GUARD_SPAWN_EGG = ITEMS.registerItem("dwarf_guard_spawn_egg",
             (properties) -> new SpawnEggItem(JolCraftEntities.DWARF_GUARD.get(), properties));
@@ -131,17 +176,6 @@ public class JolCraftItems {
 
     public static final DeferredItem<Item> WOECRYSTAL = ITEMS.registerItem("woecrystal",
             Item::new, new Item.Properties());
-
-    private String getTierName(int tier) {
-        return switch (tier) {
-            case 0 -> "Stranger";
-            case 1 -> "Known Face";
-            case 2 -> "Trusted";
-            case 3 -> "Respected";
-            case 4 -> "Blood-Kin";
-            default -> "Unknown";
-        };
-    }
 
     //Reputation
     public static final DeferredItem<Item> REPUTATION_TABLET_0 =

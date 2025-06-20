@@ -40,6 +40,7 @@ import net.minecraft.world.phys.Vec3;
 import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.advancement.JolCraftCriteriaTriggers;
 import net.sievert.jolcraft.capability.JolCraftAttachments;
+import net.sievert.jolcraft.client.data.MyClientLanguageData;
 import net.sievert.jolcraft.data.JolCraftTags;
 import net.sievert.jolcraft.entity.JolCraftEntities;
 import net.sievert.jolcraft.entity.ai.goal.DwarfBlockGoal;
@@ -243,9 +244,9 @@ public class AbstractDwarfEntity extends AbstractVillager {
         // 🧠 Language check - ensures only players who know the Dwarvish language can interact
         boolean client = this.level().isClientSide;
         boolean knowsLanguage = client
-                ? net.sievert.jolcraft.client.data.MyClientLanguageData.knowsLanguage()
-                : player.getData(JolCraftAttachments.DWARVEN_LANGUAGE) != null &&
-                player.getData(JolCraftAttachments.DWARVEN_LANGUAGE).knowsLanguage();
+                ? MyClientLanguageData.knowsLanguage()
+                : (player.getData(JolCraftAttachments.DWARVEN_LANGUAGE) != null &&
+                player.getData(JolCraftAttachments.DWARVEN_LANGUAGE).knowsLanguage());
 
         // ❌ Block interaction if language check fails
         if (!knowsLanguage) {
@@ -737,9 +738,6 @@ public class AbstractDwarfEntity extends AbstractVillager {
     public static final Logger LOGGER = LogUtils.getLogger();
     public boolean increaseProfessionLevelOnUpdate = false;
     public boolean assignProfessionWhenSpawned;
-    public boolean assignProfessionWhenSpawned() {
-        return this.assignProfessionWhenSpawned;
-    }
 
     @Override
     protected void updateTrades() {

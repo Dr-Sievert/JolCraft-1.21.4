@@ -39,19 +39,19 @@ public class BountyGenerator {
             BuiltInRegistries.ITEM.getKey(Items.EMERALD),
             BuiltInRegistries.ITEM.getKey(Items.AMETHYST_SHARD),
             BuiltInRegistries.ITEM.getKey(Items.BLAZE_POWDER),
-            BuiltInRegistries.ITEM.getKey(Items.PORKCHOP)
-    );
+            BuiltInRegistries.ITEM.getKey(Items.INK_SAC)
+
+            );
 
     // Tier 4 - Expert items
     private static final List<ResourceLocation> TIER_4_ITEMS = List.of(
             BuiltInRegistries.ITEM.getKey(Items.ANVIL),
             BuiltInRegistries.ITEM.getKey(Items.GOLDEN_APPLE),
-            BuiltInRegistries.ITEM.getKey(Items.INK_SAC),
-            BuiltInRegistries.ITEM.getKey(Items.FEATHER),
             BuiltInRegistries.ITEM.getKey(Items.BOOK),
-            BuiltInRegistries.ITEM.getKey(Items.PAPER),
             BuiltInRegistries.ITEM.getKey(Items.CAULDRON),
-            BuiltInRegistries.ITEM.getKey(Items.ITEM_FRAME)
+            BuiltInRegistries.ITEM.getKey(Items.ITEM_FRAME),
+            BuiltInRegistries.ITEM.getKey(Items.ENDER_PEARL)
+
     );
 
     // Tier 5 - Master items (without gems)

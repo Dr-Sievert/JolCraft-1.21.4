@@ -20,6 +20,7 @@ public class JolCraftEntities {
     //Dwarves
 
     public static ResourceKey<EntityType<?>> DWARF_KEY = ResourceKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "dwarf"));
+    public static ResourceKey<EntityType<?>> DWARF_GUILDMASTER_KEY = ResourceKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID,"dwarf_guildmaster"));
     public static ResourceKey<EntityType<?>> DWARF_GUARD_KEY = ResourceKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID,"dwarf_guard"));
     public static ResourceKey<EntityType<?>> DWARF_HISTORIAN_KEY = ResourceKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID,"dwarf_historian"));
     public static ResourceKey<EntityType<?>> DWARF_SCRAPPER_KEY = ResourceKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID,"dwarf_scrapper"));
@@ -28,6 +29,10 @@ public class JolCraftEntities {
     public static final Supplier<EntityType<DwarfEntity>> DWARF =
             ENTITY_TYPES.register("dwarf", () -> EntityType.Builder.of(DwarfEntity::new, MobCategory.CREATURE)
                     .sized(0.5f, 1.6f).build(DWARF_KEY));
+
+    public static final Supplier<EntityType<DwarfGuildmasterEntity>> DWARF_GUILDMASTER =
+            ENTITY_TYPES.register("dwarf_guildmaster", () -> EntityType.Builder.of(DwarfGuildmasterEntity::new, MobCategory.CREATURE)
+                    .sized(0.5f, 1.6f).build(DWARF_GUILDMASTER_KEY));
 
     public static final Supplier<EntityType<DwarfGuardEntity>> DWARF_GUARD =
             ENTITY_TYPES.register("dwarf_guard", () -> EntityType.Builder.of(DwarfGuardEntity::new, MobCategory.CREATURE)

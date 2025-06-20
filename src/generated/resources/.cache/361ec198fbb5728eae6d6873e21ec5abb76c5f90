@@ -1,4 +1,4 @@
-// 1.21.4	2025-06-18T17:34:42.2471169	Tags for minecraft:item mod id jolcraft
+// 1.21.4	2025-06-20T03:01:33.045929	Tags for minecraft:item mod id jolcraft
 b4fbeec3a15fa89ad64b1145d7f2775a193da48b data/jolcraft/tags/item/gems.json
 d60de4fc2e80779b31b1d96353673140c193859f data/jolcraft/tags/item/general_scrap.json
 79db8dbd1c373c681954ad7f22d148efe9a10d0b data/jolcraft/tags/item/global_scrap.json
@@ -7,6 +7,7 @@ dccd427a306e5bfcfd560329886f71065f9749fc data/jolcraft/tags/item/ink_and_quills.
 941f886eea2408be764098f2dbcba9187c6201f4 data/jolcraft/tags/item/iron_scrap.json
 67ca2c733ca17d498c022eac4896311efd27402e data/jolcraft/tags/item/mithril_scrap.json
 53e3575a480034fde8e41051fa01a3dcdacb589b data/jolcraft/tags/item/redstone_scrap.json
+662fcaf589c0a2dc8b7ab716c85da058aca1591e data/jolcraft/tags/item/signed_contracts.json
 fd45b2d0babc1ba749beedf446d3626275db2393 data/jolcraft/tags/item/spawn_eggs.json
 7e7239dc449926884d9c3b6dfb72455ad82d1c1d data/jolcraft/tags/item/textile_scrap.json
 d93fe5c56c7aa54d5fe4fe63e5df038319fbd62f data/minecraft/tags/item/enchantable/durability.json

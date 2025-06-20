@@ -33,7 +33,22 @@ public class JolCraftCreativeModeTabs {
 
                         pOutput.accept(JolCraftItems.CONTRACT_WRITTEN);
                         pOutput.accept(JolCraftItems.CONTRACT_SIGNED);
+
+                        pOutput.accept(JolCraftItems.CONTRACT_MERCHANT);
+                        pOutput.accept(JolCraftItems.CONTRACT_HISTORIAN);
+                        pOutput.accept(JolCraftItems.CONTRACT_SCRAPPER);
                         pOutput.accept(JolCraftItems.CONTRACT_GUARD);
+                        pOutput.accept(JolCraftItems.CONTRACT_EXPLORER);
+                        pOutput.accept(JolCraftItems.CONTRACT_KEEPER);
+                        pOutput.accept(JolCraftItems.CONTRACT_MINER);
+                        pOutput.accept(JolCraftItems.CONTRACT_BREWMASTER);
+                        pOutput.accept(JolCraftItems.CONTRACT_ARTISAN);
+                        pOutput.accept(JolCraftItems.CONTRACT_ALCHEMIST);
+                        pOutput.accept(JolCraftItems.CONTRACT_ARCANIST);
+                        pOutput.accept(JolCraftItems.CONTRACT_PRIEST);
+                        pOutput.accept(JolCraftItems.CONTRACT_CHAMPION);
+                        pOutput.accept(JolCraftItems.CONTRACT_BLACKSMITH);
+                        pOutput.accept(JolCraftItems.CONTRACT_SMELTER);
 
                         pOutput.accept(JolCraftItems.AEGISCORE);
                         pOutput.accept(JolCraftItems.ASHFANG);
@@ -87,10 +102,11 @@ public class JolCraftCreativeModeTabs {
                     .withTabsBefore(ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "jolcraft_items_tab"))
                     .displayItems((pParameters, pOutput) -> {
                         pOutput.accept(JolCraftItems.DWARF_SPAWN_EGG);
-                        pOutput.accept(JolCraftItems.DWARF_GUARD_SPAWN_EGG);
+                        pOutput.accept(JolCraftItems.DWARF_GUILDMASTER_SPAWN_EGG);
                         pOutput.accept(JolCraftItems.DWARF_HISTORIAN_SPAWN_EGG);
-                        pOutput.accept(JolCraftItems.DWARF_SCRAPPER_SPAWN_EGG);
                         pOutput.accept(JolCraftItems.DWARF_MERCHANT_SPAWN_EGG);
+                        pOutput.accept(JolCraftItems.DWARF_SCRAPPER_SPAWN_EGG);
+                        pOutput.accept(JolCraftItems.DWARF_GUARD_SPAWN_EGG);
 
                     }).build());
 

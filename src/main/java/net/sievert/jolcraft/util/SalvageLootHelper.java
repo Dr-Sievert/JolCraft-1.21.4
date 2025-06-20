@@ -1,4 +1,4 @@
-package net.sievert.jolcraft.loot;
+package net.sievert.jolcraft.util;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;

@@ -117,6 +117,24 @@ public class JolCraftItemTagProvider extends ItemTagsProvider {
                 .addTag(JolCraftTags.Items.GOLD_SCRAP)
                 .addTag(JolCraftTags.Items.MITHRIL_SCRAP);
 
+        tag(JolCraftTags.Items.SIGNED_CONTRACTS)
+                .add(JolCraftItems.CONTRACT_MERCHANT.get())
+                .add(JolCraftItems.CONTRACT_HISTORIAN.get())
+                .add(JolCraftItems.CONTRACT_SCRAPPER.get())
+                .add(JolCraftItems.CONTRACT_GUARD.get())
+                .add(JolCraftItems.CONTRACT_EXPLORER.get())
+                .add(JolCraftItems.CONTRACT_KEEPER.get())
+                .add(JolCraftItems.CONTRACT_MINER.get())
+                .add(JolCraftItems.CONTRACT_BREWMASTER.get())
+                .add(JolCraftItems.CONTRACT_ARTISAN.get())
+                .add(JolCraftItems.CONTRACT_ALCHEMIST.get())
+                .add(JolCraftItems.CONTRACT_ARCANIST.get())
+                .add(JolCraftItems.CONTRACT_PRIEST.get())
+                .add(JolCraftItems.CONTRACT_CHAMPION.get())
+                .add(JolCraftItems.CONTRACT_BLACKSMITH.get())
+                .add(JolCraftItems.CONTRACT_SMELTER.get());
+
+
     }
 
 

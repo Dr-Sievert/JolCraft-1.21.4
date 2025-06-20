@@ -178,6 +178,7 @@ public class DwarfScrapperEntity extends AbstractDwarfEntity {
             }
         }
     }
+
     //Sound
     @Override
     public float getVoicePitch() {

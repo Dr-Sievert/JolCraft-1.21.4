@@ -21,6 +21,9 @@ public class JolCraftTags {
 
         public static final TagKey<Item> GEMS = createTag("gems");
 
+        public static final TagKey<Item> SIGNED_CONTRACTS = createTag("signed_contracts");
+
+
         //Scrap
         public static final TagKey<Item> GLOBAL_SCRAP = createTag("global_scrap");
         public static final TagKey<Item> GENERAL_SCRAP = createTag("general_scrap");
