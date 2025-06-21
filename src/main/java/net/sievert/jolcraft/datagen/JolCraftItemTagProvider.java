@@ -135,6 +135,13 @@ public class JolCraftItemTagProvider extends ItemTagsProvider {
                 .add(JolCraftItems.CONTRACT_BLACKSMITH.get())
                 .add(JolCraftItems.CONTRACT_SMELTER.get());
 
+        tag(JolCraftTags.Items.REPUTATION_TABLETS)
+                .add(JolCraftItems.REPUTATION_TABLET_0.get())
+                .add(JolCraftItems.REPUTATION_TABLET_1.get())
+                .add(JolCraftItems.REPUTATION_TABLET_2.get())
+                .add(JolCraftItems.REPUTATION_TABLET_3.get())
+                .add(JolCraftItems.REPUTATION_TABLET_4.get());
+
 
     }
 

@@ -36,7 +36,6 @@ public class ReputationTabletItem extends Item {
             DwarvenReputationImpl rep = serverPlayer.getData(JolCraftAttachments.DWARVEN_REP.get());
             int currentTier = rep.getTier();
             int endorsements = rep.getEndorsementCount();
-            System.out.println("Player rep tier: " + currentTier + ", endorsement count: " + endorsements);
 
             if (currentTier >= ENDORSEMENT_THRESHOLDS.length) {
                 serverPlayer.displayClientMessage(
@@ -61,20 +60,7 @@ public class ReputationTabletItem extends Item {
             if (stack.is(JolCraftItems.REPUTATION_TABLET_0.get())) {
                 stack.set(JolCraftDataComponents.REP_OWNER.get(), serverPlayer.getName().getString());
                 stack.set(JolCraftDataComponents.REP_TIER.get(), 0);
-                stack.set(JolCraftDataComponents.REP_ENDORSEMENTS.get(), 1);
-
-                DwarvenReputationImpl rep = serverPlayer.getData(JolCraftAttachments.DWARVEN_REP.get());
-                System.out.println("Attempting to add endorsement to player rep");
-
-                ResourceLocation HISTORIAN_ID = ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "historian");
-                if (!rep.hasEndorsement(HISTORIAN_ID)) {
-                    rep.addEndorsement(HISTORIAN_ID);
-                    System.out.println("✅ Added endorsement: historian");
-                } else {
-                    System.out.println("ℹ️ Historian endorsement already present");
-                }
-
-                System.out.println("🎯 Player endorsement count: " + rep.getEndorsementCount());
+                stack.set(JolCraftDataComponents.REP_ENDORSEMENTS.get(), 0);
             }
         }
 
@@ -102,7 +88,6 @@ public class ReputationTabletItem extends Item {
             tooltip.add(Component.translatable("tooltip.jolcraft.tablet.locked")
                     .withStyle(ChatFormatting.GRAY));
         }
-
         super.appendHoverText(stack, context, tooltip, flag);
     }
 

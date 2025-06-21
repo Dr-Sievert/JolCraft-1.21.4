@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -24,6 +25,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
+import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.entity.ai.goal.*;
 import net.sievert.jolcraft.item.JolCraftItems;
 import net.sievert.jolcraft.villager.JolCraftDwarfTrades;
@@ -58,6 +60,11 @@ public class DwarfScrapperEntity extends AbstractDwarfEntity {
     @Override
     public ItemStack getSignedContractItem() {
         return new ItemStack(JolCraftItems.CONTRACT_SCRAPPER.get());
+    }
+
+    @Override
+    public ResourceLocation getProfessionId() {
+        return ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "scrapper");
     }
 
     @Override

@@ -85,6 +85,7 @@
   "item.jolcraft.rusty_tongs": "Rusty Forge Tongs",
 
   "chat.jolcraft.dwarf_interact.locked": "You do not understand each other.",
+  "tooltip.jolcraft.dwarf.not_paid": "You should pay the dwarf first.",
 
   "tooltip.jolcraft.contract_guard": "The contract echoes with duty.",
 
@@ -124,10 +125,12 @@
   "tooltip.jolcraft.rep_owner": "Granted to: %s",
   "tooltip.jolcraft.reputation_tier": "Reputation: ",
   "tooltip.jolcraft.endorsement_count": "Endorsements: %s",
+  "tooltip.jolcraft.reputation.cannot_endorse": "This dwarf is not ready to give you an endorsement.",
+  "tooltip.jolcraft.reputation.already_endorsed": "You already have this endorsement.",
+
 
   "itemGroup.jolcraft.jolcraft_items_tab": "JolCraft",
   "itemGroup.jolcraft.jolcraft_egg_tab": "JolCraft Spawn Eggs",
-
 
   "advancement.jolcraft.root.title": "The Dwarven Path",
   "advancement.jolcraft.root.description": "A journey through dwarven halls.",

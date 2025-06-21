@@ -59,7 +59,7 @@ public class DwarfRenderer<T extends AbstractDwarfEntity> extends HumanoidMobRen
 
     @Override
     public void render(DwarfRenderState renderState, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
-        if(renderState.isBaby) {
+        if (renderState.isBaby) {
             poseStack.scale(0.45f, 0.45f, 0.45f);
         } else {
             poseStack.scale(0.9f, 0.9f, 0.9f);

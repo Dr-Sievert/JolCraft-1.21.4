@@ -23,6 +23,7 @@ public class JolCraftTags {
 
         public static final TagKey<Item> SIGNED_CONTRACTS = createTag("signed_contracts");
 
+        public static final TagKey<Item> REPUTATION_TABLETS = createTag("reputation_tablets");
 
         //Scrap
         public static final TagKey<Item> GLOBAL_SCRAP = createTag("global_scrap");

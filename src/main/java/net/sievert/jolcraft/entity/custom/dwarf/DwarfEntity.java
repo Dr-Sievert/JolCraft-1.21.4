@@ -50,6 +50,11 @@ public class DwarfEntity extends AbstractDwarfEntity {
     }
 
     @Override
+    public boolean canEndorse(Player player) {
+        return false;
+    }
+
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new FirePanicGoal(this, 1.3));

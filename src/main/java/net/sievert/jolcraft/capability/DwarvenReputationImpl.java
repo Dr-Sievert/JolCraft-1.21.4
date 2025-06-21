@@ -13,17 +13,21 @@ import java.util.*;
 
 public class DwarvenReputationImpl implements DwarvenReputation {
 
-    private int tier = 0; // 0 = Stranger, 1 = Known Face, etc.
+    private int tier = 0;
     private final Set<ResourceLocation> endorsements = new HashSet<>();
+    private boolean grantedByCreative = false;
 
     @Override
     public int getTier() {
-        return tier;
+        // Return max tier if granted by creative, else normal tier
+        return grantedByCreative ? getMaxTier() : tier;
     }
 
     @Override
     public void setTier(int tier) {
         this.tier = tier;
+        // If manually setting, clear creative override
+        this.grantedByCreative = false;
     }
 
     @Override
@@ -41,17 +45,24 @@ public class DwarvenReputationImpl implements DwarvenReputation {
         return endorsements.contains(professionId);
     }
 
-    public static final Codec<DwarvenReputationImpl> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            Codec.INT.fieldOf("tier").forGetter(DwarvenReputationImpl::getTier),
-            ResourceLocation.CODEC.listOf().fieldOf("endorsements")
-                    .xmap(HashSet::new, ArrayList::new)
-                    .forGetter(rep -> new HashSet<>(rep.getEndorsements()))
-    ).apply(instance, (tier, endorsementSet) -> {
-        DwarvenReputationImpl impl = new DwarvenReputationImpl();
-        impl.setTier(tier);
-        impl.getEndorsements().addAll(endorsementSet);
-        return impl;
-    }));
+    // --- Creative Rep Logic ---
+
+    @Override
+    public void grantTemporaryCreativeReputation() {
+        this.grantedByCreative = true;
+    }
+
+    @Override
+    public void revokeCreativeReputation() {
+        this.grantedByCreative = false;
+    }
+
+    @Override
+    public boolean wasGrantedByCreative() {
+        return this.grantedByCreative;
+    }
+
+    // --- Serialization ---
 
     @Override
     public CompoundTag serializeNBT(HolderLookup.Provider provider) {
@@ -64,6 +75,7 @@ public class DwarvenReputationImpl implements DwarvenReputation {
         }
         tag.put("endorsements", endorsementList);
 
+        tag.putBoolean("GrantedByCreative", grantedByCreative); // NEW
         return tag;
     }
 
@@ -82,5 +94,20 @@ public class DwarvenReputationImpl implements DwarvenReputation {
                 JolCraft.LOGGER.warn("Failed to parse endorsement ID: '{}'", idString);
             }
         }
+        this.grantedByCreative = tag.getBoolean("GrantedByCreative"); // NEW
     }
+
+    public static final Codec<DwarvenReputationImpl> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            Codec.INT.fieldOf("tier").forGetter(rep -> rep.tier),
+            ResourceLocation.CODEC.listOf().fieldOf("endorsements")
+                    .xmap(HashSet::new, ArrayList::new)
+                    .forGetter(rep -> new HashSet<>(rep.endorsements)),
+            Codec.BOOL.optionalFieldOf("GrantedByCreative", false).forGetter(rep -> rep.grantedByCreative)
+    ).apply(instance, (tier, endorsementSet, grantedByCreative) -> {
+        DwarvenReputationImpl impl = new DwarvenReputationImpl();
+        impl.tier = tier;
+        impl.endorsements.addAll(endorsementSet);
+        impl.grantedByCreative = grantedByCreative;
+        return impl;
+    }));
 }

@@ -42,31 +42,11 @@ public class JolCraftModEvents {
 
     }
 
+    /*
     //Spawning
     @SubscribeEvent
     public static void registerSpawnPlacements(RegisterSpawnPlacementsEvent event) {
 
-    }
-
-    /*@SubscribeEvent
-    public static void onRegisterPayloads(RegisterPayloadHandlersEvent event) {
-        PayloadRegistrar registrar = event.registrar(JolCraft.MOD_ID);
-        registrar
-                .playToClient(
-                        ClientboundSyncLanguagePacket.TYPE,
-                        ClientboundSyncLanguagePacket.CODEC,
-                        (packet, context) -> {
-                            context.enqueueWork(() -> {
-                                // Update client-side state:
-                                MyClientLanguageData.setKnows(packet.knowsLanguage());
-                            });
-                        }
-                );
-    }*/
-
-
-
-
-
+    } */
 
 }

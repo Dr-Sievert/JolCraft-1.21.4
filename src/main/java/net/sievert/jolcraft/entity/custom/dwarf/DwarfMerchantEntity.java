@@ -6,6 +6,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -31,6 +32,7 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
+import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.component.JolCraftDataComponents;
 import net.sievert.jolcraft.data.BountyData;
 import net.sievert.jolcraft.entity.ai.goal.*;
@@ -74,6 +76,11 @@ public class DwarfMerchantEntity extends AbstractDwarfEntity {
     @Override
     public ItemStack getSignedContractItem() {
         return new ItemStack(JolCraftItems.CONTRACT_MERCHANT.get());
+    }
+
+    @Override
+    public ResourceLocation getProfessionId() {
+        return ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "merchant");
     }
 
     @Override

@@ -20,6 +20,30 @@ public interface DwarvenReputation extends INBTSerializable<CompoundTag> {
         return getEndorsements().size();
     }
 
+    // --- Creative Reputation Logic ---
+
+    /**
+     * Grants maximum reputation tier temporarily (e.g., for creative mode).
+     */
+    void grantTemporaryCreativeReputation();
+
+    /**
+     * Revokes the temporary creative reputation, restoring normal rep behavior.
+     */
+    void revokeCreativeReputation();
+
+    /**
+     * Returns true if the max rep is currently granted due to creative mode.
+     */
+    boolean wasGrantedByCreative();
+
+    /**
+     * Returns the maximum tier value (usually 4 for "Blood-Kin").
+     */
+    default int getMaxTier() {
+        return 4;
+    }
+
     static DwarvenReputation get(Player player) {
         return player.getData(JolCraftAttachments.DWARVEN_REP.get());
     }

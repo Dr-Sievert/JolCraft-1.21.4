@@ -30,6 +30,8 @@ import net.sievert.jolcraft.data.JolCraftTags;
 import net.sievert.jolcraft.entity.custom.dwarf.DwarfGuardEntity;
 import net.sievert.jolcraft.item.JolCraftItems;
 import net.sievert.jolcraft.item.custom.SpannerItem;
+import net.sievert.jolcraft.network.packet.ClientboundSyncEndorsementsPacket;
+import net.sievert.jolcraft.network.packet.ClientboundSyncReputationPacket;
 import net.sievert.jolcraft.util.SalvageLootHelper;
 import net.sievert.jolcraft.network.JolCraftNetworking;
 import net.sievert.jolcraft.network.packet.ClientboundSyncLanguagePacket;
@@ -93,24 +95,36 @@ public class JolCraftGameEvents {
         event.setCancellationResult(InteractionResult.SUCCESS);
         event.setCanceled(true);
     }
-
     @SubscribeEvent
     public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
         Player player = event.getEntity();
-        var cap = player.getData(JolCraftAttachments.DWARVEN_LANGUAGE);
 
-        if (cap != null) {
-            // 🧠 Grant temp access if joining in creative
-            if (player.isCreative() && !cap.knowsLanguage()) {
-                if (cap instanceof DwarvenLanguageImpl impl) {
+        // --- Language ---
+        var langCap = player.getData(JolCraftAttachments.DWARVEN_LANGUAGE);
+        if (langCap != null) {
+            if (player.isCreative() && !langCap.knowsLanguage()) {
+                if (langCap instanceof DwarvenLanguageImpl impl) {
                     impl.grantTemporaryCreativeLanguage();
                 }
             }
-
             // ✅ Sync to client
             if (player instanceof ServerPlayer serverPlayer) {
-                JolCraftNetworking.sendToClient(serverPlayer, new ClientboundSyncLanguagePacket(cap.knowsLanguage()));
-                System.out.println("[SERVER] Sync packet on join: " + cap.knowsLanguage());
+                JolCraftNetworking.sendToClient(serverPlayer, new ClientboundSyncLanguagePacket(langCap.knowsLanguage()));
+            }
+        }
+
+        // --- Reputation ---
+        var repCap = player.getData(JolCraftAttachments.DWARVEN_REP);
+        if (repCap != null) {
+            if (player.isCreative() && !repCap.wasGrantedByCreative()) {
+                repCap.grantTemporaryCreativeReputation();
+            }
+            // ✅ Sync to client (add this packet!)
+            if (player instanceof ServerPlayer serverPlayer) {
+                // If you don't have a packet, just leave this out for now
+                JolCraftNetworking.sendToClient(serverPlayer,
+                        new ClientboundSyncReputationPacket(repCap.getTier())
+                );
             }
         }
     }
@@ -118,25 +132,45 @@ public class JolCraftGameEvents {
     @SubscribeEvent
     public static void onGameModeChange(PlayerEvent.PlayerChangeGameModeEvent event) {
         Player player = event.getEntity();
-        var cap = player.getData(JolCraftAttachments.DWARVEN_LANGUAGE);
 
-        if (cap instanceof DwarvenLanguageImpl impl) {
+        // --- Language ---
+        var langCap = player.getData(JolCraftAttachments.DWARVEN_LANGUAGE);
+        if (langCap instanceof DwarvenLanguageImpl impl) {
             if (event.getNewGameMode() == GameType.CREATIVE && event.getCurrentGameMode() != GameType.CREATIVE) {
-                // 🟢 Entering creative — grant temp language if needed
                 if (!impl.knowsLanguage()) {
                     impl.grantTemporaryCreativeLanguage();
                 }
             } else if (event.getCurrentGameMode() == GameType.CREATIVE && event.getNewGameMode() != GameType.CREATIVE) {
-                // 🔴 Leaving creative — revoke temp language if it was granted this way
                 impl.revokeCreativeLanguage();
             }
-
             // ✅ Sync to client
             if (player instanceof ServerPlayer serverPlayer) {
                 JolCraftNetworking.sendToClient(serverPlayer, new ClientboundSyncLanguagePacket(impl.knowsLanguage()));
             }
         }
+
+        // --- Reputation ---
+        var repCap = player.getData(JolCraftAttachments.DWARVEN_REP);
+        if (repCap != null) {
+            if (event.getNewGameMode() == GameType.CREATIVE && event.getCurrentGameMode() != GameType.CREATIVE) {
+                if (!repCap.wasGrantedByCreative()) {
+                    repCap.grantTemporaryCreativeReputation();
+                }
+            } else if (event.getCurrentGameMode() == GameType.CREATIVE && event.getNewGameMode() != GameType.CREATIVE) {
+                repCap.revokeCreativeReputation();
+            }
+            // ✅ Sync to client (tier AND endorsements)
+            if (player instanceof ServerPlayer serverPlayer) {
+                JolCraftNetworking.sendToClient(serverPlayer,
+                        new ClientboundSyncReputationPacket(repCap.getTier())
+                );
+                JolCraftNetworking.sendToClient(serverPlayer,
+                        new ClientboundSyncEndorsementsPacket(repCap.getEndorsements())
+                );
+            }
+        }
     }
+
 
 
 }
