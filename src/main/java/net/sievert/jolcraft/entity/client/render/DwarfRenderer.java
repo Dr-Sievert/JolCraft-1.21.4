@@ -9,10 +9,7 @@ import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.sievert.jolcraft.JolCraft;
-import net.sievert.jolcraft.entity.client.dwarf.DwarfArmorLayer;
-import net.sievert.jolcraft.entity.client.dwarf.DwarfBeardLayer;
-import net.sievert.jolcraft.entity.client.dwarf.DwarfEyeLayer;
-import net.sievert.jolcraft.entity.client.dwarf.DwarfRenderState;
+import net.sievert.jolcraft.entity.client.dwarf.*;
 import net.sievert.jolcraft.entity.client.model.DwarfModel;
 import net.sievert.jolcraft.entity.custom.dwarf.AbstractDwarfEntity;
 import net.sievert.jolcraft.entity.custom.dwarf.variation.DwarfVariant;
@@ -73,13 +70,13 @@ public class DwarfRenderer<T extends AbstractDwarfEntity> extends HumanoidMobRen
     }
 
     @Override
-    public void extractRenderState(AbstractDwarfEntity entity, DwarfRenderState reusedState, float partialTick) {
-        super.extractRenderState((T) entity, reusedState, partialTick);
+    public void extractRenderState(T entity, DwarfRenderState reusedState, float partialTick) {
+        super.extractRenderState(entity, reusedState, partialTick);
+
         reusedState.idleAnimationState.copyFrom(entity.idleAnimationState);
-        reusedState.attackAnimationState.copyFrom(entity.attackAnimationState);
-        reusedState.inspectingAnimationState.copyFrom(entity.inspectingAnimationState);
-        reusedState.blockingAnimationState.copyFrom(entity.blockingAnimationState);
-        reusedState.drinkAnimationState.copyFrom(entity.drinkAnimationState);
+        for (DwarfAnimationType type : DwarfAnimationType.values()) {
+            reusedState.animationStates.get(type).copyFrom(entity.getAnimationState(type));
+        }
         reusedState.dwarf = entity;
         reusedState.variant = entity.getVariant();
         reusedState.beard = entity.getBeard();
@@ -92,4 +89,8 @@ public class DwarfRenderer<T extends AbstractDwarfEntity> extends HumanoidMobRen
         reusedState.legsEquipment = entity.getItemBySlot(EquipmentSlot.LEGS);
         reusedState.feetEquipment = entity.getItemBySlot(EquipmentSlot.FEET);
     }
+
+
+
+
 }

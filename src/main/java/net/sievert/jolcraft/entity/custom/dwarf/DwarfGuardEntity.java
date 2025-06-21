@@ -1,6 +1,7 @@
 package net.sievert.jolcraft.entity.custom.dwarf;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.DifficultyInstance;
@@ -24,8 +25,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.phys.Vec3;
 import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.entity.ai.goal.*;
+import net.sievert.jolcraft.entity.client.dwarf.DwarfAnimationType;
 import net.sievert.jolcraft.item.JolCraftItems;
 
 public class DwarfGuardEntity extends AbstractDwarfEntity {
@@ -103,11 +106,6 @@ public class DwarfGuardEntity extends AbstractDwarfEntity {
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, EntitySpawnReason spawnType, @org.jetbrains.annotations.Nullable SpawnGroupData spawnGroupData) {
         this.setLeftHanded(false);
-//        this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_AXE));
-//        this.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.IRON_HELMET));
-//        this.setItemSlot(EquipmentSlot.CHEST, new ItemStack(Items.IRON_CHESTPLATE));
-//        this.setItemSlot(EquipmentSlot.LEGS, new ItemStack(Items.IRON_LEGGINGS));
-//        this.setItemSlot(EquipmentSlot.FEET, new ItemStack(Items.IRON_BOOTS));
         return super.finalizeSpawn(level, difficulty, spawnType, spawnGroupData);
     }
 

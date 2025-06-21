@@ -49,6 +49,7 @@ import net.sievert.jolcraft.component.JolCraftDataComponents;
 import net.sievert.jolcraft.data.JolCraftTags;
 import net.sievert.jolcraft.entity.JolCraftEntities;
 import net.sievert.jolcraft.entity.ai.goal.DwarfBlockGoal;
+import net.sievert.jolcraft.entity.client.dwarf.DwarfAnimationType;
 import net.sievert.jolcraft.entity.custom.dwarf.variation.DwarfBeardColor;
 import net.sievert.jolcraft.entity.custom.dwarf.variation.DwarfEyeColor;
 import net.sievert.jolcraft.entity.custom.dwarf.variation.DwarfVariant;
@@ -61,6 +62,7 @@ import net.sievert.jolcraft.network.JolCraftNetworking;
 import org.slf4j.Logger;
 
 import javax.annotation.Nullable;
+import java.util.EnumMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -80,14 +82,16 @@ public class AbstractDwarfEntity extends AbstractVillager {
         this.setDropChance(EquipmentSlot.MAINHAND, 0.0F);
         this.setDropChance(EquipmentSlot.OFFHAND, 0.0F);
 
+        for (DwarfAnimationType type : DwarfAnimationType.values()) {
+            animationStates.put(type, new AnimationState());
+            hasStartedFlags.put(type, false);
+        }
     }
 
     //Animations
     public final AnimationState idleAnimationState = new AnimationState();
     public int idleAnimationTimeout = 0;
 
-    public final AnimationState attackAnimationState = new AnimationState();
-    public boolean hasStartedAttackAnimation = false;
     public void setAttacking(boolean attacking) {
         this.entityData.set(ATTACKING, attacking);
     }
@@ -95,8 +99,6 @@ public class AbstractDwarfEntity extends AbstractVillager {
         return this.entityData.get(ATTACKING);
     }
 
-    public final AnimationState inspectingAnimationState = new AnimationState();
-    public boolean hasStartedInspectingAnimation = false;
     public void setInspecting(boolean inspecting) {
         this.entityData.set(INSPECTING, inspecting);
     }
@@ -104,8 +106,6 @@ public class AbstractDwarfEntity extends AbstractVillager {
         return this.entityData.get(INSPECTING);
     }
 
-    public final AnimationState blockingAnimationState = new AnimationState();
-    public boolean hasStartedBlockingAnimation = false;
     public void setBlocking(boolean blocking) {
         this.entityData.set(BLOCKING, blocking);
     }
@@ -113,62 +113,54 @@ public class AbstractDwarfEntity extends AbstractVillager {
         return this.entityData.get(BLOCKING);
     }
 
-    public final AnimationState drinkAnimationState = new AnimationState();
-    public boolean hasStartedDrinkAnimation = false;
     public void setDrinking(boolean drinking) {
         this.entityData.set(DRINKING, drinking);
     }
     public boolean isDrinking() {
         return this.entityData.get(DRINKING);
     }
+
+    private final EnumMap<DwarfAnimationType, AnimationState> animationStates = new EnumMap<>(DwarfAnimationType.class);
+    private final EnumMap<DwarfAnimationType, Boolean> hasStartedFlags = new EnumMap<>(DwarfAnimationType.class);
+
+    public AnimationState getAnimationState(DwarfAnimationType type) {
+        return animationStates.get(type);
+    }
+
+    private boolean isAnimationActive(DwarfAnimationType type) {
+        return switch (type) {
+            case ATTACK, ATTACK_AXE -> this.isAttacking(); // Both attack types share the same flag for now
+            case BLOCK -> this.isBlocking();
+            case DRINK -> this.isDrinking();
+            case INSPECT -> this.isInspecting();
+        };
+    }
+
     protected void setupAnimationStates() {
-        if(this.idleAnimationTimeout <= 0) {
+        // Handle idle as before (the only "ticking" animation)
+        if (this.idleAnimationTimeout <= 0) {
             this.idleAnimationTimeout = 90;
             this.idleAnimationState.start(this.tickCount);
         } else {
             --this.idleAnimationTimeout;
         }
 
-        if (this.isAttacking()) {
-            if (!hasStartedAttackAnimation) {
-                attackAnimationState.start(this.tickCount);
-                hasStartedAttackAnimation = true;
-            }
-        } else {
-            hasStartedAttackAnimation = false;
-        }
+        // Handle all one-shot animations in one loop
+        for (DwarfAnimationType type : DwarfAnimationType.values()) {
+            boolean active = isAnimationActive(type);
+            AnimationState state = animationStates.get(type);
+            boolean hasStarted = hasStartedFlags.get(type);
 
-        if (isBlocking()) {
-            if (!hasStartedBlockingAnimation) {
-                blockingAnimationState.start(this.tickCount);
-                hasStartedBlockingAnimation = true;
+            if (active) {
+                if (!hasStarted) {
+                    state.start(this.tickCount);
+                    hasStartedFlags.put(type, true);
+                }
+            } else {
+                hasStartedFlags.put(type, false);
             }
-        } else {
-            hasStartedBlockingAnimation = false;
         }
-
-        if (isDrinking()) {
-            if (!hasStartedDrinkAnimation) {
-                drinkAnimationState.start(this.tickCount);
-                hasStartedDrinkAnimation = true;
-            }
-        } else {
-            hasStartedDrinkAnimation = false;
-        }
-
-        if (isInspecting()) {
-            if (!hasStartedInspectingAnimation) {
-                inspectingAnimationState.start(this.tickCount);
-                hasStartedInspectingAnimation = true;
-            }
-        } else {
-            hasStartedInspectingAnimation = false;
-        }
-
     }
-
-    private Vec3 blockParticlePos = null;
-    private int blockParticleTicks = 0;
 
     @Override
     public void tick() {
@@ -177,7 +169,7 @@ public class AbstractDwarfEntity extends AbstractVillager {
             this.setupAnimationStates();
 
             //Blocking particles
-            if (this.hasStartedBlockingAnimation) {
+            if (hasStartedFlags.get(DwarfAnimationType.BLOCK)) {
                 if (blockParticlePos == null) {
                     // Capture particle spawn location at start
                     Vec3 look = this.getLookAngle().normalize();
@@ -215,13 +207,7 @@ public class AbstractDwarfEntity extends AbstractVillager {
                 blockParticleTicks = 0;
             }
 
-
-
         }
-
-
-
-
 
     }
 
@@ -287,10 +273,10 @@ public class AbstractDwarfEntity extends AbstractVillager {
         currentActionPlayer = null;
         usedItem = ItemStack.EMPTY;
         previousMainHandItem = ItemStack.EMPTY;
-        currentActionId = null; // <-- add this line
+        currentActionId = null;
     }
 
-    // --- Getters/setters (as needed) ---
+    // --- Getters/setters ---
     protected boolean isPerformingAction() { return performingAction; }
     protected void setPerformingAction(boolean val) { performingAction = val; }
 
@@ -367,7 +353,7 @@ public class AbstractDwarfEntity extends AbstractVillager {
 
             if (client) {
                 player.displayClientMessage(
-                        Component.translatable("chat.jolcraft.dwarf_interact.locked").withStyle(ChatFormatting.GRAY), true
+                        Component.translatable("tooltip.jolcraft.dwarf.locked").withStyle(ChatFormatting.GRAY), true
                 );
                 return InteractionResult.CONSUME; // ✅ Allow client visuals
             }
@@ -377,6 +363,13 @@ public class AbstractDwarfEntity extends AbstractVillager {
 
         // 🛑 Block if dwarf is dead, trading, holding a spawn egg, or performing an action
         if (this.isBusyOrBlacklisted(player, itemstack)) {
+            if (this.isPerformingAction() && this.level().isClientSide) {
+                player.displayClientMessage(
+                        Component.translatable("tooltip.jolcraft.dwarf.busy").withStyle(ChatFormatting.GRAY), true
+                );
+            }else{
+                this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
+            }
             return InteractionResult.FAIL; // ❌ Block interaction if any condition is met
         }
 
@@ -439,22 +432,39 @@ public class AbstractDwarfEntity extends AbstractVillager {
         }
 
 
-        // 🖊️ Contract signing action
+// 🖊️ Contract signing action
         if (itemstack.is(JolCraftItems.CONTRACT_WRITTEN.get()) && !this.isBaby()) {
-            if (!canSign() || !this.isPaid() || this.isPerformingAction()) {
+            boolean client = this.level().isClientSide;
+
+            // 1️⃣ Cannot sign (wrong dwarf type)
+            if (!canSign()) {
+                if (!client) {
+                    player.displayClientMessage(
+                            Component.translatable("tooltip.jolcraft.dwarf.cannot_sign").withStyle(ChatFormatting.GRAY), true
+                    );
+                }
                 this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
-                return InteractionResult.SUCCESS;
+                return client ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
             }
 
-            // Immediate feedback: remove contract from player, play sound, show contract in dwarf's hand
+            // 2️⃣ Not paid yet
+            if (!this.isPaid()) {
+                if (!client) {
+                    player.displayClientMessage(
+                            Component.translatable("tooltip.jolcraft.dwarf.not_paid").withStyle(ChatFormatting.GRAY), true
+                    );
+                }
+                this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
+                return client ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
+            }
+
+            // ✅ All clear: proceed with contract signing
             this.usePlayerItem(player, hand, itemstack);
             this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_YES.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
-            ItemStack prevMainHand = this.getMainHandItem().copy(); // Save for restoration at end
+            ItemStack prevMainHand = this.getMainHandItem().copy();
             this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(JolCraftItems.CONTRACT_WRITTEN.get()));
 
-            // Start the multi-tick action. All completion logic is in the lambda.
             beginAction(player, 40, ACTION_CONTRACT_SIGNING, itemstack, prevMainHand, () -> {
-                // "Action completed" logic -- runs automatically after 40 ticks!
                 this.setInspecting(false);
                 this.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
 
@@ -469,10 +479,7 @@ public class AbstractDwarfEntity extends AbstractVillager {
                     thrown.setPickUpDelay(10);
                     this.level().addFreshEntity(thrown);
 
-                    // Play throw sound
                     this.level().playSound(null, this.blockPosition(), SoundEvents.SNOWBALL_THROW, SoundSource.PLAYERS, 0.5F, 0.8F);
-
-                    // Restore previous main hand item (if any)
                     this.setItemSlot(EquipmentSlot.MAINHAND, this.previousMainHandItem);
                     this.previousMainHandItem = ItemStack.EMPTY;
                 }
@@ -481,35 +488,53 @@ public class AbstractDwarfEntity extends AbstractVillager {
             return InteractionResult.SUCCESS_SERVER;
         }
 
+
         // 🪄 Profession Promotion with Signed Contract
         if (itemstack.is(JolCraftTags.Items.SIGNED_CONTRACTS) && !this.isBaby()) {
-            if (!canPromoteToProfession() || !this.isPaid() || this.isPerformingAction()) {
+            boolean client = this.level().isClientSide;
+
+            // 1 Not promotable type (wrong dwarf)
+            if (!canPromoteToProfession()) {
+                if (!client) {
+                    player.displayClientMessage(
+                            Component.translatable("tooltip.jolcraft.dwarf.cannot_promote").withStyle(ChatFormatting.GRAY), true
+                    );
+                }
                 this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
-                return InteractionResult.SUCCESS;
+                return client ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
             }
 
-            // Immediate feedback
-            this.previousMainHandItem = itemstack.copy(); // Save the contract for animation & later use
+            // 2 Not paid yet
+            if (!this.isPaid()) {
+                if (!client) {
+                    player.displayClientMessage(
+                            Component.translatable("tooltip.jolcraft.dwarf.not_paid").withStyle(ChatFormatting.GRAY), true
+                    );
+                }
+                this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
+                return client ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
+            }
+
+            // ✅ All clear: proceed with profession promotion
+            this.previousMainHandItem = itemstack.copy(); // Save contract for animation & later use
             this.usePlayerItem(player, hand, itemstack);  // Remove contract from player
             this.setItemSlot(EquipmentSlot.MAINHAND, itemstack.copy()); // Show contract in dwarf's hand
             this.level().playSound(null, this.blockPosition(), SoundEvents.EVOKER_CAST_SPELL, SoundSource.NEUTRAL, 1.0F, 1.5F);
 
             // Start the promotion action
             beginAction(player, 40, ACTION_PROFESSION_PROMOTION, itemstack, previousMainHandItem, () -> {
-                // Completion logic — only runs after 40 ticks!
                 this.setInspecting(false);
                 this.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
 
                 if (!this.level().isClientSide && this.currentActionPlayer != null) {
-                    // Transform to new profession (this.previousMainHandItem is the signed contract)
-                    this.transformToProfession();
+                    this.transformToProfession(); // Transform to new profession
                 }
-                // Clean up
                 this.previousMainHandItem = ItemStack.EMPTY;
             });
 
             return InteractionResult.SUCCESS_SERVER;
         }
+
 
         // 🗿 Tablet endorsement (works both sides for animation)
         if (itemstack.is(JolCraftTags.Items.REPUTATION_TABLETS) && !this.isBaby()) {
@@ -539,7 +564,7 @@ public class AbstractDwarfEntity extends AbstractVillager {
                 return this.level().isClientSide ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
             }
 
-// 2️⃣b. Can endorse in principle, but player doesn't meet conditions (wrong tier, profession, etc.)
+            // 2️⃣b. Can endorse in principle, but player doesn't meet conditions (wrong tier, profession, etc.)
             if (!this.canEndorse(player)) {
                 if (!this.level().isClientSide) {
                     player.displayClientMessage(Component.translatable("tooltip.jolcraft.reputation.cannot_endorse").withStyle(ChatFormatting.GRAY), true);
@@ -849,7 +874,10 @@ public class AbstractDwarfEntity extends AbstractVillager {
     }
 
     //Blocking
-    private boolean shouldStartBlocking = false;
+    protected Vec3 blockParticlePos = null;
+    protected int blockParticleTicks = 0;
+
+    protected boolean shouldStartBlocking = false;
 
     public int blockCooldown = 0;
 
@@ -1453,6 +1481,9 @@ public class AbstractDwarfEntity extends AbstractVillager {
         }
         net.neoforged.neoforge.common.NeoForge.EVENT_BUS.post(new net.neoforged.neoforge.event.entity.player.TradeWithVillagerEvent(this.lastTradedPlayer, offer, this));
     }
+
+
+
 
 
 

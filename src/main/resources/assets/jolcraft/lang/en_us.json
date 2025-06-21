@@ -84,8 +84,12 @@
   "item.jolcraft.old_fabric": "Old Fabric",
   "item.jolcraft.rusty_tongs": "Rusty Forge Tongs",
 
-  "chat.jolcraft.dwarf_interact.locked": "You do not understand each other.",
+  "tooltip.jolcraft.dwarf.locked": "You do not understand each other.",
+  "tooltip.jolcraft.dwarf.busy": "This dwarf is currently busy.",
   "tooltip.jolcraft.dwarf.not_paid": "You should pay the dwarf first.",
+  "tooltip.jolcraft.dwarf.cannot_sign": "This dwarf cannot sign contracts.",
+  "tooltip.jolcraft.dwarf.cannot_promote": "This dwarf cannot accept a new contract.",
+
 
   "tooltip.jolcraft.contract_guard": "The contract echoes with duty.",
 

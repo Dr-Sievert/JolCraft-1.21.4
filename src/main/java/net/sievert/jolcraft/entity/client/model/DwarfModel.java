@@ -1,6 +1,7 @@
 package net.sievert.jolcraft.entity.client.model;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.client.model.*;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
@@ -10,6 +11,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.HumanoidArm;
 import net.sievert.jolcraft.JolCraft;
+import net.sievert.jolcraft.entity.client.dwarf.DwarfAnimationType;
 import net.sievert.jolcraft.entity.client.dwarf.DwarfRenderState;
 import net.sievert.jolcraft.entity.client.dwarf.DwarfAnimations;
 
@@ -110,30 +112,40 @@ public class DwarfModel extends HumanoidModel<DwarfRenderState>{
 
     @Override
     public void setupAnim(DwarfRenderState state) {
-        super.setupAnim(state);
         this.root().getAllParts().forEach(ModelPart::resetPose);
         this.applyHeadRotation(state.yRot, state.xRot);
         this.animateWalk(DwarfAnimations.DWARF_WALK, state.walkAnimationPos, state.walkAnimationSpeed, 2f, 2.5f);
-        this.animate(state.idleAnimationState, DwarfAnimations.DWARF_IDLE, state.ageInTicks, 1f);
-        this.animate(state.attackAnimationState, DwarfAnimations.DWARF_ATTACK, state.ageInTicks, 1f);
-        this.animate(state.inspectingAnimationState, DwarfAnimations.DWARF_INSPECT, state.ageInTicks, 1f);
-        this.animate(state.blockingAnimationState, DwarfAnimations.DWARF_BLOCK, state.ageInTicks, 1f);
-        this.animate(state.drinkAnimationState, DwarfAnimations.DWARF_DRINK, state.ageInTicks, 1f);
 
-        // Helmet
+        // Idle remains as before
+        this.animate(state.idleAnimationState, DwarfAnimations.DWARF_IDLE, state.ageInTicks, 1f);
+
+        // Loop through all one-shot animations
+        for (DwarfAnimationType type : DwarfAnimationType.values()) {
+            this.animate(
+                    state.animationStates.get(type),
+                    getAttackAnimationFor(state, type),
+                    state.ageInTicks,
+                    1f
+            );
+        }
+
+        // Equipment logic as before
         this.hat.visible = !state.headEquipment.isEmpty();
-        // Chestplate
         boolean hasChest = !state.chestEquipment.isEmpty();
         this.bodywear.visible = hasChest;
         this.right_armwear.visible = hasChest;
         this.left_armwear.visible = hasChest;
-        // Leggings
         this.legwear.visible = !state.legsEquipment.isEmpty();
-        // Boots
         boolean hasBoots = !state.feetEquipment.isEmpty();
         this.right_footwear.visible = hasBoots;
         this.left_footwear.visible = hasBoots;
     }
+
+    protected AnimationDefinition getAttackAnimationFor(DwarfRenderState state, DwarfAnimationType type) {
+        // Default: use standard mapping
+        return DwarfAnimations.getByType(type);
+    }
+
 
     @Override
     public void translateToHand(HumanoidArm side, PoseStack poseStack) {

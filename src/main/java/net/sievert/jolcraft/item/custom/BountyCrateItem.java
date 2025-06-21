@@ -38,11 +38,24 @@ public class BountyCrateItem extends Item implements IItemExtension {
 
     @Override
     public boolean overrideOtherStackedOnMe(ItemStack stack, ItemStack other, Slot slot, ClickAction action, Player player, SlotAccess access) {
-        if (action == ClickAction.PRIMARY) {
-            return tryFillCrate(stack, access.get(), access, Integer.MAX_VALUE);
+        if (action == ClickAction.PRIMARY || action == ClickAction.SECONDARY) {
+            int maxTransfer = action == ClickAction.PRIMARY ? Integer.MAX_VALUE : 1;
+            boolean filled = tryFillCrate(stack, access.get(), access, maxTransfer);
+            if (filled && player.level() != null) {
+                player.level().playSound(
+                        null,
+                        player.blockPosition(),
+                        SoundEvents.ITEM_PICKUP,
+                        SoundSource.PLAYERS,
+                        0.6f,
+                        1.2f
+                );
+            }
+            return filled;
         }
         return false;
     }
+
 
     private boolean tryFillCrate(ItemStack crate, ItemStack target, SlotAccess access, int maxTransfer) {
         BountyData data = crate.get(JolCraftDataComponents.BOUNTY_DATA.get());

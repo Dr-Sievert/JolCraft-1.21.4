@@ -77,11 +77,6 @@ public class DwarfHistorianModel extends DwarfModel{
     @Override
     public void setupAnim(DwarfRenderState state) {
         super.setupAnim(state);
-        this.root().getAllParts().forEach(ModelPart::resetPose);
-        this.animateWalk(DwarfAnimations.DWARF_WALK, state.walkAnimationPos, state.walkAnimationSpeed, 2f, 2.5f);
-        this.animate(state.idleAnimationState, DwarfAnimations.DWARF_IDLE, state.ageInTicks, 1f);
-        this.animate(state.attackAnimationState, DwarfAnimations.DWARF_ATTACK, state.ageInTicks, 1f);
-        this.animate(state.inspectingAnimationState, DwarfAnimations.DWARF_INSPECT, state.ageInTicks, 1f);
 
         // Force display of wear/armor-slot parts
         this.head.getChild("hat").visible = true;

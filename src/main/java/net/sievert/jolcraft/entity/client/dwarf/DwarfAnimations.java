@@ -5,8 +5,10 @@ import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.client.animation.Keyframe;
 import net.minecraft.client.animation.KeyframeAnimations;
 
-public class DwarfAnimations {
+import java.util.EnumMap;
+import java.util.Map;
 
+public class DwarfAnimations {
 
     public static final AnimationDefinition DWARF_IDLE = AnimationDefinition.Builder.withLength(4.167667f).looping()
             .addAnimation("left_eyebrow",
@@ -180,7 +182,7 @@ public class DwarfAnimations {
                             new Keyframe(0.4167667f, KeyframeAnimations.degreeVec(0f, 0f, 0f),
                                     AnimationChannel.Interpolations.LINEAR))).build();
 
-    public static final AnimationDefinition DWARF_ATTACK_WEAPON = AnimationDefinition.Builder.withLength(0.5f)
+    public static final AnimationDefinition DWARF_ATTACK_AXE = AnimationDefinition.Builder.withLength(0.5f)
             .addAnimation("right_arm",
                     new AnimationChannel(AnimationChannel.Targets.POSITION,
                             new Keyframe(0f, KeyframeAnimations.posVec(0f, 0f, 0f),
@@ -249,6 +251,7 @@ public class DwarfAnimations {
                                     AnimationChannel.Interpolations.LINEAR),
                             new Keyframe(0.33333f, KeyframeAnimations.degreeVec(0f, 0f, 0f),
                                     AnimationChannel.Interpolations.LINEAR))).build();
+
     public static final AnimationDefinition DWARF_BLOCK = AnimationDefinition.Builder.withLength(0.75f)
             .addAnimation("body",
                     new AnimationChannel(AnimationChannel.Targets.ROTATION,
@@ -401,4 +404,24 @@ public class DwarfAnimations {
                                     AnimationChannel.Interpolations.LINEAR),
                             new Keyframe(1.95833f, KeyframeAnimations.degreeVec(0f, 0f, 0f),
                                     AnimationChannel.Interpolations.LINEAR))).build();
+
+
+
+
+    // Helper mapping enum → AnimationDefinition
+    private static final Map<DwarfAnimationType, AnimationDefinition> BY_TYPE = new EnumMap<>(DwarfAnimationType.class);
+
+    static {
+        BY_TYPE.put(DwarfAnimationType.ATTACK, DWARF_ATTACK);
+        BY_TYPE.put(DwarfAnimationType.ATTACK_AXE, DWARF_ATTACK_AXE);
+        BY_TYPE.put(DwarfAnimationType.BLOCK, DWARF_BLOCK);
+        BY_TYPE.put(DwarfAnimationType.DRINK, DWARF_DRINK);
+        BY_TYPE.put(DwarfAnimationType.INSPECT, DWARF_INSPECT);
+    }
+
+    public static AnimationDefinition getByType(DwarfAnimationType type) {
+        return BY_TYPE.get(type);
+    }
+
 }
+

@@ -113,7 +113,6 @@ public class DwarfMerchantEntity extends AbstractDwarfEntity {
     public ItemStack getBountyCrateItem() {
         return new ItemStack(JolCraftItems.BOUNTY_CRATE.get());
     }
-
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
@@ -131,11 +130,11 @@ public class DwarfMerchantEntity extends AbstractDwarfEntity {
                 return InteractionResult.SUCCESS;
             }
 
-            // Immediate feedback
-            this.usePlayerItem(player, hand, itemstack);
-            this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_YES.get(), SoundSource.NEUTRAL, 1.0F, 1.2F);
+            // Both sides: hand swap and animation sync
             ItemStack prevMainHand = this.getMainHandItem().copy();
             this.setItemSlot(EquipmentSlot.MAINHAND, itemstack.copy());
+            this.usePlayerItem(player, hand, itemstack);
+            this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_YES.get(), SoundSource.NEUTRAL, 1.0F, 1.2F);
 
             // Begin multi-tick action
             beginAction(player, 40, ACTION_BOUNTY_CRATE_TURNIN, itemstack, prevMainHand, () -> {
@@ -143,10 +142,10 @@ public class DwarfMerchantEntity extends AbstractDwarfEntity {
                 this.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
 
                 if (!this.level().isClientSide && this.currentActionPlayer != null) {
-                    ItemStack saved = this.previousMainHandItem;
+                    // Reward logic (server only)
+                    ItemStack saved = this.usedItem;
                     if (saved.is(JolCraftItems.BOUNTY_CRATE.get()) &&
-                            saved.has(JolCraftDataComponents.BOUNTY_COMPLETE.get()) &&
-                            saved.get(JolCraftDataComponents.BOUNTY_COMPLETE.get())) {
+                            Boolean.TRUE.equals(saved.get(JolCraftDataComponents.BOUNTY_COMPLETE.get()))) {
 
                         BountyData data = saved.get(JolCraftDataComponents.BOUNTY_DATA.get());
                         if (data != null) {
@@ -168,7 +167,6 @@ public class DwarfMerchantEntity extends AbstractDwarfEntity {
                                 default -> 0;
                             };
                             this.dwarfXp += xp;
-
                             this.level().addFreshEntity(new ExperienceOrb(this.level(), this.getX(), this.getY() + 1.0, this.getZ(), 3 + this.getRandom().nextInt(3)));
                             this.level().playSound(null, this.blockPosition(), SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 0.8F, 1.2F);
                             this.level().playSound(null, this.blockPosition(), SoundEvents.SNOWBALL_THROW, SoundSource.PLAYERS, 0.5F, 0.7F);
@@ -183,27 +181,26 @@ public class DwarfMerchantEntity extends AbstractDwarfEntity {
             return InteractionResult.SUCCESS_SERVER;
         }
 
-        // 📦 Bounty note submission
+        // 📦 Bounty note submission (for getting a new crate)
         if (itemstack.is(JolCraftItems.BOUNTY.get())) {
-            // Immediate feedback
-            this.usePlayerItem(player, hand, itemstack);
-            this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_YES.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
+            // Both sides: hand swap and animation sync
             ItemStack prevMainHand = this.getMainHandItem().copy();
             this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(JolCraftItems.BOUNTY.get()));
+            this.usePlayerItem(player, hand, itemstack);
+            this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_YES.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
 
             beginAction(player, 40, ACTION_BOUNTY_NOTE_SUBMIT, itemstack, prevMainHand, () -> {
                 this.setInspecting(false);
                 this.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
 
                 if (!this.level().isClientSide && this.currentActionPlayer != null) {
-                    ItemStack saved = this.previousMainHandItem;
+                    ItemStack saved = this.usedItem;
                     if (saved.is(JolCraftItems.BOUNTY.get())) {
                         Vec3 start = this.position().add(0.0, this.getEyeHeight(), 0.0);
                         Vec3 target = this.currentActionPlayer.position().add(0.0, this.currentActionPlayer.getBbHeight() * 0.5, 0.0);
                         Vec3 velocity = target.subtract(start).normalize().scale(0.4);
 
                         ItemStack crate = this.getBountyCrateItem();
-
                         int merchantTier = this.getVillagerData().getLevel();
 
                         crate.set(JolCraftDataComponents.BOUNTY_DATA.get(),
@@ -223,9 +220,10 @@ public class DwarfMerchantEntity extends AbstractDwarfEntity {
             return InteractionResult.SUCCESS_SERVER;
         }
 
-        // Call parent for all other interactions
+        // Call parent for all other interactions (contracts, trades, etc)
         return super.mobInteract(player, hand);
     }
+
 
 
     @Override
@@ -248,7 +246,7 @@ public class DwarfMerchantEntity extends AbstractDwarfEntity {
             --this.updateMerchantTimer;
         }
 
-        // Per-tick logic for bounty crate turn-in
+        // Per-tick bounty action logic
         if (ACTION_BOUNTY_CRATE_TURNIN.equals(currentActionId)) {
             this.setInspecting(true);
             if (currentActionTicks == 25) {
@@ -258,8 +256,6 @@ public class DwarfMerchantEntity extends AbstractDwarfEntity {
                 this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_YES.get(), SoundSource.NEUTRAL, 1.0F, 1.2F);
             }
         }
-
-        // Per-tick logic for bounty note submission
         if (ACTION_BOUNTY_NOTE_SUBMIT.equals(currentActionId)) {
             this.setInspecting(true);
             if (currentActionTicks == 25) {
@@ -278,27 +274,23 @@ public class DwarfMerchantEntity extends AbstractDwarfEntity {
 
     //Particles
     @Override
-    public void tick() {
-        super.tick();
+    protected void tickAction() {
+        super.tickAction();
 
-        if (this.level().isClientSide()) {
-            this.setupAnimationStates();
+        if (ACTION_BOUNTY_CRATE_TURNIN.equals(currentActionId) && currentActionTicks <= 10 && currentActionTicks > 0) {
+            this.spawnColoredParticles(1.0F, 0.84F, 0.0F, 0.5F, 10, 1.0D);
 
-            if (this.bountyTurnInTicks > 0 && this.bountyTurnInTicks <= 10) {
-                this.spawnColoredParticles(1.0F, 0.84F, 0.0F, 0.5F, 10, 1.0D);
-
-                if (this.bountyTurnInTicks == 10) {
-                    this.level().playLocalSound(
-                            this.getX(),
-                            this.getY() + 1.0D,
-                            this.getZ(),
-                            SoundEvents.FIREWORK_ROCKET_TWINKLE_FAR,
-                            SoundSource.NEUTRAL,
-                            1.0F,
-                            1.2F,
-                            false
-                    );
-                }
+            if (currentActionTicks == 10) {
+                this.level().playLocalSound(
+                        this.getX(),
+                        this.getY() + 1.0D,
+                        this.getZ(),
+                        SoundEvents.FIREWORK_ROCKET_TWINKLE_FAR,
+                        SoundSource.NEUTRAL,
+                        1.0F,
+                        1.2F,
+                        false
+                );
             }
         }
     }
