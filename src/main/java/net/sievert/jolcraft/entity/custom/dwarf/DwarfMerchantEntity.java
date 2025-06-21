@@ -29,7 +29,6 @@ import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.item.trading.MerchantOffers;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
 import net.sievert.jolcraft.JolCraft;
@@ -119,20 +118,12 @@ public class DwarfMerchantEntity extends AbstractDwarfEntity {
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
 
-        // 🔄 Block interactions while the dwarf is processing a bounty action
         if (this.isPerformingAction()) {
-            return InteractionResult.FAIL; // ❌ Block other interactions if an action is in progress
+            return InteractionResult.FAIL; // ❌ Block if another action is running
         }
 
-        // 🎯 Handle bounty crate turn-in
+        // 🎯 Bounty crate turn-in (must be complete)
         if (itemstack.is(JolCraftItems.BOUNTY_CRATE.get())) {
-            // 🛑 Block if bounty ticks are already going (similar to contract signing)
-            if (this.bountyTurnInTicks > 0) {
-                player.displayClientMessage(Component.translatable("tooltip.jolcraft.bounty_crate.processing").withStyle(ChatFormatting.GRAY), true);
-                this.level().playSound(null, this.blockPosition(), SoundEvents.VILLAGER_NO, SoundSource.NEUTRAL, 1.0F, 1.0F);
-                return InteractionResult.FAIL; // ❌ Block if a bounty action is already in progress
-            }
-
             Boolean complete = itemstack.get(JolCraftDataComponents.BOUNTY_COMPLETE.get());
             if (complete == null || !complete) {
                 this.level().playSound(null, this.blockPosition(), SoundEvents.VILLAGER_NO, SoundSource.NEUTRAL, 1.0F, 1.0F);
@@ -140,55 +131,102 @@ public class DwarfMerchantEntity extends AbstractDwarfEntity {
                 return InteractionResult.SUCCESS;
             }
 
-            // Set performingAction to true while processing the bounty
-            this.setPerformingAction(true);
-
-            // Process the bounty crate
-            this.setNoAi(true);
-            this.previousMainHandItem = itemstack.copy();
+            // Immediate feedback
             this.usePlayerItem(player, hand, itemstack);
-            this.setItemSlot(EquipmentSlot.MAINHAND, itemstack.copy());
-            this.bountyTurnInTicks = 40;
-            this.bountyPlayer = player;
-
             this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_YES.get(), SoundSource.NEUTRAL, 1.0F, 1.2F);
+            ItemStack prevMainHand = this.getMainHandItem().copy();
+            this.setItemSlot(EquipmentSlot.MAINHAND, itemstack.copy());
 
-            // Set performingAction to false after processing the action
-            this.setPerformingAction(false);
+            // Begin multi-tick action
+            beginAction(player, 40, ACTION_BOUNTY_CRATE_TURNIN, itemstack, prevMainHand, () -> {
+                this.setInspecting(false);
+                this.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
 
-            return InteractionResult.SUCCESS;
+                if (!this.level().isClientSide && this.currentActionPlayer != null) {
+                    ItemStack saved = this.previousMainHandItem;
+                    if (saved.is(JolCraftItems.BOUNTY_CRATE.get()) &&
+                            saved.has(JolCraftDataComponents.BOUNTY_COMPLETE.get()) &&
+                            saved.get(JolCraftDataComponents.BOUNTY_COMPLETE.get())) {
+
+                        BountyData data = saved.get(JolCraftDataComponents.BOUNTY_DATA.get());
+                        if (data != null) {
+                            Vec3 start = this.position().add(0.0, this.getEyeHeight(), 0.0);
+                            Vec3 target = this.currentActionPlayer.position().add(0.0, this.currentActionPlayer.getBbHeight() * 0.5, 0.0);
+                            Vec3 velocity = target.subtract(start).normalize().scale(0.4);
+
+                            ItemStack reward = BountyReward.getReward(data, this.getRandom());
+                            ItemEntity thrownReward = new ItemEntity(this.level(), start.x, start.y, start.z, reward);
+                            thrownReward.setDeltaMovement(velocity);
+                            thrownReward.setPickUpDelay(10);
+                            this.level().addFreshEntity(thrownReward);
+
+                            int xp = switch (data.tier()) {
+                                case 1 -> 10;
+                                case 2 -> 35;
+                                case 3 -> 50;
+                                case 4 -> 65;
+                                default -> 0;
+                            };
+                            this.dwarfXp += xp;
+
+                            this.level().addFreshEntity(new ExperienceOrb(this.level(), this.getX(), this.getY() + 1.0, this.getZ(), 3 + this.getRandom().nextInt(3)));
+                            this.level().playSound(null, this.blockPosition(), SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 0.8F, 1.2F);
+                            this.level().playSound(null, this.blockPosition(), SoundEvents.SNOWBALL_THROW, SoundSource.PLAYERS, 0.5F, 0.7F);
+                        }
+                        this.restockBountiesOnly();
+                        this.setItemSlot(EquipmentSlot.MAINHAND, this.previousMainHandItem);
+                        this.previousMainHandItem = ItemStack.EMPTY;
+                    }
+                }
+            });
+
+            return InteractionResult.SUCCESS_SERVER;
         }
 
-        // 📦 Handle bounty note submission
+        // 📦 Bounty note submission
         if (itemstack.is(JolCraftItems.BOUNTY.get())) {
-            // 🛑 Block if bounty ticks are already going (similar to contract signing)
-            if (this.bountyCrateTicks > 0) {
-                this.level().playSound(null, this.blockPosition(), SoundEvents.VILLAGER_NO, SoundSource.NEUTRAL, 1.0F, 1.0F);
-                return InteractionResult.FAIL; // ❌ Block if a bounty action is already in progress
-            }
-
-            // Set performingAction to true while processing the bounty note
-            this.setPerformingAction(true);
-
-            // Process the bounty note
-            this.setNoAi(true);
-            this.previousMainHandItem = itemstack.copy();
+            // Immediate feedback
             this.usePlayerItem(player, hand, itemstack);
-            this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(JolCraftItems.BOUNTY.get()));
-            this.bountyCrateTicks = 40;
-            this.bountyPlayer = player;
-
             this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_YES.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
+            ItemStack prevMainHand = this.getMainHandItem().copy();
+            this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(JolCraftItems.BOUNTY.get()));
 
-            // Set performingAction to false after processing the action
-            this.setPerformingAction(false);
+            beginAction(player, 40, ACTION_BOUNTY_NOTE_SUBMIT, itemstack, prevMainHand, () -> {
+                this.setInspecting(false);
+                this.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
 
-            return InteractionResult.SUCCESS;
+                if (!this.level().isClientSide && this.currentActionPlayer != null) {
+                    ItemStack saved = this.previousMainHandItem;
+                    if (saved.is(JolCraftItems.BOUNTY.get())) {
+                        Vec3 start = this.position().add(0.0, this.getEyeHeight(), 0.0);
+                        Vec3 target = this.currentActionPlayer.position().add(0.0, this.currentActionPlayer.getBbHeight() * 0.5, 0.0);
+                        Vec3 velocity = target.subtract(start).normalize().scale(0.4);
+
+                        ItemStack crate = this.getBountyCrateItem();
+
+                        int merchantTier = this.getVillagerData().getLevel();
+
+                        crate.set(JolCraftDataComponents.BOUNTY_DATA.get(),
+                                BountyGenerator.generate(new RandomAdapter(this.getRandom()), merchantTier));
+
+                        ItemEntity thrown = new ItemEntity(this.level(), start.x, start.y, start.z, crate);
+                        thrown.setDeltaMovement(velocity);
+                        thrown.setPickUpDelay(10);
+                        this.level().addFreshEntity(thrown);
+                        this.level().playSound(null, this.blockPosition(), SoundEvents.SNOWBALL_THROW, SoundSource.PLAYERS, 0.5F, 0.8F);
+                    }
+                    this.setItemSlot(EquipmentSlot.MAINHAND, this.previousMainHandItem);
+                    this.previousMainHandItem = ItemStack.EMPTY;
+                }
+            });
+
+            return InteractionResult.SUCCESS_SERVER;
         }
 
-        // Call parent method to handle any other interactions (e.g., contracts, trading)
+        // Call parent for all other interactions
         return super.mobInteract(player, hand);
     }
+
 
     @Override
     public void aiStep() {
@@ -210,97 +248,32 @@ public class DwarfMerchantEntity extends AbstractDwarfEntity {
             --this.updateMerchantTimer;
         }
 
-        if (this.bountyTurnInTicks > 0) {
-            if (this.bountyTurnInTicks == 25) {
+        // Per-tick logic for bounty crate turn-in
+        if (ACTION_BOUNTY_CRATE_TURNIN.equals(currentActionId)) {
+            this.setInspecting(true);
+            if (currentActionTicks == 25) {
                 this.level().playSound(null, this.blockPosition(), SoundEvents.VILLAGER_WORK_FISHERMAN, SoundSource.NEUTRAL, 1.0F, 1.2F);
-            } else if (this.bountyTurnInTicks == 15) {
+            }
+            if (currentActionTicks == 15) {
                 this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_YES.get(), SoundSource.NEUTRAL, 1.0F, 1.2F);
             }
-            --this.bountyTurnInTicks;
-
-            if (this.bountyTurnInTicks == 0 && !this.level().isClientSide && this.bountyPlayer != null) {
-                ItemStack saved = this.previousMainHandItem;
-
-                if (saved.is(JolCraftItems.BOUNTY_CRATE.get()) &&
-                        saved.has(JolCraftDataComponents.BOUNTY_COMPLETE.get()) &&
-                        saved.get(JolCraftDataComponents.BOUNTY_COMPLETE.get())) {
-
-                    BountyData data = saved.get(JolCraftDataComponents.BOUNTY_DATA.get());
-                    if (data != null) {
-                        Vec3 start = this.position().add(0.0, this.getEyeHeight(), 0.0);
-                        Vec3 target = this.bountyPlayer.position().add(0.0, this.bountyPlayer.getBbHeight() * 0.5, 0.0);
-                        Vec3 velocity = target.subtract(start).normalize().scale(0.4);
-
-                        ItemStack reward = BountyReward.getReward(data, this.getRandom());
-                        ItemEntity thrownReward = new ItemEntity(this.level(), start.x, start.y, start.z, reward);
-                        thrownReward.setDeltaMovement(velocity);
-                        thrownReward.setPickUpDelay(10);
-                        this.level().addFreshEntity(thrownReward);
-
-                        int xp = switch (data.tier()) {
-                            case 1 -> 10;
-                            case 2 -> 35;
-                            case 3 -> 50;
-                            case 4 -> 65;
-                            default -> 0;
-                        };
-                        this.dwarfXp += xp;
-
-                        this.level().addFreshEntity(new ExperienceOrb(this.level(), this.getX(), this.getY() + 1.0, this.getZ(), 3 + this.getRandom().nextInt(3)));
-                        this.level().playSound(null, this.blockPosition(), SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 0.8F, 1.2F);
-                        this.level().playSound(null, this.blockPosition(), SoundEvents.SNOWBALL_THROW, SoundSource.PLAYERS, 0.5F, 0.7F);
-                    }
-
-                    // Only restock bounty trades, not general offers
-                    this.restockBountiesOnly();
-
-                    this.bountyPlayer = null;
-                    this.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
-                    this.setNoAi(false);
-                    this.previousMainHandItem = ItemStack.EMPTY;
-                }
-            }
         }
 
-        if (this.bountyCrateTicks > 0) {
-            if (this.bountyCrateTicks == 25) {
+        // Per-tick logic for bounty note submission
+        if (ACTION_BOUNTY_NOTE_SUBMIT.equals(currentActionId)) {
+            this.setInspecting(true);
+            if (currentActionTicks == 25) {
                 this.level().playSound(null, this.blockPosition(), SoundEvents.VILLAGER_WORK_CARTOGRAPHER, SoundSource.NEUTRAL, 1.0F, 1.2F);
-            } else if (this.bountyCrateTicks == 15) {
+            }
+            if (currentActionTicks == 15) {
                 this.level().playSound(null, this.blockPosition(), SoundEvents.VILLAGER_WORK_FISHERMAN, SoundSource.NEUTRAL, 1.0F, 1.2F);
             }
-            --this.bountyCrateTicks;
-
-            if (this.bountyCrateTicks == 0 && !this.level().isClientSide && this.bountyPlayer != null) {
-                ItemStack saved = this.previousMainHandItem;
-
-                if (saved.is(JolCraftItems.BOUNTY.get())) {
-                    Vec3 start = this.position().add(0.0, this.getEyeHeight(), 0.0);
-                    Vec3 target = this.bountyPlayer.position().add(0.0, this.bountyPlayer.getBbHeight() * 0.5, 0.0);
-                    Vec3 velocity = target.subtract(start).normalize().scale(0.4);
-
-                    ItemStack crate = this.getBountyCrateItem();
-
-                    // Determine the merchant's current tier
-                    int merchantTier = this.getVillagerData().getLevel(); // Implement this method or field to return 1-5
-
-                    // Generate bounty data for the merchant's tier
-                    crate.set(JolCraftDataComponents.BOUNTY_DATA.get(),
-                            BountyGenerator.generate(new RandomAdapter(this.getRandom()), merchantTier));
-
-                    ItemEntity thrown = new ItemEntity(this.level(), start.x, start.y, start.z, crate);
-                    thrown.setDeltaMovement(velocity);
-                    thrown.setPickUpDelay(10);
-                    this.level().addFreshEntity(thrown);
-                    this.level().playSound(null, this.blockPosition(), SoundEvents.SNOWBALL_THROW, SoundSource.PLAYERS, 0.5F, 0.8F);
-                }
-
-                this.bountyPlayer = null;
-                this.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
-                this.setNoAi(false);
-                this.previousMainHandItem = ItemStack.EMPTY;
-            }
         }
 
+        // Universal animation reset
+        if (currentActionId == null) {
+            this.setInspecting(false);
+        }
     }
 
     //Particles

@@ -44,6 +44,7 @@ import net.sievert.jolcraft.advancement.JolCraftCriteriaTriggers;
 import net.sievert.jolcraft.capability.DwarvenReputationImpl;
 import net.sievert.jolcraft.capability.JolCraftAttachments;
 import net.sievert.jolcraft.client.data.MyClientLanguageData;
+import net.sievert.jolcraft.client.data.MyClientReputationData;
 import net.sievert.jolcraft.component.JolCraftDataComponents;
 import net.sievert.jolcraft.data.JolCraftTags;
 import net.sievert.jolcraft.entity.JolCraftEntities;
@@ -53,6 +54,7 @@ import net.sievert.jolcraft.entity.custom.dwarf.variation.DwarfEyeColor;
 import net.sievert.jolcraft.entity.custom.dwarf.variation.DwarfVariant;
 import net.sievert.jolcraft.item.JolCraftItems;
 import net.sievert.jolcraft.network.packet.ClientboundDwarfEndorseAnimationPacket;
+import net.sievert.jolcraft.network.packet.ClientboundSyncEndorsementsPacket;
 import net.sievert.jolcraft.network.packet.ClientboundSyncReputationPacket;
 import net.sievert.jolcraft.sound.JolCraftSounds;
 import net.sievert.jolcraft.network.JolCraftNetworking;
@@ -213,38 +215,17 @@ public class AbstractDwarfEntity extends AbstractVillager {
                 blockParticleTicks = 0;
             }
 
-            //Transformation particles
-            if (this.contractTicks == 39) {
-                // First subtle gray poof
-                this.spawnColoredParticles(0.35F, 0.35F, 0.35F, 0.7F, 16, 0.5D);
-            }
-            if (this.contractTicks == 20) {
-                // Second, slightly bigger gray poof
-                this.spawnColoredParticles(0.35F, 0.35F, 0.35F, 0.8F, 24, 0.7D);
-            }
-            if (this.contractTicks == 2) {
-                // Final: big gray cloud
-                this.spawnColoredParticles(0.35F, 0.35F, 0.35F, 1.25F, 64, 2.5D);
-            }
-
 
 
         }
 
 
+
+
+
     }
 
     //Behavior
-
-    protected ItemStack previousMainHandItem = ItemStack.EMPTY;
-    protected ItemStack usedItem = ItemStack.EMPTY; // Used for whatever item the player handed in
-    protected int signingTicks = 0;
-    protected Player signingPlayer;
-    protected int contractTicks = 0;
-    protected Player contractPlayer;
-    protected int tabletTicks = 0;
-    protected Player tabletPlayer;
-
     public boolean canTrade() {
         return false;
     }
@@ -255,20 +236,84 @@ public class AbstractDwarfEntity extends AbstractVillager {
 
     public boolean canEndorse(Player player) {
         // Default: only allow if profession level is 5 (master)
-        return this.getVillagerData().getLevel() >= 1;
+        return this.getVillagerData().getLevel() >= 5;
     }
 
-    // Flag to track if the dwarf is performing an action (e.g., processing a bounty crate)
-    private boolean performingAction = false;
-
-    // Getter and Setter for performingAction
-    public boolean isPerformingAction() {
-        return performingAction;
+    public boolean neverEndorse(Player player) {
+        return false;
     }
 
-    public void setPerformingAction(boolean performingAction) {
-        this.performingAction = performingAction;
+    // --- Action-related state ---
+    protected Player currentActionPlayer;
+    protected int currentActionTicks;
+    protected ResourceLocation currentActionId = null;
+    protected Runnable finishActionCallback;
+    protected boolean performingAction = false;
+
+    // For item snapshotting (what the player handed in, and the dwarf's previous item)
+    protected ItemStack previousMainHandItem = ItemStack.EMPTY;
+    protected ItemStack usedItem = ItemStack.EMPTY;
+
+    // --- Action starter ---
+    protected void beginAction(Player player, int ticks, ResourceLocation actionId, ItemStack usedItem, ItemStack previousMainHandItem, Runnable onFinish) {
+        setNoAi(true);
+        this.currentActionPlayer = player;
+        this.currentActionTicks = ticks;
+        this.currentActionId = actionId;
+        this.usedItem = usedItem.copy(); // always defensive copy!
+        this.previousMainHandItem = previousMainHandItem.copy();
+        this.finishActionCallback = onFinish;
+        this.performingAction = true;
     }
+
+    // --- Action ticker ---
+    protected void tickAction() {
+        if (performingAction && currentActionTicks > 0) {
+            currentActionTicks--;
+            if (currentActionTicks == 0) {
+                finishAction();
+            }
+        }
+    }
+
+    // --- Action finisher ---
+    protected void finishAction() {
+        setNoAi(false);
+        this.performingAction = false;
+        if (finishActionCallback != null) {
+            finishActionCallback.run();
+            finishActionCallback = null;
+        }
+        currentActionPlayer = null;
+        usedItem = ItemStack.EMPTY;
+        previousMainHandItem = ItemStack.EMPTY;
+        currentActionId = null; // <-- add this line
+    }
+
+    // --- Getters/setters (as needed) ---
+    protected boolean isPerformingAction() { return performingAction; }
+    protected void setPerformingAction(boolean val) { performingAction = val; }
+
+    //Actions list
+
+    //Common
+    public static final ResourceLocation ACTION_CONTRACT_SIGNING =
+            ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "contract_signing");
+
+    public static final ResourceLocation ACTION_PROFESSION_PROMOTION =
+            ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "profession_promotion");
+
+    public static final ResourceLocation ACTION_REPUTATION_ENDORSEMENT =
+            ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "reputation_endorsement");
+
+    //Guildmaster
+
+    //Merchant
+    public static final ResourceLocation ACTION_BOUNTY_CRATE_TURNIN =
+            ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "bounty_crate_turnin");
+
+    public static final ResourceLocation ACTION_BOUNTY_NOTE_SUBMIT =
+            ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "bounty_note_submit");
 
 
     public ItemStack getSignedContractItem() {
@@ -289,6 +334,9 @@ public class AbstractDwarfEntity extends AbstractVillager {
         return stack.is(JolCraftTags.Items.SPAWN_EGGS);
     }
 
+    protected boolean isBusyOrBlacklisted(Player player, ItemStack stack) {
+        return blacklistedProperties() || isGloballyBlacklistedItem(stack) || isPerformingAction();
+    }
 
     // Items handled in the abstract class (e.g., contract, food)
     protected boolean isCommonHandledItem(ItemStack stack) {
@@ -328,7 +376,7 @@ public class AbstractDwarfEntity extends AbstractVillager {
         }
 
         // 🛑 Block if dwarf is dead, trading, holding a spawn egg, or performing an action
-        if (blacklistedProperties() || isGloballyBlacklistedItem(itemstack) || isPerformingAction()) {
+        if (this.isBusyOrBlacklisted(player, itemstack)) {
             return InteractionResult.FAIL; // ❌ Block interaction if any condition is met
         }
 
@@ -391,52 +439,107 @@ public class AbstractDwarfEntity extends AbstractVillager {
         }
 
 
-        // 🖊️ Contract signing
+        // 🖊️ Contract signing action
         if (itemstack.is(JolCraftItems.CONTRACT_WRITTEN.get()) && !this.isBaby()) {
-            if (!canSign() || !this.isPaid() || this.signingTicks > 0 || this.signingPlayer != null) {
+            if (!canSign() || !this.isPaid() || this.isPerformingAction()) {
                 this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
-                return InteractionResult.SUCCESS; // Block fallback trade
+                return InteractionResult.SUCCESS;
             }
 
-            this.setNoAi(true);
-            this.previousMainHandItem = this.getMainHandItem().copy();
+            // Immediate feedback: remove contract from player, play sound, show contract in dwarf's hand
             this.usePlayerItem(player, hand, itemstack);
             this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_YES.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
+            ItemStack prevMainHand = this.getMainHandItem().copy(); // Save for restoration at end
             this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(JolCraftItems.CONTRACT_WRITTEN.get()));
-            this.signingTicks = 40;
-            this.signingPlayer = player;
+
+            // Start the multi-tick action. All completion logic is in the lambda.
+            beginAction(player, 40, ACTION_CONTRACT_SIGNING, itemstack, prevMainHand, () -> {
+                // "Action completed" logic -- runs automatically after 40 ticks!
+                this.setInspecting(false);
+                this.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
+
+                if (!this.level().isClientSide && this.currentActionPlayer != null) {
+                    // Throw the signed contract to the player
+                    Vec3 start = this.position().add(0.0, this.getEyeHeight(), 0.0);
+                    Vec3 target = this.currentActionPlayer.position().add(0.0, this.currentActionPlayer.getBbHeight() * 0.5, 0.0);
+                    Vec3 velocity = target.subtract(start).normalize().scale(0.4);
+
+                    ItemEntity thrown = new ItemEntity(this.level(), start.x, start.y, start.z, this.getSignedContractItem());
+                    thrown.setDeltaMovement(velocity);
+                    thrown.setPickUpDelay(10);
+                    this.level().addFreshEntity(thrown);
+
+                    // Play throw sound
+                    this.level().playSound(null, this.blockPosition(), SoundEvents.SNOWBALL_THROW, SoundSource.PLAYERS, 0.5F, 0.8F);
+
+                    // Restore previous main hand item (if any)
+                    this.setItemSlot(EquipmentSlot.MAINHAND, this.previousMainHandItem);
+                    this.previousMainHandItem = ItemStack.EMPTY;
+                }
+            });
+
             return InteractionResult.SUCCESS_SERVER;
         }
 
         // 🪄 Profession Promotion with Signed Contract
         if (itemstack.is(JolCraftTags.Items.SIGNED_CONTRACTS) && !this.isBaby()) {
-            if (!canPromoteToProfession() || !this.isPaid() || this.contractTicks > 0 || this.contractPlayer != null) {
+            if (!canPromoteToProfession() || !this.isPaid() || this.isPerformingAction()) {
                 this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
                 return InteractionResult.SUCCESS;
             }
-            this.setNoAi(true);
-            this.previousMainHandItem = itemstack.copy();              // Save the correct contract used for transform
-            this.usePlayerItem(player, hand, itemstack);               // Remove one contract from player hand
-            this.setItemSlot(EquipmentSlot.MAINHAND, itemstack.copy()); // Dwarf visibly holds contract for animation
+
+            // Immediate feedback
+            this.previousMainHandItem = itemstack.copy(); // Save the contract for animation & later use
+            this.usePlayerItem(player, hand, itemstack);  // Remove contract from player
+            this.setItemSlot(EquipmentSlot.MAINHAND, itemstack.copy()); // Show contract in dwarf's hand
             this.level().playSound(null, this.blockPosition(), SoundEvents.EVOKER_CAST_SPELL, SoundSource.NEUTRAL, 1.0F, 1.5F);
-            this.contractTicks = 40;
-            this.contractPlayer = player;
+
+            // Start the promotion action
+            beginAction(player, 40, ACTION_PROFESSION_PROMOTION, itemstack, previousMainHandItem, () -> {
+                // Completion logic — only runs after 40 ticks!
+                this.setInspecting(false);
+                this.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
+
+                if (!this.level().isClientSide && this.currentActionPlayer != null) {
+                    // Transform to new profession (this.previousMainHandItem is the signed contract)
+                    this.transformToProfession();
+                }
+                // Clean up
+                this.previousMainHandItem = ItemStack.EMPTY;
+            });
+
             return InteractionResult.SUCCESS_SERVER;
         }
 
-        //Tablet
-        if (itemstack.is(JolCraftTags.Items.REPUTATION_TABLETS) && !this.isBaby() && (tabletTicks == 0 || tabletPlayer == null)) {
+        // 🗿 Tablet endorsement (works both sides for animation)
+        if (itemstack.is(JolCraftTags.Items.REPUTATION_TABLETS) && !this.isBaby()) {
             DwarvenReputationImpl rep = player.getData(JolCraftAttachments.DWARVEN_REP.get());
             ResourceLocation profId = this.getProfessionId();
+            boolean client = this.level().isClientSide;
+            boolean hasEndorsement = client
+                    ? MyClientReputationData.hasEndorsement(profId)
+                    : rep != null && rep.hasEndorsement(profId); // <-- add null check just in case
 
-            if (!this.canEndorse(player) && !this.isPaid()) {
+            // 1️⃣ Already endorsed? Instantly block.
+            if (hasEndorsement) {
+                if (!client) {
+                    player.displayClientMessage(
+                            Component.translatable("tooltip.jolcraft.reputation.already_endorsed").withStyle(ChatFormatting.GRAY), true);
+                }
+                this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
+                return client ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
+            }
+
+            // 2️⃣a. This dwarf can NEVER endorse (Guildmaster, PlainDwarf, etc.)
+            if (this.neverEndorse(player)) {
                 if (!this.level().isClientSide) {
-                    player.displayClientMessage(Component.translatable("tooltip.jolcraft.reputation.cannot_endorse").withStyle(ChatFormatting.GRAY), true);
+                    player.displayClientMessage(Component.translatable("tooltip.jolcraft.reputation.never_endorse").withStyle(ChatFormatting.GRAY), true);
                 }
                 this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
                 return this.level().isClientSide ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
             }
 
+// 2️⃣b. Can endorse in principle, but player doesn't meet conditions (wrong tier, profession, etc.)
             if (!this.canEndorse(player)) {
                 if (!this.level().isClientSide) {
                     player.displayClientMessage(Component.translatable("tooltip.jolcraft.reputation.cannot_endorse").withStyle(ChatFormatting.GRAY), true);
@@ -445,6 +548,8 @@ public class AbstractDwarfEntity extends AbstractVillager {
                 return this.level().isClientSide ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
             }
 
+
+            // 3️⃣ Paid check (all else valid, just not paid)
             if (!this.isPaid()) {
                 if (!this.level().isClientSide) {
                     player.displayClientMessage(Component.translatable("tooltip.jolcraft.dwarf.not_paid").withStyle(ChatFormatting.GRAY), true);
@@ -452,35 +557,66 @@ public class AbstractDwarfEntity extends AbstractVillager {
                 this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
                 return this.level().isClientSide ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
             }
-            if (rep.hasEndorsement(profId)) {
-                if (!this.level().isClientSide) {
-                    player.displayClientMessage(Component.translatable("tooltip.jolcraft.reputation.already_endorsed").withStyle(ChatFormatting.GRAY), true);
+
+            // ✅ Only here do we proceed with animation, hand changes, beginAction, etc:
+            ItemStack prevMainHand = this.getMainHandItem().copy();
+            ItemStack tabletUsed = itemstack.copy();
+            this.setItemSlot(EquipmentSlot.MAINHAND, tabletUsed.copy());
+            this.usePlayerItem(player, hand, itemstack);
+            this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_YES.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
+
+            beginAction(player, 40, ACTION_REPUTATION_ENDORSEMENT, tabletUsed, prevMainHand, () -> {
+                this.setInspecting(false);
+                this.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
+
+                if (!this.level().isClientSide && this.currentActionPlayer != null) {
+                    DwarvenReputationImpl repFinish = this.currentActionPlayer.getData(JolCraftAttachments.DWARVEN_REP.get());
+                    ResourceLocation profIdFinish = this.getProfessionId();
+                    boolean added = false;
+                    if (repFinish != null && !repFinish.hasEndorsement(profIdFinish)) {
+                        repFinish.addEndorsement(profIdFinish);
+                        added = true;
+                    }
+
+                    if (this.currentActionPlayer instanceof ServerPlayer serverPlayer) {
+                        JolCraftNetworking.sendToClient(serverPlayer,
+                                new ClientboundSyncReputationPacket(repFinish.getTier()));
+                        JolCraftNetworking.sendToClient(serverPlayer,
+                                new ClientboundSyncEndorsementsPacket(repFinish.getEndorsements()));
+                    }
+
+                    if (added) {
+                        // Throw the updated tablet
+                        ItemStack updatedTablet = this.usedItem.copy();
+                        updatedTablet.set(JolCraftDataComponents.REP_ENDORSEMENTS.get(), repFinish.getEndorsementCount());
+                        updatedTablet.set(JolCraftDataComponents.REP_TIER.get(), repFinish.getTier());
+                        updatedTablet.set(JolCraftDataComponents.REP_OWNER.get(), this.currentActionPlayer.getName().getString());
+
+                        Vec3 start = this.position().add(0.0, this.getEyeHeight(), 0.0);
+                        Vec3 target = this.currentActionPlayer.position().add(0.0, this.currentActionPlayer.getBbHeight() * 0.5, 0.0);
+                        Vec3 velocity = target.subtract(start).normalize().scale(0.4);
+
+                        ItemEntity thrown = new ItemEntity(this.level(), start.x, start.y, start.z, updatedTablet);
+                        thrown.setDeltaMovement(velocity);
+                        thrown.setPickUpDelay(10);
+                        this.level().addFreshEntity(thrown);
+                        this.level().playSound(null, this.blockPosition(), SoundEvents.SNOWBALL_THROW, SoundSource.PLAYERS, 0.5F, 0.8F);
+                    }
+                    this.setItemSlot(EquipmentSlot.MAINHAND, this.previousMainHandItem);
+                    this.previousMainHandItem = ItemStack.EMPTY;
                 }
-                this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
-                return this.level().isClientSide ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
-            }
+            });
 
-            // ✅ All requirements passed: perform endorsement (SERVER SIDE)
             if (!this.level().isClientSide) {
-                this.previousMainHandItem = this.getMainHandItem().copy(); // Save the dwarf's current hand
-                this.usedItem = itemstack.copy(); // Save the actual item being processed (the tablet)
-                this.setItemSlot(EquipmentSlot.MAINHAND, usedItem.copy());
-                this.usePlayerItem(player, hand, itemstack);
-                this.tabletTicks = 40;
-                this.tabletPlayer = player;
-                this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_YES.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
-
                 JolCraftNetworking.sendToNearbyClients(
                         this.level(), this.blockPosition(), 32,
                         new ClientboundDwarfEndorseAnimationPacket(this.getId())
                 );
-
-                if (player instanceof ServerPlayer serverPlayer) {
-                    JolCraftNetworking.sendToClient(serverPlayer, new ClientboundSyncReputationPacket(rep.getTier()));
-                }
             }
+
             return this.level().isClientSide ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
         }
+
 
 
         // 💼 Trade (only if hand empty and a baby)
@@ -543,7 +679,7 @@ public class AbstractDwarfEntity extends AbstractVillager {
     public void aiStep() {
         super.aiStep();
         tickBlockCooldown();
-
+        tickAction();
 
         if (this.level().isClientSide) {
             if (this.forcedAgeTimer > 0) {
@@ -583,148 +719,58 @@ public class AbstractDwarfEntity extends AbstractVillager {
         }
 
 
-        // Signing logic
-        if (this.signingTicks > 0) {
-            this.signingTicks--;
-            this.setInspecting(true); // Only touch the flag!
+        // Contract signing: do per-tick effects if this is the current action
+        if (ACTION_CONTRACT_SIGNING.equals(currentActionId)) {
+            this.setInspecting(true); // Show "inspecting" animation state (signing)
 
             // Paid status: always reset at the start of animation
-            if (this.signingTicks == 39) {
+            if (currentActionTicks == 39) {
                 this.resetPaid();
             }
 
-            if (this.signingTicks == 15 || this.signingTicks == 25) {
+            // Sound effects at specific ticks
+            if (currentActionTicks == 25 || currentActionTicks == 15) {
                 this.level().playSound(null, this.blockPosition(), SoundEvents.VILLAGER_WORK_CARTOGRAPHER, SoundSource.NEUTRAL, 1.0F, 1.2F);
             }
 
-            if (this.signingTicks == 0) {
-                // Only use setInspecting(false) to stop animation
-                this.setInspecting(false);
-                this.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
-                this.setNoAi(false);
-
-                if (!this.level().isClientSide && this.signingPlayer != null) {
-
-                    // Calculate direction from dwarf to player's center
-                    Vec3 start = this.position().add(0.0, this.getEyeHeight(), 0.0);
-                    Vec3 target = this.signingPlayer.position().add(0.0, this.signingPlayer.getBbHeight() * 0.5, 0.0);
-                    Vec3 velocity = target.subtract(start).normalize().scale(0.4); // tweak speed here
-
-                    // Create and launch item
-                    ItemEntity thrown = new ItemEntity(this.level(), start.x, start.y, start.z, this.getSignedContractItem());
-                    thrown.setDeltaMovement(velocity);
-                    thrown.setPickUpDelay(10); // small delay to avoid instant pickup
-                    this.level().addFreshEntity(thrown);
-
-                    // Play sound effect on throw
-                    this.level().playSound(null, this.blockPosition(), SoundEvents.SNOWBALL_THROW, SoundSource.PLAYERS, 0.5F, 0.8F);
-
-                    //Give back old item
-                    this.setItemSlot(EquipmentSlot.MAINHAND, this.previousMainHandItem);
-                    this.previousMainHandItem = ItemStack.EMPTY;
-                }
-                signingPlayer = null;
-            }
         }
 
-        // Contract logic
-        if (this.contractTicks > 0) {
-            --this.contractTicks;
-            this.setInspecting(true); // Only touch the flag!
+        //Profession promotion
+        if (ACTION_PROFESSION_PROMOTION.equals(currentActionId)) {
+            this.setInspecting(true); // You could use a different animation flag if you want
 
-            if (this.contractTicks == 20) {
-                this.level().playSound(null, this.blockPosition(), SoundEvents.EVOKER_CAST_SPELL, SoundSource.NEUTRAL, 1.0F, 1.5F);
-            }
-            if (this.contractTicks == 2) {
-                this.level().playSound(null, this.blockPosition(), JolCraftSounds.POOF.get(), SoundSource.NEUTRAL, 1.5F, 1.0F);
-            }
-            if (this.contractTicks == 0 && !this.level().isClientSide && this.contractPlayer != null) {
-                this.transformToProfession();
-                this.setInspecting(false); // Animation ends here
-                this.contractPlayer = null;
-                this.setNoAi(false);
-            }
-        }
-
-
-        // Tablet endorsement animation & logic
-        if (this.tabletTicks > 0) {
-            this.tabletTicks--;
-
-            // Animation: only touch setInspecting(true)
-            this.setInspecting(true);
-
-            // Paid status: always reset at the start of animation
-            if (this.tabletTicks == 39) {
+            if (this.currentActionTicks == 39) {
+                // First subtle gray poof
+                this.spawnColoredParticles(0.35F, 0.35F, 0.35F, 0.7F, 16, 0.5D);
                 this.resetPaid();
             }
 
-            // Cartographer sound milestones
-            if (this.tabletTicks == 15 || this.tabletTicks == 25) {
-                this.level().playSound(null, this.blockPosition(), SoundEvents.VILLAGER_WORK_CARTOGRAPHER, SoundSource.NEUTRAL, 1.0F, 0.5F);
+            if (currentActionTicks == 20) {
+                this.level().playSound(null, this.blockPosition(), SoundEvents.EVOKER_CAST_SPELL, SoundSource.NEUTRAL, 1.0F, 1.5F);
+                this.spawnColoredParticles(0.35F, 0.35F, 0.35F, 0.8F, 24, 0.7D);
             }
-
-            // End of animation: clean up, throw tablet, and sync state
-            if (this.tabletTicks == 0) {
-                this.setInspecting(false);
-
-                if (this.level().isClientSide) {
-                    net.sievert.jolcraft.client.data.MyClientReputationData.setEndorsementAnimation(this.getId(), false);
-                }
-
-                if (!this.level().isClientSide) {
-                    if (this.tabletPlayer != null) {
-                        DwarvenReputationImpl rep = this.tabletPlayer.getData(JolCraftAttachments.DWARVEN_REP.get());
-                        ResourceLocation profId = this.getProfessionId();
-
-                        // Only add the endorsement if not already present
-                        boolean added = false;
-                        if (!rep.hasEndorsement(profId)) {
-                            rep.addEndorsement(profId);
-                            added = true;
-                        }
-
-                        // Always sync tier and endorsements after animation (even if unchanged)
-                        if (this.tabletPlayer instanceof ServerPlayer serverPlayer) {
-                            net.sievert.jolcraft.network.JolCraftNetworking.sendToClient(serverPlayer,
-                                    new net.sievert.jolcraft.network.packet.ClientboundSyncReputationPacket(rep.getTier()));
-                            net.sievert.jolcraft.network.JolCraftNetworking.sendToClient(serverPlayer,
-                                    new net.sievert.jolcraft.network.packet.ClientboundSyncEndorsementsPacket(rep.getEndorsements()));
-                        }
-
-                        // Only throw updated tablet if endorsement was new
-                        if (added) {
-                            ItemStack updatedTablet = this.usedItem.copy(); // Always use usedItem here!
-                            // Lock in all relevant values at moment of endorsement
-                            updatedTablet.set(JolCraftDataComponents.REP_ENDORSEMENTS.get(), rep.getEndorsementCount());
-                            updatedTablet.set(JolCraftDataComponents.REP_TIER.get(), rep.getTier());
-                            updatedTablet.set(JolCraftDataComponents.REP_OWNER.get(), this.tabletPlayer.getName().getString());
-
-                            Vec3 start = this.position().add(0.0, this.getEyeHeight(), 0.0);
-                            Vec3 target = this.tabletPlayer.position().add(0.0, this.tabletPlayer.getBbHeight() * 0.5, 0.0);
-                            Vec3 velocity = target.subtract(start).normalize().scale(0.4);
-
-                            ItemEntity thrown = new ItemEntity(this.level(), start.x, start.y, start.z, updatedTablet);
-                            thrown.setDeltaMovement(velocity);
-                            thrown.setPickUpDelay(10);
-                            this.level().addFreshEntity(thrown);
-                            this.level().playSound(null, this.blockPosition(), SoundEvents.SNOWBALL_THROW, SoundSource.PLAYERS, 0.5F, 0.8F);
-
-                            // Give back old item (usually empty hand)
-                            this.setItemSlot(EquipmentSlot.MAINHAND, this.previousMainHandItem);
-                            this.previousMainHandItem = ItemStack.EMPTY;
-                        }
-                    }
-                }
-                // Always clear previousMainHandItem and tabletPlayer on both sides!
-                this.previousMainHandItem = ItemStack.EMPTY;
-                this.tabletPlayer = null;
+            if (currentActionTicks == 2) {
+                this.level().playSound(null, this.blockPosition(), JolCraftSounds.POOF.get(), SoundSource.NEUTRAL, 1.5F, 1.0F);
+                this.spawnColoredParticles(0.35F, 0.35F, 0.35F, 1.25F, 64, 2.5D);
             }
         }
 
+        // Tablet endorsement per-tick logic
+        if (ACTION_REPUTATION_ENDORSEMENT.equals(currentActionId)) {
+            this.setInspecting(true);
+            if (currentActionTicks == 39) {
+                this.resetPaid();
+            }
+            if (currentActionTicks == 25 || currentActionTicks == 15) {
+                this.level().playSound(null, this.blockPosition(), SoundEvents.VILLAGER_WORK_CARTOGRAPHER, SoundSource.NEUTRAL, 1.2F, 0.6F);
+            }
+        }
 
-
-
+        // Universal animation reset: runs if NO action is running
+        if (currentActionId == null) {
+            this.setInspecting(false);
+            // Add other animation flags to reset here as you add more actions!
+        }
 
     }
 

@@ -53,8 +53,8 @@ public class DwarfGuildmasterEntity extends AbstractDwarfEntity {
     }
 
     @Override
-    public boolean canEndorse(Player player) {
-        return false;
+    public boolean neverEndorse(Player player) {
+        return true;
     }
 
     @Override

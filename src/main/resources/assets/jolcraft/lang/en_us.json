@@ -125,6 +125,7 @@
   "tooltip.jolcraft.rep_owner": "Granted to: %s",
   "tooltip.jolcraft.reputation_tier": "Reputation: ",
   "tooltip.jolcraft.endorsement_count": "Endorsements: %s",
+  "tooltip.jolcraft.reputation.never_endorse": "This dwarf does not give endorsements.",
   "tooltip.jolcraft.reputation.cannot_endorse": "This dwarf is not ready to give you an endorsement.",
   "tooltip.jolcraft.reputation.already_endorsed": "You already have this endorsement.",
 
