@@ -15,7 +15,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.equipment.EquipmentAsset;
 import net.minecraft.world.item.equipment.Equippable;
 import net.sievert.jolcraft.JolCraft;
-import net.sievert.jolcraft.entity.client.model.DwarfModel;
+import net.sievert.jolcraft.entity.client.dwarf.model.DwarfModel;
 
 public class DwarfArmorLayer extends RenderLayer<DwarfRenderState, DwarfModel> {
 

@@ -1,4 +1,4 @@
-// 1.21.4	2025-06-22T02:11:50.3116887	Model Definitions - jolcraft
+// 1.21.4	2025-06-22T18:20:18.09615	Model Definitions - jolcraft
 514fa4af6796c2d245487e0f0d0268286013059c assets/jolcraft/items/aegiscore.json
 b949c867dd45b7a402abd9d29cbb4517f22e9b49 assets/jolcraft/items/ashfang.json
 38f30432e8ce23fd9725a5acbc3fcc9f7cebee8b assets/jolcraft/items/bounty.json
@@ -29,9 +29,11 @@ d7859d5373168fa7e4e15578fb88ec39a71f9ded assets/jolcraft/items/contract_written.
 82ff668d9abcbbfafafca9a8f700bfde77a33324 assets/jolcraft/items/copper_spanner.json
 0606d65b60df6ccf5b630cfec98135673b4dd779 assets/jolcraft/items/deepmarrow.json
 de65094368fea64287bea784d2587165850d9783 assets/jolcraft/items/deepslate_mug.json
+bde240fb926be4a72f77d595be12252a86829e19 assets/jolcraft/items/dwarf_brewmaster_spawn_egg.json
 63f5313ed92108a8915a860be35025ee9ae9c256 assets/jolcraft/items/dwarf_guard_spawn_egg.json
 7f280b6a86e2a79b53efaac50ff25d4c972ab7a6 assets/jolcraft/items/dwarf_guildmaster_spawn_egg.json
 11a9f44b88760d5ee09fea95347ef37aed81edb2 assets/jolcraft/items/dwarf_historian_spawn_egg.json
+11f35cc503d04b87ca376abed2f8a62b011b8367 assets/jolcraft/items/dwarf_keeper_spawn_egg.json
 25519222e3e0c4ba4e21b243c2355bd3377a9722 assets/jolcraft/items/dwarf_merchant_spawn_egg.json
 325d281cc8d2d7160561cc8cc99959adc1565ada assets/jolcraft/items/dwarf_scrapper_spawn_egg.json
 24cd6ae2d33acb7f6c5f176439171fd9cc5a3676 assets/jolcraft/items/dwarf_spawn_egg.json

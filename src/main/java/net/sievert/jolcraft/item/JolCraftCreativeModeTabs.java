@@ -106,7 +106,9 @@ public class JolCraftCreativeModeTabs {
                         pOutput.accept(JolCraftItems.DWARF_HISTORIAN_SPAWN_EGG);
                         pOutput.accept(JolCraftItems.DWARF_MERCHANT_SPAWN_EGG);
                         pOutput.accept(JolCraftItems.DWARF_SCRAPPER_SPAWN_EGG);
+                        pOutput.accept(JolCraftItems.DWARF_BREWMASTER_SPAWN_EGG);
                         pOutput.accept(JolCraftItems.DWARF_GUARD_SPAWN_EGG);
+                        pOutput.accept(JolCraftItems.DWARF_KEEPER_SPAWN_EGG);
 
                     }).build());
 

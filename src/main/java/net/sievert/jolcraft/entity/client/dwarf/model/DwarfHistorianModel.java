@@ -1,4 +1,4 @@
-package net.sievert.jolcraft.entity.client.model;
+package net.sievert.jolcraft.entity.client.dwarf.model;
 
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
@@ -7,7 +7,6 @@ import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
 import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.entity.client.dwarf.DwarfRenderState;
-import net.sievert.jolcraft.entity.client.dwarf.DwarfAnimations;
 
 public class DwarfHistorianModel extends DwarfModel{
 

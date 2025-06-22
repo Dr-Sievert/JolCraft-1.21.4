@@ -7,7 +7,7 @@ import net.sievert.jolcraft.advancement.JolCraftCriteriaTriggers;
 import net.sievert.jolcraft.capability.JolCraftAttachments;
 import net.sievert.jolcraft.component.JolCraftDataComponents;
 import net.sievert.jolcraft.entity.JolCraftEntities;
-import net.sievert.jolcraft.entity.client.render.*;
+import net.sievert.jolcraft.entity.client.dwarf.render.*;
 import net.sievert.jolcraft.item.JolCraftCreativeModeTabs;
 import net.sievert.jolcraft.item.JolCraftItems;
 import net.sievert.jolcraft.loot.JolCraftLootModifiers;
@@ -133,10 +133,13 @@ public class JolCraft
         {
             EntityRenderers.register(JolCraftEntities.DWARF.get(), DwarfRenderer::new);
             EntityRenderers.register(JolCraftEntities.DWARF_GUILDMASTER.get(), DwarfGuildmasterRenderer::new);
-            EntityRenderers.register(JolCraftEntities.DWARF_GUARD.get(), DwarfGuardRenderer::new);
             EntityRenderers.register(JolCraftEntities.DWARF_HISTORIAN.get(), DwarfHistorianRenderer::new);
-            EntityRenderers.register(JolCraftEntities.DWARF_SCRAPPER.get(), DwarfScrapperRenderer::new);
             EntityRenderers.register(JolCraftEntities.DWARF_MERCHANT.get(), DwarfMerchantRenderer::new);
+            EntityRenderers.register(JolCraftEntities.DWARF_SCRAPPER.get(), DwarfScrapperRenderer::new);
+            EntityRenderers.register(JolCraftEntities.DWARF_BREWMASTER.get(), DwarfBrewmasterRenderer::new);
+            EntityRenderers.register(JolCraftEntities.DWARF_GUARD.get(), DwarfGuardRenderer::new);
+            EntityRenderers.register(JolCraftEntities.DWARF_KEEPER.get(), DwarfKeeperRenderer::new);
+
 
             // Some client setup code
             LOGGER.info("HELLO FROM CLIENT SETUP");

@@ -36,10 +36,12 @@
 
   "item.jolcraft.dwarf_spawn_egg": "Dwarf Spawn Egg",
   "item.jolcraft.dwarf_guildmaster_spawn_egg": "Dwarf Guildmaster Spawn Egg",
-  "item.jolcraft.dwarf_guard_spawn_egg": "Dwarf Guard Spawn Egg",
   "item.jolcraft.dwarf_historian_spawn_egg": "Dwarf Historian Spawn Egg",
-  "item.jolcraft.dwarf_scrapper_spawn_egg": "Dwarf Scrapper Spawn Egg",
   "item.jolcraft.dwarf_merchant_spawn_egg": "Dwarf Merchant Spawn Egg",
+  "item.jolcraft.dwarf_scrapper_spawn_egg": "Dwarf Scrapper Spawn Egg",
+  "item.jolcraft.dwarf_brewmaster_spawn_egg": "Dwarf Brewmaster Spawn Egg",
+  "item.jolcraft.dwarf_guard_spawn_egg": "Dwarf Guard Spawn Egg",
+  "item.jolcraft.dwarf_keeper_spawn_egg": "Dwarf Keeper Spawn Egg",
 
   "item.jolcraft.aegiscore": "Aegiscore",
   "item.jolcraft.ashfang": "Ashfang",
@@ -86,7 +88,7 @@
   "item.jolcraft.old_fabric": "Old Fabric",
   "item.jolcraft.rusty_tongs": "Rusty Forge Tongs",
 
-  "tooltip.jolcraft.dwarf.locked": "You do not understand each other.",
+  "tooltip.jolcraft.language.locked": "You do not understand each other.",
   "tooltip.jolcraft.dwarf.busy": "This dwarf is currently busy.",
   "tooltip.jolcraft.dwarf.not_paid": "You should pay the dwarf first.",
   "tooltip.jolcraft.dwarf.cannot_sign": "This dwarf cannot sign contracts.",
@@ -135,6 +137,7 @@
   "tooltip.jolcraft.rep_owner": "Granted to: %s",
   "tooltip.jolcraft.reputation_tier": "Reputation: ",
   "tooltip.jolcraft.endorsement_count": "Endorsements: %s",
+  "tooltip.jolcraft.reputation.locked": "You need a higher reputation for this.",
   "tooltip.jolcraft.reputation.max_tier": "You are already at the highest reputation tier!",
   "tooltip.jolcraft.reputation.not_enough_endorsements": "You need %1$d endorsements to advance (you have %2$d).",
   "tooltip.jolcraft.reputation.never_endorse": "This dwarf does not give endorsements.",
@@ -156,10 +159,13 @@
 
   "entity.jolcraft.dwarf": "Dwarf",
   "entity.jolcraft.dwarf_guildmaster": "Guildmaster",
-  "entity.jolcraft.dwarf_guard": "Guard",
   "entity.jolcraft.dwarf_historian": "Historian",
-  "entity.jolcraft.dwarf_scrapper": "Scrapper",
   "entity.jolcraft.dwarf_merchant": "Merchant",
+  "entity.jolcraft.dwarf_scrapper": "Scrapper",
+  "entity.jolcraft.dwarf_brewmaster": "Brewmaster",
+  "entity.jolcraft.dwarf_guard": "Guard",
+  "entity.jolcraft.dwarf_keeper": "Keeper",
+
 
   "filled_map.forge": "Map to a Dwarven Forge"
 }

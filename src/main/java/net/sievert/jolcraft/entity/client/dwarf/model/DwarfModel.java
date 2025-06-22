@@ -1,4 +1,4 @@
-package net.sievert.jolcraft.entity.client.model;
+package net.sievert.jolcraft.entity.client.dwarf.model;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.animation.AnimationDefinition;

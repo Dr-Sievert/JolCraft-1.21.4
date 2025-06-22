@@ -12,7 +12,7 @@ import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.sievert.jolcraft.JolCraft;
-import net.sievert.jolcraft.entity.client.model.DwarfModel;
+import net.sievert.jolcraft.entity.client.dwarf.model.DwarfModel;
 import net.sievert.jolcraft.entity.custom.dwarf.variation.DwarfBeardColor;
 
 import java.util.Map;

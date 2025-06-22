@@ -1,4 +1,4 @@
-package net.sievert.jolcraft.entity.client.model;
+package net.sievert.jolcraft.entity.client.dwarf.model;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -9,7 +9,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.HumanoidArm;
 import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.entity.client.dwarf.DwarfRenderState;
-import net.sievert.jolcraft.entity.client.dwarf.DwarfAnimations;
 
 public class DwarfScrapperModel extends DwarfModel{
 

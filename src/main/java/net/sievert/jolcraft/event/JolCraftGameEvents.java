@@ -46,7 +46,7 @@ public class JolCraftGameEvents {
     public static void onLivingDamage(LivingDamageEvent.Pre event) {
         if (event.getEntity() instanceof DwarfGuardEntity dwarf && dwarf.isBlockCooldownReady() && event.getSource().getEntity() instanceof Monster) {
             dwarf.markForBlocking();
-            event.setNewDamage(0.2F);
+            event.setNewDamage(event.getOriginalDamage()*0.2f);
         }
     }
 

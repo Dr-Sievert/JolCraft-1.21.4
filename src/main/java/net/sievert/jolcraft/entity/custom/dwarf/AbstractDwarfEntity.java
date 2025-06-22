@@ -336,29 +336,64 @@ public class AbstractDwarfEntity extends AbstractVillager {
                 || stack.is(JolCraftItems.BOUNTY_CRATE.get());
     }
 
-    @Override
-    public InteractionResult mobInteract(Player player, InteractionHand hand) {
-        ItemStack itemstack = player.getItemInHand(hand);
-
-        // 🧠 Language check - ensures only players who know the Dwarvish language can interact
+    public InteractionResult languageCheck(Player player) {
         boolean client = this.level().isClientSide;
         boolean knowsLanguage = client
                 ? MyClientLanguageData.knowsLanguage()
                 : (player.getData(JolCraftAttachments.DWARVEN_LANGUAGE) != null &&
                 player.getData(JolCraftAttachments.DWARVEN_LANGUAGE).knowsLanguage());
 
-        // ❌ Block interaction if language check fails
         if (!knowsLanguage) {
             this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
 
             if (client) {
                 player.displayClientMessage(
-                        Component.translatable("tooltip.jolcraft.dwarf.locked").withStyle(ChatFormatting.GRAY), true
+                        Component.translatable("tooltip.jolcraft.language.locked").withStyle(ChatFormatting.RED), true
                 );
-                return InteractionResult.CONSUME; // ✅ Allow client visuals
+                return InteractionResult.CONSUME;
             }
 
-            return InteractionResult.FAIL; // ✅ Block server interaction
+            return InteractionResult.FAIL;
+        }
+
+        // Success: do nothing special, let interaction continue
+        return InteractionResult.SUCCESS;
+    }
+
+    public InteractionResult reputationCheck(Player player, int requiredTier) {
+        boolean client = this.level().isClientSide;
+        int playerTier = client
+                ? MyClientReputationData.getTier()
+                : (player.getData(JolCraftAttachments.DWARVEN_REP.get()) != null
+                ? player.getData(JolCraftAttachments.DWARVEN_REP.get()).getTier()
+                : 0);
+
+        if (playerTier < requiredTier) {
+            this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
+
+            if (client) {
+                player.displayClientMessage(
+                        Component.translatable("tooltip.jolcraft.reputation.locked", requiredTier).withStyle(ChatFormatting.RED), true
+                );
+                return InteractionResult.CONSUME;
+            }
+            return InteractionResult.FAIL;
+        }
+
+        // Success: allowed to interact
+        return InteractionResult.SUCCESS;
+    }
+
+
+    @Override
+    public InteractionResult mobInteract(Player player, InteractionHand hand) {
+        ItemStack itemstack = player.getItemInHand(hand);
+        boolean client = this.level().isClientSide;
+
+        // 🧠 Language check - ensures only players who know the Dwarvish language can interact
+        InteractionResult langCheck = this.languageCheck(player);
+        if (langCheck != InteractionResult.SUCCESS) {
+            return langCheck;
         }
 
         // 🛑 Block if dwarf is dead, trading, holding a spawn egg, or performing an action
@@ -1392,10 +1427,6 @@ public class AbstractDwarfEntity extends AbstractVillager {
     @Nullable
     @Override
     protected SoundEvent getHurtSound(DamageSource damageSource) {
-        // Suppress if blocking
-        if (this.isBlockCooldownReady()) {
-            return null;
-        }
         return JolCraftSounds.DWARF_HURT.get();
     }
 

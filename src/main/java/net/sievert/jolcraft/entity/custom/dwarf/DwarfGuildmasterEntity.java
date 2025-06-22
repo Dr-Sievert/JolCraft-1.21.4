@@ -76,6 +76,11 @@ public class DwarfGuildmasterEntity extends AbstractDwarfEntity {
     }
 
     @Override
+    public float getVoicePitch() {
+        return 0.8F; // deeper voice for guildmaster
+    }
+
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new FirePanicGoal(this, 1.3));
@@ -106,23 +111,9 @@ public class DwarfGuildmasterEntity extends AbstractDwarfEntity {
         boolean client = this.level().isClientSide;
 
         // 🧠 Language check - ensures only players who know the Dwarvish language can interact
-        boolean knowsLanguage = client
-                ? MyClientLanguageData.knowsLanguage()
-                : (player.getData(JolCraftAttachments.DWARVEN_LANGUAGE) != null &&
-                player.getData(JolCraftAttachments.DWARVEN_LANGUAGE).knowsLanguage());
-
-        // ❌ Block interaction if language check fails
-        if (!knowsLanguage) {
-            this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
-
-            if (client) {
-                player.displayClientMessage(
-                        Component.translatable("tooltip.jolcraft.dwarf.locked").withStyle(ChatFormatting.GRAY), true
-                );
-                return InteractionResult.CONSUME; // ✅ Allow client visuals
-            }
-
-            return InteractionResult.FAIL; // ✅ Block server interaction
+        InteractionResult langCheck = this.languageCheck(player);
+        if (langCheck != InteractionResult.SUCCESS) {
+            return langCheck;
         }
 
         // Sync Guildmaster level with player reputation tier

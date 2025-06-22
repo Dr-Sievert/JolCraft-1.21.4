@@ -128,17 +128,24 @@ public class JolCraftItems {
     public static final DeferredItem<Item> DWARF_GUILDMASTER_SPAWN_EGG = ITEMS.registerItem("dwarf_guildmaster_spawn_egg",
             (properties) -> new SpawnEggItem(JolCraftEntities.DWARF_GUILDMASTER.get(), properties));
 
-    public static final DeferredItem<Item> DWARF_GUARD_SPAWN_EGG = ITEMS.registerItem("dwarf_guard_spawn_egg",
-            (properties) -> new SpawnEggItem(JolCraftEntities.DWARF_GUARD.get(), properties));
-
     public static final DeferredItem<Item> DWARF_HISTORIAN_SPAWN_EGG = ITEMS.registerItem("dwarf_historian_spawn_egg",
             (properties) -> new SpawnEggItem(JolCraftEntities.DWARF_HISTORIAN.get(), properties));
+
+    public static final DeferredItem<Item> DWARF_MERCHANT_SPAWN_EGG = ITEMS.registerItem("dwarf_merchant_spawn_egg",
+            (properties) -> new SpawnEggItem(JolCraftEntities.DWARF_MERCHANT.get(), properties));
 
     public static final DeferredItem<Item> DWARF_SCRAPPER_SPAWN_EGG = ITEMS.registerItem("dwarf_scrapper_spawn_egg",
             (properties) -> new SpawnEggItem(JolCraftEntities.DWARF_SCRAPPER.get(), properties));
 
-    public static final DeferredItem<Item> DWARF_MERCHANT_SPAWN_EGG = ITEMS.registerItem("dwarf_merchant_spawn_egg",
-            (properties) -> new SpawnEggItem(JolCraftEntities.DWARF_MERCHANT.get(), properties));
+    public static final DeferredItem<Item> DWARF_BREWMASTER_SPAWN_EGG = ITEMS.registerItem("dwarf_brewmaster_spawn_egg",
+            (properties) -> new SpawnEggItem(JolCraftEntities.DWARF_BREWMASTER.get(), properties));
+
+    public static final DeferredItem<Item> DWARF_GUARD_SPAWN_EGG = ITEMS.registerItem("dwarf_guard_spawn_egg",
+            (properties) -> new SpawnEggItem(JolCraftEntities.DWARF_GUARD.get(), properties));
+
+    public static final DeferredItem<Item> DWARF_KEEPER_SPAWN_EGG = ITEMS.registerItem("dwarf_keeper_spawn_egg",
+            (properties) -> new SpawnEggItem(JolCraftEntities.DWARF_KEEPER.get(), properties));
+
 
     //Gems
     public static final DeferredItem<Item> AEGISCORE = ITEMS.registerItem("aegiscore",

@@ -1,34 +1,33 @@
-package net.sievert.jolcraft.entity.client.render;
+package net.sievert.jolcraft.entity.client.dwarf.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.sievert.jolcraft.JolCraft;
-import net.sievert.jolcraft.entity.client.dwarf.DwarfArmorLayer;
 import net.sievert.jolcraft.entity.client.dwarf.DwarfBeardLayer;
 import net.sievert.jolcraft.entity.client.dwarf.DwarfEyeLayer;
+import net.sievert.jolcraft.entity.client.dwarf.model.DwarfHistorianModel;
 import net.sievert.jolcraft.entity.client.dwarf.DwarfRenderState;
-import net.sievert.jolcraft.entity.client.model.DwarfGuardModel;
-import net.sievert.jolcraft.entity.custom.dwarf.DwarfGuardEntity;
+import net.sievert.jolcraft.entity.custom.dwarf.DwarfHistorianEntity;
 
-public class DwarfGuardRenderer extends DwarfRenderer<DwarfGuardEntity> {
 
-    public DwarfGuardRenderer(EntityRendererProvider.Context context) {
-        super(context, new DwarfGuardModel(context.bakeLayer(DwarfGuardModel.LAYER_LOCATION)));
-        addLayer(new DwarfArmorLayer(this));
+public class DwarfHistorianRenderer extends DwarfRenderer<DwarfHistorianEntity> {
+
+    public DwarfHistorianRenderer(EntityRendererProvider.Context context) {
+        super(context, new DwarfHistorianModel(context.bakeLayer(DwarfHistorianModel.LAYER_LOCATION)));
         this.addLayer(new DwarfBeardLayer(this));
         this.addLayer(new DwarfEyeLayer(this));
+
     }
 
     @Override
     public ResourceLocation getTextureLocation(DwarfRenderState entity) {
-        return ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "textures/entity/dwarf/dwarf_guard.png");
+        return ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "textures/entity/dwarf/dwarf_historian.png");
     }
 
     @Override
     public void render(DwarfRenderState renderState, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
-        poseStack.scale(1.1f, 1.1f, 1.1f);
         super.render(renderState, poseStack, bufferSource, packedLight);
 
     }
@@ -39,8 +38,9 @@ public class DwarfGuardRenderer extends DwarfRenderer<DwarfGuardEntity> {
     }
 
     @Override
-    public void extractRenderState(DwarfGuardEntity entity, DwarfRenderState reusedState, float partialTick) {
+    public void extractRenderState(DwarfHistorianEntity entity, DwarfRenderState reusedState, float partialTick) {
         super.extractRenderState(entity, reusedState, partialTick);
     }
 
 }
+

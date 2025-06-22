@@ -3,10 +3,12 @@ package net.sievert.jolcraft.entity.custom.dwarf;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -30,6 +32,9 @@ import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.entity.ai.goal.*;
 import net.sievert.jolcraft.entity.client.dwarf.DwarfAnimationType;
 import net.sievert.jolcraft.item.JolCraftItems;
+import net.sievert.jolcraft.sound.JolCraftSounds;
+
+import javax.annotation.Nullable;
 
 public class DwarfGuardEntity extends AbstractDwarfEntity {
 
@@ -54,7 +59,7 @@ public class DwarfGuardEntity extends AbstractDwarfEntity {
                 .add(Attributes.KNOCKBACK_RESISTANCE, 0.2);
     }
 
-    //Behavior
+    //Core
     @Override
     public boolean canTrade() {
         return false;
@@ -68,6 +73,11 @@ public class DwarfGuardEntity extends AbstractDwarfEntity {
     @Override
     public ResourceLocation getProfessionId() {
         return ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "guard");
+    }
+
+    @Override
+    public float getVoicePitch() {
+        return 0.7F; // deeper voice for guards
     }
 
     @Override
@@ -96,10 +106,26 @@ public class DwarfGuardEntity extends AbstractDwarfEntity {
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, AbstractPiglin.class, false));
     }
 
-    //Sound
     @Override
-    public float getVoicePitch() {
-        return 0.8F; // deeper pitch for guards
+    public InteractionResult mobInteract(Player player, InteractionHand hand) {
+        ItemStack itemstack = player.getItemInHand(hand);
+        boolean client = this.level().isClientSide;
+
+        // 🧠 Language check
+        InteractionResult langCheck = this.languageCheck(player);
+        if (langCheck != InteractionResult.SUCCESS) {
+            return langCheck;
+        }
+
+        // Reputation check
+        InteractionResult repCheck = this.reputationCheck(player, 1);
+        if (repCheck != InteractionResult.SUCCESS) {
+            return repCheck;
+        }
+
+
+        // Call parent for all other interactions (contracts, trades, etc)
+        return super.mobInteract(player, hand);
     }
 
     //Spawning
@@ -107,6 +133,16 @@ public class DwarfGuardEntity extends AbstractDwarfEntity {
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, EntitySpawnReason spawnType, @org.jetbrains.annotations.Nullable SpawnGroupData spawnGroupData) {
         this.setLeftHanded(false);
         return super.finalizeSpawn(level, difficulty, spawnType, spawnGroupData);
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getHurtSound(DamageSource damageSource) {
+        // Suppress if blocking
+        if (this.isBlocking()) {
+            return null;
+        }
+        return JolCraftSounds.DWARF_HURT.get();
     }
 
 

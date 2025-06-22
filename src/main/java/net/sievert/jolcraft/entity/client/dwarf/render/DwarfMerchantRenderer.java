@@ -1,4 +1,4 @@
-package net.sievert.jolcraft.entity.client.render;
+package net.sievert.jolcraft.entity.client.dwarf.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -8,7 +8,7 @@ import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.entity.client.dwarf.DwarfBeardLayer;
 import net.sievert.jolcraft.entity.client.dwarf.DwarfEyeLayer;
 import net.sievert.jolcraft.entity.client.dwarf.DwarfRenderState;
-import net.sievert.jolcraft.entity.client.model.DwarfMerchantModel;
+import net.sievert.jolcraft.entity.client.dwarf.model.DwarfMerchantModel;
 import net.sievert.jolcraft.entity.custom.dwarf.DwarfMerchantEntity;
 
 

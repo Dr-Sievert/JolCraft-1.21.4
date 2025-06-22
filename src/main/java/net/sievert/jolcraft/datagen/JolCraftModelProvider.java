@@ -116,26 +116,36 @@ public class JolCraftModelProvider extends ModelProvider {
                 -4355214,
                 -11716526
         );
-
-        itemModels.generateSpawnEgg(
-                JolCraftItems.DWARF_GUARD_SPAWN_EGG.get(),
-                -4355214,
-                -2233622
-        );
         itemModels.generateSpawnEgg(
                 JolCraftItems.DWARF_HISTORIAN_SPAWN_EGG.get(),
                 -4355214,
                 -8807323
         );
         itemModels.generateSpawnEgg(
+                JolCraftItems.DWARF_MERCHANT_SPAWN_EGG.get(),
+                -4355214,
+                -1399760
+        );
+        itemModels.generateSpawnEgg(
                 JolCraftItems.DWARF_SCRAPPER_SPAWN_EGG.get(),
                 -4355214,
                 -3380960
         );
+
         itemModels.generateSpawnEgg(
-                JolCraftItems.DWARF_MERCHANT_SPAWN_EGG.get(),
+                JolCraftItems.DWARF_BREWMASTER_SPAWN_EGG.get(),
                 -4355214,
-                -1399760
+                -396380
+        );
+        itemModels.generateSpawnEgg(
+                JolCraftItems.DWARF_GUARD_SPAWN_EGG.get(),
+                -4355214,
+                -2233622
+        );
+        itemModels.generateSpawnEgg(
+                JolCraftItems.DWARF_KEEPER_SPAWN_EGG.get(),
+                -4355214,
+                -7799040
         );
 
 

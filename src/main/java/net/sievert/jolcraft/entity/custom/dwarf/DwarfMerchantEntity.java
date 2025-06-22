@@ -108,10 +108,6 @@ public class DwarfMerchantEntity extends AbstractDwarfEntity {
         });
     }
 
-    private int bountyCrateTicks = 0;
-    private int bountyTurnInTicks = 0;
-    private Player bountyPlayer;
-
     public ItemStack getBountyCrateItem() {
         return new ItemStack(JolCraftItems.BOUNTY_CRATE.get());
     }
@@ -122,23 +118,9 @@ public class DwarfMerchantEntity extends AbstractDwarfEntity {
         boolean client = this.level().isClientSide;
 
         // 🧠 Language check - ensures only players who know the Dwarvish language can interact
-        boolean knowsLanguage = client
-                ? MyClientLanguageData.knowsLanguage()
-                : (player.getData(JolCraftAttachments.DWARVEN_LANGUAGE) != null &&
-                player.getData(JolCraftAttachments.DWARVEN_LANGUAGE).knowsLanguage());
-
-        // ❌ Block interaction if language check fails
-        if (!knowsLanguage) {
-            this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
-
-            if (client) {
-                player.displayClientMessage(
-                        Component.translatable("tooltip.jolcraft.dwarf.locked").withStyle(ChatFormatting.GRAY), true
-                );
-                return InteractionResult.CONSUME; // ✅ Allow client visuals
-            }
-
-            return InteractionResult.FAIL; // ✅ Block server interaction
+        InteractionResult langCheck = this.languageCheck(player);
+        if (langCheck != InteractionResult.SUCCESS) {
+            return langCheck;
         }
 
 
