@@ -25,6 +25,9 @@ public class JolCraftItems {
     public static final DeferredItem<Item> BOUNTY_CRATE = ITEMS.registerItem("bounty_crate",
             BountyCrateItem::new, new Item.Properties().stacksTo(1));
 
+    public static final DeferredItem<Item> RESTOCK_CRATE = ITEMS.registerItem("restock_crate",
+            RestockCrateItem::new, new Item.Properties().stacksTo(1));
+
     //Core Items
     public static final DeferredItem<Item> GOLD_COIN = ITEMS.registerItem("gold_coin",
             Item::new, new Item.Properties().rarity(Rarity.UNCOMMON));
@@ -255,7 +258,7 @@ public class JolCraftItems {
                     pTooltipComponents.add(Component.translatable("tooltip.jolcraft.salvage").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
                     super.appendHoverText(pStack, pContext, pTooltipComponents, pTooltipFlag);
                 }
-            }, new Item.Properties());
+            }, new Item.Properties().stacksTo(1));
 
     public static final DeferredItem<Item> BROKEN_AMULET =
             ITEMS.registerItem("broken_amulet", properties -> new Item(properties) {
@@ -264,7 +267,7 @@ public class JolCraftItems {
                     pTooltipComponents.add(Component.translatable("tooltip.jolcraft.salvage").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
                     super.appendHoverText(pStack, pContext, pTooltipComponents, pTooltipFlag);
                 }
-            }, new Item.Properties());
+            }, new Item.Properties().stacksTo(1));
 
     public static final DeferredItem<Item> BROKEN_BELT =
             ITEMS.registerItem("broken_belt", properties -> new Item(properties) {
@@ -273,7 +276,7 @@ public class JolCraftItems {
                     pTooltipComponents.add(Component.translatable("tooltip.jolcraft.salvage").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
                     super.appendHoverText(pStack, pContext, pTooltipComponents, pTooltipFlag);
                 }
-            }, new Item.Properties());
+            }, new Item.Properties().stacksTo(1));
 
     public static final DeferredItem<Item> BROKEN_COINS =
             ITEMS.registerItem("broken_coins", properties -> new Item(properties) {
@@ -291,7 +294,7 @@ public class JolCraftItems {
                     pTooltipComponents.add(Component.translatable("tooltip.jolcraft.salvage").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
                     super.appendHoverText(pStack, pContext, pTooltipComponents, pTooltipFlag);
                 }
-            }, new Item.Properties());
+            }, new Item.Properties().stacksTo(16));
 
     public static final DeferredItem<Item> EXPIRED_POTION =
             ITEMS.registerItem("expired_potion", properties -> new Item(properties) {
@@ -300,7 +303,7 @@ public class JolCraftItems {
                     pTooltipComponents.add(Component.translatable("tooltip.jolcraft.salvage").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
                     super.appendHoverText(pStack, pContext, pTooltipComponents, pTooltipFlag);
                 }
-            }, new Item.Properties());
+            }, new Item.Properties().stacksTo(1));
 
     public static final DeferredItem<Item> INGOT_MOULD =
             ITEMS.registerItem("ingot_mould", properties -> new Item(properties) {
@@ -309,7 +312,7 @@ public class JolCraftItems {
                     pTooltipComponents.add(Component.translatable("tooltip.jolcraft.salvage").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
                     super.appendHoverText(pStack, pContext, pTooltipComponents, pTooltipFlag);
                 }
-            }, new Item.Properties());
+            }, new Item.Properties().stacksTo(1));
 
     public static final DeferredItem<Item> MITHRIL_SALVAGE =
             ITEMS.registerItem("mithril_salvage", properties -> new Item(properties) {
@@ -336,7 +339,7 @@ public class JolCraftItems {
                     pTooltipComponents.add(Component.translatable("tooltip.jolcraft.salvage").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
                     super.appendHoverText(pStack, pContext, pTooltipComponents, pTooltipFlag);
                 }
-            }, new Item.Properties());
+            }, new Item.Properties().stacksTo(1));
 
 
     public static void register(IEventBus eventBus) {

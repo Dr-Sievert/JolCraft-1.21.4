@@ -14,6 +14,7 @@ public class JolCraftSounds {
             DeferredRegister.create(BuiltInRegistries.SOUND_EVENT, JolCraft.MOD_ID);
 
     //Random
+    public static final Supplier<SoundEvent> LEVEL_UP = registerSoundEvent("level_up");
     public static final Supplier<SoundEvent> POOF = registerSoundEvent("poof");
 
     //Dwarf
@@ -23,8 +24,6 @@ public class JolCraftSounds {
     public static final Supplier<SoundEvent> DWARF_YES = registerSoundEvent("dwarf_yes");
     public static final Supplier<SoundEvent> DWARF_NO = registerSoundEvent("dwarf_no");
     public static final Supplier<SoundEvent> DWARF_TRADE = registerSoundEvent("dwarf_trade");
-
-
 
     private static Supplier<SoundEvent> registerSoundEvent(String name) {
         ResourceLocation id = ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, name);

@@ -93,5 +93,13 @@
       }
     ],
     "subtitle": "sounds.jolcraft.poof"
+  },
+  "level_up": {
+    "sounds": [
+      {
+        "name": "jolcraft:random/levelup"
+      }
+    ],
+    "subtitle": "sounds.jolcraft.level_up"
   }
 }

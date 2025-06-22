@@ -5,6 +5,8 @@
   "item.jolcraft.parchment": "Parchment",
   "item.jolcraft.bounty": "Bounty",
   "item.jolcraft.bounty_crate": "Bounty Crate",
+  "item.jolcraft.restock_crate": "Restock Crate",
+  "item.jolcraft.reroll_crate": "Reroll Crate",
 
   "item.jolcraft.quill_full": "Ink and Quill",
   "item.jolcraft.quill_half": "Ink and Quill",
@@ -91,7 +93,6 @@
   "tooltip.jolcraft.dwarf.cannot_promote": "This dwarf cannot accept a new contract.",
 
 
-  "tooltip.jolcraft.contract_guard": "The contract echoes with duty.",
 
   "tooltip.jolcraft.dwarven_lexicon.locked": "The pages are filled with unfamiliar symbols.",
   "tooltip.jolcraft.dwarven_lexicon.unlocked": "The key to dwarven speech lies within.",
@@ -116,6 +117,11 @@
   "tooltip.jolcraft.bounty_crate.complete": "Ready to be turned in.",
   "tooltip.jolcraft.bounty_crate.not_complete": "This bounty has not been completed.",
 
+  "tooltip.jolcraft.restock_crate": "Can be used to restock a traders inventory.",
+  "tooltip.jolcraft.restock_crate.success": "Trader inventory restocked!",
+  "tooltip.jolcraft.reroll_crate": "Can be used to reroll a traders inventory.",
+  "tooltip.jolcraft.reroll_crate.success": "Trader inventory rerolled!",
+
 
   "tooltip.jolcraft.spanner": "Can be used to produce scrap from salvage.",
   "tooltip.jolcraft.salvage": "Salvagable",
@@ -129,9 +135,13 @@
   "tooltip.jolcraft.rep_owner": "Granted to: %s",
   "tooltip.jolcraft.reputation_tier": "Reputation: ",
   "tooltip.jolcraft.endorsement_count": "Endorsements: %s",
+  "tooltip.jolcraft.reputation.max_tier": "You are already at the highest reputation tier!",
+  "tooltip.jolcraft.reputation.not_enough_endorsements": "You need %1$d endorsements to advance (you have %2$d).",
   "tooltip.jolcraft.reputation.never_endorse": "This dwarf does not give endorsements.",
   "tooltip.jolcraft.reputation.cannot_endorse": "This dwarf is not ready to give you an endorsement.",
   "tooltip.jolcraft.reputation.already_endorsed": "You already have this endorsement.",
+  "tooltip.jolcraft.reputation.wrong_tablet": "You must present the correct reputation tablet to the Guildmaster.",
+  "tooltip.jolcraft.reputation.level_up": "You have advanced in dwarven reputation!",
 
 
   "itemGroup.jolcraft.jolcraft_items_tab": "JolCraft",

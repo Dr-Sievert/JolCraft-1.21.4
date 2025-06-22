@@ -1,4 +1,4 @@
-// 1.21.4	2025-06-20T13:02:51.8617834	Model Definitions - jolcraft
+// 1.21.4	2025-06-22T02:11:50.3116887	Model Definitions - jolcraft
 514fa4af6796c2d245487e0f0d0268286013059c assets/jolcraft/items/aegiscore.json
 b949c867dd45b7a402abd9d29cbb4517f22e9b49 assets/jolcraft/items/ashfang.json
 38f30432e8ce23fd9725a5acbc3fcc9f7cebee8b assets/jolcraft/items/bounty.json
@@ -65,6 +65,7 @@ d4ece8d7821c57f450dabeea628efceef3281d31 assets/jolcraft/items/quill_half.json
 ea2a3a1c6d94f14d9ba1b3a3d90a3628aab8f434 assets/jolcraft/items/reputation_tablet_2.json
 cb2bb171a1886320df0ba5b07c2924d89234a67e assets/jolcraft/items/reputation_tablet_3.json
 1f2e2395f5f11175cec5dbc5f40a3d17fd45c421 assets/jolcraft/items/reputation_tablet_4.json
+1b1280caaac4a6bcf0fab88de8e2895af2d8b921 assets/jolcraft/items/restock_crate.json
 0ae24bbf5e46497ea6dad1a852efc906bb1219da assets/jolcraft/items/rustagate.json
 7cad4c9923f52ccd46491c3c7ed875a01d9ff030 assets/jolcraft/items/rusty_tongs.json
 5ad74c3071835e605b71f0ee7b29e43b463fa880 assets/jolcraft/items/scrap.json
@@ -133,6 +134,7 @@ d88c7f683cc02c0fb94eb93e63f31553d7cc1e53 assets/jolcraft/models/item/moonshard.j
 ee1a30c3ca1a96ad4cfb8c54f1eb4a55af59a5c4 assets/jolcraft/models/item/reputation_tablet_2.json
 746b45ef0f2ffafefa1e80338d15d47ab22cc3b1 assets/jolcraft/models/item/reputation_tablet_3.json
 aaeb94f200ffb2a81599b69dff28630966e70ada assets/jolcraft/models/item/reputation_tablet_4.json
+5484fb596a22419930f5d8bef18b6de7ddd0ab5b assets/jolcraft/models/item/restock_crate.json
 845f892f2d7d732aa67e52ca96892793048e0a8e assets/jolcraft/models/item/rustagate.json
 1a472a0dd3ebdbf55bef2f07cd215ce92ad6ec71 assets/jolcraft/models/item/rusty_tongs.json
 aa1bd34f7990b9a19ce09826ca28bc3e079779a1 assets/jolcraft/models/item/scrap.json

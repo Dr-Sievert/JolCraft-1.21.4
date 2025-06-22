@@ -222,7 +222,7 @@ public class AbstractDwarfEntity extends AbstractVillager {
 
     public boolean canEndorse(Player player) {
         // Default: only allow if profession level is 5 (master)
-        return this.getVillagerData().getLevel() >= 5;
+        return this.getVillagerData().getLevel() >= 1;
     }
 
     public boolean neverEndorse(Player player) {
@@ -432,7 +432,7 @@ public class AbstractDwarfEntity extends AbstractVillager {
         }
 
 
-// 🖊️ Contract signing action
+        // 🖊️ Contract signing action
         if (itemstack.is(JolCraftItems.CONTRACT_WRITTEN.get()) && !this.isBaby()) {
             boolean client = this.level().isClientSide;
 
@@ -535,7 +535,6 @@ public class AbstractDwarfEntity extends AbstractVillager {
             return InteractionResult.SUCCESS_SERVER;
         }
 
-
         // 🗿 Tablet endorsement (works both sides for animation)
         if (itemstack.is(JolCraftTags.Items.REPUTATION_TABLETS) && !this.isBaby()) {
             DwarvenReputationImpl rep = player.getData(JolCraftAttachments.DWARVEN_REP.get());
@@ -544,6 +543,12 @@ public class AbstractDwarfEntity extends AbstractVillager {
             boolean hasEndorsement = client
                     ? MyClientReputationData.hasEndorsement(profId)
                     : rep != null && rep.hasEndorsement(profId); // <-- add null check just in case
+
+            //Send to subclass if special case
+            if (this instanceof DwarfGuildmasterEntity) {
+                // Block here; subclass will handle in its own mobInteract.
+                return InteractionResult.CONSUME;
+            }
 
             // 1️⃣ Already endorsed? Instantly block.
             if (hasEndorsement) {
@@ -642,8 +647,6 @@ public class AbstractDwarfEntity extends AbstractVillager {
             return this.level().isClientSide ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
         }
 
-
-
         // 💼 Trade (only if hand empty and a baby)
         if (canTrade()
                 && itemstack.isEmpty()
@@ -663,6 +666,18 @@ public class AbstractDwarfEntity extends AbstractVillager {
                 this.openTradingScreen(player, this.getDisplayName(), this.getVillagerData().getLevel());
             }
 
+            return InteractionResult.SUCCESS;
+        }
+
+        //Restock
+        if (itemstack.is(JolCraftItems.RESTOCK_CRATE.get()) && !this.isBaby()) {
+            if (!this.level().isClientSide) {
+                player.displayClientMessage(Component.translatable("tooltip.jolcraft.restock_crate.success").withStyle(ChatFormatting.GREEN), true);
+                this.restock();
+                this.level().playSound(null, this.blockPosition(), SoundEvents.VILLAGER_WORK_FISHERMAN, SoundSource.NEUTRAL, 1.0F, 1.0F);
+                this.usePlayerItem(player, hand, itemstack);
+                return InteractionResult.SUCCESS_SERVER;
+            }
             return InteractionResult.SUCCESS;
         }
 
@@ -1302,6 +1317,22 @@ public class AbstractDwarfEntity extends AbstractVillager {
             this.lastRestockGameTime = this.level().getGameTime();
             this.playSound(SoundEvents.VILLAGER_WORK_FISHERMAN, 0.8F, 0.5F);
         }
+    }
+
+    public void rerollTrades() {
+        // Remove all offers
+        this.getOffers().clear();
+
+        // Get current level (1 = Novice, 5 = Master)
+        int level = this.getVillagerData().getLevel();
+
+        // Generate trades for each level up to current
+        for (int i = 1; i <= level; i++) {
+            this.setVillagerData(this.getVillagerData().setLevel(i));
+            this.updateTrades();
+        }
+
+        // Custom subclasses (e.g. Merchant, Guildmaster) can override for special pools.
     }
 
     @Override

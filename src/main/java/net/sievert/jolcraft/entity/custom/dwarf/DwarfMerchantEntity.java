@@ -32,6 +32,8 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
 import net.sievert.jolcraft.JolCraft;
+import net.sievert.jolcraft.capability.JolCraftAttachments;
+import net.sievert.jolcraft.client.data.MyClientLanguageData;
 import net.sievert.jolcraft.component.JolCraftDataComponents;
 import net.sievert.jolcraft.data.BountyData;
 import net.sievert.jolcraft.entity.ai.goal.*;
@@ -113,13 +115,32 @@ public class DwarfMerchantEntity extends AbstractDwarfEntity {
     public ItemStack getBountyCrateItem() {
         return new ItemStack(JolCraftItems.BOUNTY_CRATE.get());
     }
+
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
+        boolean client = this.level().isClientSide;
 
-        if (this.isPerformingAction()) {
-            return InteractionResult.FAIL; // ❌ Block if another action is running
+        // 🧠 Language check - ensures only players who know the Dwarvish language can interact
+        boolean knowsLanguage = client
+                ? MyClientLanguageData.knowsLanguage()
+                : (player.getData(JolCraftAttachments.DWARVEN_LANGUAGE) != null &&
+                player.getData(JolCraftAttachments.DWARVEN_LANGUAGE).knowsLanguage());
+
+        // ❌ Block interaction if language check fails
+        if (!knowsLanguage) {
+            this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
+
+            if (client) {
+                player.displayClientMessage(
+                        Component.translatable("tooltip.jolcraft.dwarf.locked").withStyle(ChatFormatting.GRAY), true
+                );
+                return InteractionResult.CONSUME; // ✅ Allow client visuals
+            }
+
+            return InteractionResult.FAIL; // ✅ Block server interaction
         }
+
 
         // 🎯 Bounty crate turn-in (must be complete)
         if (itemstack.is(JolCraftItems.BOUNTY_CRATE.get())) {
@@ -152,12 +173,15 @@ public class DwarfMerchantEntity extends AbstractDwarfEntity {
                             Vec3 start = this.position().add(0.0, this.getEyeHeight(), 0.0);
                             Vec3 target = this.currentActionPlayer.position().add(0.0, this.currentActionPlayer.getBbHeight() * 0.5, 0.0);
                             Vec3 velocity = target.subtract(start).normalize().scale(0.4);
-
-                            ItemStack reward = BountyReward.getReward(data, this.getRandom());
-                            ItemEntity thrownReward = new ItemEntity(this.level(), start.x, start.y, start.z, reward);
-                            thrownReward.setDeltaMovement(velocity);
-                            thrownReward.setPickUpDelay(10);
-                            this.level().addFreshEntity(thrownReward);
+                            List<ItemStack> rewards = BountyReward.getReward(data, this.getRandom());
+                            for (ItemStack reward : rewards) {
+                                if (!reward.isEmpty()) {
+                                    ItemEntity thrownReward = new ItemEntity(this.level(), start.x, start.y, start.z, reward);
+                                    thrownReward.setDeltaMovement(velocity);
+                                    thrownReward.setPickUpDelay(10);
+                                    this.level().addFreshEntity(thrownReward);
+                                }
+                            }
 
                             int xp = switch (data.tier()) {
                                 case 1 -> 10;
@@ -403,7 +427,7 @@ public class DwarfMerchantEntity extends AbstractDwarfEntity {
 
                 // Master
                 5, new VillagerTrades.ItemListing[]{
-                        new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.MITHRIL_SALVAGE.get(), Mth.nextInt(random, 1, 2), 1, 1, 1)
+                        new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.RESTOCK_CRATE.get(), Mth.nextInt(random, 5, 15), 1, 1, 1),
                 }
         ));
     }

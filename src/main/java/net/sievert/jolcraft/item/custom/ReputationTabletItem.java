@@ -53,7 +53,7 @@ public class ReputationTabletItem extends Item {
 
             if (currentTier >= ENDORSEMENT_THRESHOLDS.length) {
                 serverPlayer.displayClientMessage(
-                        Component.literal("You have reached the highest reputation tier!"), true
+                        Component.translatable("tooltip.jolcraft.reputation.max_tier").withStyle(ChatFormatting.GRAY), true
                 );
             } else {
                 int needed = ENDORSEMENT_THRESHOLDS[currentTier];
