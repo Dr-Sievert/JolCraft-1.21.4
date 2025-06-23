@@ -2,9 +2,11 @@ package net.sievert.jolcraft.data;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.sievert.jolcraft.JolCraft;
 
@@ -25,6 +27,7 @@ public class JolCraftTags {
 
         public static final TagKey<Item> REPUTATION_TABLETS = createTag("reputation_tablets");
 
+
         //Scrap
         public static final TagKey<Item> GLOBAL_SCRAP = createTag("global_scrap");
         public static final TagKey<Item> GENERAL_SCRAP = createTag("general_scrap");
@@ -37,6 +40,18 @@ public class JolCraftTags {
         private static TagKey<Item> createTag(String name) {
             return ItemTags.create(ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, name));
         }
+    }
+
+    public final class Blocks {
+
+        public static final TagKey<Block> HOPS_BOTTOM = createTag("hops_bottom");
+
+        public static final TagKey<Block> HOPS_TOP = createTag("hops_top");
+
+        private static TagKey<Block> createTag(String name) {
+            return BlockTags.create(ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, name));
+        }
+
     }
 
     public interface Structures {

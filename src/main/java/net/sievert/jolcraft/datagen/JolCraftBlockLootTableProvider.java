@@ -22,6 +22,7 @@ import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.sievert.jolcraft.block.JolCraftBlocks;
 import net.sievert.jolcraft.block.custom.BarleyCropBlock;
+import net.sievert.jolcraft.block.custom.HopsCropTopBlock;
 import net.sievert.jolcraft.item.JolCraftItems;
 
 import java.util.Set;
@@ -46,6 +47,20 @@ public class JolCraftBlockLootTableProvider extends BlockLootSubProvider {
                                 LootPool.lootPool()
                                         .setRolls(ConstantValue.exactly(1))
                                         .add(LootItem.lootTableItem(Blocks.CAULDRON))
+                        )
+        );
+
+        // Only drop ASGARNIAN_HOPS when the top is at age 4
+        LootItemCondition.Builder topAgeMax = LootItemBlockStatePropertyCondition
+                .hasBlockStateProperties(JolCraftBlocks.ASGARNIAN_CROP_TOP.get())
+                .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(HopsCropTopBlock.TOP_AGE, 4));
+
+        this.add(JolCraftBlocks.ASGARNIAN_CROP_TOP.get(),
+                LootTable.lootTable()
+                        .withPool(LootPool.lootPool()
+                                .setRolls(ConstantValue.exactly(1))
+                                .add(LootItem.lootTableItem(JolCraftItems.ASGARNIAN_HOPS.get())
+                                        .when(topAgeMax))
                         )
         );
 

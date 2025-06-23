@@ -18,6 +18,8 @@ public class JolCraftDataMapProvider extends DataMapProvider {
     protected void gather(HolderLookup.Provider provider) {
         this.builder(NeoForgeDataMaps.COMPOSTABLES)
                 .add(JolCraftItems.BARLEY_SEEDS.getId(), new Compostable(0.25f), false)
-                .add(JolCraftItems.BARLEY.getId(), new Compostable(0.45f), false);
+                .add(JolCraftItems.BARLEY.getId(), new Compostable(0.45f), false)
+                .add(JolCraftItems.ASGARNIAN_SEEDS.getId(), new Compostable(0.25f), false)
+                .add(JolCraftItems.ASGARNIAN_HOPS.getId(), new Compostable(0.45f), false);
     }
 }

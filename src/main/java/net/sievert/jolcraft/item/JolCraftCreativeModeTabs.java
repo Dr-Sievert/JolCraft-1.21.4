@@ -25,6 +25,8 @@ public class JolCraftCreativeModeTabs {
                         pOutput.accept(JolCraftItems.BARLEY_SEEDS);
                         pOutput.accept(JolCraftItems.BARLEY);
                         pOutput.accept(JolCraftItems.BARLEY_MALT);
+                        pOutput.accept(JolCraftItems.ASGARNIAN_SEEDS);
+                        pOutput.accept(JolCraftItems.ASGARNIAN_HOPS);
                         pOutput.accept(JolCraftItems.YEAST);
                         pOutput.accept(JolCraftItems.GLASS_MUG);
                         pOutput.accept(JolCraftItems.DWARVEN_BREW);

@@ -1,20 +1,24 @@
 package net.sievert.jolcraft.datagen;
 
 import com.google.gson.JsonObject;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.client.data.models.ModelProvider;
 import net.minecraft.client.data.models.blockstates.*;
-import net.minecraft.client.data.models.model.ModelInstance;
 import net.minecraft.client.data.models.model.ModelTemplates;
+import net.minecraft.client.data.models.model.TextureMapping;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.block.JolCraftBlocks;
 import net.sievert.jolcraft.block.custom.BarleyCropBlock;
-import net.sievert.jolcraft.block.custom.FermentingCauldronBlock;
+import net.sievert.jolcraft.block.custom.HopsCropBottomBlock;
+import net.sievert.jolcraft.block.custom.HopsCropTopBlock;
 import net.sievert.jolcraft.item.JolCraftItems;
 
 import java.nio.file.Path;
@@ -39,6 +43,7 @@ public class JolCraftModelProvider extends ModelProvider {
         //Brewing
         itemModels.generateFlatItem(JolCraftItems.BARLEY.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(JolCraftItems.BARLEY_MALT.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.ASGARNIAN_HOPS.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(JolCraftItems.YEAST.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(JolCraftItems.GLASS_MUG.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(JolCraftItems.DWARVEN_BREW.get(), ModelTemplates.FLAT_ITEM);
@@ -176,6 +181,15 @@ public class JolCraftModelProvider extends ModelProvider {
         //Crops
         blockModels.createCropBlock(JolCraftBlocks.BARLEY_CROP.get(), BarleyCropBlock.AGE,  0, 1, 2, 3, 4, 5, 6, 7);
 
+        // Top half of hops — visual only
+        createTopCropBlock(
+                blockModels,
+                JolCraftBlocks.ASGARNIAN_CROP_TOP.get(),
+                HopsCropTopBlock.TOP_AGE, // <-- use your top crop's static property
+                0, 1, 2, 3, 4 // <-- as many stages as you defined models/textures for
+        );
+
+        blockModels.createCropBlock(JolCraftBlocks.ASGARNIAN_CROP_BOTTOM.get(), HopsCropBottomBlock.AGE, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
 
 
         // For Fermenting Cauldron: custom blockstate with level property
@@ -208,6 +222,28 @@ public class JolCraftModelProvider extends ModelProvider {
 
 
     }
+
+    //Hops top helper
+    private void createTopCropBlock(BlockModelGenerators blockModels, Block block, IntegerProperty ageProperty, int... ageToVisualStageMapping) {
+        if (ageProperty.getPossibleValues().size() != ageToVisualStageMapping.length) {
+            throw new IllegalArgumentException("Mismatch between age property values and visual stage mapping!");
+        }
+
+        Int2ObjectMap<ResourceLocation> visualStageModels = new Int2ObjectOpenHashMap<>();
+
+        PropertyDispatch dispatch = PropertyDispatch.property(ageProperty).generate(ageValue -> {
+            int visualStage = ageToVisualStageMapping[ageValue];
+            ResourceLocation modelId = visualStageModels.computeIfAbsent(
+                    visualStage,
+                    i -> blockModels.createSuffixedVariant(block, "_stage" + i, ModelTemplates.CROP, TextureMapping::crop)
+            );
+            return Variant.variant().with(VariantProperties.MODEL, modelId);
+        });
+
+        blockModels.blockStateOutput.accept(MultiVariantGenerator.multiVariant(block).with(dispatch));
+    }
+
+
 
     // --- FLUID HELPER ---
     private void generateFluidBlockstateAndModels(

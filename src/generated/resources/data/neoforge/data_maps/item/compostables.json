@@ -1,5 +1,11 @@
 {
   "values": {
+    "jolcraft:asgarnian_hops": {
+      "chance": 0.45
+    },
+    "jolcraft:asgarnian_seeds": {
+      "chance": 0.25
+    },
     "jolcraft:barley": {
       "chance": 0.45
     },

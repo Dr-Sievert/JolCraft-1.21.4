@@ -1,9 +1,7 @@
 package net.sievert.jolcraft.item;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.Holder;
 import net.minecraft.world.item.*;
-import net.minecraft.world.level.block.Block;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -207,6 +205,13 @@ public class JolCraftItems {
 
     public static final DeferredItem<Item> BARLEY_MALT =
             ITEMS.registerItem("barley_malt", Item::new,
+                    new Item.Properties());
+
+    public static final DeferredItem<Item> ASGARNIAN_SEEDS = ITEMS.registerItem("asgarnian_seeds",
+            properties -> new BlockItem(JolCraftBlocks.ASGARNIAN_CROP_BOTTOM.get(), properties));
+
+    public static final DeferredItem<Item> ASGARNIAN_HOPS =
+            ITEMS.registerItem("asgarnian_hops", Item::new,
                     new Item.Properties());
 
     public static final DeferredItem<Item> YEAST =
