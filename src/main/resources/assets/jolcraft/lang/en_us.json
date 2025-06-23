@@ -2,6 +2,16 @@
   "item.jolcraft.gold_coin": "Gold Coin",
   "item.jolcraft.dwarven_lexicon": "Dwarven Lexicon",
 
+  "item.jolcraft.barley_seeds": "Dwarven Barley Seeds",
+  "block.jolcraft.barley_crop": "Dwarven Barley Crops",
+  "item.jolcraft.barley": "Dwarven Barley",
+  "item.jolcraft.barley_malt": "Dwarven Malt",
+  "block.jolcraft.fermenting_cauldron": "Fermenting Cauldron",
+  "block.jolcraft.fermenting_fluid": "Fermenting Fluid",
+  "item.jolcraft.yeast": "Dwarven Yeast",
+  "item.jolcraft.glass_mug": "Glass Mug",
+  "item.jolcraft.dwarven_brew": "Dwarven Brew",
+
   "item.jolcraft.parchment": "Parchment",
   "item.jolcraft.bounty": "Bounty",
   "item.jolcraft.bounty_crate": "Bounty Crate",
@@ -146,7 +156,6 @@
   "tooltip.jolcraft.reputation.wrong_tablet": "You must present the correct reputation tablet to the Guildmaster.",
   "tooltip.jolcraft.reputation.level_up": "You have advanced in dwarven reputation!",
 
-
   "itemGroup.jolcraft.jolcraft_items_tab": "JolCraft",
   "itemGroup.jolcraft.jolcraft_egg_tab": "JolCraft Spawn Eggs",
 
@@ -165,7 +174,6 @@
   "entity.jolcraft.dwarf_brewmaster": "Brewmaster",
   "entity.jolcraft.dwarf_guard": "Guard",
   "entity.jolcraft.dwarf_keeper": "Keeper",
-
 
   "filled_map.forge": "Map to a Dwarven Forge"
 }

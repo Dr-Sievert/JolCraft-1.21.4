@@ -1,6 +1,12 @@
-// 1.21.4	2025-06-22T18:20:18.09615	Model Definitions - jolcraft
+// 1.21.4	2025-06-23T09:32:19.2216867	Model Definitions - jolcraft
+b9c534875e99b8b5850a169306d2a052f8043e11 assets/jolcraft/blockstates/barley_crop.json
+935a677e41cfc66b9a88adf9e3b6447a5aaa66fd assets/jolcraft/blockstates/fermenting_cauldron.json
+80f779bf68eca6937cab4cd7b533cd19d7b6d612 assets/jolcraft/blockstates/fermenting_fluid.json
 514fa4af6796c2d245487e0f0d0268286013059c assets/jolcraft/items/aegiscore.json
 b949c867dd45b7a402abd9d29cbb4517f22e9b49 assets/jolcraft/items/ashfang.json
+a06ebafd9f36015b9c1c3eadece167e19aa634ee assets/jolcraft/items/barley.json
+3086ad3147dc52f0016c538355c6c03390f93ffe assets/jolcraft/items/barley_malt.json
+63befa2c7ce780dbcc3d4b2853c0e2861ca00c8a assets/jolcraft/items/barley_seeds.json
 38f30432e8ce23fd9725a5acbc3fcc9f7cebee8b assets/jolcraft/items/bounty.json
 8042dc26c21da7805320614b88f3ea33b134eac3 assets/jolcraft/items/bounty_crate.json
 2f0a64f049f126971d97fcd174214da1d6bd2be0 assets/jolcraft/items/broken_amulet.json
@@ -37,6 +43,7 @@ bde240fb926be4a72f77d595be12252a86829e19 assets/jolcraft/items/dwarf_brewmaster_
 25519222e3e0c4ba4e21b243c2355bd3377a9722 assets/jolcraft/items/dwarf_merchant_spawn_egg.json
 325d281cc8d2d7160561cc8cc99959adc1565ada assets/jolcraft/items/dwarf_scrapper_spawn_egg.json
 24cd6ae2d33acb7f6c5f176439171fd9cc5a3676 assets/jolcraft/items/dwarf_spawn_egg.json
+7fba58cfb5adfc1fea057315d4467d69e3795d47 assets/jolcraft/items/dwarven_brew.json
 1b66b50bfde59a65cbcf2fb3e1d777e80d91af3d assets/jolcraft/items/dwarven_lexicon.json
 8718cdecc3d0c287eb9ac0f5ab227262d774f4b6 assets/jolcraft/items/dwarven_tome.json
 d15f2d79fab50c9cb9b20d05e9f5627ed81f643c assets/jolcraft/items/dwarven_tome_common.json
@@ -46,7 +53,9 @@ d15f2d79fab50c9cb9b20d05e9f5627ed81f643c assets/jolcraft/items/dwarven_tome_comm
 b8f4876eb89c6dd14d9e6e7f017d58bfe54fbc91 assets/jolcraft/items/earthblood.json
 1625505ec7e0b52f2df4d4b035c682c8f2504b69 assets/jolcraft/items/emberglass.json
 8f756d857a64c4f79320bc5becb83c370aa0d113 assets/jolcraft/items/expired_potion.json
+7e1a12fd1a62a16f096c1706bc51969accfe8c4b assets/jolcraft/items/fermenting_cauldron.json
 74b2f1d8976e207af37009265782c67c5ac4e388 assets/jolcraft/items/frostvein.json
+bb052b9a45f7d5a14b3676ca4c084cb0f6711340 assets/jolcraft/items/glass_mug.json
 d118affbc6974ddb63331ecadbf5104539a22e2c assets/jolcraft/items/gold_coin.json
 288d33f8c593ee149a3bed69e14e5e68fe50ae12 assets/jolcraft/items/grimstone.json
 d7f635f874b1e4445a5aa2fb22dfde995bc87bba assets/jolcraft/items/guild_sigil.json
@@ -76,8 +85,20 @@ dd656a2bc5eea169f3d545581ba025fd3b4a8e8c assets/jolcraft/items/scrap_heap.json
 35d90f0394c0b28f78f54a6012ca2bd9bbc624fb assets/jolcraft/items/sungleam.json
 7fc56949e69bb8c892c5b1101c07869c2ce62c1b assets/jolcraft/items/verdanite.json
 88299e24a47eb4f7d2151e5afa1a6605495d8fb3 assets/jolcraft/items/woecrystal.json
+0e83483ccb7184d0db82cf860d238e18e10cfe73 assets/jolcraft/items/yeast.json
+8bc29eaa35d1d8955c5164dbd06abaea159ddc6a assets/jolcraft/models/block/barley_crop_stage0.json
+a45b8d1ded2fe3b572576df731cdb27d906e2452 assets/jolcraft/models/block/barley_crop_stage1.json
+9907e4ec425e75ce6727637be47aed60e301d478 assets/jolcraft/models/block/barley_crop_stage2.json
+a9e28d10eb60ba53539639d7f87bc8df7e02e34a assets/jolcraft/models/block/barley_crop_stage3.json
+3f8fce2b16d788b8061361404db0f4a79a1787de assets/jolcraft/models/block/barley_crop_stage4.json
+9cfd8e268c81cc769099838b867358c9395570e6 assets/jolcraft/models/block/barley_crop_stage5.json
+815ded2e16e7be2ed18a7d9778dad4c3a7de0b83 assets/jolcraft/models/block/barley_crop_stage6.json
+d91a00ea40d5cc70d4dd70ff2559fd14473de8e7 assets/jolcraft/models/block/barley_crop_stage7.json
 0b29a86c84ea36cb1d33609a357710f78091ec97 assets/jolcraft/models/item/aegiscore.json
 9251ea4ccc62d66bc9c1adda4e90e82cc372db47 assets/jolcraft/models/item/ashfang.json
+aaa34993f50b8a431d400e7daf0cc31cc81ac82a assets/jolcraft/models/item/barley.json
+20ede22917f59c79afbbae9b0c1288037b2bc127 assets/jolcraft/models/item/barley_malt.json
+74b760b0cad0b47f25df1610b8aa9b077167b6bd assets/jolcraft/models/item/barley_seeds.json
 5a0cd2c6c0ce2441ae8dfc214d420d4cad73689f assets/jolcraft/models/item/bounty.json
 ece4ae61715573a31289cf72479bf5227f7f1601 assets/jolcraft/models/item/bounty_crate.json
 b61f0458a3a51b234859a06da25eb6bc35b162f6 assets/jolcraft/models/item/broken_amulet.json
@@ -106,6 +127,7 @@ b4db59238975674fb81bd5640e05721dd9003bb0 assets/jolcraft/models/item/contract_wr
 d996069b9149791e1d3e2f14a99efb9734f57c62 assets/jolcraft/models/item/copper_spanner.json
 a354ac87f5c1a9f792aab72ca8cc2f51efee3adf assets/jolcraft/models/item/deepmarrow.json
 808931e159dd518342e0dae658392d488ea77dca assets/jolcraft/models/item/deepslate_mug.json
+65855cc45296b3937060d56c27fac8efd0bf1a9f assets/jolcraft/models/item/dwarven_brew.json
 f37172a3b4da36e6479959d08346200bfc43b7d7 assets/jolcraft/models/item/dwarven_lexicon.json
 ede21d07f7de125294e4cddd710ef11d15d93a03 assets/jolcraft/models/item/dwarven_tome.json
 ede21d07f7de125294e4cddd710ef11d15d93a03 assets/jolcraft/models/item/dwarven_tome_common.json
@@ -116,6 +138,7 @@ d66a1d61af21bbc0817dd9343fd1cfd5ae98715b assets/jolcraft/models/item/earthblood.
 62cd04b43c905f8cf691c73fe31c31a59f5609b4 assets/jolcraft/models/item/emberglass.json
 af290eb0e410bff8e6bcc534855dbff8dc323a44 assets/jolcraft/models/item/expired_potion.json
 2157da712cdbc7601dfde417f7b1628d0cd052f2 assets/jolcraft/models/item/frostvein.json
+18d360c00f757eba3eb18d7a3d3c662ae3fe8527 assets/jolcraft/models/item/glass_mug.json
 f73610af65d4521fb243b9b93bc5a57d19209561 assets/jolcraft/models/item/gold_coin.json
 a3ed122d72b135bdc041ffb9d2125462b7becde1 assets/jolcraft/models/item/grimstone.json
 eb5e5861eb21fd0d26001467b450d2a4a46b8cbe assets/jolcraft/models/item/guild_sigil.json
@@ -145,3 +168,4 @@ c5ff1e24a56e1215b69c633a8df2b1895ee61ea6 assets/jolcraft/models/item/skyburrow.j
 9fe8be3c995ca8b88874d9d1a372f9ea47027786 assets/jolcraft/models/item/sungleam.json
 b03fc32199b4b447788ca7501669d2ac80877253 assets/jolcraft/models/item/verdanite.json
 a505a75038a705105787e22db2930caff9519df3 assets/jolcraft/models/item/woecrystal.json
+b918598b82d634eaa0ba2f803a09614f0580a33e assets/jolcraft/models/item/yeast.json

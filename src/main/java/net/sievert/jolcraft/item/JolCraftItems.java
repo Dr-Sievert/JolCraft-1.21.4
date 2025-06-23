@@ -1,11 +1,14 @@
 package net.sievert.jolcraft.item;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.Holder;
 import net.minecraft.world.item.*;
+import net.minecraft.world.level.block.Block;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.sievert.jolcraft.JolCraft;
+import net.sievert.jolcraft.block.JolCraftBlocks;
 import net.sievert.jolcraft.entity.JolCraftEntities;
 import net.minecraft.network.chat.Component;
 import net.sievert.jolcraft.item.custom.*;
@@ -193,6 +196,31 @@ public class JolCraftItems {
     public static final DeferredItem<Item> WOECRYSTAL = ITEMS.registerItem("woecrystal",
             Item::new, new Item.Properties());
 
+    //Crops, food and brewing
+
+    public static final DeferredItem<Item> BARLEY_SEEDS = ITEMS.registerItem("barley_seeds",
+            properties -> new BlockItem(JolCraftBlocks.BARLEY_CROP.get(), properties));
+
+    public static final DeferredItem<Item> BARLEY =
+            ITEMS.registerItem("barley", Item::new,
+                    new Item.Properties());
+
+    public static final DeferredItem<Item> BARLEY_MALT =
+            ITEMS.registerItem("barley_malt", Item::new,
+                    new Item.Properties());
+
+    public static final DeferredItem<Item> YEAST =
+            ITEMS.registerItem("yeast", Item::new,
+                    new Item.Properties().stacksTo(16).craftRemainder(Items.GLASS_BOTTLE));
+
+    public static final DeferredItem<Item> GLASS_MUG =
+            ITEMS.registerItem("glass_mug", Item::new,
+                    new Item.Properties().stacksTo(16));
+
+    public static final DeferredItem<Item> DWARVEN_BREW =
+            ITEMS.registerItem("dwarven_brew",  (properties) -> new Item(properties.food(JolCraftFoodProperties.DWARVEN_BREW, JolCraftFoodProperties.DWARVEN_BREW_EFFECT).usingConvertsTo(JolCraftItems.GLASS_MUG.get()).stacksTo(1)));
+
+
     //Reputation
     public static final DeferredItem<Item> REPUTATION_TABLET_0 =
             ITEMS.registerItem("reputation_tablet_0", ReputationTabletItem::new,
@@ -347,7 +375,6 @@ public class JolCraftItems {
                     super.appendHoverText(pStack, pContext, pTooltipComponents, pTooltipFlag);
                 }
             }, new Item.Properties().stacksTo(1));
-
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);

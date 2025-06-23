@@ -1,13 +1,18 @@
 package net.sievert.jolcraft;
 
 
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.resources.ResourceLocation;
 import net.sievert.jolcraft.advancement.JolCraftCriteriaTriggers;
+import net.sievert.jolcraft.block.JolCraftBlocks;
+import net.sievert.jolcraft.block.entity.JolCraftBlockEntities;
 import net.sievert.jolcraft.capability.JolCraftAttachments;
 import net.sievert.jolcraft.component.JolCraftDataComponents;
 import net.sievert.jolcraft.entity.JolCraftEntities;
 import net.sievert.jolcraft.entity.client.dwarf.render.*;
+import net.sievert.jolcraft.fluid.JolCraftFluids;
 import net.sievert.jolcraft.item.JolCraftCreativeModeTabs;
 import net.sievert.jolcraft.item.JolCraftItems;
 import net.sievert.jolcraft.loot.JolCraftLootModifiers;
@@ -51,7 +56,14 @@ public class JolCraft
         modEventBus.addListener(this::commonSetup);
 
         // For registration and init stuff.
+        JolCraftBlocks.register(modEventBus);
+
+        JolCraftFluids.register(modEventBus);
+
         JolCraftItems.register(modEventBus);
+
+        JolCraftBlockEntities.register(modEventBus);
+
         JolCraftCreativeModeTabs.register(modEventBus);
 
         JolCraftDataComponents.register(modEventBus);
@@ -140,6 +152,8 @@ public class JolCraft
             EntityRenderers.register(JolCraftEntities.DWARF_GUARD.get(), DwarfGuardRenderer::new);
             EntityRenderers.register(JolCraftEntities.DWARF_KEEPER.get(), DwarfKeeperRenderer::new);
 
+            ItemBlockRenderTypes.setRenderLayer(JolCraftBlocks.BARLEY_CROP.get(), RenderType.cutout());
+            ItemBlockRenderTypes.setRenderLayer(JolCraftBlocks.FERMENTING_CAULDRON.get(), RenderType.translucent());
 
             // Some client setup code
             LOGGER.info("HELLO FROM CLIENT SETUP");

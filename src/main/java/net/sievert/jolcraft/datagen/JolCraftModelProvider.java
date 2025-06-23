@@ -1,16 +1,31 @@
 package net.sievert.jolcraft.datagen;
 
+import com.google.gson.JsonObject;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.client.data.models.ModelProvider;
+import net.minecraft.client.data.models.blockstates.*;
+import net.minecraft.client.data.models.model.ModelInstance;
 import net.minecraft.client.data.models.model.ModelTemplates;
+import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.Block;
 import net.sievert.jolcraft.JolCraft;
+import net.sievert.jolcraft.block.JolCraftBlocks;
+import net.sievert.jolcraft.block.custom.BarleyCropBlock;
+import net.sievert.jolcraft.block.custom.FermentingCauldronBlock;
 import net.sievert.jolcraft.item.JolCraftItems;
 
+import java.nio.file.Path;
+
 public class JolCraftModelProvider extends ModelProvider {
+
+    private final PackOutput packOutput;
     public JolCraftModelProvider(PackOutput output) {
         super(output, JolCraft.MOD_ID);
+        this.packOutput = output; // <-- save it
+
     }
 
     @Override
@@ -20,6 +35,13 @@ public class JolCraftModelProvider extends ModelProvider {
         itemModels.generateFlatItem(JolCraftItems.GOLD_COIN.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(JolCraftItems.DWARVEN_LEXICON.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(JolCraftItems.PARCHMENT.get(), ModelTemplates.FLAT_ITEM);
+
+        //Brewing
+        itemModels.generateFlatItem(JolCraftItems.BARLEY.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.BARLEY_MALT.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.YEAST.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.GLASS_MUG.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.DWARVEN_BREW.get(), ModelTemplates.FLAT_ITEM);
 
         //Bounty
         itemModels.generateFlatItem(JolCraftItems.BOUNTY.get(), ModelTemplates.FLAT_ITEM);
@@ -149,7 +171,110 @@ public class JolCraftModelProvider extends ModelProvider {
         );
 
 
+        //Blocks
+
+        //Crops
+        blockModels.createCropBlock(JolCraftBlocks.BARLEY_CROP.get(), BarleyCropBlock.AGE,  0, 1, 2, 3, 4, 5, 6, 7);
+
+
+
+        // For Fermenting Cauldron: custom blockstate with level property
+        blockModels.blockStateOutput.accept(new BlockStateGenerator() {
+            @Override
+            public JsonObject get() {
+                JsonObject root = new JsonObject();
+                JsonObject variants = new JsonObject();
+                variants.add("level=1", modelObj(JolCraft.MOD_ID, "block/fermenting_cauldron_level1"));
+                variants.add("level=2", modelObj(JolCraft.MOD_ID, "block/fermenting_cauldron_level2"));
+                variants.add("level=3", modelObj(JolCraft.MOD_ID, "block/fermenting_cauldron_full"));
+                root.add("variants", variants);
+                return root;
+            }
+            @Override
+            public Block getBlock() {
+                return JolCraftBlocks.FERMENTING_CAULDRON.get();
+            }
+        });
+
+        // Generate fluid blockstates
+        generateFluidBlockstateAndModels(
+                blockModels,
+                this.packOutput,
+                JolCraftBlocks.FERMENTING_FLUID.get(),
+                "fermenting_fluid",
+                "fermenting_fluid_still",
+                "fermenting_fluid_flow"
+        );
+
 
     }
+
+    // --- FLUID HELPER ---
+    private void generateFluidBlockstateAndModels(
+            BlockModelGenerators blockModels, PackOutput output, Block fluidBlock,
+            String fluidName, String stillTextureName, String flowingTextureName
+    ) {
+        // Blockstate for the fluid block
+        blockModels.blockStateOutput.accept(new BlockStateGenerator() {
+            @Override
+            public JsonObject get() {
+                JsonObject root = new JsonObject();
+                JsonObject variants = new JsonObject();
+                variants.add("", modelObj(JolCraft.MOD_ID, "fluid/" + fluidName + "_still"));
+                root.add("variants", variants);
+                return root;
+            }
+            @Override
+            public Block getBlock() {
+                return fluidBlock;
+            }
+        });
+
+        // Still fluid model JSON
+        JsonObject stillModel = new JsonObject();
+        stillModel.addProperty("parent", "minecraft:block/fluid");
+        JsonObject stillTextures = new JsonObject();
+        stillTextures.addProperty("still", JolCraft.MOD_ID + ":block/" + stillTextureName);
+        stillTextures.addProperty("flow", JolCraft.MOD_ID + ":block/" + flowingTextureName);
+        stillTextures.addProperty("overlay", "minecraft:block/water_overlay");
+        stillModel.add("textures", stillTextures);
+        saveModelJson(output, ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "fluid/" + fluidName + "_still"), stillModel);
+
+        // Flowing fluid model JSON
+        JsonObject flowModel = new JsonObject();
+        flowModel.addProperty("parent", "minecraft:block/flowing");
+        JsonObject flowTextures = new JsonObject();
+        flowTextures.addProperty("still", JolCraft.MOD_ID + ":block/" + stillTextureName);
+        flowTextures.addProperty("flow", JolCraft.MOD_ID + ":block/" + flowingTextureName);
+        flowTextures.addProperty("overlay", "minecraft:block/water_overlay");
+        flowModel.add("textures", flowTextures);
+        saveModelJson(output, ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "fluid/" + fluidName + "_flow"), flowModel);
+    }
+
+
+    // --- RAW MODEL JSON SAVER ---
+    private void saveModelJson(PackOutput output, ResourceLocation modelLoc, JsonObject json) {
+        Path path = output.getOutputFolder(PackOutput.Target.RESOURCE_PACK)
+                .resolve("assets")
+                .resolve(modelLoc.getNamespace())
+                .resolve("models")
+                .resolve(modelLoc.getPath() + ".json");
+        try {
+            DataProvider.saveStable(null, json, path);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to save model " + modelLoc, e);
+        }
+    }
+
+
+
+
+    // Helper for the model property
+    private static JsonObject modelObj(String modid, String path) {
+        JsonObject obj = new JsonObject();
+        obj.addProperty("model", modid + ":" + path);
+        return obj;
+    }
+
 
 }

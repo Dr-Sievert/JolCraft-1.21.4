@@ -1,0 +1,10 @@
+{
+  "values": {
+    "jolcraft:barley": {
+      "chance": 0.45
+    },
+    "jolcraft:barley_seeds": {
+      "chance": 0.25
+    }
+  }
+}

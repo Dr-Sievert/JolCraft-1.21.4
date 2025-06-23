@@ -17,6 +17,9 @@ import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LayeredCauldronBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
@@ -24,6 +27,8 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.village.VillagerTradesEvent;
 import net.sievert.jolcraft.JolCraft;
+import net.sievert.jolcraft.block.custom.FermentingCauldronBlock;
+import net.sievert.jolcraft.block.custom.FermentingStage;
 import net.sievert.jolcraft.capability.DwarvenLanguageImpl;
 import net.sievert.jolcraft.capability.JolCraftAttachments;
 import net.sievert.jolcraft.data.JolCraftTags;
@@ -35,13 +40,85 @@ import net.sievert.jolcraft.network.packet.ClientboundSyncReputationPacket;
 import net.sievert.jolcraft.util.SalvageLootHelper;
 import net.sievert.jolcraft.network.JolCraftNetworking;
 import net.sievert.jolcraft.network.packet.ClientboundSyncLanguagePacket;
+import net.sievert.jolcraft.block.JolCraftBlocks;
 
 import java.util.List;
 
 @EventBusSubscriber(modid = JolCraft.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public class JolCraftGameEvents {
 
-    //Hurting living entities
+    @SubscribeEvent
+    public static void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
+        var player = event.getEntity();
+        var level = event.getLevel();
+        var pos = event.getPos();
+        var state = level.getBlockState(pos);
+
+        if (!level.isClientSide()) {
+            // Check that block is full water cauldron
+            if (state.is(Blocks.WATER_CAULDRON) && state.getValue(LayeredCauldronBlock.LEVEL) == 3) {
+                var mainHandStack = player.getMainHandItem();
+
+                // === SUGAR logic for yeast creation ===
+                if (mainHandStack.is(Items.SUGAR)) {
+                    BlockState fermentState = JolCraftBlocks.FERMENTING_CAULDRON.get().defaultBlockState()
+                            .setValue(FermentingCauldronBlock.LEVEL, 3)
+                            .setValue(FermentingCauldronBlock.STAGE, FermentingStage.YEAST_FERMENTING);
+                    level.setBlock(pos, fermentState, 3);
+
+                    level.playSound(null, pos, SoundEvents.PLAYER_SPLASH, SoundSource.BLOCKS, 0.3F, 1.7F);
+
+                    mainHandStack.shrink(1);
+
+                    event.setCancellationResult(InteractionResult.SUCCESS);
+                    event.setCanceled(true);
+                    return;
+                }
+
+                // === BARLEY MALT logic for malted stage ===
+                if (mainHandStack.is(JolCraftItems.BARLEY_MALT.get())) {
+                    BlockState maltedState = JolCraftBlocks.FERMENTING_CAULDRON.get().defaultBlockState()
+                            .setValue(FermentingCauldronBlock.LEVEL, 3)
+                            .setValue(FermentingCauldronBlock.STAGE, FermentingStage.MALTED);
+                    // Optionally set a malted boolean property if you want
+
+                    level.setBlock(pos, maltedState, 3);
+
+                    level.playSound(null, pos, SoundEvents.PLAYER_SPLASH, SoundSource.BLOCKS, 0.3F, 1.7F);
+
+                    mainHandStack.shrink(1);
+
+                    event.setCancellationResult(InteractionResult.SUCCESS);
+                    event.setCanceled(true);
+                    return;
+                }
+            }
+
+            // === Adding yeast on malted cauldron to start brew fermentation ===
+            if (state.is(JolCraftBlocks.FERMENTING_CAULDRON.get()) &&
+                    state.getValue(FermentingCauldronBlock.STAGE) == FermentingStage.MALTED) {
+
+                var mainHandStack = player.getMainHandItem();
+
+                if (mainHandStack.is(JolCraftItems.YEAST.get())) {
+                    BlockState brewFermentingState = state
+                            .setValue(FermentingCauldronBlock.STAGE, FermentingStage.BREW_FERMENTING)
+                            .setValue(FermentingCauldronBlock.LEVEL, 3);
+
+                    level.setBlock(pos, brewFermentingState, 3);
+
+                    level.playSound(null, pos, SoundEvents.PLAYER_SPLASH, SoundSource.BLOCKS, 0.4F, 1.6F);
+
+                    mainHandStack.shrink(1);
+
+                    event.setCancellationResult(InteractionResult.SUCCESS);
+                    event.setCanceled(true);
+                    return;
+                }
+            }
+        }
+    }
+
     @SubscribeEvent
     public static void onLivingDamage(LivingDamageEvent.Pre event) {
         if (event.getEntity() instanceof DwarfGuardEntity dwarf && dwarf.isBlockCooldownReady() && event.getSource().getEntity() instanceof Monster) {

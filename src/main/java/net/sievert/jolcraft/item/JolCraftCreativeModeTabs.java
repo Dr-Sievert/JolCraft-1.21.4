@@ -22,6 +22,13 @@ public class JolCraftCreativeModeTabs {
                         pOutput.accept(JolCraftItems.DWARVEN_LEXICON);
                         pOutput.accept(JolCraftItems.GOLD_COIN);
 
+                        pOutput.accept(JolCraftItems.BARLEY_SEEDS);
+                        pOutput.accept(JolCraftItems.BARLEY);
+                        pOutput.accept(JolCraftItems.BARLEY_MALT);
+                        pOutput.accept(JolCraftItems.YEAST);
+                        pOutput.accept(JolCraftItems.GLASS_MUG);
+                        pOutput.accept(JolCraftItems.DWARVEN_BREW);
+
                         pOutput.accept(JolCraftItems.QUILL_EMPTY);
                         pOutput.accept(JolCraftItems.QUILL_FULL);
                         pOutput.accept(JolCraftItems.PARCHMENT);

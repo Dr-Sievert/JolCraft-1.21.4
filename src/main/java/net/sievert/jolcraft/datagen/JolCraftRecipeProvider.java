@@ -5,7 +5,9 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.sievert.jolcraft.data.JolCraftTags;
 import net.sievert.jolcraft.item.JolCraftItems;
 
@@ -62,6 +64,13 @@ public class JolCraftRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_contract_signed", has(JolCraftItems.CONTRACT_SIGNED.get()))
                 .save(output);
 
+        shaped(RecipeCategory.MISC, JolCraftItems.GLASS_MUG.get())
+                .pattern("B ")
+                .pattern("BB")
+                .pattern("B ")
+                .define('B', Items.GLASS)
+                .unlockedBy("has_glass", has(Items.GLASS)).save(output);
+
         shapeless(RecipeCategory.MISC, JolCraftItems.QUILL_FULL.get())
                 .requires(Items.GLASS)
                 .requires(Items.FEATHER)
@@ -87,6 +96,26 @@ public class JolCraftRecipeProvider extends RecipeProvider {
                 RecipeCategory.MISC,
                 JolCraftItems.SCRAP_HEAP.get() //Block
         );
+
+        // Barley -> Barley Malt (Smelting)
+        SimpleCookingRecipeBuilder.smelting(
+                        Ingredient.of(JolCraftItems.BARLEY.get()),
+                        RecipeCategory.FOOD,
+                        JolCraftItems.BARLEY_MALT.get(),
+                        0.35f, // XP
+                        200    // Cooking time (in ticks, vanilla is 200 = 10s)
+                ).unlockedBy("has_barley", has(JolCraftItems.BARLEY.get()))
+                .save(output, "barley_malt_from_smelting");
+
+        // Barley -> Barley Malt (Smoking)
+        SimpleCookingRecipeBuilder.smoking(
+                        Ingredient.of(JolCraftItems.BARLEY.get()),
+                        RecipeCategory.FOOD,
+                        JolCraftItems.BARLEY_MALT.get(),
+                        0.35f, // XP
+                        100    // Cooking time (smoking is usually faster, vanilla is 100 = 5s)
+                ).unlockedBy("has_barley", has(JolCraftItems.BARLEY.get()))
+                .save(output, "barley_malt_from_smoking");
 
 
 

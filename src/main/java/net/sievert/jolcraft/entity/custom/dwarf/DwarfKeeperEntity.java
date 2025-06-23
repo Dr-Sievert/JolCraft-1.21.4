@@ -134,8 +134,7 @@ public class DwarfKeeperEntity extends AbstractDwarfEntity {
                     1,
                     new VillagerTrades.ItemListing[]{
                             new JolCraftDwarfTrades.ItemsForGold(Items.STICK, 1, 1, 6, 500),
-                            new JolCraftDwarfTrades.GoldForItems(Items.SMITHING_TABLE, 2, 4, 4, 1)
-
+                            new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.BARLEY_SEEDS.get(), 3, 1, 6, 1)
                     },
 
                     //Apprentice
