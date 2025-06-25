@@ -12,6 +12,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.sievert.jolcraft.block.JolCraftBlocks;
 import net.sievert.jolcraft.data.JolCraftTags;
 
 import java.util.function.Supplier;
@@ -115,5 +116,30 @@ public class HopsCropTopBlock extends HopsCropBottomBlock {
             }
         }
     }
+
+    @Override
+    protected boolean mayPlaceOn(BlockState state, BlockGetter level, BlockPos pos) {
+        return state.getBlock() instanceof HopsCropBottomBlock;
+    }
+
+    @Override
+    public void growCrops(Level level, BlockPos pos, BlockState state) {
+        super.growCrops(level, pos, state);
+        int newTopAge = level.getBlockState(pos).getValue(TOP_AGE);
+        syncBottomBlock(level, pos, newTopAge);
+    }
+
+    private void syncBottomBlock(Level level, BlockPos pos, int topAge) {
+        BlockPos below = pos.below();
+        BlockState belowState = level.getBlockState(below);
+        if (belowState.is(JolCraftTags.Blocks.HOPS_BOTTOM)) {
+            int requiredBottomAge = topAge + 5;
+            int clamped = Math.min(requiredBottomAge, HopsCropBottomBlock.MAX_AGE);
+            if (belowState.getValue(HopsCropBottomBlock.AGE) != clamped) {
+                level.setBlock(below, belowState.setValue(HopsCropBottomBlock.AGE, clamped), 2);
+            }
+        }
+    }
+
 
 }

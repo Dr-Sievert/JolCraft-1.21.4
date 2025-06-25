@@ -23,12 +23,25 @@ public class FermentingCauldronBlockEntity extends BlockEntity {
     private int fermentationProgress = 0;
     private final int maxFermentationProgress = 100;
     private int bubbleCooldown = 0;
+    private int yeastTickDelay = 12; //How many times we multiply 5 seconds (100 ticks)
+    private int yeastTickCounter = 0;
+    private int brewTickDelay = 60; //How many times we multiply 5 seconds (100 ticks)
+    private int brewTickCounter = 0;
+
+
+    public FermentingCauldronBlockEntity(BlockPos pos, BlockState state) {
+        super(JolCraftBlockEntities.FERMENTING_CAULDRON.get(), pos, state);
+    }
 
     // Store added hops as a Set to prevent duplicates
     private Set<HopsType> addedHops = new HashSet<>();
 
-    public FermentingCauldronBlockEntity(BlockPos pos, BlockState state) {
-        super(JolCraftBlockEntities.FERMENTING_CAULDRON.get(), pos, state);
+    public String getHopsString() {
+        return addedHops.stream()
+                .map(HopsType::name)
+                .sorted() // optional, makes the string deterministic
+                .reduce((a, b) -> a + "," + b)
+                .orElse("");
     }
 
     // --- Save/load NBT ---
@@ -97,33 +110,70 @@ public class FermentingCauldronBlockEntity extends BlockEntity {
 
         // Handle fermentation progress if it's in the fermenting stage
         if (isFermentingStage(stage)) {
-            fermentationProgress++;
 
-            // Trigger fermentation progress and handle color update
-            updateBlockStateProgress();
-
-            // Bubbles and sound effects for fermentation progress
-            if (bubbleCooldown <= 0) {
-                if (level instanceof ServerLevel serverLevel) {
-                    double x = worldPosition.getX() + 0.5 + (serverLevel.random.nextDouble() - 0.5);
-                    double y = worldPosition.getY() + 1.1;
-                    double z = worldPosition.getZ() + 0.5 + (serverLevel.random.nextDouble() - 0.5);
-
-                    // Bubble particle effect
-                    serverLevel.sendParticles(ParticleTypes.BUBBLE_POP, x, y, z, 1, 0.0, 0.05, 0.0, 0.05);
-                    // Bubble sound effect
-                    serverLevel.playSound(null, x, y, z, SoundEvents.BUBBLE_POP, SoundSource.BLOCKS, 0.3f, 1.4f);
-
-                    bubbleCooldown = 3 + serverLevel.random.nextInt(3);
+            if (state.getValue(FermentingCauldronBlock.STAGE) == FermentingStage.BREW_FERMENTING) {
+                if (++brewTickCounter >= brewTickDelay) {
+                    fermentationProgress++;
+                    brewTickCounter = 0;
                 }
-            } else {
-                bubbleCooldown--;
+
+                // Trigger fermentation progress and handle color update
+                updateBlockStateProgress();
+
+
+                // Bubbles and sound effects for fermentation progress
+                if (bubbleCooldown <= 0) {
+                    if (level instanceof ServerLevel serverLevel) {
+                        double x = worldPosition.getX() + 0.5 + (serverLevel.random.nextDouble() - 0.5);
+                        double y = worldPosition.getY() + 1.01;
+                        double z = worldPosition.getZ() + 0.5 + (serverLevel.random.nextDouble() - 0.5);
+
+                        // Bubble particle effect
+                        serverLevel.sendParticles(ParticleTypes.BUBBLE_POP, x, y, z, 1, 0.0, 0.05, 0.0, 0.05);
+                        // Bubble sound effect
+                        serverLevel.playSound(null, x, y, z, SoundEvents.BUBBLE_POP, SoundSource.BLOCKS, 0.3f, 1.4f);
+
+                        bubbleCooldown = 3 + serverLevel.random.nextInt(60);
+                    }
+                } else {
+                    bubbleCooldown--;
+                }
+            }
+
+            if (state.getValue(FermentingCauldronBlock.STAGE) == FermentingStage.YEAST_FERMENTING) {
+                if (++yeastTickCounter >= yeastTickDelay) {
+                    fermentationProgress++;
+                    yeastTickCounter = 0;
+                }
+
+                // Trigger fermentation progress and handle color update
+                updateBlockStateProgress();
+
+
+                // Bubbles and sound effects for fermentation progress
+                if (bubbleCooldown <= 0) {
+                    if (level instanceof ServerLevel serverLevel) {
+                        double x = worldPosition.getX() + 0.5 + (serverLevel.random.nextDouble() - 0.5);
+                        double y = worldPosition.getY() + 1.01;
+                        double z = worldPosition.getZ() + 0.5 + (serverLevel.random.nextDouble() - 0.5);
+
+                        // Bubble particle effect
+                        serverLevel.sendParticles(ParticleTypes.BUBBLE_POP, x, y, z, 1, 0.0, 0.05, 0.0, 0.05);
+                        // Bubble sound effect
+                        serverLevel.playSound(null, x, y, z, SoundEvents.BUBBLE_POP, SoundSource.BLOCKS, 0.3f, 1.4f);
+
+                        bubbleCooldown = 3 + serverLevel.random.nextInt(3);
+                    }
+                } else {
+                    bubbleCooldown--;
+                }
             }
 
             if (fermentationProgress >= maxFermentationProgress) {
                 finishFermentation(stage);
                 fermentationProgress = 0;
             }
+
         }
 
         setChanged();

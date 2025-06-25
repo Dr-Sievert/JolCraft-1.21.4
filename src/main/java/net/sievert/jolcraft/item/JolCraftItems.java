@@ -244,7 +244,7 @@ public class JolCraftItems {
                     new Item.Properties().stacksTo(16));
 
     public static final DeferredItem<Item> DWARVEN_BREW =
-            ITEMS.registerItem("dwarven_brew",  (properties) -> new Item(properties.food(JolCraftFoodProperties.DWARVEN_BREW, JolCraftFoodProperties.DWARVEN_BREW_EFFECT).usingConvertsTo(JolCraftItems.GLASS_MUG.get()).stacksTo(1)));
+            ITEMS.registerItem("dwarven_brew",  (properties) -> new DwarvenBrewItem(properties.food(JolCraftFoodProperties.DWARVEN_BREW, JolCraftFoodProperties.DWARVEN_BREW_EFFECT).usingConvertsTo(JolCraftItems.GLASS_MUG.get()).stacksTo(1)));
 
 
     //Reputation

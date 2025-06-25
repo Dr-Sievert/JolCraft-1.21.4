@@ -90,6 +90,7 @@ public class HopsCropBottomBlock extends CropBlock {
             level.destroyBlock(pos, true);
             return;
         }
+
         if (!hasSufficientDarkness(level, pos)) return;
 
         // Growth logic (only if not max age and not blocked above)
@@ -104,23 +105,31 @@ public class HopsCropBottomBlock extends CropBlock {
                 }
             }
         }
+        syncTopBlock(level, pos, age);
 
-        // --- Always sync top block every tick! ---
-        aboveState = level.getBlockState(above); // Refresh in case changed
-        if (aboveState.isAir() || aboveState.is(JolCraftTags.Blocks.HOPS_TOP)) {
-            if (age >= 5) {
-                int topAge = Math.min(age - 5, HopsCropTopBlock.MAX_AGE);
-                if (!aboveState.is(JolCraftTags.Blocks.HOPS_TOP)) {
-                    BlockState topState = topBlock.get().defaultBlockState().setValue(HopsCropTopBlock.TOP_AGE, topAge);
-                    level.setBlock(above, topState, 2);
-                } else if (aboveState.getValue(HopsCropTopBlock.TOP_AGE) != topAge) {
-                    level.setBlock(above, aboveState.setValue(HopsCropTopBlock.TOP_AGE, topAge), 2);
-                }
-            } else {
-                if (aboveState.is(JolCraftTags.Blocks.HOPS_TOP)) {
-                    level.destroyBlock(above, true);
-                }
+    }
+
+    @Override
+    public void growCrops(Level level, BlockPos pos, BlockState state) {
+        super.growCrops(level, pos, state);
+        int newAge = level.getBlockState(pos).getValue(this.getAgeProperty());
+        syncTopBlock(level, pos, newAge);
+    }
+
+    private void syncTopBlock(Level level, BlockPos pos, int age) {
+        BlockPos above = pos.above();
+        BlockState aboveState = level.getBlockState(above);
+
+        if (age >= 5) {
+            int topAge = Math.min(age - 5, HopsCropTopBlock.MAX_AGE);
+            if (!aboveState.is(JolCraftTags.Blocks.HOPS_TOP)) {
+                BlockState topState = topBlock.get().defaultBlockState().setValue(HopsCropTopBlock.TOP_AGE, topAge);
+                level.setBlock(above, topState, 2);
+            } else if (aboveState.getValue(HopsCropTopBlock.TOP_AGE) != topAge) {
+                level.setBlock(above, aboveState.setValue(HopsCropTopBlock.TOP_AGE, topAge), 2);
             }
+        } else if (aboveState.is(JolCraftTags.Blocks.HOPS_TOP)) {
+            level.destroyBlock(above, true);
         }
     }
 
@@ -129,7 +138,6 @@ public class HopsCropBottomBlock extends CropBlock {
     public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
         BlockState soil = level.getBlockState(pos.below());
         boolean soilOk = false;
-
         // NeoForge/vanilla's TriState for plant support
         TriState soilDecision = soil.canSustainPlant(level, pos.below(), Direction.UP, state);
         if (!soilDecision.isDefault()) {

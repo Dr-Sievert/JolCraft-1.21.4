@@ -13,7 +13,6 @@ public class JolCraftFoodProperties {
 
     // Ensure both effects are applied with the given chances
     public static final Consumable DWARVEN_BREW_EFFECT = Consumables.defaultDrink()
-            .onConsume(new ApplyStatusEffectsConsumeEffect(new MobEffectInstance(MobEffects.HEALTH_BOOST, 400, 2), 1.0f)) // Always apply health boost
-            .onConsume(new ApplyStatusEffectsConsumeEffect(new MobEffectInstance(MobEffects.CONFUSION, 400, 0), 1.0f)) // Always apply confusion
+            .onConsume(new ApplyStatusEffectsConsumeEffect(new MobEffectInstance(MobEffects.CONFUSION, 200, 0), 1.0f)) // Always apply confusion
             .build();
 }

@@ -68,7 +68,7 @@ public class JolCraftGameEvents {
 
                     level.playSound(null, pos, SoundEvents.PLAYER_SPLASH, SoundSource.BLOCKS, 0.3F, 1.7F);
 
-                    mainHandStack.shrink(1);
+                    if (!player.isCreative()) mainHandStack.shrink(1);
 
                     event.setCancellationResult(InteractionResult.SUCCESS);
                     event.setCanceled(true);
@@ -86,7 +86,7 @@ public class JolCraftGameEvents {
 
                     level.playSound(null, pos, SoundEvents.PLAYER_SPLASH, SoundSource.BLOCKS, 0.3F, 1.7F);
 
-                    mainHandStack.shrink(1);
+                    if (!player.isCreative()) mainHandStack.shrink(1);
 
                     event.setCancellationResult(InteractionResult.SUCCESS);
                     event.setCanceled(true);
@@ -94,28 +94,6 @@ public class JolCraftGameEvents {
                 }
             }
 
-            // === Adding yeast on malted cauldron to start brew fermentation ===
-            if (state.is(JolCraftBlocks.FERMENTING_CAULDRON.get()) &&
-                    state.getValue(FermentingCauldronBlock.STAGE) == FermentingStage.MALTED) {
-
-                var mainHandStack = player.getMainHandItem();
-
-                if (mainHandStack.is(JolCraftItems.YEAST.get())) {
-                    BlockState brewFermentingState = state
-                            .setValue(FermentingCauldronBlock.STAGE, FermentingStage.BREW_FERMENTING)
-                            .setValue(FermentingCauldronBlock.LEVEL, 3);
-
-                    level.setBlock(pos, brewFermentingState, 3);
-
-                    level.playSound(null, pos, SoundEvents.PLAYER_SPLASH, SoundSource.BLOCKS, 0.4F, 1.6F);
-
-                    mainHandStack.shrink(1);
-
-                    event.setCancellationResult(InteractionResult.SUCCESS);
-                    event.setCanceled(true);
-                    return;
-                }
-            }
         }
     }
 

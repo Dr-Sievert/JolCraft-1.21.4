@@ -172,7 +172,13 @@
   "tooltip.jolcraft.reputation.wrong_tablet": "You must present the correct reputation tablet to the Guildmaster.",
   "tooltip.jolcraft.reputation.level_up": "You have advanced in dwarven reputation!",
 
-  "tooltip.jolcraft.brewing.hops": "You already added this type to the brew.",
+  "tooltip.jolcraft.brewing.hops": "You already added this hops type to the brew.",
+  "tooltip.jolcraft.brew.hops_added": "No hops added.",
+  "tooltip.jolcraft.brew.hops_added": "Hops:",
+  "tooltip.jolcraft.hops.asgarnian": "Asgarnian",
+  "tooltip.jolcraft.hops.duskhold": "Duskhold",
+  "tooltip.jolcraft.hops.krandonian": "Krandonian",
+  "tooltip.jolcraft.hops.yanillian": "Yanillian",
 
 
   "itemGroup.jolcraft.jolcraft_items_tab": "JolCraft",

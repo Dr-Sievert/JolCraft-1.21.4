@@ -19,7 +19,7 @@ public class JolCraftClientEvents {
     private static final int BREW_COLOR = 0xFFA500; // Final orange brew
     private static final int YEAST_FERMENTING_START = 0xFF8EE8AA; // Light green
     private static final int YEAST_FERMENTING_END = 0xFF40B14A; // Dark green
-    private static final int HOP_COLOR = 0x2A9D8F; // Generic hop color
+    private static final int BLEND_COLOR = 0xFF786533; // Generic hop color
 
     @SubscribeEvent
     public static void onRegisterBlockColors(RegisterColorHandlersEvent.Block event) {
@@ -45,12 +45,12 @@ public class JolCraftClientEvents {
             }
 
 
-                    if (state.getValue(FermentingCauldronBlock.STAGE) != FermentingStage.HOPS){
+            if (state.getValue(FermentingCauldronBlock.STAGE) != FermentingStage.HOPS){
                 switch (stage) {
                     case YEAST_FERMENTING:
                         return blendColors(YEAST_FERMENTING_START, YEAST_FERMENTING_END, ratio); // Blend yeast fermentation
                     case BREW_FERMENTING:
-                        return blendColors(HOP_COLOR, BREW_COLOR, ratio); // Blending between hop and final brew color
+                        return blendColors(BLEND_COLOR, BREW_COLOR, ratio); // Blending between hop and final brew color
                     case YEAST_READY:
                         return YEAST_FERMENTING_END; // Final yeast color (dark green)
                     case BREW_READY:
@@ -60,19 +60,19 @@ public class JolCraftClientEvents {
                 }
             }
 
-                // Check for specific hop types and return corresponding color
-                switch (hopsType) {
-                    case ASGARNIAN:
-                        return 0xFF6B5352; // Color for Asgarnian hop
-                    case DUSKHOLD:
-                        return 0xFF5F5864; // Color for Duskhold hop
-                    case KRANDONIAN:
-                        return 0xFF526B69; // Color for Krandonian hop
-                    case YANILLIAN:
-                        return 0xFF2B4318; // Color for Yanillian hop
-                    default:
-                        return 0xFFB16A1D; // Default hop color
-                }
+            // Check for specific hop types and return corresponding color
+            switch (hopsType) {
+                case ASGARNIAN:
+                    return 0xFF6B5352; // Color for Asgarnian hop
+                case DUSKHOLD:
+                    return 0xFF5F5864; // Color for Duskhold hop
+                case KRANDONIAN:
+                    return 0xFF526B69; // Color for Krandonian hop
+                case YANILLIAN:
+                    return 0xFF2B4318; // Color for Yanillian hop
+                default:
+                    return 0xFFB16A1D; // Default hop color
+            }
 
         }, JolCraftBlocks.FERMENTING_CAULDRON.get());
     }

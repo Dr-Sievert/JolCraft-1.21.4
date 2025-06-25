@@ -23,24 +23,21 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.sievert.jolcraft.block.entity.FermentingCauldronBlockEntity;
 import net.sievert.jolcraft.block.entity.JolCraftBlockEntities;
+import net.sievert.jolcraft.component.JolCraftDataComponents;
 import net.sievert.jolcraft.data.JolCraftTags;
 import net.sievert.jolcraft.item.JolCraftItems;
 import org.jetbrains.annotations.Nullable;
 
 public class FermentingCauldronBlock extends LayeredCauldronBlock implements EntityBlock {
 
-    private static final int TICK_DELAY = 40;
-
     // Unique properties for Fermenting Cauldron
     public static final EnumProperty<FermentingStage> STAGE = EnumProperty.create("stage", FermentingStage.class);
     public static final EnumProperty<HopsType> HOPS_TYPE = EnumProperty.create("hops_type", HopsType.class);
-    public static final BooleanProperty MALTED = BooleanProperty.create("malted");
     public static final IntegerProperty FERMENTATION_PROGRESS = IntegerProperty.create("fermentation_progress", 0, 100);
 
     public FermentingCauldronBlock(Biome.Precipitation precipitationType, CauldronInteraction.InteractionMap interactions, Properties properties) {
@@ -50,7 +47,6 @@ public class FermentingCauldronBlock extends LayeredCauldronBlock implements Ent
                         .setValue(LEVEL, 3)  // This comes from LayeredCauldronBlock
                         .setValue(STAGE, FermentingStage.YEAST_FERMENTING)
                         .setValue(FERMENTATION_PROGRESS, 0)
-                        .setValue(MALTED, false)
                         .setValue(HOPS_TYPE, HopsType.NONE)
         );
     }
@@ -59,7 +55,7 @@ public class FermentingCauldronBlock extends LayeredCauldronBlock implements Ent
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         // Add the unique properties of Fermenting Cauldron
-        builder.add(STAGE, FERMENTATION_PROGRESS, MALTED, HOPS_TYPE);
+        builder.add(STAGE, FERMENTATION_PROGRESS, HOPS_TYPE);
     }
 
     // --- Interaction Logic ---
@@ -84,15 +80,38 @@ public class FermentingCauldronBlock extends LayeredCauldronBlock implements Ent
         // 2. Extract brew (if brew is ready)
         if (stack.is(JolCraftItems.GLASS_MUG.get()) && state.getValue(STAGE) == FermentingStage.BREW_READY) {
             int currentLevel = state.getValue(LEVEL);
+
+            // Create the brew item
             ItemStack dwarvenBrew = new ItemStack(JolCraftItems.DWARVEN_BREW.get());
-            if (!player.isCreative()) stack.shrink(1);
-            if (!player.getInventory().add(dwarvenBrew)) player.drop(dwarvenBrew, false);
+
+            // Attempt to get hops data from the block entity
+            BlockEntity be = level.getBlockEntity(pos);
+            if (be instanceof FermentingCauldronBlockEntity cauldron) {
+                String hopsData = cauldron.getHopsString();
+                if (!hopsData.isEmpty()) {
+                    dwarvenBrew.set(JolCraftDataComponents.HOPS.get(), hopsData);
+                }
+            }
+
+            // Consume mug and give brew
+            if (!player.isCreative()) {
+                stack.shrink(1);
+            }
+            if (!player.getInventory().add(dwarvenBrew)) {
+                player.drop(dwarvenBrew, false);
+            }
+
+            // Update cauldron state
             int newLevel = currentLevel - 1;
-            BlockState newState = newLevel > 0 ? state.setValue(LEVEL, newLevel) : Blocks.CAULDRON.defaultBlockState();
+            BlockState newState = newLevel > 0
+                    ? state.setValue(LEVEL, newLevel)
+                    : Blocks.CAULDRON.defaultBlockState();
             level.setBlock(pos, newState, 3);
+
             level.playSound(null, pos, SoundEvents.BOTTLE_FILL, SoundSource.BLOCKS, 0.8F, 0.5F);
             return InteractionResult.SUCCESS;
         }
+
 
         // Add hops (in MALTED or HOPS phase)
         if (state.getValue(STAGE) == FermentingStage.HOPS || state.getValue(STAGE) == FermentingStage.MALTED) {
@@ -140,13 +159,13 @@ public class FermentingCauldronBlock extends LayeredCauldronBlock implements Ent
 
 
         // Add yeast to start fermentation
-        if (stack.is(JolCraftItems.YEAST.get()) && state.getValue(STAGE) == FermentingStage.HOPS) {
-                BlockState newState = state.setValue(STAGE, FermentingStage.BREW_FERMENTING);
-                level.setBlock(pos, newState, 3); // Start the fermentation
-                level.sendBlockUpdated(pos, state, newState, 3);  // Force update to inform the client
-                if (!player.isCreative()) stack.shrink(1);
-                level.playSound(null, pos, SoundEvents.PLAYER_SPLASH, SoundSource.BLOCKS, 0.4F, 1.6F);
-                return InteractionResult.SUCCESS;
+        if (stack.is(JolCraftItems.YEAST.get()) && (state.getValue(STAGE) == FermentingStage.HOPS || state.getValue(STAGE) == FermentingStage.MALTED)) {
+            BlockState newState = state.setValue(STAGE, FermentingStage.BREW_FERMENTING);
+            level.setBlock(pos, newState, 3); // Start the fermentation
+            level.sendBlockUpdated(pos, state, newState, 3);  // Force update to inform the client
+            if (!player.isCreative()) stack.shrink(1);
+            level.playSound(null, pos, SoundEvents.PLAYER_SPLASH, SoundSource.BLOCKS, 0.4F, 1.6F);
+            return InteractionResult.SUCCESS;
         }
         return InteractionResult.PASS;
     }
@@ -172,18 +191,6 @@ public class FermentingCauldronBlock extends LayeredCauldronBlock implements Ent
             };
         }
         return null;
-    }
-
-    // --- OPTIONAL: TICK LOGIC OVERRIDE IF NEEDED ---
-    @Override
-    public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
-        // Only schedule fermentation ticks if appropriate
-        FermentingStage stage = state.getValue(STAGE);
-        if (stage == FermentingStage.YEAST_FERMENTING || stage == FermentingStage.BREW_FERMENTING) {
-            level.scheduleTick(pos, this, TICK_DELAY);
-            // Trigger a visual update on the client by sending a block update
-            level.sendBlockUpdated(pos, state, state, 3); // Client-side color update
-        }
     }
 
     @Override

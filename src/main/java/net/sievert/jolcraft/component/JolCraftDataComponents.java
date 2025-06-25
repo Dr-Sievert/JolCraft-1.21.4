@@ -46,6 +46,12 @@ public class JolCraftDataComponents {
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Boolean>> BOUNTY_COMPLETE =
             register("bounty_complete", builder -> builder.persistent(Codec.BOOL));
 
+    //Brewing
+
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<String>> HOPS =
+            register("hops", builder -> builder.persistent(Codec.STRING));
+
+
     private static <T>DeferredHolder<DataComponentType<?>, DataComponentType<T>> register(String name,
                                                                                           UnaryOperator<DataComponentType.Builder<T>> builderOperator) {
         return DATA_COMPONENT_TYPES.register(name, () -> builderOperator.apply(DataComponentType.builder()).build());
