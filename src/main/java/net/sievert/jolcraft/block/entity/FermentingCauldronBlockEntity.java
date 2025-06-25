@@ -1,36 +1,45 @@
 package net.sievert.jolcraft.block.entity;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.server.level.ServerLevel;
 import net.sievert.jolcraft.block.custom.FermentingCauldronBlock;
 import net.sievert.jolcraft.block.custom.FermentingStage;
-import org.jetbrains.annotations.Nullable;
+import net.sievert.jolcraft.block.custom.HopsType;
+
+import javax.annotation.Nullable;
+import java.util.HashSet;
+import java.util.Set;
 
 public class FermentingCauldronBlockEntity extends BlockEntity {
 
     private int fermentationProgress = 0;
-    private final int maxFermentationProgress = 100; // constant max progress
+    private final int maxFermentationProgress = 100;
     private int bubbleCooldown = 0;
+
+    // Store added hops as a Set to prevent duplicates
+    private Set<HopsType> addedHops = new HashSet<>();
 
     public FermentingCauldronBlockEntity(BlockPos pos, BlockState state) {
         super(JolCraftBlockEntities.FERMENTING_CAULDRON.get(), pos, state);
     }
 
     // --- Save/load NBT ---
-
     @Override
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.saveAdditional(tag, registries);
         tag.putInt("FermentationProgress", fermentationProgress);
         tag.putInt("BubbleCooldown", bubbleCooldown);
+
+        // Save the set of hops that have been added
+        tag.putIntArray("AddedHops", addedHops.stream().mapToInt(HopsType::ordinal).toArray());
     }
 
     @Override
@@ -38,14 +47,34 @@ public class FermentingCauldronBlockEntity extends BlockEntity {
         super.loadAdditional(tag, registries);
         fermentationProgress = tag.getInt("FermentationProgress");
         bubbleCooldown = tag.getInt("BubbleCooldown");
+        // Load the added hops from NBT
+        int[] hopsArray = tag.getIntArray("AddedHops");
+        addedHops.clear();
+        for (int hop : hopsArray) {
+            addedHops.add(HopsType.values()[hop]);
+        }
+    }
+
+    // --- Methods for managing hops ---
+    public boolean addHop(HopsType hop) {
+        // Prevent adding the same hop twice
+        if (addedHops.contains(hop)) {
+            return false; // Hop already added
+        }
+
+        addedHops.add(hop);  // Add the hop type to the set
+        return true;  // Successfully added the hop
+    }
+
+    public Set<HopsType> getAddedHops() {
+        return addedHops;
     }
 
     // --- Client sync ---
-
     @Nullable
     @Override
     public ClientboundBlockEntityDataPacket getUpdatePacket() {
-        return ClientboundBlockEntityDataPacket.create(this);
+        return ClientboundBlockEntityDataPacket.create(this, (blockEntity, registryAccess) -> blockEntity.getUpdateTag(registryAccess));
     }
 
     @Override
@@ -53,53 +82,48 @@ public class FermentingCauldronBlockEntity extends BlockEntity {
         return saveWithoutMetadata(registries);
     }
 
-    public void handleUpdateTag(CompoundTag tag) {
-        if (tag != null) {
-            loadAdditional(tag, null);
-        }
-    }
-
     private void syncToClient() {
-        if (level != null) {
+        if (level != null && !level.isClientSide) {
             level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
         }
     }
 
-    // --- Helpers for ticking logic ---
+    // --- Updated tick method with hops blending ---
     public void tick() {
         if (level == null || level.isClientSide) return;
 
-        // Only ferment if stage is a fermenting stage
         BlockState state = getBlockState();
         FermentingStage stage = state.getValue(FermentingCauldronBlock.STAGE);
 
-        if (!isFermentingStage(stage)) {
-            fermentationProgress = 0;
-            return;
-        }
+        // Handle fermentation progress if it's in the fermenting stage
+        if (isFermentingStage(stage)) {
+            fermentationProgress++;
 
-        fermentationProgress++;
+            // Trigger fermentation progress and handle color update
+            updateBlockStateProgress();
 
-        if (level instanceof ServerLevel serverLevel) {
+            // Bubbles and sound effects for fermentation progress
             if (bubbleCooldown <= 0) {
-                double x = worldPosition.getX() + 0.5 + (serverLevel.random.nextDouble() - 0.5);
-                double y = worldPosition.getY() + 1.1;
-                double z = worldPosition.getZ() + 0.5 + (serverLevel.random.nextDouble() - 0.5);
+                if (level instanceof ServerLevel serverLevel) {
+                    double x = worldPosition.getX() + 0.5 + (serverLevel.random.nextDouble() - 0.5);
+                    double y = worldPosition.getY() + 1.1;
+                    double z = worldPosition.getZ() + 0.5 + (serverLevel.random.nextDouble() - 0.5);
 
-                serverLevel.sendParticles(ParticleTypes.BUBBLE_POP, x, y, z, 1, 0.0, 0.05, 0.0, 0.05);
-                serverLevel.playSound(null, x, y, z, SoundEvents.BUBBLE_POP, SoundSource.BLOCKS, 0.3f, 1.4f);
+                    // Bubble particle effect
+                    serverLevel.sendParticles(ParticleTypes.BUBBLE_POP, x, y, z, 1, 0.0, 0.05, 0.0, 0.05);
+                    // Bubble sound effect
+                    serverLevel.playSound(null, x, y, z, SoundEvents.BUBBLE_POP, SoundSource.BLOCKS, 0.3f, 1.4f);
 
-                bubbleCooldown = 3 + serverLevel.random.nextInt(3);
+                    bubbleCooldown = 3 + serverLevel.random.nextInt(3);
+                }
             } else {
                 bubbleCooldown--;
             }
-        }
 
-        updateBlockStateProgress();
-
-        if (fermentationProgress >= maxFermentationProgress) {
-            finishFermentation(stage);
-            fermentationProgress = 0;
+            if (fermentationProgress >= maxFermentationProgress) {
+                finishFermentation(stage);
+                fermentationProgress = 0;
+            }
         }
 
         setChanged();
@@ -107,10 +131,7 @@ public class FermentingCauldronBlockEntity extends BlockEntity {
     }
 
     private boolean isFermentingStage(FermentingStage stage) {
-        return switch (stage) {
-            case YEAST_FERMENTING, BREW_FERMENTING -> true;
-            default -> false;
-        };
+        return stage == FermentingStage.YEAST_FERMENTING || stage == FermentingStage.BREW_FERMENTING;
     }
 
     private void finishFermentation(FermentingStage currentStage) {
@@ -121,13 +142,13 @@ public class FermentingCauldronBlockEntity extends BlockEntity {
 
         switch (currentStage) {
             case YEAST_FERMENTING -> {
-                // Yeast fermenting done → yeast ready
+                // Yeast fermentation done → yeast ready
                 newState = currentState.setValue(FermentingCauldronBlock.STAGE, FermentingStage.YEAST_READY)
                         .setValue(FermentingCauldronBlock.LEVEL, 3)
                         .setValue(FermentingCauldronBlock.FERMENTATION_PROGRESS, 0);
             }
             case BREW_FERMENTING -> {
-                // Brew fermenting done → brew ready
+                // Brew fermentation done → brew ready
                 newState = currentState.setValue(FermentingCauldronBlock.STAGE, FermentingStage.BREW_READY)
                         .setValue(FermentingCauldronBlock.LEVEL, 3)
                         .setValue(FermentingCauldronBlock.FERMENTATION_PROGRESS, 0);
@@ -149,9 +170,5 @@ public class FermentingCauldronBlockEntity extends BlockEntity {
         if (currentState.getValue(FermentingCauldronBlock.FERMENTATION_PROGRESS) != progressPercent) {
             level.setBlock(worldPosition, currentState.setValue(FermentingCauldronBlock.FERMENTATION_PROGRESS, progressPercent), 3);
         }
-    }
-
-    public float getFermentationProgressRatio() {
-        return maxFermentationProgress == 0 ? 0f : (float) fermentationProgress / maxFermentationProgress;
     }
 }

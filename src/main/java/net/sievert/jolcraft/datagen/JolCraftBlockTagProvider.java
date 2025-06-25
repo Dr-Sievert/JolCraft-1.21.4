@@ -18,10 +18,16 @@ public class JolCraftBlockTagProvider extends BlockTagsProvider {
     protected void addTags(HolderLookup.Provider provider) {
 
         tag(JolCraftTags.Blocks.HOPS_BOTTOM)
-                .add(JolCraftBlocks.ASGARNIAN_CROP_BOTTOM.get());
+                .add(JolCraftBlocks.ASGARNIAN_CROP_BOTTOM.get())
+                .add(JolCraftBlocks.DUSKHOLD_CROP_BOTTOM.get())
+                .add(JolCraftBlocks.KRANDONIAN_CROP_BOTTOM.get())
+                .add(JolCraftBlocks.YANILLIAN_CROP_BOTTOM.get());
 
         tag(JolCraftTags.Blocks.HOPS_TOP)
-                .add(JolCraftBlocks.ASGARNIAN_CROP_TOP.get());
+                .add(JolCraftBlocks.ASGARNIAN_CROP_TOP.get())
+                .add(JolCraftBlocks.DUSKHOLD_CROP_TOP.get())
+                .add(JolCraftBlocks.KRANDONIAN_CROP_TOP.get())
+                .add(JolCraftBlocks.YANILLIAN_CROP_TOP.get());
 
     }
 

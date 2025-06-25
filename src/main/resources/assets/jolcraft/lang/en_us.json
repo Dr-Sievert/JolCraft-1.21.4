@@ -10,6 +10,18 @@
   "block.jolcraft.asgarnian_crop_bottom": "Asgarnian Hops",
   "block.jolcraft.asgarnian_crop_top": "Asgarnian Hops",
   "item.jolcraft.asgarnian_hops": "Asgarnian Hops",
+  "item.jolcraft.duskhold_seeds": "Duskhold Seeds",
+  "block.jolcraft.duskhold_crop_bottom": "Duskhold Hops",
+  "block.jolcraft.duskhold_crop_top": "Duskhold Hops",
+  "item.jolcraft.duskhold_hops": "Duskhold Hops",
+  "item.jolcraft.krandonian_seeds": "Krandonian Seeds",
+  "block.jolcraft.krandonian_crop_bottom": "Krandonian Hops",
+  "block.jolcraft.krandonian_crop_top": "Krandonian Hops",
+  "item.jolcraft.krandonian_hops": "Krandonian Hops",
+  "item.jolcraft.yanillian_seeds": "Yanillian Seeds",
+  "block.jolcraft.yanillian_crop_bottom": "Yanillian Hops",
+  "block.jolcraft.yanillian_crop_top": "Yanillian Hops",
+  "item.jolcraft.yanillian_hops": "Yanillian Hops",
   "block.jolcraft.fermenting_cauldron": "Fermenting Cauldron",
   "block.jolcraft.fermenting_fluid": "Fermenting Fluid",
   "item.jolcraft.yeast": "Dwarven Yeast",
@@ -159,6 +171,9 @@
   "tooltip.jolcraft.reputation.already_endorsed": "You already have this endorsement.",
   "tooltip.jolcraft.reputation.wrong_tablet": "You must present the correct reputation tablet to the Guildmaster.",
   "tooltip.jolcraft.reputation.level_up": "You have advanced in dwarven reputation!",
+
+  "tooltip.jolcraft.brewing.hops": "You already added this type to the brew.",
+
 
   "itemGroup.jolcraft.jolcraft_items_tab": "JolCraft",
   "itemGroup.jolcraft.jolcraft_egg_tab": "JolCraft Spawn Eggs",

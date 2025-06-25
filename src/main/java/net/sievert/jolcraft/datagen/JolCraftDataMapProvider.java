@@ -20,6 +20,12 @@ public class JolCraftDataMapProvider extends DataMapProvider {
                 .add(JolCraftItems.BARLEY_SEEDS.getId(), new Compostable(0.25f), false)
                 .add(JolCraftItems.BARLEY.getId(), new Compostable(0.45f), false)
                 .add(JolCraftItems.ASGARNIAN_SEEDS.getId(), new Compostable(0.25f), false)
-                .add(JolCraftItems.ASGARNIAN_HOPS.getId(), new Compostable(0.45f), false);
+                .add(JolCraftItems.ASGARNIAN_HOPS.getId(), new Compostable(0.45f), false)
+                .add(JolCraftItems.DUSKHOLD_SEEDS.getId(), new Compostable(0.25f), false)
+                .add(JolCraftItems.DUSKHOLD_HOPS.getId(), new Compostable(0.45f), false)
+                .add(JolCraftItems.KRANDONIAN_SEEDS.getId(), new Compostable(0.25f), false)
+                .add(JolCraftItems.KRANDONIAN_HOPS.getId(), new Compostable(0.45f), false)
+                .add(JolCraftItems.YANILLIAN_SEEDS.getId(), new Compostable(0.25f), false)
+                .add(JolCraftItems.YANILLIAN_HOPS.getId(), new Compostable(0.45f), false);
     }
 }

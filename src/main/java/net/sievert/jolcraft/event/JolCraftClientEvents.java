@@ -9,67 +9,80 @@ import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.block.JolCraftBlocks;
 import net.sievert.jolcraft.block.custom.FermentingCauldronBlock;
 import net.sievert.jolcraft.block.custom.FermentingStage;
+import net.sievert.jolcraft.block.custom.HopsType;
 import net.sievert.jolcraft.block.entity.FermentingCauldronBlockEntity;
 
 @EventBusSubscriber(modid = JolCraft.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class JolCraftClientEvents {
 
+    private static final int MALT_COLOR = 0xFFB16A1D; // Brown/orange malt
+    private static final int BREW_COLOR = 0xFFA500; // Final orange brew
+    private static final int YEAST_FERMENTING_START = 0xFF8EE8AA; // Light green
+    private static final int YEAST_FERMENTING_END = 0xFF40B14A; // Dark green
+    private static final int HOP_COLOR = 0x2A9D8F; // Generic hop color
+
     @SubscribeEvent
     public static void onRegisterBlockColors(RegisterColorHandlersEvent.Block event) {
         event.register((state, world, pos, tintIndex) -> {
-            if (tintIndex != 0) {
-                return 0xFFFFFFFF; // default white for other tint indexes
-            }
+            if (tintIndex != 0) return 0xFFFFFFFF; // Default fallback color
 
+            // Retrieve the current stage of fermentation
             FermentingStage stage = state.getValue(FermentingCauldronBlock.STAGE);
 
-            // Handle finished states with direct color
-            if (stage == FermentingStage.YEAST_READY) {
-                return 0xFF40B14A; // dark green for yeast ready
-            }
-            if (stage == FermentingStage.BREW_READY) {
-                return 0xFFA500; // orange for brew ready (adjusted)
-            }
+            // Retrieve the current hop type from the block state
+            HopsType hopsType = state.getValue(FermentingCauldronBlock.HOPS_TYPE);
 
-            // Determine progress ratio from blockstate or blockentity
+            // Color blending logic for fermentation stages
             float ratio = 0f;
             if (state.hasProperty(FermentingCauldronBlock.FERMENTATION_PROGRESS)) {
                 int progress = state.getValue(FermentingCauldronBlock.FERMENTATION_PROGRESS);
                 ratio = clamp01(progress / 100f);
-            } else if (world != null && pos != null) {
-                BlockEntity be = world.getBlockEntity(pos);
-                if (be instanceof FermentingCauldronBlockEntity fermentingBE) {
-                    ratio = clamp01(fermentingBE.getFermentationProgressRatio());
+            }
+
+            // If the cauldron is in the 'MALTED' stage, return the malt color directly without blending
+            if (stage == FermentingStage.MALTED) {
+                return MALT_COLOR;  // Just the malt color when in MALTED stage
+            }
+
+
+                    if (state.getValue(FermentingCauldronBlock.STAGE) != FermentingStage.HOPS){
+                switch (stage) {
+                    case YEAST_FERMENTING:
+                        return blendColors(YEAST_FERMENTING_START, YEAST_FERMENTING_END, ratio); // Blend yeast fermentation
+                    case BREW_FERMENTING:
+                        return blendColors(HOP_COLOR, BREW_COLOR, ratio); // Blending between hop and final brew color
+                    case YEAST_READY:
+                        return YEAST_FERMENTING_END; // Final yeast color (dark green)
+                    case BREW_READY:
+                        return BREW_COLOR; // Final brew color when brewing is completed
+                    default:
+                        return YEAST_FERMENTING_START; // Default color for fallback
                 }
             }
 
-            // Define start and end colors per fermenting type
-            int startColor;
-            int endColor;
+                // Check for specific hop types and return corresponding color
+                switch (hopsType) {
+                    case ASGARNIAN:
+                        return 0xFF6B5352; // Color for Asgarnian hop
+                    case DUSKHOLD:
+                        return 0xFF5F5864; // Color for Duskhold hop
+                    case KRANDONIAN:
+                        return 0xFF526B69; // Color for Krandonian hop
+                    case YANILLIAN:
+                        return 0xFF2B4318; // Color for Yanillian hop
+                    default:
+                        return 0xFFB16A1D; // Default hop color
+                }
 
-            if (stage == FermentingStage.YEAST_FERMENTING) {
-                startColor = 0xFF8EE8AA; // watery light green start for yeast
-                endColor = 0xFF40B14A;   // dark green yeast finish
-            } else if (stage == FermentingStage.BREW_FERMENTING) {
-                startColor = 0xFF40B14A; // yeast green for fermenting brew start
-                endColor = 0xFFA500;     // golden orange for brew finish
-            } else if (stage == FermentingStage.MALTED) {
-                // Optional: fixed color or no gradient for malted state
-                return 0xFFB16A1D; // brown/orange color for malted
-            } else {
-                // fallback to watery green
-                startColor = 0xFF8EE8AA;
-                endColor = 0xFF40B14A;
-            }
-
-            return blendColors(startColor, endColor, ratio);
         }, JolCraftBlocks.FERMENTING_CAULDRON.get());
     }
 
+    // Helper method to clamp a float value between 0 and 1
     private static float clamp01(float value) {
         return Math.min(1.0f, Math.max(0.0f, value));
     }
 
+    // Helper method to blend two colors based on the given ratio
     private static int blendColors(int color1, int color2, float ratio) {
         ratio = clamp01(ratio);
         int a1 = (color1 >> 24) & 0xFF;
@@ -82,10 +95,10 @@ public class JolCraftClientEvents {
         int g2 = (color2 >> 8) & 0xFF;
         int b2 = color2 & 0xFF;
 
-        int a = (int)(a1 + (a2 - a1) * ratio);
-        int r = (int)(r1 + (r2 - r1) * ratio);
-        int g = (int)(g1 + (g2 - g1) * ratio);
-        int b = (int)(b1 + (b2 - b1) * ratio);
+        int a = (int) (a1 + (a2 - a1) * ratio);
+        int r = (int) (r1 + (r2 - r1) * ratio);
+        int g = (int) (g1 + (g2 - g1) * ratio);
+        int b = (int) (b1 + (b2 - b1) * ratio);
 
         return (a << 24) | (r << 16) | (g << 8) | b;
     }

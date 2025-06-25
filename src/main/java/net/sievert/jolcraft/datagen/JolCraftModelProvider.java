@@ -7,6 +7,7 @@ import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.client.data.models.ModelProvider;
 import net.minecraft.client.data.models.blockstates.*;
+import net.minecraft.client.data.models.model.ModelTemplate;
 import net.minecraft.client.data.models.model.ModelTemplates;
 import net.minecraft.client.data.models.model.TextureMapping;
 import net.minecraft.data.DataProvider;
@@ -44,6 +45,9 @@ public class JolCraftModelProvider extends ModelProvider {
         itemModels.generateFlatItem(JolCraftItems.BARLEY.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(JolCraftItems.BARLEY_MALT.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(JolCraftItems.ASGARNIAN_HOPS.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.DUSKHOLD_HOPS.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.KRANDONIAN_HOPS.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.YANILLIAN_HOPS.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(JolCraftItems.YEAST.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(JolCraftItems.GLASS_MUG.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(JolCraftItems.DWARVEN_BREW.get(), ModelTemplates.FLAT_ITEM);
@@ -181,7 +185,7 @@ public class JolCraftModelProvider extends ModelProvider {
         //Crops
         blockModels.createCropBlock(JolCraftBlocks.BARLEY_CROP.get(), BarleyCropBlock.AGE,  0, 1, 2, 3, 4, 5, 6, 7);
 
-        // Top half of hops — visual only
+        //Hops
         createTopCropBlock(
                 blockModels,
                 JolCraftBlocks.ASGARNIAN_CROP_TOP.get(),
@@ -190,6 +194,33 @@ public class JolCraftModelProvider extends ModelProvider {
         );
 
         blockModels.createCropBlock(JolCraftBlocks.ASGARNIAN_CROP_BOTTOM.get(), HopsCropBottomBlock.AGE, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
+
+        createTopCropBlock(
+                blockModels,
+                JolCraftBlocks.DUSKHOLD_CROP_TOP.get(),
+                HopsCropTopBlock.TOP_AGE, // <-- use your top crop's static property
+                0, 1, 2, 3, 4 // <-- as many stages as you defined models/textures for
+        );
+
+        blockModels.createCropBlock(JolCraftBlocks.DUSKHOLD_CROP_BOTTOM.get(), HopsCropBottomBlock.AGE, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
+
+        createTopCropBlock(
+                blockModels,
+                JolCraftBlocks.KRANDONIAN_CROP_TOP.get(),
+                HopsCropTopBlock.TOP_AGE, // <-- use your top crop's static property
+                0, 1, 2, 3, 4 // <-- as many stages as you defined models/textures for
+        );
+
+        blockModels.createCropBlock(JolCraftBlocks.KRANDONIAN_CROP_BOTTOM.get(), HopsCropBottomBlock.AGE, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
+
+        createTopCropBlock(
+                blockModels,
+                JolCraftBlocks.YANILLIAN_CROP_TOP.get(),
+                HopsCropTopBlock.TOP_AGE, // <-- use your top crop's static property
+                0, 1, 2, 3, 4 // <-- as many stages as you defined models/textures for
+        );
+
+        blockModels.createCropBlock(JolCraftBlocks.YANILLIAN_CROP_BOTTOM.get(), HopsCropBottomBlock.AGE, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
 
 
         // For Fermenting Cauldron: custom blockstate with level property
@@ -209,16 +240,6 @@ public class JolCraftModelProvider extends ModelProvider {
                 return JolCraftBlocks.FERMENTING_CAULDRON.get();
             }
         });
-
-        // Generate fluid blockstates
-        generateFluidBlockstateAndModels(
-                blockModels,
-                this.packOutput,
-                JolCraftBlocks.FERMENTING_FLUID.get(),
-                "fermenting_fluid",
-                "fermenting_fluid_still",
-                "fermenting_fluid_flow"
-        );
 
 
     }
@@ -242,51 +263,6 @@ public class JolCraftModelProvider extends ModelProvider {
 
         blockModels.blockStateOutput.accept(MultiVariantGenerator.multiVariant(block).with(dispatch));
     }
-
-
-
-    // --- FLUID HELPER ---
-    private void generateFluidBlockstateAndModels(
-            BlockModelGenerators blockModels, PackOutput output, Block fluidBlock,
-            String fluidName, String stillTextureName, String flowingTextureName
-    ) {
-        // Blockstate for the fluid block
-        blockModels.blockStateOutput.accept(new BlockStateGenerator() {
-            @Override
-            public JsonObject get() {
-                JsonObject root = new JsonObject();
-                JsonObject variants = new JsonObject();
-                variants.add("", modelObj(JolCraft.MOD_ID, "fluid/" + fluidName + "_still"));
-                root.add("variants", variants);
-                return root;
-            }
-            @Override
-            public Block getBlock() {
-                return fluidBlock;
-            }
-        });
-
-        // Still fluid model JSON
-        JsonObject stillModel = new JsonObject();
-        stillModel.addProperty("parent", "minecraft:block/fluid");
-        JsonObject stillTextures = new JsonObject();
-        stillTextures.addProperty("still", JolCraft.MOD_ID + ":block/" + stillTextureName);
-        stillTextures.addProperty("flow", JolCraft.MOD_ID + ":block/" + flowingTextureName);
-        stillTextures.addProperty("overlay", "minecraft:block/water_overlay");
-        stillModel.add("textures", stillTextures);
-        saveModelJson(output, ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "fluid/" + fluidName + "_still"), stillModel);
-
-        // Flowing fluid model JSON
-        JsonObject flowModel = new JsonObject();
-        flowModel.addProperty("parent", "minecraft:block/flowing");
-        JsonObject flowTextures = new JsonObject();
-        flowTextures.addProperty("still", JolCraft.MOD_ID + ":block/" + stillTextureName);
-        flowTextures.addProperty("flow", JolCraft.MOD_ID + ":block/" + flowingTextureName);
-        flowTextures.addProperty("overlay", "minecraft:block/water_overlay");
-        flowModel.add("textures", flowTextures);
-        saveModelJson(output, ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "fluid/" + fluidName + "_flow"), flowModel);
-    }
-
 
     // --- RAW MODEL JSON SAVER ---
     private void saveModelJson(PackOutput output, ResourceLocation modelLoc, JsonObject json) {

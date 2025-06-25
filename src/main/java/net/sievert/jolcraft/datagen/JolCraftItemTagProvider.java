@@ -142,6 +142,12 @@ public class JolCraftItemTagProvider extends ItemTagsProvider {
                 .add(JolCraftItems.REPUTATION_TABLET_3.get())
                 .add(JolCraftItems.REPUTATION_TABLET_4.get());
 
+        tag(JolCraftTags.Items.HOPS)
+                .add(JolCraftItems.ASGARNIAN_HOPS.get())
+                .add(JolCraftItems.DUSKHOLD_HOPS.get())
+                .add(JolCraftItems.KRANDONIAN_HOPS.get())
+                .add(JolCraftItems.YANILLIAN_HOPS.get());
+
 
     }
 

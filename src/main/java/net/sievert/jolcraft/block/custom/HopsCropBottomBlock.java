@@ -76,7 +76,7 @@ public class HopsCropBottomBlock extends CropBlock {
 
     @Override
     protected boolean isRandomlyTicking(BlockState state) {
-        return !this.isMaxAge(state);
+        return true; // Always tick, for enforcement & fixes
     }
 
     @Override
@@ -85,47 +85,45 @@ public class HopsCropBottomBlock extends CropBlock {
         BlockPos above = pos.above();
         BlockState aboveState = level.getBlockState(above);
 
-        //If it cant survive destroy it
+        // Survival check
         if (!this.canSurvive(state, level, pos)) {
-            level.destroyBlock(pos, true); // with drops
+            level.destroyBlock(pos, true);
             return;
         }
-
-        // Darkness check
         if (!hasSufficientDarkness(level, pos)) return;
 
-        // Only allow growth if above is air or already a valid hops top block
-        if (!(aboveState.isAir() || aboveState.is(JolCraftTags.Blocks.HOPS_TOP))) {
-            return; // Blocked above, do not grow
+        // Growth logic (only if not max age and not blocked above)
+        if (age < MAX_AGE) {
+            if (aboveState.isAir() || aboveState.is(JolCraftTags.Blocks.HOPS_TOP)) {
+                float growthSpeed = getGrowthSpeed(state, level, pos);
+                if (random.nextInt((int) (25.0F / growthSpeed) + 1) == 0) {
+                    int newAge = age + 1;
+                    BlockState newState = this.getStateForAge(newAge);
+                    level.setBlock(pos, newState, 2);
+                    age = newAge; // update age so sync is correct
+                }
+            }
         }
 
-        if (age < MAX_AGE) {
-            float growthSpeed = getGrowthSpeed(state, level, pos);
-            if (random.nextInt((int) (25.0F / growthSpeed) + 1) == 0) {
-                int newAge = age + 1;
-                BlockState newState = this.getStateForAge(newAge);
-                level.setBlock(pos, newState, 2);
-
-                // TOP BLOCK HANDLING
-                if (newAge >= 5) {
-                    int topAge = Math.min(newAge - 5, HopsCropTopBlock.MAX_AGE);
-
-                    if (aboveState.isAir() || !aboveState.is(JolCraftTags.Blocks.HOPS_TOP)) {
-                        BlockState topState = topBlock.get().defaultBlockState().setValue(HopsCropTopBlock.TOP_AGE, topAge);
-                        level.setBlock(above, topState, 2);
-                    } else if (aboveState.getValue(HopsCropTopBlock.TOP_AGE) != topAge) {
-                        // Always update the top's age to match
-                        level.setBlock(above, aboveState.setValue(HopsCropTopBlock.TOP_AGE, topAge), 2);
-                    }
-                } else {
-                    // If we're below stage 5, make sure the top block is gone
-                    if (aboveState.is(JolCraftTags.Blocks.HOPS_TOP)) {
-                        level.destroyBlock(above, true);
-                    }
+        // --- Always sync top block every tick! ---
+        aboveState = level.getBlockState(above); // Refresh in case changed
+        if (aboveState.isAir() || aboveState.is(JolCraftTags.Blocks.HOPS_TOP)) {
+            if (age >= 5) {
+                int topAge = Math.min(age - 5, HopsCropTopBlock.MAX_AGE);
+                if (!aboveState.is(JolCraftTags.Blocks.HOPS_TOP)) {
+                    BlockState topState = topBlock.get().defaultBlockState().setValue(HopsCropTopBlock.TOP_AGE, topAge);
+                    level.setBlock(above, topState, 2);
+                } else if (aboveState.getValue(HopsCropTopBlock.TOP_AGE) != topAge) {
+                    level.setBlock(above, aboveState.setValue(HopsCropTopBlock.TOP_AGE, topAge), 2);
+                }
+            } else {
+                if (aboveState.is(JolCraftTags.Blocks.HOPS_TOP)) {
+                    level.destroyBlock(above, true);
                 }
             }
         }
     }
+
 
     @Override
     public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
@@ -177,4 +175,10 @@ public class HopsCropBottomBlock extends CropBlock {
         }
         super.onRemove(state, level, pos, newState, isMoving);
     }
+
+
+
+
+
+
 }

@@ -1,8 +1,9 @@
-// 1.21.4	2025-06-21T02:04:45.9917718	Tags for minecraft:item mod id jolcraft
+// 1.21.4	2025-06-24T18:28:32.4217579	Tags for minecraft:item mod id jolcraft
 b4fbeec3a15fa89ad64b1145d7f2775a193da48b data/jolcraft/tags/item/gems.json
 d60de4fc2e80779b31b1d96353673140c193859f data/jolcraft/tags/item/general_scrap.json
 79db8dbd1c373c681954ad7f22d148efe9a10d0b data/jolcraft/tags/item/global_scrap.json
 f68e2065b4975ec2fcc04a9900d773ab64c19a15 data/jolcraft/tags/item/gold_scrap.json
+5b7f833bb15194a84a64e43ef6563c6e00591565 data/jolcraft/tags/item/hops.json
 dccd427a306e5bfcfd560329886f71065f9749fc data/jolcraft/tags/item/ink_and_quills.json
 941f886eea2408be764098f2dbcba9187c6201f4 data/jolcraft/tags/item/iron_scrap.json
 67ca2c733ca17d498c022eac4896311efd27402e data/jolcraft/tags/item/mithril_scrap.json

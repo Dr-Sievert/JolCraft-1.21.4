@@ -1,20 +1,17 @@
 package net.sievert.jolcraft.block;
 
+import net.minecraft.core.cauldron.CauldronInteraction;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.material.MapColor;
-import net.minecraft.world.level.material.PushReaction;
+import net.minecraft.world.level.material.*;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.sievert.jolcraft.JolCraft;
-import net.sievert.jolcraft.block.custom.BarleyCropBlock;
-import net.sievert.jolcraft.block.custom.FermentingCauldronBlock;
-import net.sievert.jolcraft.block.custom.HopsCropBottomBlock;
-import net.sievert.jolcraft.block.custom.HopsCropTopBlock;
+import net.sievert.jolcraft.block.custom.*;
 import net.sievert.jolcraft.item.JolCraftItems;
-import net.sievert.jolcraft.fluid.JolCraftFluids;
 
 import java.util.function.Function;
 
@@ -38,7 +35,7 @@ public class JolCraftBlocks {
     public static final DeferredBlock<Block> ASGARNIAN_CROP_TOP = BLOCKS.registerBlock("asgarnian_crop_top",
             (properties) -> new HopsCropTopBlock(
                     properties
-                            .mapColor(MapColor.PLANT)
+                            .mapColor(MapColor.TERRACOTTA_MAGENTA)
                             .noCollission()
                             .instabreak()
                             .randomTicks()
@@ -52,9 +49,8 @@ public class JolCraftBlocks {
     public static final DeferredBlock<Block> ASGARNIAN_CROP_BOTTOM = BLOCKS.registerBlock("asgarnian_crop_bottom",
             (properties) -> new HopsCropBottomBlock(
                     properties
-                            .mapColor(MapColor.PLANT)
+                            .mapColor(MapColor.TERRACOTTA_MAGENTA)
                             .noCollission()
-                            .noLootTable()
                             .randomTicks()
                             .instabreak()
                             .sound(SoundType.CROP)
@@ -64,46 +60,115 @@ public class JolCraftBlocks {
             )
     );
 
-    public static final DeferredBlock<FermentingCauldronBlock> FERMENTING_CAULDRON = registerBlock(
-            "fermenting_cauldron",
-            props -> new FermentingCauldronBlock(props
-                    .mapColor(MapColor.METAL)
-                    .strength(2.0F, 6.0F)
-                    .sound(SoundType.METAL)
-                    .noOcclusion() // Required for cauldron shape
-                    .requiresCorrectToolForDrops()
-            )
-    );
-
-    // You need to register the fluid itself elsewhere as FERMENTING_FLUID (see note below)
-    public static final DeferredBlock<LiquidBlock> FERMENTING_FLUID = BLOCKS.registerBlock(
-            "fermenting_fluid",
-            props -> new LiquidBlock(
-                    JolCraftFluids.FERMENTING_FLUID_SOURCE.get(), // <--- .get() to pass the instance!
-                    props
-                            .mapColor(MapColor.WATER)
-                            .replaceable()
+    public static final DeferredBlock<Block> DUSKHOLD_CROP_TOP = BLOCKS.registerBlock("duskhold_crop_top",
+            (properties) -> new HopsCropTopBlock(
+                    properties
+                            .mapColor(MapColor.TERRACOTTA_LIGHT_BLUE)
                             .noCollission()
-                            .strength(100.0F)
-                            .pushReaction(PushReaction.DESTROY)
-                            .noLootTable()
-                            .liquid()
-                            .sound(SoundType.EMPTY)
-                            .requiresCorrectToolForDrops()
+                            .instabreak()
+                            .randomTicks()
+                            .sound(SoundType.CROP)
+                            .pushReaction(PushReaction.DESTROY),
+                    () -> JolCraftItems.DUSKHOLD_SEEDS.get()
             )
     );
 
-    private static <T extends Block> DeferredBlock<T> registerBlock(String name, Function<BlockBehaviour.Properties, T> function) {
-        DeferredBlock<T> toReturn = BLOCKS.registerBlock(name, function);
-        registerBlockItem(name, toReturn);
-        return toReturn;
+    public static final DeferredBlock<Block> DUSKHOLD_CROP_BOTTOM = BLOCKS.registerBlock("duskhold_crop_bottom",
+            (properties) -> new HopsCropBottomBlock(
+                    properties
+                            .mapColor(MapColor.TERRACOTTA_LIGHT_BLUE)
+                            .noCollission()
+                            .randomTicks()
+                            .instabreak()
+                            .sound(SoundType.CROP)
+                            .pushReaction(PushReaction.DESTROY),
+                    () -> JolCraftItems.DUSKHOLD_SEEDS.get(),
+                    () -> JolCraftBlocks.DUSKHOLD_CROP_TOP.get()
+            )
+    );
+
+    public static final DeferredBlock<Block> KRANDONIAN_CROP_TOP = BLOCKS.registerBlock("krandonian_crop_top",
+            (properties) -> new HopsCropTopBlock(
+                    properties
+                            .mapColor(MapColor.WARPED_STEM)
+                            .noCollission()
+                            .instabreak()
+                            .randomTicks()
+                            .sound(SoundType.CROP)
+                            .pushReaction(PushReaction.DESTROY),
+                    () -> JolCraftItems.KRANDONIAN_SEEDS.get()
+            )
+    );
+
+    public static final DeferredBlock<Block> KRANDONIAN_CROP_BOTTOM = BLOCKS.registerBlock("krandonian_crop_bottom",
+            (properties) -> new HopsCropBottomBlock(
+                    properties
+                            .mapColor(MapColor.WARPED_STEM)
+                            .noCollission()
+                            .randomTicks()
+                            .instabreak()
+                            .sound(SoundType.CROP)
+                            .pushReaction(PushReaction.DESTROY),
+                    () -> JolCraftItems.KRANDONIAN_SEEDS.get(),
+                    () -> JolCraftBlocks.KRANDONIAN_CROP_TOP.get()
+            )
+    );
+
+
+    public static final DeferredBlock<Block> YANILLIAN_CROP_TOP = BLOCKS.registerBlock("yanillian_crop_top",
+            (properties) -> new HopsCropTopBlock(
+                    properties
+                            .mapColor(MapColor.COLOR_GREEN)
+                            .noCollission()
+                            .instabreak()
+                            .randomTicks()
+                            .sound(SoundType.CROP)
+                            .pushReaction(PushReaction.DESTROY),
+                    () -> JolCraftItems.YANILLIAN_SEEDS.get()
+            )
+    );
+
+    public static final DeferredBlock<Block> YANILLIAN_CROP_BOTTOM = BLOCKS.registerBlock("yanillian_crop_bottom",
+            (properties) -> new HopsCropBottomBlock(
+                    properties
+                            .mapColor(MapColor.COLOR_GREEN)
+                            .noCollission()
+                            .randomTicks()
+                            .instabreak()
+                            .sound(SoundType.CROP)
+                            .pushReaction(PushReaction.DESTROY),
+                    () -> JolCraftItems.YANILLIAN_SEEDS.get(),
+                    () -> JolCraftBlocks.YANILLIAN_CROP_TOP.get()
+            )
+    );
+
+
+    public static final DeferredBlock<FermentingCauldronBlock> FERMENTING_CAULDRON = BLOCKS.registerBlock(
+            "fermenting_cauldron",
+            props -> new FermentingCauldronBlock(
+                    Biome.Precipitation.NONE,
+                    CauldronInteraction.EMPTY,
+                    props
+            ),
+            BlockBehaviour.Properties.ofFullCopy(Blocks.CAULDRON)
+    );
+
+
+    // Registers a block and its corresponding item
+    private static <B extends Block> DeferredBlock<B> registerBlock(String name, Function<BlockBehaviour.Properties, ? extends B> builder, BlockBehaviour.Properties properties) {
+        DeferredBlock<B> block = BLOCKS.registerBlock(name, builder);
+        registerBlockItem(name, block);
+        return block;
     }
 
-    private static <T extends Block> void registerBlockItem(String name, DeferredBlock<T> block) {
-        JolCraftItems.ITEMS.registerItem(name, (properties) -> new BlockItem(block.get(), properties.useBlockDescriptionPrefix()));
+    // Registers a BlockItem for an existing block
+    private static <B extends Block> void registerBlockItem(String name, DeferredBlock<B> block) {
+        JolCraftItems.ITEMS.registerItem(name, props -> new BlockItem(block.get(), props.useBlockDescriptionPrefix()));
     }
 
     public static void register(IEventBus eventBus) {
         BLOCKS.register(eventBus);
     }
+
+
 }

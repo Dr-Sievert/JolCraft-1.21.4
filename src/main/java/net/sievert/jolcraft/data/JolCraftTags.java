@@ -8,6 +8,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.structure.Structure;
+import net.minecraft.world.level.material.Fluid;
 import net.sievert.jolcraft.JolCraft;
 
 import static net.sievert.jolcraft.JolCraft.locate;
@@ -27,6 +28,7 @@ public class JolCraftTags {
 
         public static final TagKey<Item> REPUTATION_TABLETS = createTag("reputation_tablets");
 
+        public static final TagKey<Item> HOPS = createTag("hops");
 
         //Scrap
         public static final TagKey<Item> GLOBAL_SCRAP = createTag("global_scrap");
@@ -52,6 +54,14 @@ public class JolCraftTags {
             return BlockTags.create(ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, name));
         }
 
+    }
+
+    public static class Fluids {
+        public static final TagKey<Fluid> FERMENTING_FLUID = tag("fermenting_fluid");
+
+        private static TagKey<Fluid> tag(String name) {
+            return TagKey.create(Registries.FLUID, ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, name));
+        }
     }
 
     public interface Structures {

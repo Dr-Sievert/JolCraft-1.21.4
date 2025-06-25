@@ -214,6 +214,27 @@ public class JolCraftItems {
             ITEMS.registerItem("asgarnian_hops", Item::new,
                     new Item.Properties());
 
+    public static final DeferredItem<Item> DUSKHOLD_SEEDS = ITEMS.registerItem("duskhold_seeds",
+            properties -> new BlockItem(JolCraftBlocks.DUSKHOLD_CROP_BOTTOM.get(), properties));
+
+    public static final DeferredItem<Item> DUSKHOLD_HOPS =
+            ITEMS.registerItem("duskhold_hops", Item::new,
+                    new Item.Properties());
+
+    public static final DeferredItem<Item> KRANDONIAN_SEEDS = ITEMS.registerItem("krandonian_seeds",
+            properties -> new BlockItem(JolCraftBlocks.KRANDONIAN_CROP_BOTTOM.get(), properties));
+
+    public static final DeferredItem<Item> KRANDONIAN_HOPS =
+            ITEMS.registerItem("krandonian_hops", Item::new,
+                    new Item.Properties());
+
+    public static final DeferredItem<Item> YANILLIAN_SEEDS = ITEMS.registerItem("yanillian_seeds",
+            properties -> new BlockItem(JolCraftBlocks.YANILLIAN_CROP_BOTTOM.get(), properties));
+
+    public static final DeferredItem<Item> YANILLIAN_HOPS =
+            ITEMS.registerItem("yanillian_hops", Item::new,
+                    new Item.Properties());
+
     public static final DeferredItem<Item> YEAST =
             ITEMS.registerItem("yeast", Item::new,
                     new Item.Properties().stacksTo(16).craftRemainder(Items.GLASS_BOTTLE));

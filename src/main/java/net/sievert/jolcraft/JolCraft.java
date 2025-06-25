@@ -12,7 +12,6 @@ import net.sievert.jolcraft.capability.JolCraftAttachments;
 import net.sievert.jolcraft.component.JolCraftDataComponents;
 import net.sievert.jolcraft.entity.JolCraftEntities;
 import net.sievert.jolcraft.entity.client.dwarf.render.*;
-import net.sievert.jolcraft.fluid.JolCraftFluids;
 import net.sievert.jolcraft.item.JolCraftCreativeModeTabs;
 import net.sievert.jolcraft.item.JolCraftItems;
 import net.sievert.jolcraft.loot.JolCraftLootModifiers;
@@ -50,55 +49,31 @@ public class JolCraft
 
     // The constructor for the mod class is the first code that is run when your mod is loaded.
     // FML will recognize some parameter types like IEventBus or ModContainer and pass them in automatically.
-    public JolCraft(IEventBus modEventBus, ModContainer modContainer)
-    {
-        // Register the commonSetup method for modloading
-        modEventBus.addListener(this::commonSetup);
+    public JolCraft(IEventBus modEventBus, ModContainer modContainer) {
 
-        // For registration and init stuff.
         JolCraftBlocks.register(modEventBus);
-
-        JolCraftFluids.register(modEventBus);
-
         JolCraftItems.register(modEventBus);
-
-        JolCraftBlockEntities.register(modEventBus);
-
-        JolCraftCreativeModeTabs.register(modEventBus);
-
-        JolCraftDataComponents.register(modEventBus);
-
         JolCraftEntities.register(modEventBus);
-
+        JolCraftBlockEntities.register(modEventBus);
+        JolCraftCreativeModeTabs.register(modEventBus);
+        JolCraftDataComponents.register(modEventBus);
         JolCraftLootModifiers.register(modEventBus);
-
         JolCraftSounds.register(modEventBus);
-
         JolCraftProcessors.register(modEventBus);
-
         JolCraftAttachments.register(modEventBus);
-
         JolCraftStructures.DEFERRED_REGISTRY_STRUCTURE.register(modEventBus);
 
-
-        // Register ourselves for server and other game events we are interested in.
-        // Note that this is necessary if and only if we want *this* class (ExampleMod) to respond directly to events.
-        // Do not add this line if there are no @SubscribeEvent-annotated functions in this class, like onServerStarting() below.
+        // Register server events
         NeoForge.EVENT_BUS.register(this);
 
-        // Register the item to a creative tab
+        // Register items to creative tabs (if needed)
         modEventBus.addListener(this::addCreative);
 
         modEventBus.addListener(JolCraftNetworking::register);
-
         modEventBus.addListener(JolCraftCriteriaTriggers::register);
 
-
-
-        // Register our mod's ModConfigSpec so that FML can create and load the config file for us
+        // Register the config file
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
-
-
     }
 
     private void commonSetup(final FMLCommonSetupEvent event)
@@ -155,6 +130,12 @@ public class JolCraft
             ItemBlockRenderTypes.setRenderLayer(JolCraftBlocks.BARLEY_CROP.get(), RenderType.cutout());
             ItemBlockRenderTypes.setRenderLayer(JolCraftBlocks.ASGARNIAN_CROP_BOTTOM.get(), RenderType.cutout());
             ItemBlockRenderTypes.setRenderLayer(JolCraftBlocks.ASGARNIAN_CROP_TOP.get(), RenderType.cutout());
+            ItemBlockRenderTypes.setRenderLayer(JolCraftBlocks.DUSKHOLD_CROP_BOTTOM.get(), RenderType.cutout());
+            ItemBlockRenderTypes.setRenderLayer(JolCraftBlocks.DUSKHOLD_CROP_TOP.get(), RenderType.cutout());
+            ItemBlockRenderTypes.setRenderLayer(JolCraftBlocks.KRANDONIAN_CROP_BOTTOM.get(), RenderType.cutout());
+            ItemBlockRenderTypes.setRenderLayer(JolCraftBlocks.KRANDONIAN_CROP_TOP.get(), RenderType.cutout());
+            ItemBlockRenderTypes.setRenderLayer(JolCraftBlocks.YANILLIAN_CROP_BOTTOM.get(), RenderType.cutout());
+            ItemBlockRenderTypes.setRenderLayer(JolCraftBlocks.YANILLIAN_CROP_TOP.get(), RenderType.cutout());
             ItemBlockRenderTypes.setRenderLayer(JolCraftBlocks.FERMENTING_CAULDRON.get(), RenderType.translucent());
 
             // Some client setup code
