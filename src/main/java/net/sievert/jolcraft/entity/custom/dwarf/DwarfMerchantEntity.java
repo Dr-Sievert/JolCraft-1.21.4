@@ -7,8 +7,10 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.stats.Stats;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
@@ -32,6 +34,7 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
 import net.sievert.jolcraft.JolCraft;
+import net.sievert.jolcraft.advancement.JolCraftCriteriaTriggers;
 import net.sievert.jolcraft.capability.JolCraftAttachments;
 import net.sievert.jolcraft.client.data.MyClientLanguageData;
 import net.sievert.jolcraft.component.JolCraftDataComponents;
@@ -81,7 +84,7 @@ public class DwarfMerchantEntity extends AbstractDwarfEntity {
 
     @Override
     public ResourceLocation getProfessionId() {
-        return ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "merchant");
+        return ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "dwarf_merchant");
     }
 
     @Override
@@ -554,6 +557,18 @@ public class DwarfMerchantEntity extends AbstractDwarfEntity {
         if (needsRestock) {
             this.playSound(SoundEvents.VILLAGER_WORK_FISHERMAN, 1.0F, 1.0F);
         }
+    }
+
+    @Override
+    public void notifyTrade(MerchantOffer offer) {
+        super.notifyTrade(offer); // handles XP, sound, stats, and default advancement
+
+        if (this.getTradingPlayer() instanceof ServerPlayer serverPlayer) {
+            // Fire specific advancement for Merchant
+            serverPlayer.awardStat(Stats.TRADED_WITH_VILLAGER); // optional if not already done in super
+            JolCraftCriteriaTriggers.TRADE_WITH_DWARF.trigger(serverPlayer, this);
+        }
+
     }
 
     //Sound

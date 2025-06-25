@@ -10,6 +10,7 @@ import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.sievert.jolcraft.JolCraft;
+import net.sievert.jolcraft.entity.custom.dwarf.AbstractDwarfEntity;
 
 import java.util.Optional;
 
@@ -26,21 +27,35 @@ public class TradeWithDwarfTrigger extends SimpleCriterionTrigger<TradeWithDwarf
     }
 
     /** Called when the player successfully trades with the dwarf */
-    public void trigger(ServerPlayer player) {
-        this.trigger(player, instance -> true);
+    public void trigger(ServerPlayer player, AbstractDwarfEntity dwarf) {
+        this.trigger(player, instance -> instance.matches(dwarf));
     }
 
     /** Convenient method to create Criterion for advancement JSON */
-    public static Criterion<TriggerInstance> tradedWithDwarf() {
-        return JolCraftCriteriaTriggers.TRADE_WITH_DWARF.createCriterion(new TriggerInstance(Optional.empty()));
+    public static Criterion<TriggerInstance> tradedWithSpecificDwarf(String dwarfId) {
+        return JolCraftCriteriaTriggers.TRADE_WITH_DWARF.createCriterion(
+                new TriggerInstance(Optional.empty(), Optional.of(ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, dwarfId)))
+        );
     }
 
-    public record TriggerInstance(Optional<ContextAwarePredicate> player) implements SimpleCriterionTrigger.SimpleInstance {
+    public static Criterion<TriggerInstance> tradedWithAnyDwarf() {
+        return JolCraftCriteriaTriggers.TRADE_WITH_DWARF.createCriterion(
+                new TriggerInstance(Optional.empty(), Optional.empty())
+        );
+    }
+
+    public record TriggerInstance(Optional<ContextAwarePredicate> player, Optional<ResourceLocation> dwarfType)
+            implements SimpleCriterionTrigger.SimpleInstance {
 
         public static final Codec<TriggerInstance> CODEC = RecordCodecBuilder.create(
                 instance -> instance.group(
-                        EntityPredicate.ADVANCEMENT_CODEC.optionalFieldOf("player").forGetter(TriggerInstance::player)
+                        EntityPredicate.ADVANCEMENT_CODEC.optionalFieldOf("player").forGetter(TriggerInstance::player),
+                        ResourceLocation.CODEC.optionalFieldOf("dwarf_type").forGetter(TriggerInstance::dwarfType)
                 ).apply(instance, TriggerInstance::new)
         );
+
+        public boolean matches(AbstractDwarfEntity dwarf) {
+            return dwarfType.isEmpty() || dwarf.getType().builtInRegistryHolder().key().location().equals(dwarfType.get());
+        }
     }
 }

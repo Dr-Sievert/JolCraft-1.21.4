@@ -29,7 +29,7 @@ public class DwarfBrewmasterEntity extends AbstractDwarfEntity {
 
     public DwarfBrewmasterEntity(EntityType<? extends AbstractDwarfEntity> entityType, Level level) {
         super(entityType, level);
-        this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(JolCraftItems.DEEPSLATE_MUG.get()));
+        this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(JolCraftItems.GLASS_MUG.get()));
     }
 
     //Attributes
@@ -55,7 +55,7 @@ public class DwarfBrewmasterEntity extends AbstractDwarfEntity {
 
     @Override
     public ResourceLocation getProfessionId() {
-        return ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "brewmaster");
+        return ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "dwarf_brewmaster");
     }
 
     @Override

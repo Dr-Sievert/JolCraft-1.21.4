@@ -8,7 +8,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -159,7 +158,7 @@ public class FermentingCauldronBlock extends LayeredCauldronBlock implements Ent
 
 
         // Add yeast to start fermentation
-        if (stack.is(JolCraftItems.YEAST.get()) && (state.getValue(STAGE) == FermentingStage.HOPS || state.getValue(STAGE) == FermentingStage.MALTED)) {
+        if (stack.is(JolCraftItems.YEAST.get()) && (state.getValue(STAGE) == FermentingStage.HOPS)) {
             BlockState newState = state.setValue(STAGE, FermentingStage.BREW_FERMENTING);
             level.setBlock(pos, newState, 3); // Start the fermentation
             level.sendBlockUpdated(pos, state, newState, 3);  // Force update to inform the client

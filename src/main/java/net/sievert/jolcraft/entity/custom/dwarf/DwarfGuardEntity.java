@@ -72,7 +72,7 @@ public class DwarfGuardEntity extends AbstractDwarfEntity {
 
     @Override
     public ResourceLocation getProfessionId() {
-        return ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "guard");
+        return ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "dwarf_guard");
     }
 
     @Override

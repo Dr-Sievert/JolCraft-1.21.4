@@ -64,7 +64,7 @@ public class DwarfScrapperEntity extends AbstractDwarfEntity {
 
     @Override
     public ResourceLocation getProfessionId() {
-        return ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "scrapper");
+        return ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "dwarf_scrapper");
     }
 
     @Override

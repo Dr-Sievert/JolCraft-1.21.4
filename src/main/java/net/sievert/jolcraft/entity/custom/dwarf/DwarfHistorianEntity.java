@@ -60,7 +60,7 @@ public class DwarfHistorianEntity extends AbstractDwarfEntity {
 
     @Override
     public ResourceLocation getProfessionId() {
-        return ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "historian");
+        return ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "dwarf_historian");
     }
 
     @Override

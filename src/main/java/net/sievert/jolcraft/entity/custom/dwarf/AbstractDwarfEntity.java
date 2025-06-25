@@ -641,6 +641,9 @@ public class AbstractDwarfEntity extends AbstractVillager {
                     if (repFinish != null && !repFinish.hasEndorsement(profIdFinish)) {
                         repFinish.addEndorsement(profIdFinish);
                         added = true;
+                        if (this.currentActionPlayer instanceof ServerPlayer serverPlayer) {
+                            JolCraftCriteriaTriggers.ENDORSEMENT_GAIN.trigger(serverPlayer, profIdFinish);
+                        }
                     }
 
                     if (this.currentActionPlayer instanceof ServerPlayer serverPlayer) {
@@ -1539,7 +1542,7 @@ public class AbstractDwarfEntity extends AbstractVillager {
         this.rewardTradeXp(offer);
         if (player instanceof ServerPlayer serverPlayer) {
             player.awardStat(Stats.TRADED_WITH_VILLAGER);
-            JolCraftCriteriaTriggers.TRADE_WITH_DWARF.trigger(serverPlayer);
+            JolCraftCriteriaTriggers.TRADE_WITH_DWARF.trigger(serverPlayer, this);
         }
         net.neoforged.neoforge.common.NeoForge.EVENT_BUS.post(new net.neoforged.neoforge.event.entity.player.TradeWithVillagerEvent(this.lastTradedPlayer, offer, this));
     }

@@ -1,4 +1,7 @@
-// 1.21.4	2025-06-24T18:28:32.4217579	Advancements
+// 1.21.4	2025-06-25T21:33:29.7580458	Advancements
+25bbb1cb7a8e33f5817e9875a4360496f6e871a6 data/jolcraft/advancement/story/endorse_merchant.json
 2629973a60365b008d89c47051ec394f23131221 data/jolcraft/advancement/story/read_lexicon.json
 2fae7cfe5485d7dfb84323f04b96a5645faeb09e data/jolcraft/advancement/story/root.json
-a9b17fd60e79cd45656e52c2ad814f645ba0e926 data/jolcraft/advancement/story/trade_with_dwarf.json
+e8ca26b2e5f3c9f0cdacc7a2e7c85bdf09aec956 data/jolcraft/advancement/story/trade.json
+d4c6c6370e47785c33a074fc5b6cc36fab8c8daa data/jolcraft/advancement/story/trade_dummy.json
+1d4d0652e4a48d80e9b3dcb139ad995df05f6258 data/jolcraft/advancement/story/trade_merchant.json

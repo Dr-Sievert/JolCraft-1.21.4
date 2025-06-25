@@ -188,8 +188,15 @@
   "advancement.jolcraft.root.description": "A journey through dwarven halls.",
   "advancement.jolcraft.read_lexicon.title": "Bilingual",
   "advancement.jolcraft.read_lexicon.description": "Learn to understand the dwarven language.",
+  "advancement.jolcraft.trade_dummy.title": "What now?",
+  "advancement.jolcraft.trade_dummy.description": "Explore the world and find dwarves to interact with.",
   "advancement.jolcraft.trade_with_dwarf.title": "Dwarven Commerce",
   "advancement.jolcraft.trade_with_dwarf.description": "Trade with a dwarf.",
+
+  "advancement.jolcraft.merchant.trade.title": "Assorted goods",
+  "advancement.jolcraft.merchant.trade.description": "Trade with a merchant.",
+  "advancement.jolcraft.merchant.endorse.title": "Appraised fetcher",
+  "advancement.jolcraft.merchant.endorse.description": "Get endorsed by a master merchant.",
 
   "entity.jolcraft.dwarf": "Dwarf",
   "entity.jolcraft.dwarf_guildmaster": "Guildmaster",

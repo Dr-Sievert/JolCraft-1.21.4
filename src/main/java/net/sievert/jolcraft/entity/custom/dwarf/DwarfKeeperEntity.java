@@ -45,7 +45,7 @@ public class DwarfKeeperEntity extends AbstractDwarfEntity {
 
     public DwarfKeeperEntity(EntityType<? extends AbstractDwarfEntity> entityType, Level level) {
         super(entityType, level);
-        this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(Items.WHEAT));
+        this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(JolCraftItems.BARLEY.get()));
     }
 
     //Attributes
@@ -71,7 +71,7 @@ public class DwarfKeeperEntity extends AbstractDwarfEntity {
 
     @Override
     public ResourceLocation getProfessionId() {
-        return ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "keeper");
+        return ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "dwarf_keeper");
     }
 
     @Override

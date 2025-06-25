@@ -1,7 +1,7 @@
 {
-  "parent": "jolcraft:story/read_lexicon",
+  "parent": "jolcraft:story/trade_dummy",
   "criteria": {
-    "trade_with_dwarf": {
+    "generic_dwarf_trade": {
       "trigger": "minecraft:trade_with_dwarf"
     }
   },
@@ -19,7 +19,7 @@
   },
   "requirements": [
     [
-      "trade_with_dwarf"
+      "generic_dwarf_trade"
     ]
   ],
   "sends_telemetry_event": true

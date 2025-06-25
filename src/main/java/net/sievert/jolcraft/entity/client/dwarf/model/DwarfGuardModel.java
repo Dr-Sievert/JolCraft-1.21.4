@@ -43,7 +43,7 @@ public class DwarfGuardModel extends DwarfModel{
 
         PartDefinition right_arm = partdefinition.addOrReplaceChild("right_arm", CubeListBuilder.create().texOffs(16, 18).addBox(-3.8F, -0.01F, -1.5F, 4.0F, 9.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-6.0F, 5.5F, 0.25F, -0.7418F, 0.0F, 0.0F));
 
-        right_arm.addOrReplaceChild("right_armwear", CubeListBuilder.create().texOffs(110, 18).addBox(-3.8F, 3.99F, -2.0F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.25F)), PartPose.offset(0.0F, -4.0F, 0.0F));
+        right_arm.addOrReplaceChild("right_armwear", CubeListBuilder.create().texOffs(110, 18).addBox(-3.8F, 3.99F, -1.5F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.25F)), PartPose.offset(0.0F, -4.0F, 0.0F));
 
         PartDefinition left_arm = partdefinition.addOrReplaceChild("left_arm", CubeListBuilder.create().texOffs(0, 18).addBox(-0.2F, -0.01F, -2.0F, 4.0F, 9.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(6.0F, 5.5F, 0.25F, -0.5236F, 0.0F, 0.0F));
 

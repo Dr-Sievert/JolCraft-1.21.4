@@ -1,6 +1,7 @@
 package net.sievert.jolcraft.event;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import net.minecraft.advancements.Advancement;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -22,11 +23,14 @@ import net.minecraft.world.level.block.LayeredCauldronBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.EntityInvulnerabilityCheckEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
+import net.neoforged.neoforge.event.entity.player.AdvancementEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.village.VillagerTradesEvent;
 import net.sievert.jolcraft.JolCraft;
+import net.sievert.jolcraft.advancement.JolCraftCriteriaTriggers;
 import net.sievert.jolcraft.block.custom.FermentingCauldronBlock;
 import net.sievert.jolcraft.block.custom.FermentingStage;
 import net.sievert.jolcraft.capability.DwarvenLanguageImpl;
@@ -98,13 +102,14 @@ public class JolCraftGameEvents {
     }
 
     @SubscribeEvent
-    public static void onLivingDamage(LivingDamageEvent.Pre event) {
-        if (event.getEntity() instanceof DwarfGuardEntity dwarf && dwarf.isBlockCooldownReady() && event.getSource().getEntity() instanceof Monster) {
+    public static void onInvulnerabilityCheck(EntityInvulnerabilityCheckEvent event) {
+        if (event.getEntity() instanceof DwarfGuardEntity dwarf &&
+                event.getSource().getEntity() instanceof Monster &&
+                dwarf.isBlockCooldownReady()) {
             dwarf.markForBlocking();
-            event.setNewDamage(event.getOriginalDamage()*0.2f);
+            event.setInvulnerable(true);
         }
     }
-
 
     @SubscribeEvent
     public static void registerCustomTrades(final VillagerTradesEvent event) {
@@ -224,6 +229,13 @@ public class JolCraftGameEvents {
                 );
             }
         }
+    }
+
+    @SubscribeEvent
+    public static void onAdvancementEarned(AdvancementEvent.AdvancementEarnEvent event) {
+        if (!(event.getEntity() instanceof ServerPlayer player)) return;
+
+        JolCraftCriteriaTriggers.HAS_ADVANCEMENT.trigger(player, event.getAdvancement().id());
     }
 
 
