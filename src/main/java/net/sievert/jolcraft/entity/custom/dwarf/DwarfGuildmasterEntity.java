@@ -27,6 +27,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
+import net.sievert.jolcraft.advancement.JolCraftCriteriaTriggers;
 import net.sievert.jolcraft.capability.DwarvenReputationImpl;
 import net.sievert.jolcraft.capability.JolCraftAttachments;
 import net.sievert.jolcraft.client.data.MyClientLanguageData;
@@ -228,6 +229,9 @@ public class DwarfGuildmasterEntity extends AbstractDwarfEntity {
                 DwarvenReputationImpl rep = this.currentActionPlayer.getData(JolCraftAttachments.DWARVEN_REP.get());
                 if (rep != null && rep.getTier() == currentTier) {
                     rep.setTier(currentTier + 1);
+                    if (player instanceof ServerPlayer serverPlayer) {
+                        JolCraftCriteriaTriggers.REPUTATION_TIER.trigger(serverPlayer);
+                    }
 
                     // 🎯 Level up Guildmaster
                     int newPlayerTier = rep.getTier();

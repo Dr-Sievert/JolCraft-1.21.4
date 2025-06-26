@@ -189,14 +189,55 @@
   "advancement.jolcraft.read_lexicon.title": "Bilingual",
   "advancement.jolcraft.read_lexicon.description": "Learn to understand the dwarven language.",
   "advancement.jolcraft.trade_dummy.title": "What now?",
-  "advancement.jolcraft.trade_dummy.description": "Explore the world and find dwarves to interact with.",
+  "advancement.jolcraft.trade_dummy.description": "You are a stranger to most dwarves. You need to earn their trust.",
   "advancement.jolcraft.trade_with_dwarf.title": "Dwarven Commerce",
   "advancement.jolcraft.trade_with_dwarf.description": "Trade with a dwarf.",
 
+  "advancement.jolcraft.historian.trade.title": "Curious Curator",
+  "advancement.jolcraft.historian.trade.description": "Trade with a historian.",
+  "advancement.jolcraft.historian.endorse.title": "Footnote in History",
+  "advancement.jolcraft.historian.endorse.description": "Get endorsed by a master historian.",
+
   "advancement.jolcraft.merchant.trade.title": "Assorted goods",
   "advancement.jolcraft.merchant.trade.description": "Trade with a merchant.",
-  "advancement.jolcraft.merchant.endorse.title": "Appraised fetcher",
+  "advancement.jolcraft.merchant.endorse.title": "Distinguished fetcher",
   "advancement.jolcraft.merchant.endorse.description": "Get endorsed by a master merchant.",
+
+  "advancement.jolcraft.scrapper.trade.title": "First Salvage",
+  "advancement.jolcraft.scrapper.trade.description": "Trade with a scrapper.",
+  "advancement.jolcraft.scrapper.endorse.title": "Certified Scavenger",
+  "advancement.jolcraft.scrapper.endorse.description": "Get endorsed by a master scrapper.",
+
+  "advancement.jolcraft.reputation.known_face.title": "Known Face",
+  "advancement.jolcraft.reputation.known_face.description": "Reach this rank in reputation.",
+  "advancement.jolcraft.rep1_dummy.title": "New Faces",
+  "advancement.jolcraft.rep1_dummy.description": "More dwarves are now willing to interact with you.",
+
+  "advancement.jolcraft.brewmaster.trade.title": "Toasting Traditions",
+  "advancement.jolcraft.brewmaster.trade.description": "Trade with a brewmaster.",
+  "advancement.jolcraft.brewmaster.endorse.title": "Honored in Hops",
+  "advancement.jolcraft.brewmaster.endorse.description": "Get endorsed by a master brewmaster.",
+
+  "advancement.jolcraft.guard.trade.title": "Shield and Service",
+  "advancement.jolcraft.guard.trade.description": "Trade with a guard.",
+  "advancement.jolcraft.guard.endorse.title": "Writ of Protection",
+  "advancement.jolcraft.guard.endorse.description": "Get endorsed by a master guard.",
+
+  "advancement.jolcraft.keeper.trade.title": "Horns and Harvest",
+  "advancement.jolcraft.keeper.trade.description": "Trade with a keeper.",
+  "advancement.jolcraft.keeper.endorse.title": "Caretaker's Mark",
+  "advancement.jolcraft.keeper.endorse.description": "Get endorsed by a master keeper.",
+
+  "advancement.jolcraft.reputation.trusted.title": "Trusted",
+  "advancement.jolcraft.reputation.trusted.description": "Reach this rank in reputation.",
+  "advancement.jolcraft.rep2_dummy.title": "Gaining Ground",
+  "advancement.jolcraft.rep2_dummy.description": "Your deeds echo through the halls. More dwarves are willing to work with you.",
+
+
+
+
+
+
 
   "entity.jolcraft.dwarf": "Dwarf",
   "entity.jolcraft.dwarf_guildmaster": "Guildmaster",
