@@ -1,4 +1,4 @@
-package net.sievert.jolcraft.data;
+package net.sievert.jolcraft.util;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;

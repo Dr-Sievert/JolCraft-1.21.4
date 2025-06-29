@@ -2,7 +2,6 @@ package net.sievert.jolcraft.util;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.sievert.jolcraft.data.JolCraftTags;
 import net.sievert.jolcraft.item.JolCraftItems;
 
 import java.util.ArrayList;

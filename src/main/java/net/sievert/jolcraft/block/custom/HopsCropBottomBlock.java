@@ -18,7 +18,7 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.common.util.TriState;
-import net.sievert.jolcraft.data.JolCraftTags;
+import net.sievert.jolcraft.util.JolCraftTags;
 
 import javax.annotation.Nullable;
 import java.util.function.Supplier;

@@ -7,7 +7,7 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.sievert.jolcraft.JolCraft;
-import net.sievert.jolcraft.data.JolCraftTags;
+import net.sievert.jolcraft.util.JolCraftTags;
 import net.sievert.jolcraft.item.JolCraftItems;
 
 import java.util.concurrent.CompletableFuture;

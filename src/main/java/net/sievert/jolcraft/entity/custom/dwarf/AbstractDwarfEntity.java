@@ -46,7 +46,7 @@ import net.sievert.jolcraft.capability.JolCraftAttachments;
 import net.sievert.jolcraft.client.data.MyClientLanguageData;
 import net.sievert.jolcraft.client.data.MyClientReputationData;
 import net.sievert.jolcraft.component.JolCraftDataComponents;
-import net.sievert.jolcraft.data.JolCraftTags;
+import net.sievert.jolcraft.util.JolCraftTags;
 import net.sievert.jolcraft.entity.JolCraftEntities;
 import net.sievert.jolcraft.entity.ai.goal.DwarfBlockGoal;
 import net.sievert.jolcraft.entity.client.dwarf.DwarfAnimationType;

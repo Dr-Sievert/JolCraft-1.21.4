@@ -28,7 +28,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.sievert.jolcraft.block.entity.FermentingCauldronBlockEntity;
 import net.sievert.jolcraft.block.entity.JolCraftBlockEntities;
 import net.sievert.jolcraft.component.JolCraftDataComponents;
-import net.sievert.jolcraft.data.JolCraftTags;
+import net.sievert.jolcraft.util.JolCraftTags;
 import net.sievert.jolcraft.item.JolCraftItems;
 import org.jetbrains.annotations.Nullable;
 

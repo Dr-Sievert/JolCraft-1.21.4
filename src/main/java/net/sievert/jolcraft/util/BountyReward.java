@@ -2,7 +2,6 @@ package net.sievert.jolcraft.util;
 
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
-import net.sievert.jolcraft.data.BountyData;
 import net.sievert.jolcraft.item.JolCraftItems;
 
 import java.util.ArrayList;

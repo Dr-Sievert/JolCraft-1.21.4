@@ -72,7 +72,6 @@ public class DwarfRenderer<T extends AbstractDwarfEntity> extends HumanoidMobRen
     @Override
     public void extractRenderState(T entity, DwarfRenderState reusedState, float partialTick) {
         super.extractRenderState(entity, reusedState, partialTick);
-
         reusedState.idleAnimationState.copyFrom(entity.idleAnimationState);
         for (DwarfAnimationType type : DwarfAnimationType.values()) {
             reusedState.animationStates.get(type).copyFrom(entity.getAnimationState(type));

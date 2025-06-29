@@ -3,7 +3,6 @@ package net.sievert.jolcraft.util;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
-import net.sievert.jolcraft.data.BountyData;
 import net.sievert.jolcraft.item.JolCraftItems;
 
 import java.util.List;

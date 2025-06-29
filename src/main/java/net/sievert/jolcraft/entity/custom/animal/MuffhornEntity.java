@@ -215,6 +215,5 @@ public class MuffhornEntity extends Animal implements IShearable {
     }
 
 
-
 }
 

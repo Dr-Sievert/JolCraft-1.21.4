@@ -14,7 +14,6 @@ import net.minecraft.util.Mth;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.sievert.jolcraft.JolCraft;
-import net.sievert.jolcraft.entity.custom.animal.MuffhornEntity;
 
 @OnlyIn(Dist.CLIENT)
 public class MuffhornModel extends QuadrupedModel<LivingEntityRenderState> {
