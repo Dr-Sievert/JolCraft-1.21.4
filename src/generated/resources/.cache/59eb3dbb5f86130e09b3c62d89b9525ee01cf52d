@@ -1,11 +1,14 @@
-// 1.21.4	2025-06-24T18:28:32.4207548	Loot Tables
+// 1.21.4	2025-06-29T17:04:46.3603862	Loot Tables
 586d45fc79329fcc5c2955b0d520be34bf2fda77 data/jolcraft/loot_table/blocks/asgarnian_crop_bottom.json
 4dc4298bab0cad4e8fbac7474da56bcc783d7f8e data/jolcraft/loot_table/blocks/asgarnian_crop_top.json
+faaa7e28a7da3b3da8d8bdf71408d90bb22eef82 data/jolcraft/loot_table/blocks/barley_block.json
 ccc09f304296bb6d3f0ed9a317d6d492d9594386 data/jolcraft/loot_table/blocks/barley_crop.json
 d6b460e9240a29cee3e150ed72836cd591e488f7 data/jolcraft/loot_table/blocks/duskhold_crop_bottom.json
 2d9ee056ad06a05420bc71463919fcf358217179 data/jolcraft/loot_table/blocks/duskhold_crop_top.json
 6480b4facd46c45cbc101a5cef3520b81e3651be data/jolcraft/loot_table/blocks/fermenting_cauldron.json
 512e5547d5719c32c9816d5ac9dcdb1640ce22ea data/jolcraft/loot_table/blocks/krandonian_crop_bottom.json
 7b57b1feb148aac81a24454ba94f208ba6227200 data/jolcraft/loot_table/blocks/krandonian_crop_top.json
+c412a372c94cf0e0d48a02db4189ec06a0e2d451 data/jolcraft/loot_table/blocks/muffhorn_fur_block.json
 9b4f96e8b40b9317e3ee9dc6ccd51f47d9bfaf4a data/jolcraft/loot_table/blocks/yanillian_crop_bottom.json
 80de9d73daec420db6d3bbcb057e3fae5e0cde49 data/jolcraft/loot_table/blocks/yanillian_crop_top.json
+874f15a3293af45a706c5a377e6a6a1642a5f2df data/jolcraft/loot_table/entities/muffhorn.json

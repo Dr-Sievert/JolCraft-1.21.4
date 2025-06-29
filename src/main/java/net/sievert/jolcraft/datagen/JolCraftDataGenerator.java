@@ -25,9 +25,6 @@ public class JolCraftDataGenerator {
         PackOutput packOutput = generator.getPackOutput();
         CompletableFuture<HolderLookup.Provider> lookup = event.getLookupProvider();
 
-        generator.addProvider(true , new LootTableProvider(packOutput, Collections.emptySet(),
-                List.of(new LootTableProvider.SubProviderEntry(JolCraftBlockLootTableProvider::new, LootContextParamSets.BLOCK)), lookup));
-
         BlockTagsProvider blockTagsProvider = new JolCraftBlockTagProvider(packOutput, lookup);
         generator.addProvider(true, blockTagsProvider);
 
@@ -36,6 +33,25 @@ public class JolCraftDataGenerator {
         generator.addProvider(true, new JolCraftRecipeProvider.Runner(packOutput, lookup));
 
         generator.addProvider(true, new JolCraftModelProvider(packOutput));
+
+        generator.addProvider(true, new LootTableProvider(
+                packOutput,
+                Collections.emptySet(),
+                List.of(
+                        new LootTableProvider.SubProviderEntry(
+                                provider -> new JolCraftBlockLootTableProvider(provider),
+                                LootContextParamSets.BLOCK
+                        ),
+                        new LootTableProvider.SubProviderEntry(
+                                provider -> new JolCraftEntityLootTableProvider(provider),
+                                LootContextParamSets.ENTITY
+                        )
+                ),
+                lookup
+        ));
+
+
+        generator.addProvider(true, new JolCraftGlobalLootModifierProvider(packOutput, lookup));
 
         generator.addProvider(true, new JolCraftItemTagProvider(packOutput, lookup, blockTagsProvider.contentsGetter()));
 
@@ -50,9 +66,6 @@ public class JolCraftDataGenerator {
         PackOutput packOutput = generator.getPackOutput();
         CompletableFuture<HolderLookup.Provider> lookup = event.getLookupProvider();
 
-        generator.addProvider(true , new LootTableProvider(packOutput, Collections.emptySet(),
-                List.of(new LootTableProvider.SubProviderEntry(JolCraftBlockLootTableProvider::new, LootContextParamSets.BLOCK)), lookup));
-
         BlockTagsProvider blockTagsProvider = new JolCraftBlockTagProvider(packOutput, lookup);
         generator.addProvider(true, blockTagsProvider);
 
@@ -61,6 +74,25 @@ public class JolCraftDataGenerator {
         generator.addProvider(true, new JolCraftRecipeProvider.Runner(packOutput, lookup));
 
         generator.addProvider(true, new JolCraftModelProvider(packOutput));
+
+        generator.addProvider(true, new LootTableProvider(
+                packOutput,
+                Collections.emptySet(),
+                List.of(
+                        new LootTableProvider.SubProviderEntry(
+                                provider -> new JolCraftBlockLootTableProvider(provider),
+                                LootContextParamSets.BLOCK
+                        ),
+                        new LootTableProvider.SubProviderEntry(
+                                provider -> new JolCraftEntityLootTableProvider(provider),
+                                LootContextParamSets.ENTITY
+                        )
+                ),
+                lookup
+        ));
+
+
+        generator.addProvider(true, new JolCraftGlobalLootModifierProvider(packOutput, lookup));
 
         generator.addProvider(true, new JolCraftItemTagProvider(packOutput, lookup, blockTagsProvider.contentsGetter()));
 

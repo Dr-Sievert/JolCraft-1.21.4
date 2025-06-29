@@ -38,6 +38,9 @@ public class JolCraftBlockLootTableProvider extends BlockLootSubProvider {
     @Override
     protected void generate() {
 
+        dropSelf(JolCraftBlocks.BARLEY_BLOCK.get());
+        dropSelf(JolCraftBlocks.MUFFHORN_FUR_BLOCK.get());
+
         this.add(JolCraftBlocks.BARLEY_CROP.get(),
                 createCropDrops(
                         JolCraftBlocks.BARLEY_CROP.get(),

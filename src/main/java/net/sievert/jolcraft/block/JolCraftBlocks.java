@@ -5,6 +5,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.*;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredBlock;
@@ -18,6 +19,29 @@ import java.util.function.Function;
 public class JolCraftBlocks {
     public static final DeferredRegister.Blocks BLOCKS =
             DeferredRegister.createBlocks(JolCraft.MOD_ID);
+
+    public static final DeferredBlock<HayBlock> BARLEY_BLOCK = registerBlock("barley_block",
+            (properties) -> new HayBlock(properties
+                    .mapColor(MapColor.COLOR_YELLOW)
+                    .strength(0.5F)
+                    .sound(SoundType.GRASS)
+                    .instrument(NoteBlockInstrument.BANJO)
+                    .ignitedByLava()
+            ),
+            BlockBehaviour.Properties.of()
+    );
+
+    public static final DeferredBlock<Block> MUFFHORN_FUR_BLOCK = registerBlock("muffhorn_fur_block",
+            (properties) -> new Block(properties
+                    .mapColor(MapColor.COLOR_BROWN)
+                    .strength(0.8F)
+                    .sound(SoundType.WOOL)
+                    .instrument(NoteBlockInstrument.GUITAR)
+                    .ignitedByLava()
+            ),
+            BlockBehaviour.Properties.of() // use the same props passed to the block
+    );
+
 
     // Register barley crop WITHOUT a block item!
     public static final DeferredBlock<Block> BARLEY_CROP = BLOCKS.registerBlock("barley_crop",
@@ -142,7 +166,6 @@ public class JolCraftBlocks {
             )
     );
 
-
     public static final DeferredBlock<FermentingCauldronBlock> FERMENTING_CAULDRON = BLOCKS.registerBlock(
             "fermenting_cauldron",
             props -> new FermentingCauldronBlock(
@@ -150,7 +173,11 @@ public class JolCraftBlocks {
                     CauldronInteraction.EMPTY,
                     props
             ),
-            BlockBehaviour.Properties.ofFullCopy(Blocks.CAULDRON)
+            BlockBehaviour.Properties.ofLegacyCopy(Blocks.CAULDRON)
+                    .mapColor(MapColor.STONE)
+                    .requiresCorrectToolForDrops()
+                    .strength(2.0F)
+                    .noOcclusion()
     );
 
 

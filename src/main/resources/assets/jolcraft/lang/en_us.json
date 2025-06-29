@@ -5,6 +5,7 @@
   "item.jolcraft.barley_seeds": "Dwarven Barley Seeds",
   "block.jolcraft.barley_crop": "Dwarven Barley Crops",
   "item.jolcraft.barley": "Dwarven Barley",
+  "block.jolcraft.barley_block": "Barley Hay Bale",
   "item.jolcraft.barley_malt": "Dwarven Malt",
   "item.jolcraft.asgarnian_seeds": "Asgarnian Seeds",
   "block.jolcraft.asgarnian_crop_bottom": "Asgarnian Hops",
@@ -29,6 +30,8 @@
   "item.jolcraft.dwarven_brew": "Dwarven Brew",
 
   "item.jolcraft.muffhorn_milk_bucket": "Muffhorn Milk Bucket",
+  "item.jolcraft.muffhorn_fur": "Muffhorn Fur",
+  "block.jolcraft.muffhorn_fur_block": "Muffhorn Fur Bundle",
 
   "item.jolcraft.parchment": "Parchment",
   "item.jolcraft.bounty": "Bounty",

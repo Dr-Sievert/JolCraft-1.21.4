@@ -206,4 +206,9 @@ public class FermentingCauldronBlock extends LayeredCauldronBlock implements Ent
     public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state, boolean includeData) {
         return new ItemStack(Items.CAULDRON); // Prevents pick block from giving custom cauldron with NBT
     }
+
+    @Override
+    public RenderShape getRenderShape(BlockState state) {
+        return RenderShape.MODEL;
+    }
 }

@@ -8,6 +8,8 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.sievert.jolcraft.JolCraft;
+import net.sievert.jolcraft.block.JolCraftBlocks;
+
 import java.util.function.Supplier;
 
 public class JolCraftCreativeModeTabs {
@@ -23,9 +25,12 @@ public class JolCraftCreativeModeTabs {
                         pOutput.accept(JolCraftItems.GOLD_COIN);
 
                         pOutput.accept(JolCraftItems.MUFFHORN_MILK_BUCKET);
+                        pOutput.accept(JolCraftItems.MUFFHORN_FUR);
+                        pOutput.accept(JolCraftBlocks.MUFFHORN_FUR_BLOCK);
 
                         pOutput.accept(JolCraftItems.BARLEY_SEEDS);
                         pOutput.accept(JolCraftItems.BARLEY);
+                        pOutput.accept(JolCraftBlocks.BARLEY_BLOCK);
                         pOutput.accept(JolCraftItems.BARLEY_MALT);
                         pOutput.accept(JolCraftItems.ASGARNIAN_SEEDS);
                         pOutput.accept(JolCraftItems.DUSKHOLD_SEEDS);

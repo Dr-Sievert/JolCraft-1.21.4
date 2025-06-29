@@ -6,8 +6,8 @@
       "loot_table_id": "minecraft:archaeology/trail_ruins_rare"
     },
     {
-      "condition": "minecraft:random_chance",
-      "chance": 0.50
+      "chance": 0.5,
+      "condition": "minecraft:random_chance"
     }
   ],
   "item": "jolcraft:dwarven_lexicon"

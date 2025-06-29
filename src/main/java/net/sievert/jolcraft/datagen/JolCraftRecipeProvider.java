@@ -8,6 +8,7 @@ import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.sievert.jolcraft.block.JolCraftBlocks;
 import net.sievert.jolcraft.data.JolCraftTags;
 import net.sievert.jolcraft.item.JolCraftItems;
 
@@ -38,6 +39,16 @@ public class JolCraftRecipeProvider extends RecipeProvider {
     @Override
     protected void buildRecipes() {
 
+        shaped(RecipeCategory.MISC, JolCraftBlocks.MUFFHORN_FUR_BLOCK.get())
+                .pattern("BB")
+                .pattern("BB")
+                .define('B', JolCraftItems.MUFFHORN_FUR.get())
+                .unlockedBy("has_muffhorn_fur", has(JolCraftItems.MUFFHORN_FUR.get())).save(output);
+
+        shapeless(RecipeCategory.MISC, JolCraftItems.MUFFHORN_FUR.get(), 4)
+                .requires(JolCraftBlocks.MUFFHORN_FUR_BLOCK.get())
+                .unlockedBy("has_muffhorn_fur", has(JolCraftItems.MUFFHORN_FUR.get())).save(output);
+
         shaped(RecipeCategory.MISC, JolCraftItems.PARCHMENT.get())
                 .pattern("B")
                 .pattern("B")
@@ -55,14 +66,12 @@ public class JolCraftRecipeProvider extends RecipeProvider {
         shapeless(RecipeCategory.MISC, JolCraftItems.CONTRACT_WRITTEN.get())
                 .requires(JolCraftItems.CONTRACT_BLANK.get())
                 .requires(JolCraftTags.Items.INK_AND_QUILLS)
-                .unlockedBy("has_contract_blank", has(JolCraftItems.CONTRACT_BLANK.get()))
-                .save(output);
+                .unlockedBy("has_contract_blank", has(JolCraftItems.CONTRACT_BLANK.get())).save(output);
 
         shapeless(RecipeCategory.MISC, JolCraftItems.CONTRACT_GUILDMASTER.get())
                 .requires(JolCraftItems.GUILD_SIGIL.get())
                 .requires(JolCraftItems.CONTRACT_SIGNED.get())
-                .unlockedBy("has_contract_signed", has(JolCraftItems.CONTRACT_SIGNED.get()))
-                .save(output);
+                .unlockedBy("has_contract_signed", has(JolCraftItems.CONTRACT_SIGNED.get())).save(output);
 
         shaped(RecipeCategory.MISC, JolCraftItems.GLASS_MUG.get())
                 .pattern("B ")
@@ -75,26 +84,30 @@ public class JolCraftRecipeProvider extends RecipeProvider {
                 .requires(Items.GLASS)
                 .requires(Items.FEATHER)
                 .requires(Items.INK_SAC)
-                .unlockedBy("has_ink", has(Items.INK_SAC))
-                .save(output);
+                .unlockedBy("has_ink", has(Items.INK_SAC)).save(output);
 
         shapeless(RecipeCategory.MISC, JolCraftItems.QUILL_FULL.get())
                 .requires(JolCraftItems.QUILL_EMPTY.get())
                 .requires(Items.INK_SAC)
-                .unlockedBy("has_quill_empty", has(JolCraftItems.QUILL_EMPTY.get()))
-                .save(output, "quill_full_refill");
+                .unlockedBy("has_quill_empty", has(JolCraftItems.QUILL_EMPTY.get())).save(output, "quill_full_refill");
 
         shapeless(RecipeCategory.MISC, JolCraftItems.QUILL_EMPTY.get())
                 .requires(Items.GLASS)
                 .requires(Items.FEATHER)
-                .unlockedBy("has_feather", has(Items.FEATHER))
-                .save(output);
+                .unlockedBy("has_feather", has(Items.FEATHER)).save(output);
 
         nineBlockStorageRecipes(
                 RecipeCategory.MISC,
                 JolCraftItems.SCRAP.get(), //Ingredient
                 RecipeCategory.MISC,
                 JolCraftItems.SCRAP_HEAP.get() //Block
+        );
+
+        nineBlockStorageRecipes(
+                RecipeCategory.MISC,
+                JolCraftItems.BARLEY.get(), //Ingredient
+                RecipeCategory.MISC,
+                JolCraftBlocks.BARLEY_BLOCK.get() //Block
         );
 
         // Barley -> Barley Malt (Smelting)
@@ -104,8 +117,7 @@ public class JolCraftRecipeProvider extends RecipeProvider {
                         JolCraftItems.BARLEY_MALT.get(),
                         0.35f, // XP
                         200    // Cooking time (in ticks, vanilla is 200 = 10s)
-                ).unlockedBy("has_barley", has(JolCraftItems.BARLEY.get()))
-                .save(output, "barley_malt_from_smelting");
+                ).unlockedBy("has_barley", has(JolCraftItems.BARLEY.get())).save(output, "barley_malt_from_smelting");
 
         // Barley -> Barley Malt (Smoking)
         SimpleCookingRecipeBuilder.smoking(
@@ -114,8 +126,7 @@ public class JolCraftRecipeProvider extends RecipeProvider {
                         JolCraftItems.BARLEY_MALT.get(),
                         0.35f, // XP
                         100    // Cooking time (smoking is usually faster, vanilla is 100 = 5s)
-                ).unlockedBy("has_barley", has(JolCraftItems.BARLEY.get()))
-                .save(output, "barley_malt_from_smoking");
+                ).unlockedBy("has_barley", has(JolCraftItems.BARLEY.get())).save(output, "barley_malt_from_smoking");
 
 
 

@@ -28,6 +28,9 @@ public class JolCraftItems {
                     new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
 
     //Animal-related
+    public static final DeferredItem<Item> MUFFHORN_FUR = ITEMS.registerItem("muffhorn_fur",
+            Item::new, new Item.Properties());
+
     public static final DeferredItem<Item> MUFFHORN_MILK_BUCKET = ITEMS.registerItem("muffhorn_milk_bucket",
             Item::new, new Item.Properties().craftRemainder(Items.BUCKET).component(DataComponents.CONSUMABLE, Consumables.MILK_BUCKET).usingConvertsTo(Items.BUCKET).stacksTo(1));
 

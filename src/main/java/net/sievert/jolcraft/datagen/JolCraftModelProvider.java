@@ -10,6 +10,7 @@ import net.minecraft.client.data.models.blockstates.*;
 import net.minecraft.client.data.models.model.ModelTemplate;
 import net.minecraft.client.data.models.model.ModelTemplates;
 import net.minecraft.client.data.models.model.TextureMapping;
+import net.minecraft.client.data.models.model.TexturedModel;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -43,9 +44,16 @@ public class JolCraftModelProvider extends ModelProvider {
 
         //Animal-related
         itemModels.generateFlatItem(JolCraftItems.MUFFHORN_MILK_BUCKET.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.MUFFHORN_FUR.get(), ModelTemplates.FLAT_ITEM);
+        blockModels.createTrivialCube(JolCraftBlocks.MUFFHORN_FUR_BLOCK.get());
 
         //Brewing
         itemModels.generateFlatItem(JolCraftItems.BARLEY.get(), ModelTemplates.FLAT_ITEM);
+        blockModels.createRotatedPillarWithHorizontalVariant(
+                JolCraftBlocks.BARLEY_BLOCK.get(),
+                TexturedModel.COLUMN,
+                TexturedModel.COLUMN_HORIZONTAL
+        );
         itemModels.generateFlatItem(JolCraftItems.BARLEY_MALT.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(JolCraftItems.ASGARNIAN_HOPS.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(JolCraftItems.DUSKHOLD_HOPS.get(), ModelTemplates.FLAT_ITEM);

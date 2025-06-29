@@ -67,14 +67,14 @@ public class MuffhornModel extends QuadrupedModel<LivingEntityRenderState> {
         PartDefinition body = partdefinition.addOrReplaceChild("body", CubeListBuilder.create().texOffs(52, 44).addBox(-6.0F, -5.0F, -10.0F, 12.0F, 11.0F, 26.0F, new CubeDeformation(0.0F))
                 .texOffs(72, 32).addBox(-5.0F, -8.0F, -10.0F, 10.0F, 3.0F, 8.0F, new CubeDeformation(0.0F))
                 .texOffs(79, 28).addBox(-5.0F, -7.0F, -2.0F, 10.0F, 2.0F, 1.0F, new CubeDeformation(0.0F))
-                .texOffs(79, 25).addBox(-5.0F, -6.0F, -1.0F, 10.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 5.0F, 2.0F));
+                .texOffs(79, 25).addBox(-5.0F, -6.0F, -1.0F, 10.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 6.0F, 2.0F));
 
         body.addOrReplaceChild("fur_body", CubeListBuilder.create().texOffs(52, 82).addBox(-6.0F, -5.0F, -10.0F, 12.0F, 20.0F, 26.0F, new CubeDeformation(0.75F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
         // === HIND LEGS ===
         PartDefinition right_hind_leg = partdefinition.addOrReplaceChild("right_hind_leg",
                 CubeListBuilder.create().texOffs(0, 47).addBox(-2.0F, -1.0F, -2.0F, 4.0F, 13.0F, 4.0F, new CubeDeformation(0.0F)),
-                PartPose.offset(-4.0F, 12.0F, 15.0F) // ← restored Z
+                PartPose.offset(-4.01F, 12.0F, 15.0F) // ← restored Z
         );
 
         right_hind_leg.addOrReplaceChild("fur_right_hind_leg",
@@ -84,7 +84,7 @@ public class MuffhornModel extends QuadrupedModel<LivingEntityRenderState> {
 
         PartDefinition left_hind_leg = partdefinition.addOrReplaceChild("left_hind_leg",
                 CubeListBuilder.create().texOffs(0, 47).mirror().addBox(-2.0F, -1.0F, -2.0F, 4.0F, 13.0F, 4.0F, new CubeDeformation(0.0F)).mirror(false),
-                PartPose.offset(4.0F, 12.0F, 15.0F) // ← restored Z
+                PartPose.offset(4.01F, 12.0F, 15.0F) // ← restored Z
         );
 
         left_hind_leg.addOrReplaceChild("fur_left_hind_leg",
@@ -96,7 +96,7 @@ public class MuffhornModel extends QuadrupedModel<LivingEntityRenderState> {
         // === FRONT LEGS ===
         PartDefinition right_front_leg = partdefinition.addOrReplaceChild("right_front_leg",
                 CubeListBuilder.create().texOffs(0, 47).addBox(-2.0F, -1.0F, -1.0F, 4.0F, 13.0F, 4.0F, new CubeDeformation(0.0F)),
-                PartPose.offset(-4.0F, 12.0F, -6.0F) // raised
+                PartPose.offset(-4.01F, 12.0F, -6.0F) // raised
         );
 
         right_front_leg.addOrReplaceChild("fur_right_front_leg",
@@ -106,7 +106,7 @@ public class MuffhornModel extends QuadrupedModel<LivingEntityRenderState> {
 
         PartDefinition left_front_leg = partdefinition.addOrReplaceChild("left_front_leg",
                 CubeListBuilder.create().texOffs(0, 47).mirror().addBox(-2.0F, -1.0F, -1.0F, 4.0F, 13.0F, 4.0F, new CubeDeformation(0.0F)).mirror(false),
-                PartPose.offset(4.0F, 12.0F, -6.0F) // raised
+                PartPose.offset(4.01F, 12.0F, -6.0F) // raised
         );
 
         left_front_leg.addOrReplaceChild("fur_left_front_leg",
@@ -115,7 +115,7 @@ public class MuffhornModel extends QuadrupedModel<LivingEntityRenderState> {
         );
 
         PartDefinition head = partdefinition.addOrReplaceChild("head", CubeListBuilder.create().texOffs(0, 0).addBox(-5.0F, -5.0F, -6.0F, 10.0F, 8.0F, 6.0F, new CubeDeformation(0.0F))
-                .texOffs(1, 15).addBox(-3.0F, -3.0F, -12.0F, 6.0F, 6.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 4.0F, -8.0F));
+                .texOffs(1, 15).addBox(-3.0F, -3.0F, -12.0F, 6.0F, 6.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 5.0F, -8.0F));
 
         head.addOrReplaceChild("fur_head", CubeListBuilder.create().texOffs(33, 0).addBox(-5.0F, -5.0F, -6.0F, 10.0F, 8.0F, 6.0F, new CubeDeformation(0.5F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
@@ -145,6 +145,15 @@ public class MuffhornModel extends QuadrupedModel<LivingEntityRenderState> {
 
         this.head.xRot = clampedX * ((float)Math.PI / 180.0F);
         this.head.yRot = clampedY * ((float)Math.PI / 180.0F);
+    }
+
+    public void setFurVisible(boolean visible) {
+        this.fur_body.visible = visible;
+        this.fur_head.visible = visible;
+        this.fur_right_hind_leg.visible = visible;
+        this.fur_left_hind_leg.visible = visible;
+        this.fur_right_front_leg.visible = visible;
+        this.fur_left_front_leg.visible = visible;
     }
 
     public ModelPart getHead() {
