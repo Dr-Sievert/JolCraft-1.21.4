@@ -1,7 +1,9 @@
 package net.sievert.jolcraft.item;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.component.Consumables;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -17,6 +19,19 @@ public class JolCraftItems {
 
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(JolCraft.MOD_ID);
 
+    //Core Items
+    public static final DeferredItem<Item> GOLD_COIN = ITEMS.registerItem("gold_coin",
+            Item::new, new Item.Properties().rarity(Rarity.UNCOMMON));
+
+    public static final DeferredItem<Item> DWARVEN_LEXICON =
+            ITEMS.registerItem("dwarven_lexicon", DwarvenLexiconItem::new,
+                    new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
+
+    //Animal-related
+    public static final DeferredItem<Item> MUFFHORN_MILK_BUCKET = ITEMS.registerItem("muffhorn_milk_bucket",
+            Item::new, new Item.Properties().craftRemainder(Items.BUCKET).component(DataComponents.CONSUMABLE, Consumables.MILK_BUCKET).usingConvertsTo(Items.BUCKET).stacksTo(1));
+
+
     //Bounty
     public static final DeferredItem<Item> PARCHMENT = ITEMS.registerSimpleItem("parchment");
 
@@ -29,13 +44,6 @@ public class JolCraftItems {
     public static final DeferredItem<Item> RESTOCK_CRATE = ITEMS.registerItem("restock_crate",
             RestockCrateItem::new, new Item.Properties().stacksTo(1));
 
-    //Core Items
-    public static final DeferredItem<Item> GOLD_COIN = ITEMS.registerItem("gold_coin",
-            Item::new, new Item.Properties().rarity(Rarity.UNCOMMON));
-
-    public static final DeferredItem<Item> DWARVEN_LEXICON =
-            ITEMS.registerItem("dwarven_lexicon", DwarvenLexiconItem::new,
-                    new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
 
     //Contracts and Associated Items
 
@@ -146,6 +154,10 @@ public class JolCraftItems {
 
     public static final DeferredItem<Item> DWARF_KEEPER_SPAWN_EGG = ITEMS.registerItem("dwarf_keeper_spawn_egg",
             (properties) -> new SpawnEggItem(JolCraftEntities.DWARF_KEEPER.get(), properties));
+
+    public static final DeferredItem<Item> MUFFHORN_SPAWN_EGG = ITEMS.registerItem("muffhorn_spawn_egg",
+            (properties) -> new SpawnEggItem(JolCraftEntities.MUFFHORN.get(), properties));
+
 
 
     //Gems
@@ -310,6 +322,7 @@ public class JolCraftItems {
 
     //Scrap
     public static final DeferredItem<Item> SCRAP = ITEMS.registerSimpleItem("scrap");
+
     public static final DeferredItem<Item> SCRAP_HEAP = ITEMS.registerSimpleItem("scrap_heap");
 
     public static final DeferredItem<Item> BROKEN_PICKAXE =

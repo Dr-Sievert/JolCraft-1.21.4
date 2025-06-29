@@ -9,6 +9,7 @@ import net.minecraft.world.entity.MobCategory;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.sievert.jolcraft.JolCraft;
+import net.sievert.jolcraft.entity.custom.animal.MuffhornEntity;
 import net.sievert.jolcraft.entity.custom.dwarf.*;
 
 import java.util.function.Supplier;
@@ -18,7 +19,6 @@ public class JolCraftEntities {
             DeferredRegister.create(BuiltInRegistries.ENTITY_TYPE, JolCraft.MOD_ID);
 
     //Dwarves
-
     public static ResourceKey<EntityType<?>> DWARF_KEY = ResourceKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "dwarf"));
     public static ResourceKey<EntityType<?>> DWARF_GUILDMASTER_KEY = ResourceKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID,"dwarf_guildmaster"));
     public static ResourceKey<EntityType<?>> DWARF_HISTORIAN_KEY = ResourceKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID,"dwarf_historian"));
@@ -60,8 +60,12 @@ public class JolCraftEntities {
             ENTITY_TYPES.register("dwarf_keeper", () -> EntityType.Builder.of(DwarfKeeperEntity::new, MobCategory.CREATURE)
                     .sized(0.5f, 1.6f).build(DWARF_KEEPER_KEY));
 
+    //Animals
+    public static ResourceKey<EntityType<?>> MUFFHORN_KEY = ResourceKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "muffhorn"));
 
-
+    public static final Supplier<EntityType<MuffhornEntity>> MUFFHORN =
+            ENTITY_TYPES.register("muffhorn", () -> EntityType.Builder.of(MuffhornEntity::new, MobCategory.CREATURE)
+                    .sized(1.2f, 2.2f).build(MUFFHORN_KEY));
 
 
     public static void register(IEventBus eventBus) {

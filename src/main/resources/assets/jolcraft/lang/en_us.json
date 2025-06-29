@@ -28,6 +28,8 @@
   "item.jolcraft.glass_mug": "Glass Mug",
   "item.jolcraft.dwarven_brew": "Dwarven Brew",
 
+  "item.jolcraft.muffhorn_milk_bucket": "Muffhorn Milk Bucket",
+
   "item.jolcraft.parchment": "Parchment",
   "item.jolcraft.bounty": "Bounty",
   "item.jolcraft.bounty_crate": "Bounty Crate",
@@ -68,6 +70,8 @@
   "item.jolcraft.dwarf_brewmaster_spawn_egg": "Dwarf Brewmaster Spawn Egg",
   "item.jolcraft.dwarf_guard_spawn_egg": "Dwarf Guard Spawn Egg",
   "item.jolcraft.dwarf_keeper_spawn_egg": "Dwarf Keeper Spawn Egg",
+
+  "item.jolcraft.muffhorn_spawn_egg": "Muffhorn Spawn Egg",
 
   "item.jolcraft.aegiscore": "Aegiscore",
   "item.jolcraft.ashfang": "Ashfang",
@@ -247,6 +251,9 @@
   "entity.jolcraft.dwarf_brewmaster": "Brewmaster",
   "entity.jolcraft.dwarf_guard": "Guard",
   "entity.jolcraft.dwarf_keeper": "Keeper",
+
+  "entity.jolcraft.muffhorn": "Muffhorn",
+
 
   "filled_map.forge": "Map to a Dwarven Forge"
 }

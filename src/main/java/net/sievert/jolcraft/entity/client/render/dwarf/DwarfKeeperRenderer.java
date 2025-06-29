@@ -1,4 +1,4 @@
-package net.sievert.jolcraft.entity.client.dwarf.render;
+package net.sievert.jolcraft.entity.client.render.dwarf;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -8,21 +8,21 @@ import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.entity.client.dwarf.DwarfBeardLayer;
 import net.sievert.jolcraft.entity.client.dwarf.DwarfEyeLayer;
 import net.sievert.jolcraft.entity.client.dwarf.DwarfRenderState;
-import net.sievert.jolcraft.entity.client.dwarf.model.DwarfMerchantModel;
-import net.sievert.jolcraft.entity.custom.dwarf.DwarfMerchantEntity;
+import net.sievert.jolcraft.entity.client.model.dwarf.DwarfKeeperModel;
+import net.sievert.jolcraft.entity.custom.dwarf.DwarfKeeperEntity;
 
 
-public class DwarfMerchantRenderer extends DwarfRenderer<DwarfMerchantEntity> {
+public class DwarfKeeperRenderer extends DwarfRenderer<DwarfKeeperEntity> {
 
-    public DwarfMerchantRenderer(EntityRendererProvider.Context context) {
-        super(context, new DwarfMerchantModel(context.bakeLayer(DwarfMerchantModel.LAYER_LOCATION)));
-        this.addLayer(new DwarfBeardLayer(this));
+    public DwarfKeeperRenderer(EntityRendererProvider.Context context) {
+        super(context, new DwarfKeeperModel(context.bakeLayer(DwarfKeeperModel.LAYER_LOCATION)));
         this.addLayer(new DwarfEyeLayer(this));
+        this.addLayer(new DwarfBeardLayer(this));
     }
 
     @Override
     public ResourceLocation getTextureLocation(DwarfRenderState entity) {
-        return ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "textures/entity/dwarf/dwarf_merchant.png");
+        return ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "textures/entity/dwarf/dwarf_keeper.png");
     }
 
     @Override
@@ -37,10 +37,9 @@ public class DwarfMerchantRenderer extends DwarfRenderer<DwarfMerchantEntity> {
     }
 
     @Override
-    public void extractRenderState(DwarfMerchantEntity entity, DwarfRenderState reusedState, float partialTick) {
+    public void extractRenderState(DwarfKeeperEntity entity, DwarfRenderState reusedState, float partialTick) {
         super.extractRenderState(entity, reusedState, partialTick);
     }
 
 }
-
 

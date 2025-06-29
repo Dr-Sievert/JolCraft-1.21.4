@@ -1,4 +1,4 @@
-// 1.21.4	2025-06-24T20:50:52.7485631	Model Definitions - jolcraft
+// 1.21.4	2025-06-29T02:51:59.1901838	Model Definitions - jolcraft
 a7b02bc1acbb2ea6bdd1ab40ef4efc27e0571fc6 assets/jolcraft/blockstates/asgarnian_crop_bottom.json
 4c43ce8abb7262895ef13084caca1b3dc5b1ce95 assets/jolcraft/blockstates/asgarnian_crop_top.json
 b9c534875e99b8b5850a169306d2a052f8043e11 assets/jolcraft/blockstates/barley_crop.json
@@ -77,6 +77,8 @@ a2f56f2b2cffea57628629ae138d1801665587ee assets/jolcraft/items/krandonian_seeds.
 6e72cdda6f0eb854492a7e56db09830a6608c0a5 assets/jolcraft/items/lumiere.json
 0d9f55193615ac79a57c4d4bb5e48cd4773aea1b assets/jolcraft/items/mithril_salvage.json
 2512373bddb5400a11664c97301a3fde0a0948be assets/jolcraft/items/moonshard.json
+214c2d43210c0870c2aeb0e481f9f327a648ef9c assets/jolcraft/items/muffhorn_milk_bucket.json
+66d7db36b07bc93f22b51264b534f983dd998f96 assets/jolcraft/items/muffhorn_spawn_egg.json
 bca448c7a156cf844324c33f79883ab5b3938be8 assets/jolcraft/items/old_fabric.json
 cdd748c8420823c4098ee5880d48aab079984ed6 assets/jolcraft/items/parchment.json
 0a425220b6083034dea42d281ddcd062512ed3eb assets/jolcraft/items/quill_empty.json
@@ -228,6 +230,8 @@ c6eb20e1749c11ae4294296f94dd11e9d98d0af8 assets/jolcraft/models/item/krandonian_
 e91ed010d458a2e324678aae8f1bad631bc94c98 assets/jolcraft/models/item/lumiere.json
 42b8b00a28b0a31a5cc3386077196b3856eaae77 assets/jolcraft/models/item/mithril_salvage.json
 d88c7f683cc02c0fb94eb93e63f31553d7cc1e53 assets/jolcraft/models/item/moonshard.json
+04265ffd389d3efa6ef0e2ef9f1221699993e346 assets/jolcraft/models/item/muffhorn_milk_bucket.json
+1af9b9746002f3f482ed717b31378197f30bb714 assets/jolcraft/models/item/muffhorn_spawn_egg.json
 15dda9cac59028d5489ce2775e8ea467f158ca65 assets/jolcraft/models/item/old_fabric.json
 6914ec8dcb46366d3a31f81a4d57969ae2139a23 assets/jolcraft/models/item/parchment.json
 1ecd1a0da39f14cd822306df2af4a45e334080ac assets/jolcraft/models/item/quill_empty.json

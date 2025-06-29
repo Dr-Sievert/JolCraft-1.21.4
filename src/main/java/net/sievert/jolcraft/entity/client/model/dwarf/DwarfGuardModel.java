@@ -1,6 +1,8 @@
-package net.sievert.jolcraft.entity.client.dwarf.model;
+package net.sievert.jolcraft.entity.client.model.dwarf;
+
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -8,14 +10,25 @@ import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.HumanoidArm;
 import net.sievert.jolcraft.JolCraft;
+import net.sievert.jolcraft.entity.client.dwarf.DwarfAnimationType;
 import net.sievert.jolcraft.entity.client.dwarf.DwarfRenderState;
+import net.sievert.jolcraft.entity.client.dwarf.DwarfAnimations;
 
-public class DwarfGuildmasterModel extends DwarfModel{
+public class DwarfGuardModel extends DwarfModel{
 
-    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "dwarf_guildmaster"), "main");
+    //MUST BE UNIQUE OR IT OVERWRITES AND MESSES UP TEXTURES
+    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "dwarf_guard"), "main");
 
-    public DwarfGuildmasterModel(ModelPart root) {
+    private final ModelPart right_arm;
+    private final ModelPart left_arm;
+    private final ModelPart shield;
+
+    public DwarfGuardModel(ModelPart root) {
         super(root);
+        this.right_arm = root.getChild("right_arm");
+        this.left_arm = root.getChild("left_arm");
+        this.shield = this.left_arm.getChild("shield");
+
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -28,13 +41,16 @@ public class DwarfGuildmasterModel extends DwarfModel{
 
         body.addOrReplaceChild("bodywear", CubeListBuilder.create().texOffs(91, 27).addBox(-6.0F, 5.0F, -3.0F, 12.0F, 10.75F, 6.0F, new CubeDeformation(0.25F)), PartPose.offset(0.0F, -11.0F, 0.0F));
 
-        PartDefinition right_arm = partdefinition.addOrReplaceChild("right_arm", CubeListBuilder.create().texOffs(16, 18).addBox(-3.8F, -0.01F, -2.0F, 4.0F, 9.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(-6.0F, 5.0F, 0.0F));
+        PartDefinition right_arm = partdefinition.addOrReplaceChild("right_arm", CubeListBuilder.create().texOffs(16, 18).addBox(-3.8F, -0.01F, -1.5F, 4.0F, 9.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-6.0F, 5.5F, 0.25F, -0.7418F, 0.0F, 0.0F));
 
-        right_arm.addOrReplaceChild("right_armwear", CubeListBuilder.create().texOffs(110, 18).addBox(-3.8F, 3.99F, -2.0F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.25F)), PartPose.offset(0.0F, -4.0F, 0.0F));
+        right_arm.addOrReplaceChild("right_armwear", CubeListBuilder.create().texOffs(110, 18).addBox(-3.8F, 3.99F, -1.5F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.25F)), PartPose.offset(0.0F, -4.0F, 0.0F));
 
-        PartDefinition left_arm = partdefinition.addOrReplaceChild("left_arm", CubeListBuilder.create().texOffs(0, 18).addBox(-0.2F, -0.01F, -2.0F, 4.0F, 9.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(6.0F, 5.0F, 0.0F));
+        PartDefinition left_arm = partdefinition.addOrReplaceChild("left_arm", CubeListBuilder.create().texOffs(0, 18).addBox(-0.2F, -0.01F, -2.0F, 4.0F, 9.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(6.0F, 5.5F, 0.25F, -0.5236F, 0.0F, 0.0F));
 
         left_arm.addOrReplaceChild("left_armwear", CubeListBuilder.create().texOffs(92, 18).addBox(-0.2F, -0.01F, -2.0F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.25F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+
+        left_arm.addOrReplaceChild("shield", CubeListBuilder.create().texOffs(0, 105).addBox(-2.0F, -20.0F, -1.0F, 12.0F, 22.0F, 1.0F, new CubeDeformation(0.0F))
+                .texOffs(27, 115).addBox(3.75F, -14.0F, -0.75F, 1.0F, 6.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(4.25F, 11.5F, 10.0F, 1.5708F, 0.0F, -1.5708F));
 
         PartDefinition right_leg = partdefinition.addOrReplaceChild("right_leg", CubeListBuilder.create().texOffs(18, 49).addBox(-2.0F, -0.5F, -2.0F, 5.0F, 7.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(-3.0F, 17.0F, 0.0F));
 
@@ -71,24 +87,57 @@ public class DwarfGuildmasterModel extends DwarfModel{
 
     @Override
     public void setupAnim(DwarfRenderState state) {
-        super.setupAnim(state);
+        this.root().getAllParts().forEach(ModelPart::resetPose);
+        this.applyHeadRotation(state.yRot, state.xRot);
+        this.animateWalk(DwarfAnimations.DWARF_WALK, state.walkAnimationPos, state.walkAnimationSpeed, 2f, 2.5f);
 
-        // Always show equipment overlay parts (if not handled in the model constructor)
-        this.head.getChild("hat").visible = true;
-        this.body.getChild("bodywear").visible = true;
-        this.body.getChild("legwear").visible = true;
-        this.rightArm.getChild("right_armwear").visible = true;
-        this.leftArm.getChild("left_armwear").visible = true;
-        this.rightLeg.getChild("right_footwear").visible = true;
-        this.leftLeg.getChild("left_footwear").visible = true;
+        // Idle
+        this.animate(state.idleAnimationState, DwarfAnimations.DWARF_IDLE, state.ageInTicks, 1f);
+
+        // Custom: replace the ATTACK animation with DWARF_ATTACK_AXE
+        for (DwarfAnimationType type : DwarfAnimationType.values()) {
+            if (type == DwarfAnimationType.ATTACK) {
+                this.animate(
+                        state.animationStates.get(type),
+                        DwarfAnimations.DWARF_ATTACK_AXE,
+                        state.ageInTicks,
+                        1f
+                );
+            } else {
+                this.animate(
+                        state.animationStates.get(type),
+                        DwarfAnimations.getByType(type),
+                        state.ageInTicks,
+                        1f
+                );
+            }
+        }
+
+        // Equipment overlays (copy from base)
+        this.hat.visible = !state.headEquipment.isEmpty();
+        boolean hasChest = !state.chestEquipment.isEmpty();
+        this.bodywear.visible = hasChest;
+        this.right_armwear.visible = hasChest;
+        this.left_armwear.visible = hasChest;
+        this.legwear.visible = !state.legsEquipment.isEmpty();
+        boolean hasBoots = !state.feetEquipment.isEmpty();
+        this.right_footwear.visible = hasBoots;
+        this.left_footwear.visible = hasBoots;
     }
 
+    @Override
+    protected AnimationDefinition getAttackAnimationFor(DwarfRenderState state, DwarfAnimationType type) {
+        // For ATTACK, always use axe swing
+        if (type == DwarfAnimationType.ATTACK)
+            return DwarfAnimations.DWARF_ATTACK_AXE;
+        return super.getAttackAnimationFor(state, type);
+    }
 
     @Override
     public void translateToHand(HumanoidArm side, PoseStack poseStack) {
         this.root.translateAndRotate(poseStack);
         this.getArm(side).translateAndRotate(poseStack);
-        poseStack.translate(0.05F, -0.15F, 0.05F);
+        poseStack.translate(-0.05F, -0.03F, 0.13F);
 
     }
 

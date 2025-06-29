@@ -116,38 +116,42 @@ public class DwarfBrewmasterEntity extends AbstractDwarfEntity {
                     //Novice
                     1,
                     new VillagerTrades.ItemListing[]{
-                            new JolCraftDwarfTrades.ItemsForGold(Items.STICK, 1, 1, 6, 500),
-                            new JolCraftDwarfTrades.GoldForItems(Items.SMITHING_TABLE, 2, 4, 4, 1)
+                            new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.GLASS_MUG.get(), 1, 1, 5, 500),
+                            new JolCraftDwarfTrades.GoldForItems(Items.SUGAR, 1, 10, 1, 1)
 
                     },
 
                     //Apprentice
                     2,
                     new VillagerTrades.ItemListing[]{
-                            new JolCraftDwarfTrades.ItemsForGold(Items.BREAD, 1, 1, 5, 10),
-                            new JolCraftDwarfTrades.TreasureMapForGold(13, JolCraftTags.Structures.ON_FORGE_EXPLORER_MAPS, "filled_map.forge", MapDecorationTypes.TARGET_X, 1, 10)
+                            new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.YEAST.get(), 3, 1, 5, 10),
+                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.BARLEY_MALT.get(), 1, 5, 10, 1)
 
                     },
 
                     //Journeyman
                     3,
                     new VillagerTrades.ItemListing[]{
-                            new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.CONTRACT_BLANK.get(), 3, 1, 10, 1),
-                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.QUILL_EMPTY.get(), 2, 10, 4, 1)
+                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.ASGARNIAN_HOPS.get(), 2, 10, 4, 1),
+                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.ASGARNIAN_HOPS.get(), 2, 10, 4, 1),
+                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.ASGARNIAN_HOPS.get(), 2, 10, 4, 1),
+                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.ASGARNIAN_HOPS.get(), 2, 10, 4, 1)
+
                     },
 
                     //Expert
                     4,
                     new VillagerTrades.ItemListing[]{
-                            new JolCraftDwarfTrades.ItemsForGold(Items.DIAMOND, 1, 1, 10, 10),
-                            new JolCraftDwarfTrades.GoldForItems(Items.EMERALD, 1, 10, 10, 1)
+                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.DWARVEN_BREW.get(), 1, 3, 10, 1),
+                            new JolCraftDwarfTrades.ItemsForGold(Items.CAULDRON, 10, 1, 3, 10)
+
                     },
 
                     //Master
                     5,
                     new VillagerTrades.ItemListing[]{
-                            new JolCraftDwarfTrades.ItemsForGold(Items.NETHERITE_BLOCK, 1, 1, 5, 10),
-                            new JolCraftDwarfTrades.ItemsAndGoldToItems(Items.PURPLE_DYE, 1, 30, JolCraftItems.GUILD_SIGIL.get(), 1, 1, 0, 0.05F)
+                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.EMBERGLASS.get(), 1, 1, 5, 10),
+                            new JolCraftDwarfTrades.ItemsForGold(Items.DIAMOND, 1, 1, 5, 10)
                     }
             )
     );
@@ -162,7 +166,7 @@ public class DwarfBrewmasterEntity extends AbstractDwarfEntity {
         int level = this.getVillagerData().getLevel();
         VillagerTrades.ItemListing[] listings = TRADES.get(level);
         if (listings != null) {
-            this.addOffersFromItemListings(this.getOffers(), listings, 2); // 2 = max trades for that level
+            this.addOffersFromItemListings(this.getOffers(), listings, 4); // 2 = max trades for that level
         }
     }
 

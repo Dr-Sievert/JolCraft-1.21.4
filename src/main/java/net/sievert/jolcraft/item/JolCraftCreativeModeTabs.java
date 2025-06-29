@@ -22,6 +22,8 @@ public class JolCraftCreativeModeTabs {
                         pOutput.accept(JolCraftItems.DWARVEN_LEXICON);
                         pOutput.accept(JolCraftItems.GOLD_COIN);
 
+                        pOutput.accept(JolCraftItems.MUFFHORN_MILK_BUCKET);
+
                         pOutput.accept(JolCraftItems.BARLEY_SEEDS);
                         pOutput.accept(JolCraftItems.BARLEY);
                         pOutput.accept(JolCraftItems.BARLEY_MALT);
@@ -124,7 +126,7 @@ public class JolCraftCreativeModeTabs {
                         pOutput.accept(JolCraftItems.DWARF_BREWMASTER_SPAWN_EGG);
                         pOutput.accept(JolCraftItems.DWARF_GUARD_SPAWN_EGG);
                         pOutput.accept(JolCraftItems.DWARF_KEEPER_SPAWN_EGG);
-
+                        pOutput.accept(JolCraftItems.MUFFHORN_SPAWN_EGG);
                     }).build());
 
 

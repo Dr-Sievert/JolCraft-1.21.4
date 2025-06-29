@@ -1,24 +1,21 @@
-package net.sievert.jolcraft.entity.client.dwarf.model;
+package net.sievert.jolcraft.entity.client.model.dwarf;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
-        import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.HumanoidArm;
 import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.entity.client.dwarf.DwarfRenderState;
 
-public class DwarfMerchantModel extends DwarfModel{
+public class DwarfScrapperModel extends DwarfModel{
 
-    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "dwarf_merchant"), "main");
+    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "dwarf_scrapper"), "main");
 
-    private final ModelPart glasses;
-
-    public DwarfMerchantModel(ModelPart root) {
+    public DwarfScrapperModel(ModelPart root) {
         super(root);
-        this.glasses = this.head.getChild("glasses");
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -69,8 +66,6 @@ public class DwarfMerchantModel extends DwarfModel{
 
         head.addOrReplaceChild("left_eye", CubeListBuilder.create().texOffs(73, 10).addBox(1.0F, -5.0F, -4.01F, 2.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 2.0F, 2.0F));
 
-        head.addOrReplaceChild("glasses", CubeListBuilder.create().texOffs(80, 10).addBox(0.0F, -4.75F, -4.76F, 4.0F, 5.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 2.0F, 2.0F));
-
         return LayerDefinition.create(meshdefinition, 128, 128);
     }
 
@@ -78,7 +73,7 @@ public class DwarfMerchantModel extends DwarfModel{
     public void setupAnim(DwarfRenderState state) {
         super.setupAnim(state);
 
-        // Force display of wear/armor-slot parts
+        // Always show equipment overlay parts (if not handled in the model constructor)
         this.head.getChild("hat").visible = true;
         this.body.getChild("bodywear").visible = true;
         this.body.getChild("legwear").visible = true;
@@ -88,13 +83,14 @@ public class DwarfMerchantModel extends DwarfModel{
         this.leftLeg.getChild("left_footwear").visible = true;
     }
 
+
     @Override
     public void translateToHand(HumanoidArm side, PoseStack poseStack) {
         this.root.translateAndRotate(poseStack);
         this.getArm(side).translateAndRotate(poseStack);
-        poseStack.translate(0.1F, -0.15F, 0.1F);
+        poseStack.translate(0.05F, -0.15F, 0.05F);
 
     }
 
-}
 
+}

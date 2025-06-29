@@ -133,16 +133,15 @@ public class DwarfKeeperEntity extends AbstractDwarfEntity {
                     //Novice
                     1,
                     new VillagerTrades.ItemListing[]{
-                            new JolCraftDwarfTrades.ItemsForGold(Items.STICK, 1, 1, 6, 500),
-                            new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.BARLEY_SEEDS.get(), 3, 1, 6, 1)
+                            new JolCraftDwarfTrades.ItemsForGold(Items.BONE_MEAL, 1, 3, 5, 1),
+                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.BARLEY.get(), 5, 10, 1, 1)
                     },
 
                     //Apprentice
                     2,
                     new VillagerTrades.ItemListing[]{
                             new JolCraftDwarfTrades.ItemsForGold(Items.BREAD, 1, 1, 5, 10),
-                            new JolCraftDwarfTrades.TreasureMapForGold(13, JolCraftTags.Structures.ON_FORGE_EXPLORER_MAPS, "filled_map.forge", MapDecorationTypes.TARGET_X, 1, 10)
-
+                            new JolCraftDwarfTrades.ItemsForGold(Items.TORCHFLOWER_SEEDS, 1, 1, 5, 10),
                     },
 
                     //Journeyman
@@ -155,15 +154,17 @@ public class DwarfKeeperEntity extends AbstractDwarfEntity {
                     //Expert
                     4,
                     new VillagerTrades.ItemListing[]{
-                            new JolCraftDwarfTrades.ItemsForGold(Items.DIAMOND, 1, 1, 10, 10),
-                            new JolCraftDwarfTrades.GoldForItems(Items.EMERALD, 1, 10, 10, 1)
+                            new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.ASGARNIAN_SEEDS.get(), 5, 1, 3, 0),
+                            new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.DUSKHOLD_SEEDS.get(), 5, 1, 3, 0),
+                            new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.KRANDONIAN_SEEDS.get(), 5, 1, 3, 0),
+                            new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.YANILLIAN_SEEDS.get(), 5, 1, 3, 0),
                     },
 
                     //Master
                     5,
                     new VillagerTrades.ItemListing[]{
-                            new JolCraftDwarfTrades.ItemsForGold(Items.NETHERITE_BLOCK, 1, 1, 5, 10),
-                            new JolCraftDwarfTrades.ItemsAndGoldToItems(Items.PURPLE_DYE, 1, 30, JolCraftItems.GUILD_SIGIL.get(), 1, 1, 0, 0.05F)
+                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.VERDANITE.get(), 30, 1, 0, 1),
+                            new JolCraftDwarfTrades.ItemsForGold(Items.EMERALD, 1, 1, 1, 0)
                     }
             )
     );
@@ -178,7 +179,7 @@ public class DwarfKeeperEntity extends AbstractDwarfEntity {
         int level = this.getVillagerData().getLevel();
         VillagerTrades.ItemListing[] listings = TRADES.get(level);
         if (listings != null) {
-            this.addOffersFromItemListings(this.getOffers(), listings, 2); // 2 = max trades for that level
+            this.addOffersFromItemListings(this.getOffers(), listings, 4); // 2 = max trades for that level
         }
     }
 

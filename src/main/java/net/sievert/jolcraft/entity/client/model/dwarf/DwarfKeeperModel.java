@@ -1,6 +1,7 @@
-package net.sievert.jolcraft.entity.client.dwarf.model;
+package net.sievert.jolcraft.entity.client.model.dwarf;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -10,12 +11,15 @@ import net.minecraft.world.entity.HumanoidArm;
 import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.entity.client.dwarf.DwarfRenderState;
 
-public class DwarfBrewmasterModel extends DwarfModel{
+public class DwarfKeeperModel extends DwarfModel{
 
-    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "dwarf_brewmaster"), "main");
+    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "dwarf_keeper"), "main");
 
-    public DwarfBrewmasterModel(ModelPart root) {
+    private final ModelPart sack;
+
+    public DwarfKeeperModel(ModelPart root) {
         super(root);
+        this.sack = this.body.getChild("sack");
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -27,6 +31,8 @@ public class DwarfBrewmasterModel extends DwarfModel{
         body.addOrReplaceChild("legwear", CubeListBuilder.create().texOffs(91, 44).addBox(-6.0F, 16.25F, -3.0F, 12.0F, 3.75F, 6.0F, new CubeDeformation(0.25F)), PartPose.offset(0.0F, -11.0F, 0.0F));
 
         body.addOrReplaceChild("bodywear", CubeListBuilder.create().texOffs(91, 27).addBox(-6.0F, 5.0F, -3.0F, 12.0F, 10.75F, 6.0F, new CubeDeformation(0.25F)), PartPose.offset(0.0F, -11.0F, 0.0F));
+
+        body.addOrReplaceChild("sack", CubeListBuilder.create().texOffs(0, 113).addBox(-5.0F, -5.0F, 3.26F, 10.0F, 10.0F, 5.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
         PartDefinition right_arm = partdefinition.addOrReplaceChild("right_arm", CubeListBuilder.create().texOffs(16, 18).addBox(-3.8F, -0.01F, -2.0F, 4.0F, 9.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(-6.0F, 5.0F, 0.0F));
 
@@ -60,8 +66,9 @@ public class DwarfBrewmasterModel extends DwarfModel{
 
         head.addOrReplaceChild("left_eyebrow", CubeListBuilder.create().texOffs(60, 10).addBox(0.0F, -1.0F, -0.01F, 3.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(1.0F, -3.0F, -2.0F));
 
-        head.addOrReplaceChild("hat", CubeListBuilder.create().texOffs(92, 0).addBox(-5.0F, -5.0F, -4.0F, 10.0F, 10.0F, 8.0F, new CubeDeformation(0.25F)), PartPose.offset(0.0F, -3.0F, 2.0F));
-
+        head.addOrReplaceChild("hat", CubeListBuilder.create().texOffs(0, 97).addBox(-4.0F, -6.0F, -3.0F, 8.0F, 1.0F, 6.0F, new CubeDeformation(0.25F))
+                .texOffs(0, 104).addBox(-5.0F, -5.0F, -4.0F, 10.0F, 1.0F, 8.0F, new CubeDeformation(0.25F))
+                .texOffs(18, 116).addBox(-7.0F, -4.0F, -6.0F, 14.0F, 0.01F, 12.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -3.0F, 2.0F));
         head.addOrReplaceChild("right_eye", CubeListBuilder.create().texOffs(69, 10).addBox(-3.0F, -5.0F, -4.01F, 2.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 2.0F, 2.0F));
 
         head.addOrReplaceChild("left_eye", CubeListBuilder.create().texOffs(73, 10).addBox(1.0F, -5.0F, -4.01F, 2.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 2.0F, 2.0F));
@@ -87,7 +94,9 @@ public class DwarfBrewmasterModel extends DwarfModel{
     public void translateToHand(HumanoidArm side, PoseStack poseStack) {
         this.root.translateAndRotate(poseStack);
         this.getArm(side).translateAndRotate(poseStack);
-        poseStack.translate(0.1F, -0.15F, 0.0F);
-
+        poseStack.translate(-0.15F, -0.15F, -0.15F);
+        poseStack.mulPose(Axis.YP.rotationDegrees(-45F));
     }
+
 }
+
