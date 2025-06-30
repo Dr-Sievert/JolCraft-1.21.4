@@ -63,6 +63,9 @@ public class JolCraftModelProvider extends ModelProvider {
         itemModels.generateFlatItem(JolCraftItems.GLASS_MUG.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(JolCraftItems.DWARVEN_BREW.get(), ModelTemplates.FLAT_ITEM);
 
+        //Other Crops
+        itemModels.generateFlatItem(JolCraftItems.DEEPSLATE_BULBS.get(), ModelTemplates.FLAT_ITEM);
+
         //Bounty
         itemModels.generateFlatItem(JolCraftItems.BOUNTY.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(JolCraftItems.BOUNTY_CRATE.get(), ModelTemplates.FLAT_ITEM);
@@ -197,6 +200,25 @@ public class JolCraftModelProvider extends ModelProvider {
 
         //Crops
         blockModels.createCropBlock(JolCraftBlocks.BARLEY_CROP.get(), BarleyCropBlock.AGE,  0, 1, 2, 3, 4, 5, 6, 7);
+
+        blockModels.blockStateOutput.accept(new BlockStateGenerator() {
+            @Override
+            public JsonObject get() {
+                JsonObject root = new JsonObject();
+                JsonObject variants = new JsonObject();
+                for (int age = 0; age <= 9; age++) {
+                    variants.add("age=" + age, modelObj(JolCraft.MOD_ID, "block/deepslate_bulbs_crop_stage" + age));
+                }
+                root.add("variants", variants);
+                return root;
+            }
+
+            @Override
+            public Block getBlock() {
+                return JolCraftBlocks.DEEPSLATE_BULBS_CROP.get();
+            }
+        });
+
 
         //Hops
         createTopCropBlock(

@@ -261,6 +261,8 @@ public class JolCraftItems {
     public static final DeferredItem<Item> DWARVEN_BREW =
             ITEMS.registerItem("dwarven_brew",  (properties) -> new DwarvenBrewItem(properties.food(JolCraftFoodProperties.DWARVEN_BREW, JolCraftFoodProperties.DWARVEN_BREW_EFFECT).usingConvertsTo(JolCraftItems.GLASS_MUG.get()).stacksTo(1)));
 
+    public static final DeferredItem<Item> DEEPSLATE_BULBS = ITEMS.registerItem("deepslate_bulbs",
+            properties -> new BlockItem(JolCraftBlocks.DEEPSLATE_BULBS_CROP.get(), properties.food(JolCraftFoodProperties.DWARVEN_BREW, JolCraftFoodProperties.DEEPSLATE_BULBS_EFFECT)));
 
     //Reputation
     public static final DeferredItem<Item> REPUTATION_TABLET_0 =

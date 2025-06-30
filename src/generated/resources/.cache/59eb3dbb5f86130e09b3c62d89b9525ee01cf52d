@@ -1,8 +1,9 @@
-// 1.21.4	2025-06-29T17:04:46.3603862	Loot Tables
+// 1.21.4	2025-06-30T19:14:55.5643584	Loot Tables
 586d45fc79329fcc5c2955b0d520be34bf2fda77 data/jolcraft/loot_table/blocks/asgarnian_crop_bottom.json
 4dc4298bab0cad4e8fbac7474da56bcc783d7f8e data/jolcraft/loot_table/blocks/asgarnian_crop_top.json
 faaa7e28a7da3b3da8d8bdf71408d90bb22eef82 data/jolcraft/loot_table/blocks/barley_block.json
 ccc09f304296bb6d3f0ed9a317d6d492d9594386 data/jolcraft/loot_table/blocks/barley_crop.json
+3583c816c35c027b196ef66122fa75c62b621985 data/jolcraft/loot_table/blocks/deepslate_bulbs_crop.json
 d6b460e9240a29cee3e150ed72836cd591e488f7 data/jolcraft/loot_table/blocks/duskhold_crop_bottom.json
 2d9ee056ad06a05420bc71463919fcf358217179 data/jolcraft/loot_table/blocks/duskhold_crop_top.json
 6480b4facd46c45cbc101a5cef3520b81e3651be data/jolcraft/loot_table/blocks/fermenting_cauldron.json

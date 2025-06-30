@@ -1,5 +1,6 @@
-// 1.21.4	2025-06-29T17:05:13.3564978	Tags for minecraft:block mod id jolcraft
+// 1.21.4	2025-06-30T19:06:36.1720537	Tags for minecraft:block mod id jolcraft
+2a6ca036ad1795baaeebacd5351f2f03b642f661 data/jolcraft/tags/block/deepslate_bulbs_plantable.json
 a643c53cccfa3e74996d0ef3d38233ffb7ffdbc7 data/jolcraft/tags/block/hops_bottom.json
 7cd4557c384309101c6591a20fe38183347ff98f data/jolcraft/tags/block/hops_top.json
 e029c9ce41c79de5335ee5ca92c10a4ba532ee4f data/minecraft/tags/block/mineable/hoe.json
-df26d732f1d83770672ac2c659cda559dc761370 data/minecraft/tags/block/mineable/pickaxe.json
+13fd6b372b252c56bb867021412209428ec2a582 data/minecraft/tags/block/mineable/pickaxe.json

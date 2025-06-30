@@ -43,6 +43,7 @@ public class JolCraftCreativeModeTabs {
                         pOutput.accept(JolCraftItems.YEAST);
                         pOutput.accept(JolCraftItems.GLASS_MUG);
                         pOutput.accept(JolCraftItems.DWARVEN_BREW);
+                        pOutput.accept(JolCraftItems.DEEPSLATE_BULBS);
 
                         pOutput.accept(JolCraftItems.QUILL_EMPTY);
                         pOutput.accept(JolCraftItems.QUILL_FULL);

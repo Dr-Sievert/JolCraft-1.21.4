@@ -55,6 +55,18 @@ public class JolCraftBlocks {
             )
     );
 
+    public static final DeferredBlock<Block> DEEPSLATE_BULBS_CROP = BLOCKS.registerBlock("deepslate_bulbs_crop",
+            (properties) -> new DeepslateBulbsCropBlock(properties
+                    .mapColor(MapColor.DEEPSLATE)
+                    .noCollission()
+                    .randomTicks()
+                    .requiresCorrectToolForDrops()
+                    .strength(2.0F, 6.0F)
+                    .sound(SoundType.DEEPSLATE)
+                    .pushReaction(PushReaction.DESTROY)
+            )
+    );
+
     // 🔼 Top (visual only) — no item
     public static final DeferredBlock<Block> ASGARNIAN_CROP_TOP = BLOCKS.registerBlock("asgarnian_crop_top",
             (properties) -> new HopsCropTopBlock(

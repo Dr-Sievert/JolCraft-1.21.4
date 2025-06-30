@@ -114,8 +114,8 @@ public class DwarfBrewmasterEntity extends AbstractDwarfEntity {
                     //Novice
                     1,
                     new VillagerTrades.ItemListing[]{
-                            new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.GLASS_MUG.get(), 1, 1, 5, 500),
-                            new JolCraftDwarfTrades.GoldForItems(Items.SUGAR, 1, 10, 1, 1)
+                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.GLASS_MUG.get(), 3, 5, 500, 1),
+                            new JolCraftDwarfTrades.ItemsForGold(Items.SUGAR, 1, 2, 10, 1)
 
                     },
 

@@ -46,6 +46,8 @@ public class JolCraftTags {
 
     public final class Blocks {
 
+        public static final TagKey<Block> DEEPSLATE_BULBS_PLANTABLE = createTag("deepslate_bulbs_plantable");
+
         public static final TagKey<Block> HOPS_BOTTOM = createTag("hops_bottom");
 
         public static final TagKey<Block> HOPS_TOP = createTag("hops_top");

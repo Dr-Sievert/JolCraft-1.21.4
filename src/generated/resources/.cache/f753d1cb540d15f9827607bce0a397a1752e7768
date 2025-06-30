@@ -1,8 +1,9 @@
-// 1.21.4	2025-06-29T17:09:13.7530399	Model Definitions - jolcraft
+// 1.21.4	2025-06-30T18:47:03.0973871	Model Definitions - jolcraft
 a7b02bc1acbb2ea6bdd1ab40ef4efc27e0571fc6 assets/jolcraft/blockstates/asgarnian_crop_bottom.json
 4c43ce8abb7262895ef13084caca1b3dc5b1ce95 assets/jolcraft/blockstates/asgarnian_crop_top.json
 8c2199b0245af93dc12db4e7adca4c6e14668e62 assets/jolcraft/blockstates/barley_block.json
 b9c534875e99b8b5850a169306d2a052f8043e11 assets/jolcraft/blockstates/barley_crop.json
+452814d1f1ddaab53d4eb61f7b4392f71eb64ec3 assets/jolcraft/blockstates/deepslate_bulbs_crop.json
 5c1d38279fb58d421ab5ede46f98b8de038672c7 assets/jolcraft/blockstates/duskhold_crop_bottom.json
 8c0c19931728f67eb90aebe4310ad742eb89c846 assets/jolcraft/blockstates/duskhold_crop_top.json
 935a677e41cfc66b9a88adf9e3b6447a5aaa66fd assets/jolcraft/blockstates/fermenting_cauldron.json
@@ -46,6 +47,7 @@ e5b76bfdf9fb4358e32b231993163fe5c579be5c assets/jolcraft/items/contract_scrapper
 d7859d5373168fa7e4e15578fb88ec39a71f9ded assets/jolcraft/items/contract_written.json
 82ff668d9abcbbfafafca9a8f700bfde77a33324 assets/jolcraft/items/copper_spanner.json
 0606d65b60df6ccf5b630cfec98135673b4dd779 assets/jolcraft/items/deepmarrow.json
+ae24c8a817f5cb52f44d6daa8bb12ecc4781a58e assets/jolcraft/items/deepslate_bulbs.json
 de65094368fea64287bea784d2587165850d9783 assets/jolcraft/items/deepslate_mug.json
 2a396318f150e4e784c64ce3ca504b11cef854ca assets/jolcraft/items/duskhold_hops.json
 7f89d482d50a7989d1da3764dd6f39a75755b137 assets/jolcraft/items/duskhold_seeds.json
@@ -212,6 +214,7 @@ ffae6f16124ae8036b0d39cb8f5c89f68453398b assets/jolcraft/models/item/contract_me
 b4db59238975674fb81bd5640e05721dd9003bb0 assets/jolcraft/models/item/contract_written.json
 d996069b9149791e1d3e2f14a99efb9734f57c62 assets/jolcraft/models/item/copper_spanner.json
 a354ac87f5c1a9f792aab72ca8cc2f51efee3adf assets/jolcraft/models/item/deepmarrow.json
+4fb9de0da15a5022fbae9fe29199a0f172c7ac6f assets/jolcraft/models/item/deepslate_bulbs.json
 808931e159dd518342e0dae658392d488ea77dca assets/jolcraft/models/item/deepslate_mug.json
 998f4d79fbf34c3001f4ba66a08c3db37b9fb3ad assets/jolcraft/models/item/duskhold_hops.json
 aff77fa54a522fc838e90e9c9f4774684ee779bb assets/jolcraft/models/item/duskhold_seeds.json

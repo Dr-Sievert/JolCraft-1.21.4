@@ -107,7 +107,6 @@ public class DwarfKeeperEntity extends AbstractDwarfEntity {
         return super.mobInteract(player, hand);
     }
 
-
     //Trades
     public static final Int2ObjectMap<VillagerTrades.ItemListing[]> TRADES = toIntMap(
             ImmutableMap.of(
@@ -115,15 +114,15 @@ public class DwarfKeeperEntity extends AbstractDwarfEntity {
                     //Novice
                     1,
                     new VillagerTrades.ItemListing[]{
-                            new JolCraftDwarfTrades.ItemsForGold(Items.BONE_MEAL, 1, 3, 5, 1),
-                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.BARLEY.get(), 5, 10, 1, 1)
+                            new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.BARLEY_SEEDS.get(), 1, 1, 10, 1),
+                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.MUFFHORN_FUR.get(), 1, 5, 1, 2)
                     },
 
                     //Apprentice
                     2,
                     new VillagerTrades.ItemListing[]{
-                            new JolCraftDwarfTrades.ItemsForGold(Items.BREAD, 1, 1, 5, 10),
-                            new JolCraftDwarfTrades.ItemsForGold(Items.TORCHFLOWER_SEEDS, 1, 1, 5, 10),
+                            new JolCraftDwarfTrades.ItemsAndGoldToItems(Items.DEEPSLATE, 4, 5, JolCraftItems.DEEPSLATE_BULBS.get(), 1, 3, 20, 0.05F),
+                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.MUFFHORN_MILK_BUCKET.get(), 1, 3, 20, 3),
                     },
 
                     //Journeyman

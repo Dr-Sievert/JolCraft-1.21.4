@@ -3,6 +3,7 @@ package net.sievert.jolcraft.datagen;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
 import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.block.JolCraftBlocks;
@@ -19,10 +20,15 @@ public class JolCraftBlockTagProvider extends BlockTagsProvider {
     protected void addTags(HolderLookup.Provider provider) {
 
         tag(BlockTags.MINEABLE_WITH_PICKAXE)
-                    .add(JolCraftBlocks.FERMENTING_CAULDRON.get());
+                .add(JolCraftBlocks.DEEPSLATE_BULBS_CROP.get())
+                .add(JolCraftBlocks.FERMENTING_CAULDRON.get());
 
         tag(BlockTags.MINEABLE_WITH_HOE)
                 .add(JolCraftBlocks.BARLEY_BLOCK.get());
+
+        tag(JolCraftTags.Blocks.DEEPSLATE_BULBS_PLANTABLE)
+                .add(Blocks.DEEPSLATE)
+                .add(Blocks.POLISHED_DEEPSLATE);
 
         tag(JolCraftTags.Blocks.HOPS_BOTTOM)
                 .add(JolCraftBlocks.ASGARNIAN_CROP_BOTTOM.get())

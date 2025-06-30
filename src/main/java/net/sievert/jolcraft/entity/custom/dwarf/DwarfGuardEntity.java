@@ -123,7 +123,6 @@ public class DwarfGuardEntity extends AbstractDwarfEntity {
             return repCheck;
         }
 
-
         // Call parent for all other interactions (contracts, trades, etc)
         return super.mobInteract(player, hand);
     }

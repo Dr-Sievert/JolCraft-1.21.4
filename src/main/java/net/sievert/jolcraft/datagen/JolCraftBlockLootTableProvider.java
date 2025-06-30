@@ -7,6 +7,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Block;
@@ -24,6 +25,7 @@ import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.sievert.jolcraft.block.JolCraftBlocks;
 import net.sievert.jolcraft.block.custom.BarleyCropBlock;
+import net.sievert.jolcraft.block.custom.DeepslateBulbsCropBlock;
 import net.sievert.jolcraft.block.custom.HopsCropBottomBlock;
 import net.sievert.jolcraft.block.custom.HopsCropTopBlock;
 import net.sievert.jolcraft.item.JolCraftItems;
@@ -50,6 +52,17 @@ public class JolCraftBlockLootTableProvider extends BlockLootSubProvider {
                         7
                 )
         );
+
+        this.add(JolCraftBlocks.DEEPSLATE_BULBS_CROP.get(),
+                createSelfDropStoneCropDrops(
+                        JolCraftBlocks.DEEPSLATE_BULBS_CROP.get(),
+                        JolCraftItems.DEEPSLATE_BULBS.get(),
+                        DeepslateBulbsCropBlock.AGE,
+                        9
+                )
+        );
+
+
 
         this.add(JolCraftBlocks.FERMENTING_CAULDRON.get(),
                 LootTable.lootTable()
@@ -158,6 +171,25 @@ public class JolCraftBlockLootTableProvider extends BlockLootSubProvider {
                         )
         );
     }
+
+    protected LootTable.Builder createSelfDropStoneCropDrops(Block cropBlock, Item item, IntegerProperty ageProperty, int maxAge) {
+        HolderLookup.RegistryLookup<Enchantment> registrylookup = this.registries.lookupOrThrow(Registries.ENCHANTMENT);
+
+        LootItemCondition.Builder mature = LootItemBlockStatePropertyCondition
+                .hasBlockStateProperties(cropBlock)
+                .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(ageProperty, maxAge));
+
+        return LootTable.lootTable()
+                .withPool(LootPool.lootPool()
+                        .when(mature)
+                        .setRolls(ConstantValue.exactly(1))
+                        .add(LootItem.lootTableItem(item)
+                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 2.0F))) // base yield 1–2
+                                .apply(ApplyBonusCount.addOreBonusCount(registrylookup.getOrThrow(Enchantments.FORTUNE))) // Fortune boost
+                        )
+                );
+    }
+
 
     protected LootTable.Builder createMultipleOreDrops(Block pBlock, Item item, float minDrops, float maxDrops) {
         HolderLookup.RegistryLookup<Enchantment> registrylookup = this.registries.lookupOrThrow(Registries.ENCHANTMENT);
