@@ -37,7 +37,7 @@ public class FermentingCauldronBlock extends LayeredCauldronBlock implements Ent
     // Unique properties for Fermenting Cauldron
     public static final EnumProperty<FermentingStage> STAGE = EnumProperty.create("stage", FermentingStage.class);
     public static final EnumProperty<HopsType> HOPS_TYPE = EnumProperty.create("hops_type", HopsType.class);
-    public static final IntegerProperty FERMENTATION_PROGRESS = IntegerProperty.create("fermentation_progress", 0, 100);
+    public static final IntegerProperty FERMENTATION_PROGRESS = IntegerProperty.create("fermentation_progress", 0, 9);
 
     public FermentingCauldronBlock(Biome.Precipitation precipitationType, CauldronInteraction.InteractionMap interactions, Properties properties) {
         super(precipitationType, interactions, properties);
@@ -156,13 +156,18 @@ public class FermentingCauldronBlock extends LayeredCauldronBlock implements Ent
             }
         }
 
-
         // Add yeast to start fermentation
         if (stack.is(JolCraftItems.YEAST.get()) && (state.getValue(STAGE) == FermentingStage.HOPS)) {
             BlockState newState = state.setValue(STAGE, FermentingStage.BREW_FERMENTING);
             level.setBlock(pos, newState, 3); // Start the fermentation
             level.sendBlockUpdated(pos, state, newState, 3);  // Force update to inform the client
-            if (!player.isCreative()) stack.shrink(1);
+            if (!player.isCreative()){
+                stack.shrink(1);
+                ItemStack bottle = new ItemStack(net.minecraft.world.item.Items.GLASS_BOTTLE);
+                if (!player.addItem(bottle)) {
+                    player.drop(bottle, false);
+                }
+            }
             level.playSound(null, pos, SoundEvents.PLAYER_SPLASH, SoundSource.BLOCKS, 0.4F, 1.6F);
             return InteractionResult.SUCCESS;
         }

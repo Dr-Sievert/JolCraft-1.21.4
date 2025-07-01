@@ -1,4 +1,4 @@
-// 1.21.4	2025-07-01T04:28:40.4527068	Model Definitions - jolcraft
+// 1.21.4	2025-07-01T23:13:54.4766181	Model Definitions - jolcraft
 a7b02bc1acbb2ea6bdd1ab40ef4efc27e0571fc6 assets/jolcraft/blockstates/asgarnian_crop_bottom.json
 4c43ce8abb7262895ef13084caca1b3dc5b1ce95 assets/jolcraft/blockstates/asgarnian_crop_top.json
 8c2199b0245af93dc12db4e7adca4c6e14668e62 assets/jolcraft/blockstates/barley_block.json
@@ -85,6 +85,7 @@ d118affbc6974ddb63331ecadbf5104539a22e2c assets/jolcraft/items/gold_coin.json
 288d33f8c593ee149a3bed69e14e5e68fe50ae12 assets/jolcraft/items/grimstone.json
 d7f635f874b1e4445a5aa2fb22dfde995bc87bba assets/jolcraft/items/guild_sigil.json
 07fd8daba6e1d58df3dda33ecbb4049e4b09d120 assets/jolcraft/items/ingot_mould.json
+3256be64ee688b150f82fd6fe3d7ae968ec251e0 assets/jolcraft/items/inverix.json
 aef41892a5c1da5cef56ffc85a754454c930f181 assets/jolcraft/items/ironheart.json
 d71be6c8e67364ebd1b6380d19b2de0143b05baa assets/jolcraft/items/iron_spanner.json
 d3d54fea4bf0f8b82c49650a5f326257547a3923 assets/jolcraft/items/krandonian_hops.json
@@ -298,6 +299,7 @@ f73610af65d4521fb243b9b93bc5a57d19209561 assets/jolcraft/models/item/gold_coin.j
 a3ed122d72b135bdc041ffb9d2125462b7becde1 assets/jolcraft/models/item/grimstone.json
 eb5e5861eb21fd0d26001467b450d2a4a46b8cbe assets/jolcraft/models/item/guild_sigil.json
 11d92480eb49f9f8724758fe1ec5036728cc5691 assets/jolcraft/models/item/ingot_mould.json
+8ebd7ed5a16fe2fcbcc549ca1d50f6d7d8856630 assets/jolcraft/models/item/inverix.json
 ee520522f18aeee297a4b10b8a149ea3503c3167 assets/jolcraft/models/item/ironheart.json
 e3b58081e9446242dfaddf61e2f0c4445ea1a003 assets/jolcraft/models/item/iron_spanner.json
 a93b9c5b1af53c39e62efd5b7f11afabace02fe1 assets/jolcraft/models/item/krandonian_hops.json

@@ -25,7 +25,7 @@ public class FermentingCauldronBlockEntity extends BlockEntity {
     private int bubbleCooldown = 0;
     private int yeastTickDelay = 12; //How many times we multiply 5 seconds (100 ticks)
     private int yeastTickCounter = 0;
-    private int brewTickDelay = 60; //How many times we multiply 5 seconds (100 ticks)
+    private int brewTickDelay = 60;
     private int brewTickCounter = 0;
 
 
@@ -216,9 +216,11 @@ public class FermentingCauldronBlockEntity extends BlockEntity {
         if (level == null || level.isClientSide) return;
 
         BlockState currentState = getBlockState();
-        int progressPercent = (int) ((fermentationProgress / (float) maxFermentationProgress) * 100);
-        if (currentState.getValue(FermentingCauldronBlock.FERMENTATION_PROGRESS) != progressPercent) {
-            level.setBlock(worldPosition, currentState.setValue(FermentingCauldronBlock.FERMENTATION_PROGRESS, progressPercent), 3);
+        // Map internal 0–100 progress to 0–9 for blockstate
+        int blockStateProgress = Math.min(fermentationProgress * 10 / maxFermentationProgress, 9);
+        if (currentState.getValue(FermentingCauldronBlock.FERMENTATION_PROGRESS) != blockStateProgress) {
+            level.setBlock(worldPosition, currentState.setValue(FermentingCauldronBlock.FERMENTATION_PROGRESS, blockStateProgress), 3);
         }
     }
+
 }

@@ -46,6 +46,8 @@ public class JolCraftCreativeModeTabs {
                         pOutput.accept(JolCraftItems.DEEPSLATE_BULBS);
                         pOutput.accept(JolCraftItems.DEEPSLATE_PLATE);
 
+                        pOutput.accept(JolCraftItems.INVERIX);
+
                         pOutput.accept(JolCraftItems.DEEPSLATE_SWORD);
                         pOutput.accept(JolCraftItems.DEEPSLATE_PICKAXE);
                         pOutput.accept(JolCraftItems.DEEPSLATE_SHOVEL);

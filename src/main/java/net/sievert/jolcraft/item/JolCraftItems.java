@@ -28,6 +28,8 @@ public class JolCraftItems {
             ITEMS.registerItem("dwarven_lexicon", DwarvenLexiconItem::new,
                     new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
 
+    //Materials, Armors, Tools and Weapons
+
     public static final DeferredItem<Item> DEEPSLATE_PLATE = ITEMS.registerItem("deepslate_plate",
             Item::new, new Item.Properties());
 
@@ -65,6 +67,9 @@ public class JolCraftItems {
     public static final DeferredItem<Item> MUFFHORN_MILK_BUCKET = ITEMS.registerItem("muffhorn_milk_bucket",
             Item::new, new Item.Properties().craftRemainder(Items.BUCKET).component(DataComponents.CONSUMABLE, Consumables.MILK_BUCKET).usingConvertsTo(Items.BUCKET).stacksTo(1));
 
+    //Alchemy
+    public static final DeferredItem<Item> INVERIX = ITEMS.registerItem("inverix",
+            Item::new, new Item.Properties());
 
     //Bounty
     public static final DeferredItem<Item> PARCHMENT = ITEMS.registerSimpleItem("parchment");
@@ -76,8 +81,7 @@ public class JolCraftItems {
             BountyCrateItem::new, new Item.Properties().stacksTo(1));
 
     public static final DeferredItem<Item> RESTOCK_CRATE = ITEMS.registerItem("restock_crate",
-            RestockCrateItem::new, new Item.Properties().stacksTo(1));
-
+            RestockCrateItem::new, new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
 
     //Contracts and Associated Items
 

@@ -1,4 +1,4 @@
-// 1.21.4	2025-07-01T04:28:40.4577823	JolCraft Recipes
+// 1.21.4	2025-07-01T23:15:46.8065424	JolCraft Recipes
 1df426c9e91766cc2bbbb8c25ed899f5c1980ed8 data/jolcraft/advancement/recipes/misc/contract_blank.json
 63834c714e4e2f7e8e9b71d845d808a0b5084060 data/jolcraft/advancement/recipes/misc/contract_guildmaster.json
 ada4a17760326ccc90beda85717afe773cd6dd4d data/jolcraft/advancement/recipes/misc/contract_written.json
@@ -33,6 +33,8 @@ d9991635c7807ef77a2f854cfb52182cc7cdde90 data/jolcraft/recipe/muffhorn_fur.json
 cf5535d74b902e643eacfb3947d0c682111591b5 data/jolcraft/recipe/parchment.json
 9dec8f06b849724f07954ee01db88e401b0083e9 data/jolcraft/recipe/quill_empty.json
 78552aa06ca079e677f64212a2cfa0564bf0168b data/jolcraft/recipe/quill_full.json
+3db9d8d78021beec33628f4d59fd26230ce83121 data/minecraft/advancement/recipes/brewing/inverix_charcoal.json
+3b1041f0b4caaedfd1698b9c0505ff979418988e data/minecraft/advancement/recipes/brewing/inverix_coal.json
 b25b9e2048aa15c5d3a45d68a6684bba813ead80 data/minecraft/advancement/recipes/food/barley_malt_from_smelting.json
 eae07926881aa8fbb5238286678d3fb8add2dc50 data/minecraft/advancement/recipes/food/barley_malt_from_smoking.json
 9a281eb13be4f0b27909733a79d09267dad194af data/minecraft/advancement/recipes/misc/barley.json
@@ -52,6 +54,8 @@ e93ea231fdd88b3bc09adb51053c279fd8a1ff64 data/minecraft/recipe/barley_block.json
 bcda5d0007671dcbf41a54d001a9f984a6b91662 data/minecraft/recipe/deepslate_axe_right.json
 c87b2e59bb6bc8333fd6d0d2c6d82d888c72af16 data/minecraft/recipe/deepslate_hoe_left.json
 24c44b638fd68525903031d0ca400796c1cf1116 data/minecraft/recipe/deepslate_hoe_right.json
+22c9f79b769f6c7ceae085771e5136dfa7447ded data/minecraft/recipe/inverix_charcoal.json
+2315bd09991c27877af368e4753489b1709c356e data/minecraft/recipe/inverix_coal.json
 101522e20d678cec20930777f3026ee7bbf86433 data/minecraft/recipe/quill_full_refill.json
 10c6f28a6983cce34861742f97c3377a1c79ded2 data/minecraft/recipe/scrap.json
 d797a5d97f66c0d4f583bd16025babfd84c29474 data/minecraft/recipe/scrap_heap.json

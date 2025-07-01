@@ -15,11 +15,11 @@ import net.sievert.jolcraft.block.entity.FermentingCauldronBlockEntity;
 @EventBusSubscriber(modid = JolCraft.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class JolCraftClientEvents {
 
-    private static final int MALT_COLOR = 0xFFB16A1D; // Brown/orange malt
-    private static final int BREW_COLOR = 0xFFA500; // Final orange brew
     private static final int YEAST_FERMENTING_START = 0xFF8EE8AA; // Light green
     private static final int YEAST_FERMENTING_END = 0xFF40B14A; // Dark green
-    private static final int BLEND_COLOR = 0xFF786533; // Generic hop color
+    private static final int MALT_COLOR = 0xFFB16A1D; // Brown/orange malt
+    private static final int BREW_COLOR = 0xFF9A652B; // Final orange brew
+    private static final int BLEND_COLOR = 0xFFA66824; // Malt and brew blend
 
     @SubscribeEvent
     public static void onRegisterBlockColors(RegisterColorHandlersEvent.Block event) {
@@ -36,8 +36,9 @@ public class JolCraftClientEvents {
             float ratio = 0f;
             if (state.hasProperty(FermentingCauldronBlock.FERMENTATION_PROGRESS)) {
                 int progress = state.getValue(FermentingCauldronBlock.FERMENTATION_PROGRESS);
-                ratio = clamp01(progress / 100f);
+                ratio = clamp01(progress / 9f);
             }
+
 
             // If the cauldron is in the 'MALTED' stage, return the malt color directly without blending
             if (stage == FermentingStage.MALTED) {

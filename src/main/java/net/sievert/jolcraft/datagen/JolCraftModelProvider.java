@@ -56,6 +56,9 @@ public class JolCraftModelProvider extends ModelProvider {
         itemModels.generateTrimmableItem(JolCraftItems.DEEPSLATE_LEGGINGS.get(), JolCraftEquipmentAssets.DEEPSLATE_KEY, "leggings", false);
         itemModels.generateTrimmableItem(JolCraftItems.DEEPSLATE_BOOTS.get(), JolCraftEquipmentAssets.DEEPSLATE_KEY, "boots", false);
 
+        //Alchemy
+        itemModels.generateFlatItem(JolCraftItems.INVERIX.get(), ModelTemplates.FLAT_ITEM);
+
         //Animal-related
         itemModels.generateFlatItem(JolCraftItems.MUFFHORN_MILK_BUCKET.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(JolCraftItems.MUFFHORN_FUR.get(), ModelTemplates.FLAT_ITEM);
