@@ -101,5 +101,28 @@
       }
     ],
     "subtitle": "sounds.jolcraft.level_up"
+  },
+  "armor_equip_deepslate": {
+    "sounds": [
+      {
+        "name": "block/deepslate_bricks/place1"
+      },
+      {
+        "name": "block/deepslate_bricks/place2"
+      },
+      {
+        "name": "block/deepslate_bricks/place3"
+      },
+      {
+        "name": "block/deepslate_bricks/place4"
+      },
+      {
+        "name": "block/deepslate_bricks/place5"
+      },
+      {
+        "name": "block/deepslate_bricks/place6"
+      }
+    ],
+    "subtitle": "sounds.jolcraft.armor_equip_deepslate"
   }
 }

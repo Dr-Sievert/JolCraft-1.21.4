@@ -30,6 +30,8 @@ public class JolCraftTags {
 
         public static final TagKey<Item> HOPS = createTag("hops");
 
+        public static final TagKey<Item> REPAIRS_DEEPSLATE = createTag("repairs_deepslate");
+
         //Scrap
         public static final TagKey<Item> GLOBAL_SCRAP = createTag("global_scrap");
         public static final TagKey<Item> GENERAL_SCRAP = createTag("general_scrap");

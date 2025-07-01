@@ -21,11 +21,8 @@ public class JolCraftFoodProperties {
             .build();
 
     public static final Consumable DEEPSLATE_BULBS_EFFECT = Consumables.defaultFood()
-            .onConsume(new ApplyStatusEffectsConsumeEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 200, 0), 1.0f))
+            .onConsume(new ApplyStatusEffectsConsumeEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 100, 0), 1.0f))
             .build();
-
-
-
 
 
 }

@@ -7,7 +7,6 @@ import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.client.data.models.ModelProvider;
 import net.minecraft.client.data.models.blockstates.*;
-import net.minecraft.client.data.models.model.ModelTemplate;
 import net.minecraft.client.data.models.model.ModelTemplates;
 import net.minecraft.client.data.models.model.TextureMapping;
 import net.minecraft.client.data.models.model.TexturedModel;
@@ -21,6 +20,7 @@ import net.sievert.jolcraft.block.JolCraftBlocks;
 import net.sievert.jolcraft.block.custom.BarleyCropBlock;
 import net.sievert.jolcraft.block.custom.HopsCropBottomBlock;
 import net.sievert.jolcraft.block.custom.HopsCropTopBlock;
+import net.sievert.jolcraft.item.JolCraftEquipmentAssets;
 import net.sievert.jolcraft.item.JolCraftItems;
 
 import java.nio.file.Path;
@@ -30,7 +30,7 @@ public class JolCraftModelProvider extends ModelProvider {
     private final PackOutput packOutput;
     public JolCraftModelProvider(PackOutput output) {
         super(output, JolCraft.MOD_ID);
-        this.packOutput = output; // <-- save it
+        this.packOutput = output;
 
     }
 
@@ -41,6 +41,20 @@ public class JolCraftModelProvider extends ModelProvider {
         itemModels.generateFlatItem(JolCraftItems.GOLD_COIN.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(JolCraftItems.DWARVEN_LEXICON.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(JolCraftItems.PARCHMENT.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.DEEPSLATE_PLATE.get(), ModelTemplates.FLAT_ITEM);
+
+        //Weapons and Tools
+        itemModels.generateFlatItem(JolCraftItems.DEEPSLATE_SWORD.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.DEEPSLATE_PICKAXE.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.DEEPSLATE_SHOVEL.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.DEEPSLATE_AXE.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.DEEPSLATE_HOE.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
+
+        //Armor
+        itemModels.generateTrimmableItem(JolCraftItems.DEEPSLATE_HELMET.get(), JolCraftEquipmentAssets.DEEPSLATE_KEY, "helmet", false);
+        itemModels.generateTrimmableItem(JolCraftItems.DEEPSLATE_CHESTPLATE.get(), JolCraftEquipmentAssets.DEEPSLATE_KEY, "chestplate", false);
+        itemModels.generateTrimmableItem(JolCraftItems.DEEPSLATE_LEGGINGS.get(), JolCraftEquipmentAssets.DEEPSLATE_KEY, "leggings", false);
+        itemModels.generateTrimmableItem(JolCraftItems.DEEPSLATE_BOOTS.get(), JolCraftEquipmentAssets.DEEPSLATE_KEY, "boots", false);
 
         //Animal-related
         itemModels.generateFlatItem(JolCraftItems.MUFFHORN_MILK_BUCKET.get(), ModelTemplates.FLAT_ITEM);

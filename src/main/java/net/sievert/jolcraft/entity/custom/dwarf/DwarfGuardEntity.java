@@ -40,11 +40,11 @@ public class DwarfGuardEntity extends AbstractDwarfEntity {
 
     public DwarfGuardEntity(EntityType<? extends AbstractDwarfEntity> entityType, Level level) {
         super(entityType, level);
-        this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_AXE));
-        this.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.IRON_HELMET));
-        this.setItemSlot(EquipmentSlot.CHEST, new ItemStack(Items.IRON_CHESTPLATE));
-        this.setItemSlot(EquipmentSlot.LEGS, new ItemStack(Items.IRON_LEGGINGS));
-        this.setItemSlot(EquipmentSlot.FEET, new ItemStack(Items.IRON_BOOTS));
+        this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(JolCraftItems.DEEPSLATE_AXE.get()));
+        this.setItemSlot(EquipmentSlot.HEAD, new ItemStack(JolCraftItems.DEEPSLATE_HELMET.get()));
+        this.setItemSlot(EquipmentSlot.CHEST, new ItemStack(JolCraftItems.DEEPSLATE_CHESTPLATE.get()));
+        this.setItemSlot(EquipmentSlot.LEGS, new ItemStack(JolCraftItems.DEEPSLATE_LEGGINGS.get()));
+        this.setItemSlot(EquipmentSlot.FEET, new ItemStack(JolCraftItems.DEEPSLATE_BOOTS.get()));
     }
 
     //Attributes

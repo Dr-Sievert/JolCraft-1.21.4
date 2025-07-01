@@ -4,6 +4,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.Consumables;
+import net.minecraft.world.item.equipment.ArmorType;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -26,6 +27,36 @@ public class JolCraftItems {
     public static final DeferredItem<Item> DWARVEN_LEXICON =
             ITEMS.registerItem("dwarven_lexicon", DwarvenLexiconItem::new,
                     new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
+
+    public static final DeferredItem<Item> DEEPSLATE_PLATE = ITEMS.registerItem("deepslate_plate",
+            Item::new, new Item.Properties());
+
+    public static final DeferredItem<Item> DEEPSLATE_SWORD = ITEMS.registerItem("deepslate_sword",
+            (properties) -> new SwordItem(JolCraftToolMaterials.DEEPSLATE, 3.0F, -2.4F, properties));
+
+    public static final DeferredItem<Item> DEEPSLATE_PICKAXE = ITEMS.registerItem("deepslate_pickaxe",
+            (properties) -> new PickaxeItem(ToolMaterial.IRON, 1.0F, -2.8F, properties));
+
+    public static final DeferredItem<ShovelItem> DEEPSLATE_SHOVEL = ITEMS.registerItem("deepslate_shovel",
+            (properties) -> new ShovelItem(ToolMaterial.IRON, 1.5F, -3.0F, properties));
+
+    public static final DeferredItem<AxeItem> DEEPSLATE_AXE = ITEMS.registerItem("deepslate_axe",
+            (properties) -> new AxeItem(ToolMaterial.IRON, 6.0F, -3.1F, properties));
+
+    public static final DeferredItem<HoeItem> DEEPSLATE_HOE = ITEMS.registerItem("deepslate_hoe",
+            (properties) -> new HoeItem(ToolMaterial.IRON, -2.0F, -1.0F, properties));
+
+    public static final DeferredItem<Item> DEEPSLATE_HELMET = ITEMS.registerItem("deepslate_helmet",
+            props -> new DeepslateArmorItem(JolCraftArmorMaterials.DEEPSLATE_ARMOR_MATERIAL, ArmorType.HELMET, props));
+
+    public static final DeferredItem<Item> DEEPSLATE_CHESTPLATE = ITEMS.registerItem("deepslate_chestplate",
+            props -> new DeepslateArmorItem(JolCraftArmorMaterials.DEEPSLATE_ARMOR_MATERIAL, ArmorType.CHESTPLATE, props));
+
+    public static final DeferredItem<Item> DEEPSLATE_LEGGINGS = ITEMS.registerItem("deepslate_leggings",
+            props -> new DeepslateArmorItem(JolCraftArmorMaterials.DEEPSLATE_ARMOR_MATERIAL, ArmorType.LEGGINGS, props));
+
+    public static final DeferredItem<Item> DEEPSLATE_BOOTS = ITEMS.registerItem("deepslate_boots",
+            props -> new DeepslateArmorItem(JolCraftArmorMaterials.DEEPSLATE_ARMOR_MATERIAL, ArmorType.BOOTS, props));
 
     //Animal-related
     public static final DeferredItem<Item> MUFFHORN_FUR = ITEMS.registerItem("muffhorn_fur",

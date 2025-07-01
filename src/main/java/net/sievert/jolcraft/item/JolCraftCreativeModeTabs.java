@@ -44,6 +44,17 @@ public class JolCraftCreativeModeTabs {
                         pOutput.accept(JolCraftItems.GLASS_MUG);
                         pOutput.accept(JolCraftItems.DWARVEN_BREW);
                         pOutput.accept(JolCraftItems.DEEPSLATE_BULBS);
+                        pOutput.accept(JolCraftItems.DEEPSLATE_PLATE);
+
+                        pOutput.accept(JolCraftItems.DEEPSLATE_SWORD);
+                        pOutput.accept(JolCraftItems.DEEPSLATE_PICKAXE);
+                        pOutput.accept(JolCraftItems.DEEPSLATE_SHOVEL);
+                        pOutput.accept(JolCraftItems.DEEPSLATE_AXE);
+                        pOutput.accept(JolCraftItems.DEEPSLATE_HOE);
+                        pOutput.accept(JolCraftItems.DEEPSLATE_HELMET);
+                        pOutput.accept(JolCraftItems.DEEPSLATE_CHESTPLATE);
+                        pOutput.accept(JolCraftItems.DEEPSLATE_LEGGINGS);
+                        pOutput.accept(JolCraftItems.DEEPSLATE_BOOTS);
 
                         pOutput.accept(JolCraftItems.QUILL_EMPTY);
                         pOutput.accept(JolCraftItems.QUILL_FULL);

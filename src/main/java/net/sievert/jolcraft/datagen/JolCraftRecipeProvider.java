@@ -129,6 +129,104 @@ public class JolCraftRecipeProvider extends RecipeProvider {
                 ).unlockedBy("has_barley", has(JolCraftItems.BARLEY.get())).save(output, "barley_malt_from_smoking");
 
 
+        shaped(RecipeCategory.MISC, JolCraftItems.DEEPSLATE_PLATE.get())
+                .pattern("BXB")
+                .define('B', Items.IRON_INGOT)
+                .define('X', JolCraftItems.DEEPSLATE_BULBS.get())
+                .unlockedBy("has_deepslate_bulbs", has(JolCraftItems.DEEPSLATE_BULBS.get())).save(output);
+
+        shaped(RecipeCategory.MISC, JolCraftItems.DEEPSLATE_SWORD.get())
+                .pattern("B")
+                .pattern("B")
+                .pattern("X")
+                .define('B', JolCraftItems.DEEPSLATE_PLATE.get())
+                .define('X', Items.STICK)
+                .unlockedBy("has_deepslate_bulbs", has(JolCraftItems.DEEPSLATE_PLATE.get())).save(output);
+
+        shaped(RecipeCategory.MISC, JolCraftItems.DEEPSLATE_PICKAXE.get())
+                .pattern("BBB")
+                .pattern(" X ")
+                .pattern(" X ")
+                .define('B', JolCraftItems.DEEPSLATE_PLATE.get())
+                .define('X', Items.STICK)
+                .unlockedBy("has_deepslate_bulbs", has(JolCraftItems.DEEPSLATE_PLATE.get())).save(output);
+
+        shaped(RecipeCategory.MISC, JolCraftItems.DEEPSLATE_SHOVEL.get())
+                .pattern("B")
+                .pattern("X")
+                .pattern("X")
+                .define('B', JolCraftItems.DEEPSLATE_PLATE.get())
+                .define('X', Items.STICK)
+                .unlockedBy("has_deepslate_bulbs", has(JolCraftItems.DEEPSLATE_PLATE.get())).save(output);
+
+        shaped(RecipeCategory.MISC, JolCraftItems.DEEPSLATE_AXE.get())
+                .pattern("BB")
+                .pattern("BX")
+                .pattern(" X")
+                .define('B', JolCraftItems.DEEPSLATE_PLATE.get())
+                .define('X', Items.STICK)
+                .unlockedBy("has_deepslate_bulbs", has(JolCraftItems.DEEPSLATE_PLATE.get())).save(output, "deepslate_axe_left");
+
+        shaped(RecipeCategory.MISC, JolCraftItems.DEEPSLATE_AXE.get())
+                .pattern("BB")
+                .pattern("XB")
+                .pattern("X ")
+                .define('B', JolCraftItems.DEEPSLATE_PLATE.get())
+                .define('X', Items.STICK)
+                .unlockedBy("has_deepslate_bulbs", has(JolCraftItems.DEEPSLATE_PLATE.get())).save(output, "deepslate_axe_right");
+
+        shaped(RecipeCategory.MISC, JolCraftItems.DEEPSLATE_HOE.get())
+                .pattern("BB")
+                .pattern(" X")
+                .pattern(" X")
+                .define('B', JolCraftItems.DEEPSLATE_PLATE.get())
+                .define('X', Items.STICK)
+                .unlockedBy("has_deepslate_bulbs", has(JolCraftItems.DEEPSLATE_PLATE.get())).save(output, "deepslate_hoe_left");
+
+        shaped(RecipeCategory.MISC, JolCraftItems.DEEPSLATE_HOE.get())
+                .pattern("BB")
+                .pattern("X ")
+                .pattern("X ")
+                .define('B', JolCraftItems.DEEPSLATE_PLATE.get())
+                .define('X', Items.STICK)
+                .unlockedBy("has_deepslate_bulbs", has(JolCraftItems.DEEPSLATE_PLATE.get())).save(output, "deepslate_hoe_right");
+
+        shaped(RecipeCategory.MISC, JolCraftItems.DEEPSLATE_HELMET.get())
+                .pattern("BBB")
+                .pattern("B B")
+                .define('B', JolCraftItems.DEEPSLATE_PLATE.get())
+                .unlockedBy("has_deepslate_plate", has(JolCraftItems.DEEPSLATE_PLATE.get())).save(output);
+
+        shaped(RecipeCategory.MISC, JolCraftItems.DEEPSLATE_CHESTPLATE.get())
+                .pattern("B B")
+                .pattern("BBB")
+                .pattern("BBB")
+                .define('B', JolCraftItems.DEEPSLATE_PLATE.get())
+                .unlockedBy("has_deepslate_plate", has(JolCraftItems.DEEPSLATE_PLATE.get())).save(output);
+
+        shaped(RecipeCategory.MISC, JolCraftItems.DEEPSLATE_LEGGINGS.get())
+                .pattern("BBB")
+                .pattern("B B")
+                .pattern("B B")
+                .define('B', JolCraftItems.DEEPSLATE_PLATE.get())
+                .unlockedBy("has_deepslate_plate", has(JolCraftItems.DEEPSLATE_PLATE.get())).save(output);
+
+        shaped(RecipeCategory.MISC, JolCraftItems.DEEPSLATE_BOOTS.get())
+                .pattern("B B")
+                .pattern("B B")
+                .define('B', JolCraftItems.DEEPSLATE_PLATE.get())
+                .unlockedBy("has_deepslate_plate", has(JolCraftItems.DEEPSLATE_PLATE.get())).save(output);
+
+
+
+
+
+
+
+
+
+
+
 
     }
 

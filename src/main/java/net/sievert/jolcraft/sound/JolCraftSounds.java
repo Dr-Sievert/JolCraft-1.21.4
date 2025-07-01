@@ -1,9 +1,11 @@
 package net.sievert.jolcraft.sound;
 
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.sievert.jolcraft.JolCraft;
 
@@ -13,6 +15,9 @@ public class JolCraftSounds {
     public static final DeferredRegister<SoundEvent> SOUND_EVENTS =
             DeferredRegister.create(BuiltInRegistries.SOUND_EVENT, JolCraft.MOD_ID);
 
+    public static final DeferredHolder<SoundEvent, SoundEvent> ARMOR_EQUIP_DEEPSLATE =
+            SOUND_EVENTS.register("armor_equip_deepslate", () ->
+                    SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "armor_equip_deepslate")));
     //Random
     public static final Supplier<SoundEvent> LEVEL_UP = registerSoundEvent("level_up");
     public static final Supplier<SoundEvent> POOF = registerSoundEvent("poof");

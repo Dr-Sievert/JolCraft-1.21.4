@@ -14,6 +14,7 @@ import net.sievert.jolcraft.entity.JolCraftEntities;
 import net.sievert.jolcraft.entity.client.render.animal.MuffhornRenderer;
 import net.sievert.jolcraft.entity.client.render.dwarf.*;
 import net.sievert.jolcraft.item.JolCraftCreativeModeTabs;
+import net.sievert.jolcraft.item.JolCraftEquipmentAssets;
 import net.sievert.jolcraft.item.JolCraftItems;
 import net.sievert.jolcraft.loot.JolCraftLootModifiers;
 import net.sievert.jolcraft.network.JolCraftNetworking;
@@ -62,6 +63,7 @@ public class JolCraft
         JolCraftSounds.register(modEventBus);
         JolCraftProcessors.register(modEventBus);
         JolCraftAttachments.register(modEventBus);
+        JolCraftEquipmentAssets.register(modEventBus);
         JolCraftStructures.DEFERRED_REGISTRY_STRUCTURE.register(modEventBus);
 
         // Register server events

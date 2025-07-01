@@ -2,6 +2,18 @@
   "item.jolcraft.gold_coin": "Gold Coin",
   "item.jolcraft.dwarven_lexicon": "Dwarven Lexicon",
 
+  "item.jolcraft.deepslate_plate": "Deepslate Plate",
+  "item.jolcraft.deepslate_sword": "Deepslate Sword",
+  "item.jolcraft.deepslate_pickaxe": "Deepslate Pickaxe",
+  "item.jolcraft.deepslate_shovel": "Deepslate Shovel",
+  "item.jolcraft.deepslate_axe": "Deepslate Axe",
+  "item.jolcraft.deepslate_hoe": "Deepslate Hoe",
+  "item.jolcraft.deepslate_helmet": "Deepslate Helmet",
+  "item.jolcraft.deepslate_helmet": "Deepslate Helmet",
+  "item.jolcraft.deepslate_chestplate": "Deepslate Chestplate",
+  "item.jolcraft.deepslate_leggings": "Deepslate Leggings",
+  "item.jolcraft.deepslate_boots": "Deepslate Boots",
+
   "item.jolcraft.barley_seeds": "Dwarven Barley Seeds",
   "block.jolcraft.barley_crop": "Dwarven Barley Crops",
   "item.jolcraft.barley": "Dwarven Barley",
@@ -154,11 +166,8 @@
   "tooltip.jolcraft.bounty_crate.complete": "Ready to be turned in.",
   "tooltip.jolcraft.bounty_crate.not_complete": "This bounty has not been completed.",
 
-  "tooltip.jolcraft.restock_crate": "Can be used to restock a traders inventory.",
+  "tooltip.jolcraft.restock_crate": "Can be used to restock the inventory of a dwarf trader.",
   "tooltip.jolcraft.restock_crate.success": "Trader inventory restocked!",
-  "tooltip.jolcraft.reroll_crate": "Can be used to reroll a traders inventory.",
-  "tooltip.jolcraft.reroll_crate.success": "Trader inventory rerolled!",
-
 
   "tooltip.jolcraft.spanner": "Can be used to produce scrap from salvage.",
   "tooltip.jolcraft.salvage": "Salvagable",

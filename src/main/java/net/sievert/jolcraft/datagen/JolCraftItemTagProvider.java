@@ -148,6 +148,14 @@ public class JolCraftItemTagProvider extends ItemTagsProvider {
                 .add(JolCraftItems.KRANDONIAN_HOPS.get())
                 .add(JolCraftItems.YANILLIAN_HOPS.get());
 
+        tag(JolCraftTags.Items.REPAIRS_DEEPSLATE)
+                .add(JolCraftItems.DEEPSLATE_PLATE.get());
+
+        this.tag(ItemTags.TRIMMABLE_ARMOR)
+                .add(JolCraftItems.DEEPSLATE_HELMET.get())
+                .add(JolCraftItems.DEEPSLATE_CHESTPLATE.get())
+                .add(JolCraftItems.DEEPSLATE_LEGGINGS.get())
+                .add(JolCraftItems.DEEPSLATE_BOOTS.get());
 
     }
 
