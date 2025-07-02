@@ -1,4 +1,4 @@
-// 1.21.4	2025-07-01T23:15:46.8065424	JolCraft Recipes
+// 1.21.4	2025-07-02T20:00:24.3627096	JolCraft Recipes
 1df426c9e91766cc2bbbb8c25ed899f5c1980ed8 data/jolcraft/advancement/recipes/misc/contract_blank.json
 63834c714e4e2f7e8e9b71d845d808a0b5084060 data/jolcraft/advancement/recipes/misc/contract_guildmaster.json
 ada4a17760326ccc90beda85717afe773cd6dd4d data/jolcraft/advancement/recipes/misc/contract_written.json
@@ -10,12 +10,14 @@ bff24421474598829fbcaa2ee51b9376d7cfcfbe data/jolcraft/advancement/recipes/misc/
 389cdee17452a0c4f25c767ba746099577e1735d data/jolcraft/advancement/recipes/misc/deepslate_plate.json
 bd681b12cda5d0be928299068b480a3209cb82dd data/jolcraft/advancement/recipes/misc/deepslate_shovel.json
 657f57d94cd0e8565e229a6da1dc3ab401146361 data/jolcraft/advancement/recipes/misc/deepslate_sword.json
+3ed1774e0667b7422abf5886d7abcac7b15bf7eb data/jolcraft/advancement/recipes/misc/forge_armor_trim_smithing_template.json
 be424ddb13cfeb98753b9b8bd3c148d113041c24 data/jolcraft/advancement/recipes/misc/glass_mug.json
 e06e121d00a40139dea6d3a2f6a0d6f7f23aa9d2 data/jolcraft/advancement/recipes/misc/muffhorn_fur.json
 ed2d0d5138d51877f5d7c2624630e1f69b0d7e0d data/jolcraft/advancement/recipes/misc/muffhorn_fur_block.json
 b07701eeef93cbde3b7aaffbe2a161fb57acfa92 data/jolcraft/advancement/recipes/misc/parchment.json
 1447383975895d6df8295a37e4c1138139eac5f3 data/jolcraft/advancement/recipes/misc/quill_empty.json
 a7b30f357ea962cdffb8c694f89a20d48b144b74 data/jolcraft/advancement/recipes/misc/quill_full.json
+b99ba9ea5f08b2061a1bc40ab7f9425d96c74912 data/jolcraft/advancement/recipes/misc/smithing_trim_forge.json
 767322b4f2c276b601c629aba9036561e609c594 data/jolcraft/recipe/contract_blank.json
 a24e95518f3bc666e6220f72e4102643b07b021b data/jolcraft/recipe/contract_guildmaster.json
 8d74eb5de1c608461375e0aa24d385430635d6b0 data/jolcraft/recipe/contract_written.json
@@ -27,12 +29,14 @@ a24e95518f3bc666e6220f72e4102643b07b021b data/jolcraft/recipe/contract_guildmast
 d2cd5f730b6705799a7208e3d99c08b3b9fccda8 data/jolcraft/recipe/deepslate_plate.json
 001a0febde56b3c5671b799e236664544a6702ee data/jolcraft/recipe/deepslate_shovel.json
 7e2eadd1645da2d06309d015aa9149bb2fcf7049 data/jolcraft/recipe/deepslate_sword.json
+91c7771dfd9e677bf7d4d127d78414650a6590f6 data/jolcraft/recipe/forge_armor_trim_smithing_template.json
 d0baa61656625f72888b2cc2aafeff012649f194 data/jolcraft/recipe/glass_mug.json
 d9991635c7807ef77a2f854cfb52182cc7cdde90 data/jolcraft/recipe/muffhorn_fur.json
 412c07a43fa7342641232a0ebd77cb5fa120acc6 data/jolcraft/recipe/muffhorn_fur_block.json
 cf5535d74b902e643eacfb3947d0c682111591b5 data/jolcraft/recipe/parchment.json
 9dec8f06b849724f07954ee01db88e401b0083e9 data/jolcraft/recipe/quill_empty.json
 78552aa06ca079e677f64212a2cfa0564bf0168b data/jolcraft/recipe/quill_full.json
+3b24e9ef13ac739449a5da1a157e3bb58f263f7a data/jolcraft/recipe/smithing_trim_forge.json
 3db9d8d78021beec33628f4d59fd26230ce83121 data/minecraft/advancement/recipes/brewing/inverix_charcoal.json
 3b1041f0b4caaedfd1698b9c0505ff979418988e data/minecraft/advancement/recipes/brewing/inverix_coal.json
 b25b9e2048aa15c5d3a45d68a6684bba813ead80 data/minecraft/advancement/recipes/food/barley_malt_from_smelting.json

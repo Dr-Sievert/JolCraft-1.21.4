@@ -1,6 +1,7 @@
 package net.sievert.jolcraft.datagen;
 
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.advancements.AdvancementProvider;
@@ -11,6 +12,8 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.sievert.jolcraft.JolCraft;
+import net.sievert.jolcraft.item.JolCraftTrimMaterials;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.List;
@@ -58,6 +61,9 @@ public class JolCraftDataGenerator {
         generator.addProvider(true, new AdvancementProvider(
                 packOutput, lookup, List.of(new JolCraftAdvancementProvider())
         ));
+
+        generator.addProvider(true, new JolCraftDatapackProvider(packOutput, lookup));
+
     }
 
     @SubscribeEvent
@@ -99,5 +105,11 @@ public class JolCraftDataGenerator {
         generator.addProvider(true, new AdvancementProvider(
                 packOutput, lookup, List.of(new JolCraftAdvancementProvider())
         ));
+
+        generator.addProvider(true, new JolCraftDatapackProvider(packOutput, lookup));
+
+
     }
+
+
 }

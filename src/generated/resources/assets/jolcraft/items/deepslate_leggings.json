@@ -78,6 +78,13 @@
           "model": "jolcraft:item/deepslate_leggings_resin_trim"
         },
         "when": "minecraft:resin"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "jolcraft:item/deepslate_leggings_deepslate_trim"
+        },
+        "when": "jolcraft:deepslate"
       }
     ],
     "fallback": {

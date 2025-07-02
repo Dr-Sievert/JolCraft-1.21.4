@@ -78,6 +78,13 @@
           "model": "jolcraft:item/deepslate_chestplate_resin_trim"
         },
         "when": "minecraft:resin"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "jolcraft:item/deepslate_chestplate_deepslate_trim"
+        },
+        "when": "jolcraft:deepslate"
       }
     ],
     "fallback": {

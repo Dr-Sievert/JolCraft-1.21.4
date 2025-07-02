@@ -157,6 +157,9 @@ public class JolCraftItemTagProvider extends ItemTagsProvider {
                 .add(JolCraftItems.DEEPSLATE_LEGGINGS.get())
                 .add(JolCraftItems.DEEPSLATE_BOOTS.get());
 
+        this.tag(ItemTags.TRIM_MATERIALS)
+                .add(JolCraftItems.DEEPSLATE_PLATE.get());
+
     }
 
 

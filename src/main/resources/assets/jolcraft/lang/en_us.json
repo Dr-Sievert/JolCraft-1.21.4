@@ -9,10 +9,13 @@
   "item.jolcraft.deepslate_axe": "Deepslate Axe",
   "item.jolcraft.deepslate_hoe": "Deepslate Hoe",
   "item.jolcraft.deepslate_helmet": "Deepslate Helmet",
-  "item.jolcraft.deepslate_helmet": "Deepslate Helmet",
   "item.jolcraft.deepslate_chestplate": "Deepslate Chestplate",
   "item.jolcraft.deepslate_leggings": "Deepslate Leggings",
   "item.jolcraft.deepslate_boots": "Deepslate Boots",
+
+  "item.jolcraft.forge_armor_trim_smithing_template": "Forge Armor Trim Smithing Template",
+  "trim_pattern.jolcraft.forge": "Forge Armor Trim",
+  "trim_material.jolcraft.deepslate": "Deepslate",
 
   "item.jolcraft.inverix": "Inverix",
 

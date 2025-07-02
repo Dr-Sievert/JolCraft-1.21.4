@@ -28,10 +28,12 @@ public class JolCraftItems {
             ITEMS.registerItem("dwarven_lexicon", DwarvenLexiconItem::new,
                     new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
 
-    //Materials, Armors, Tools and Weapons
-
+    //Materials, Armors, Trims, Tools and Weapons
     public static final DeferredItem<Item> DEEPSLATE_PLATE = ITEMS.registerItem("deepslate_plate",
             Item::new, new Item.Properties());
+
+    public static final DeferredItem<Item> FORGE_ARMOR_TRIM_SMITHING_TEMPLATE = ITEMS.registerItem("forge_armor_trim_smithing_template",
+            SmithingTemplateItem::createArmorTrimTemplate, new Item.Properties().rarity(Rarity.UNCOMMON));
 
     public static final DeferredItem<Item> DEEPSLATE_SWORD = ITEMS.registerItem("deepslate_sword",
             (properties) -> new SwordItem(JolCraftToolMaterials.DEEPSLATE, 3.0F, -2.4F, properties));

@@ -1,13 +1,17 @@
 package net.sievert.jolcraft.datagen;
 
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.block.JolCraftBlocks;
 import net.sievert.jolcraft.util.JolCraftTags;
 import net.sievert.jolcraft.item.JolCraftItems;
@@ -227,12 +231,18 @@ public class JolCraftRecipeProvider extends RecipeProvider {
                 .requires(Items.CHARCOAL)
                 .unlockedBy("has_muffhorn_milk_bucket", has(JolCraftItems.MUFFHORN_MILK_BUCKET.get())).save(output, "inverix_charcoal");
 
+        trimSmithing(JolCraftItems.FORGE_ARMOR_TRIM_SMITHING_TEMPLATE.get(),
+                ResourceKey.create(Registries.RECIPE, ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "smithing_trim_forge"))
+        );
 
-
-
-
-
-
+        shaped(RecipeCategory.MISC, JolCraftItems.FORGE_ARMOR_TRIM_SMITHING_TEMPLATE.get(), 2)
+                .pattern("BXB")
+                .pattern("BAB")
+                .pattern("BBB")
+                .define('B', Items.DIAMOND)
+                .define('X', JolCraftItems.FORGE_ARMOR_TRIM_SMITHING_TEMPLATE.get())
+                .define('A', JolCraftItems.DEEPSLATE_PLATE.get())
+                .unlockedBy("has_forge_armor_trim_smithing_template", has(JolCraftItems.FORGE_ARMOR_TRIM_SMITHING_TEMPLATE.get())).save(output);
 
 
     }

@@ -1,4 +1,4 @@
-// 1.21.4	2025-07-01T04:28:40.4597838	Tags for minecraft:item mod id jolcraft
+// 1.21.4	2025-07-02T11:34:58.066192	Tags for minecraft:item mod id jolcraft
 b4fbeec3a15fa89ad64b1145d7f2775a193da48b data/jolcraft/tags/item/gems.json
 d60de4fc2e80779b31b1d96353673140c193859f data/jolcraft/tags/item/general_scrap.json
 79db8dbd1c373c681954ad7f22d148efe9a10d0b data/jolcraft/tags/item/global_scrap.json
@@ -15,3 +15,4 @@ fd45b2d0babc1ba749beedf446d3626275db2393 data/jolcraft/tags/item/spawn_eggs.json
 7e7239dc449926884d9c3b6dfb72455ad82d1c1d data/jolcraft/tags/item/textile_scrap.json
 d93fe5c56c7aa54d5fe4fe63e5df038319fbd62f data/minecraft/tags/item/enchantable/durability.json
 0e4a184508cf0608a90ed3e6a2a5bfef22522bf4 data/minecraft/tags/item/trimmable_armor.json
+3ce79c2d874265007b52b4c31903e5a95c5ca8a3 data/minecraft/tags/item/trim_materials.json

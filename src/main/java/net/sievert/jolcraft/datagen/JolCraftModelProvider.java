@@ -3,16 +3,23 @@ package net.sievert.jolcraft.datagen;
 import com.google.gson.JsonObject;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import net.minecraft.client.color.item.Dye;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.client.data.models.ModelProvider;
 import net.minecraft.client.data.models.blockstates.*;
-import net.minecraft.client.data.models.model.ModelTemplates;
-import net.minecraft.client.data.models.model.TextureMapping;
-import net.minecraft.client.data.models.model.TexturedModel;
-import net.minecraft.data.DataProvider;
+import net.minecraft.client.data.models.model.*;
+import net.minecraft.client.renderer.item.ItemModel;
+import net.minecraft.client.renderer.item.SelectItemModel;
+import net.minecraft.client.renderer.item.properties.select.TrimMaterialProperty;
 import net.minecraft.data.PackOutput;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.equipment.EquipmentAsset;
+import net.minecraft.world.item.equipment.EquipmentAssets;
+import net.minecraft.world.item.equipment.trim.TrimMaterial;
+import net.minecraft.world.item.equipment.trim.TrimMaterials;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.sievert.jolcraft.JolCraft;
@@ -22,8 +29,13 @@ import net.sievert.jolcraft.block.custom.HopsCropBottomBlock;
 import net.sievert.jolcraft.block.custom.HopsCropTopBlock;
 import net.sievert.jolcraft.item.JolCraftEquipmentAssets;
 import net.sievert.jolcraft.item.JolCraftItems;
+import net.sievert.jolcraft.item.JolCraftTrimMaterials;
+import net.minecraft.core.registries.BuiltInRegistries;
 
-import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 public class JolCraftModelProvider extends ModelProvider {
 
@@ -50,11 +62,23 @@ public class JolCraftModelProvider extends ModelProvider {
         itemModels.generateFlatItem(JolCraftItems.DEEPSLATE_AXE.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
         itemModels.generateFlatItem(JolCraftItems.DEEPSLATE_HOE.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
 
-        //Armor
-        itemModels.generateTrimmableItem(JolCraftItems.DEEPSLATE_HELMET.get(), JolCraftEquipmentAssets.DEEPSLATE_KEY, "helmet", false);
-        itemModels.generateTrimmableItem(JolCraftItems.DEEPSLATE_CHESTPLATE.get(), JolCraftEquipmentAssets.DEEPSLATE_KEY, "chestplate", false);
-        itemModels.generateTrimmableItem(JolCraftItems.DEEPSLATE_LEGGINGS.get(), JolCraftEquipmentAssets.DEEPSLATE_KEY, "leggings", false);
-        itemModels.generateTrimmableItem(JolCraftItems.DEEPSLATE_BOOTS.get(), JolCraftEquipmentAssets.DEEPSLATE_KEY, "boots", false);
+        //Custom Armor and Trim Materials/Templates
+        List<ItemModelGenerators.TrimMaterialData> allTrimMaterials = new ArrayList<>();
+        for (Map.Entry<String, ResourceKey<TrimMaterial>> entry : VANILLA_TRIMS.entrySet()) {
+            allTrimMaterials.add(new ItemModelGenerators.TrimMaterialData(entry.getKey(), entry.getValue(), Map.of()));
+        }
+        allTrimMaterials.addAll(JOLCRAFT_TRIMS); // <--- just this line for ALL your custom trims
+
+        generateTrimmableArmorSetWithCustom(itemModels, "deepslate", JolCraftEquipmentAssets.DEEPSLATE_KEY, false);
+
+        generateArmorWithTrim(itemModels, "leather", EquipmentAssets.LEATHER, true);
+        generateArmorWithTrim(itemModels, "chainmail", EquipmentAssets.CHAINMAIL, false);
+        generateArmorWithTrim(itemModels, "iron", EquipmentAssets.IRON, false);
+        generateArmorWithTrim(itemModels, "golden", EquipmentAssets.GOLD, false);
+        generateArmorWithTrim(itemModels, "diamond", EquipmentAssets.DIAMOND,false);
+        generateArmorWithTrim(itemModels, "netherite", EquipmentAssets.NETHERITE, false);
+
+        itemModels.generateFlatItem(JolCraftItems.FORGE_ARMOR_TRIM_SMITHING_TEMPLATE.get(), ModelTemplates.FLAT_ITEM);
 
         //Alchemy
         itemModels.generateFlatItem(JolCraftItems.INVERIX.get(), ModelTemplates.FLAT_ITEM);
@@ -296,6 +320,249 @@ public class JolCraftModelProvider extends ModelProvider {
 
     }
 
+    //Custom Helpers!!
+
+    private void generateTrimmableItemWithCustomList(
+            ItemModelGenerators itemModels,
+            String baseName,
+            ResourceKey<EquipmentAsset> key,
+            boolean dyeable,
+            List<ItemModelGenerators.TrimMaterialData> trimMaterialList) {
+
+        for (String type : ARMOR_TYPES) {
+            String fileName = baseName + "_" + type;
+
+            ResourceLocation baseModelLocation = ResourceLocation.fromNamespaceAndPath(key.location().getNamespace(), "item/" + fileName);
+            ResourceLocation textureLocation = ResourceLocation.fromNamespaceAndPath(key.location().getNamespace(), "item/" + fileName);
+            ResourceLocation overlayTexture = ResourceLocation.fromNamespaceAndPath(key.location().getNamespace(), "item/" + fileName + "_overlay");
+
+            List<SelectItemModel.SwitchCase<ResourceKey<TrimMaterial>>> list = new ArrayList<>(trimMaterialList.size());
+
+            for (ItemModelGenerators.TrimMaterialData data : trimMaterialList) {
+                boolean isCustom = data.materialKey().location().getNamespace().equals("jolcraft");
+                ResourceLocation trimModelLoc = baseModelLocation.withSuffix("_" + data.name() + "_trim");
+
+                // Only change this line:
+                String trimTextureName = data.name();
+                if (baseName.equals(data.name())) {
+                    trimTextureName += "_darker";
+                }
+                ResourceLocation trimTextureLocation = ResourceLocation.fromNamespaceAndPath("minecraft", "trims/items/" + type + "_trim_" + trimTextureName);
+
+                ItemModel.Unbaked bakedModel;
+                if (dyeable) {
+                    itemModels.generateLayeredItem(
+                            trimModelLoc,
+                            textureLocation,
+                            overlayTexture,
+                            trimTextureLocation  // layer1 = correct namespace!
+                    );
+                    bakedModel = ItemModelUtils.tintedModel(trimModelLoc, new Dye(-6265536));
+                } else {
+                    itemModels.generateLayeredItem(
+                            trimModelLoc,
+                            textureLocation,
+                            trimTextureLocation  // layer1 = correct namespace!
+                    );
+                    bakedModel = ItemModelUtils.plainModel(trimModelLoc);
+                }
+                list.add(ItemModelUtils.when(data.materialKey(), bakedModel));
+            }
+
+
+            // Default (fallback) model
+            ItemModel.Unbaked defaultModel;
+            if (dyeable) {
+                ModelTemplates.TWO_LAYERED_ITEM.create(baseModelLocation, TextureMapping.layered(textureLocation, overlayTexture), itemModels.modelOutput);
+                defaultModel = ItemModelUtils.tintedModel(baseModelLocation, new Dye(-6265536)); // Example color
+            } else {
+                ModelTemplates.FLAT_ITEM.create(baseModelLocation, TextureMapping.layer0(textureLocation), itemModels.modelOutput);
+                defaultModel = ItemModelUtils.plainModel(baseModelLocation);
+            }
+
+            // Register select model for this armor piece
+            Item armorItem = getItemFromBaseName(baseName, type);
+            itemModels.itemModelOutput.accept(
+                    armorItem,
+                    ItemModelUtils.select(new TrimMaterialProperty(), defaultModel, list)
+            );
+        }
+    }
+
+    public void generateTrimmableArmorSetWithCustom(
+            ItemModelGenerators itemModels,
+            String baseName,
+            ResourceKey<EquipmentAsset> key,
+            boolean dyeable
+    ) {
+        List<ItemModelGenerators.TrimMaterialData> allTrims = new ArrayList<>(ItemModelGenerators.TRIM_MATERIAL_MODELS);
+        allTrims.addAll(JOLCRAFT_TRIMS);
+        generateTrimmableItemWithCustomList(itemModels, baseName, key, dyeable, allTrims);
+    }
+
+
+    private void generateArmorWithTrim(
+            ItemModelGenerators itemModels,
+            String baseName,
+            ResourceKey<EquipmentAsset> key,
+            boolean dyeable) {
+
+        // Gather all possible trims (vanilla + all custom)
+        List<ItemModelGenerators.TrimMaterialData> allTrimMaterials = new ArrayList<>();
+
+        // Add all vanilla trims
+        for (Map.Entry<String, ResourceKey<TrimMaterial>> entry : VANILLA_TRIMS.entrySet()) {
+            allTrimMaterials.add(new ItemModelGenerators.TrimMaterialData(entry.getKey(), entry.getValue(), Map.of()));
+        }
+        // Add ALL custom trims from static list
+        allTrimMaterials.addAll(JOLCRAFT_TRIMS);
+
+        for (String type : ARMOR_TYPES) {
+            String fileName = baseName + "_" + type;
+
+            List<SelectItemModel.SwitchCase<ResourceKey<TrimMaterial>>> selectCases = new ArrayList<>();
+
+            for (ItemModelGenerators.TrimMaterialData trim : allTrimMaterials) {
+                boolean isCustom = trim.materialKey().location().getNamespace().equals("jolcraft");
+                boolean isVanillaArmor = baseName.equals("diamond") || baseName.equals("netherite") || baseName.equals("leather")
+                        || baseName.equals("iron") || baseName.equals("golden") || baseName.equals("chainmail");
+                String trimName = trim.name();
+
+                ResourceLocation caseModelLoc;
+
+                // Handle non-vanilla armor separately to avoid double suffixing
+                if (!isVanillaArmor && isCustom) {
+                    // Only add one _trim suffix for custom, non-vanilla armor
+                    caseModelLoc = ResourceLocation.fromNamespaceAndPath("jolcraft", "item/" + fileName + "_" + trimName + "_trim");
+
+                    ResourceLocation texture = ResourceLocation.fromNamespaceAndPath("jolcraft", "item/" + fileName);
+                    ResourceLocation overlay = ResourceLocation.fromNamespaceAndPath("jolcraft", "item/" + fileName + "_overlay");
+                    ResourceLocation trimTexture = ResourceLocation.fromNamespaceAndPath("jolcraft", "trims/items/" + type + "_trim_" + trimName);
+
+                    addTrimModelToList(
+                            itemModels,
+                            caseModelLoc,
+                            texture,
+                            overlay,
+                            trim,
+                            trimTexture,
+                            selectCases,
+                            dyeable
+                    );
+                } else if (isCustom) {
+                    // Vanilla armor: Jolcraft custom trims still get one _trim
+                    caseModelLoc = ResourceLocation.fromNamespaceAndPath("jolcraft", "item/" + fileName);
+
+                    ResourceLocation texture = ResourceLocation.fromNamespaceAndPath("minecraft", "item/" + fileName);
+                    ResourceLocation overlay = ResourceLocation.fromNamespaceAndPath("minecraft", "item/" + fileName + "_overlay");
+                    ResourceLocation trimTexture = ResourceLocation.fromNamespaceAndPath("minecraft", "trims/items/" + type + "_trim_" + trimName);
+
+                    addTrimModelToList(
+                            itemModels,
+                            caseModelLoc,
+                            texture,
+                            overlay,
+                            trim,
+                            trimTexture,
+                            selectCases,
+                            dyeable
+                    );
+                } else {
+                    // Vanilla trims (any armor): always reference vanilla
+                    caseModelLoc = ResourceLocation.fromNamespaceAndPath("minecraft", "item/" + fileName + "_" + trimName + "_trim");
+                    ItemModel.Unbaked dummyModel = ItemModelUtils.plainModel(caseModelLoc);
+                    selectCases.add(ItemModelUtils.when(trim.materialKey(), dummyModel));
+                }
+            }
+
+            // Fallback logic
+            ResourceLocation fallbackModelLoc = (baseName.equals("diamond") || baseName.equals("netherite") || baseName.equals("leather")
+                    || baseName.equals("iron") || baseName.equals("golden") || baseName.equals("chainmail"))
+                    ? ResourceLocation.fromNamespaceAndPath("minecraft", "item/" + fileName)
+                    : ResourceLocation.fromNamespaceAndPath("jolcraft", "item/" + fileName);
+
+            ItemModel.Unbaked fallbackModel = dyeable
+                    ? ItemModelUtils.tintedModel(fallbackModelLoc, new Dye(-6265536))
+                    : ItemModelUtils.plainModel(fallbackModelLoc);
+
+            Item armorItem = getItemFromBaseName(baseName, type);
+            itemModels.itemModelOutput.accept(
+                    armorItem,
+                    ItemModelUtils.select(new TrimMaterialProperty(), fallbackModel, selectCases)
+            );
+        }
+    }
+
+
+    // Helper method to add the trim model to the list (common for custom trims only)
+    private void addTrimModelToList(
+            ItemModelGenerators itemModels,
+            ResourceLocation baseModelLocation,
+            ResourceLocation textureLocation,
+            ResourceLocation overlayTexture,
+            ItemModelGenerators.TrimMaterialData trim,
+            ResourceLocation trimTextureLocation,
+            List<SelectItemModel.SwitchCase<ResourceKey<TrimMaterial>>> list,
+            boolean dyeable) {
+
+        ItemModel.Unbaked bakedModel;
+        if (dyeable) {
+            // Generate the item model with overlay and trim texture for dyeable items
+            itemModels.generateLayeredItem(baseModelLocation.withSuffix("_" + trim.name() + "_trim"), textureLocation, overlayTexture, trimTextureLocation);
+            bakedModel = ItemModelUtils.tintedModel(baseModelLocation.withSuffix("_" + trim.name() + "_trim"), new Dye(-6265536)); // Example color
+        } else {
+            // Generate the model with the trim texture for non-dyeable items
+            itemModels.generateLayeredItem(baseModelLocation.withSuffix("_" + trim.name() + "_trim"), textureLocation, trimTextureLocation);
+            bakedModel = ItemModelUtils.plainModel(baseModelLocation.withSuffix("_" + trim.name() + "_trim"));
+        }
+
+        list.add(ItemModelUtils.when(trim.materialKey(), bakedModel));
+    }
+
+    // Helper method with custom trim list
+    private static final String[] ARMOR_TYPES = {"helmet", "chestplate", "leggings", "boots"};
+
+    private static final List<ItemModelGenerators.TrimMaterialData> JOLCRAFT_TRIMS = List.of(
+            new ItemModelGenerators.TrimMaterialData(
+                    "deepslate",
+                    JolCraftTrimMaterials.DEEPSLATE,
+                    Map.of(JolCraftEquipmentAssets.DEEPSLATE_KEY, "deepslate_darker")
+            )
+            // Add more trims as you implement them!
+    );
+
+    // At class level, or as a static final, define:
+    private static final Map<String, ResourceKey<TrimMaterial>> VANILLA_TRIMS = Map.of(
+            "quartz",   TrimMaterials.QUARTZ,
+            "iron",     TrimMaterials.IRON,
+            "netherite",TrimMaterials.NETHERITE,
+            "redstone", TrimMaterials.REDSTONE,
+            "copper",   TrimMaterials.COPPER,
+            "gold",     TrimMaterials.GOLD,
+            "emerald",  TrimMaterials.EMERALD,
+            "diamond",  TrimMaterials.DIAMOND,
+            "lapis",    TrimMaterials.LAPIS,
+            "amethyst", TrimMaterials.AMETHYST
+    );
+
+    private Item getItemFromBaseName(String baseName, String type) {
+        // Dynamically construct the correct item name based on baseName and type
+        String itemName = baseName + "_" + type;
+
+        // Try to fetch from jolcraft first
+        ResourceLocation jolcraftLocation = ResourceLocation.fromNamespaceAndPath("jolcraft", itemName);
+        Optional<Item> itemOptional = BuiltInRegistries.ITEM.getOptional(jolcraftLocation);
+
+        // If the item wasn't found in jolcraft, fall back to the minecraft namespace
+        if (!itemOptional.isPresent()) {
+            ResourceLocation minecraftLocation = ResourceLocation.fromNamespaceAndPath("minecraft", itemName);
+            itemOptional = BuiltInRegistries.ITEM.getOptional(minecraftLocation);
+        }
+
+        // If the item was not found in either namespace, throw an exception
+        return itemOptional.orElseThrow(() -> new IllegalStateException("Item not found: " + itemName));
+    }
+
     //Hops top helper
     private void createTopCropBlock(BlockModelGenerators blockModels, Block block, IntegerProperty ageProperty, int... ageToVisualStageMapping) {
         if (ageProperty.getPossibleValues().size() != ageToVisualStageMapping.length) {
@@ -315,23 +582,6 @@ public class JolCraftModelProvider extends ModelProvider {
 
         blockModels.blockStateOutput.accept(MultiVariantGenerator.multiVariant(block).with(dispatch));
     }
-
-    // --- RAW MODEL JSON SAVER ---
-    private void saveModelJson(PackOutput output, ResourceLocation modelLoc, JsonObject json) {
-        Path path = output.getOutputFolder(PackOutput.Target.RESOURCE_PACK)
-                .resolve("assets")
-                .resolve(modelLoc.getNamespace())
-                .resolve("models")
-                .resolve(modelLoc.getPath() + ".json");
-        try {
-            DataProvider.saveStable(null, json, path);
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to save model " + modelLoc, e);
-        }
-    }
-
-
-
 
     // Helper for the model property
     private static JsonObject modelObj(String modid, String path) {

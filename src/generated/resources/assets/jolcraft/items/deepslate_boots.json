@@ -78,6 +78,13 @@
           "model": "jolcraft:item/deepslate_boots_resin_trim"
         },
         "when": "minecraft:resin"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "jolcraft:item/deepslate_boots_deepslate_trim"
+        },
+        "when": "jolcraft:deepslate"
       }
     ],
     "fallback": {
