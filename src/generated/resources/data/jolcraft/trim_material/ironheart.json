@@ -1,0 +1,8 @@
+{
+  "asset_name": "ironheart",
+  "description": {
+    "color": "#5C2320",
+    "translate": "trim_material.jolcraft.ironheart"
+  },
+  "ingredient": "jolcraft:ironheart"
+}

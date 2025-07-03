@@ -85,6 +85,111 @@
           "model": "jolcraft:item/deepslate_helmet_deepslate_trim"
         },
         "when": "jolcraft:deepslate"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "jolcraft:item/deepslate_helmet_aegiscore_trim"
+        },
+        "when": "jolcraft:aegiscore"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "jolcraft:item/deepslate_helmet_ashfang_trim"
+        },
+        "when": "jolcraft:ashfang"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "jolcraft:item/deepslate_helmet_deepmarrow_trim"
+        },
+        "when": "jolcraft:deepmarrow"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "jolcraft:item/deepslate_helmet_earthblood_trim"
+        },
+        "when": "jolcraft:earthblood"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "jolcraft:item/deepslate_helmet_emberglass_trim"
+        },
+        "when": "jolcraft:emberglass"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "jolcraft:item/deepslate_helmet_frostvein_trim"
+        },
+        "when": "jolcraft:frostvein"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "jolcraft:item/deepslate_helmet_grimstone_trim"
+        },
+        "when": "jolcraft:grimstone"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "jolcraft:item/deepslate_helmet_ironheart_trim"
+        },
+        "when": "jolcraft:ironheart"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "jolcraft:item/deepslate_helmet_lumiere_trim"
+        },
+        "when": "jolcraft:lumiere"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "jolcraft:item/deepslate_helmet_moonshard_trim"
+        },
+        "when": "jolcraft:moonshard"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "jolcraft:item/deepslate_helmet_rustagate_trim"
+        },
+        "when": "jolcraft:rustagate"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "jolcraft:item/deepslate_helmet_skyburrow_trim"
+        },
+        "when": "jolcraft:skyburrow"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "jolcraft:item/deepslate_helmet_sungleam_trim"
+        },
+        "when": "jolcraft:sungleam"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "jolcraft:item/deepslate_helmet_verdanite_trim"
+        },
+        "when": "jolcraft:verdanite"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "jolcraft:item/deepslate_helmet_woecrystal_trim"
+        },
+        "when": "jolcraft:woecrystal"
       }
     ],
     "fallback": {

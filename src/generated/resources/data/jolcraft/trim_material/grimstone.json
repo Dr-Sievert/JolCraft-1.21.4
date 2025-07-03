@@ -1,0 +1,8 @@
+{
+  "asset_name": "grimstone",
+  "description": {
+    "color": "#B50002",
+    "translate": "trim_material.jolcraft.grimstone"
+  },
+  "ingredient": "jolcraft:grimstone"
+}

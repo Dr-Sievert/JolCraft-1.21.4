@@ -17,6 +17,22 @@
   "trim_pattern.jolcraft.forge": "Forge Armor Trim",
   "trim_material.jolcraft.deepslate": "Deepslate",
 
+  "trim_material.jolcraft.aegiscore": "Aegiscore",
+  "trim_material.jolcraft.ashfang": "Ashfang",
+  "trim_material.jolcraft.deepmarrow": "Deepmarrow",
+  "trim_material.jolcraft.earthblood": "Earthblood",
+  "trim_material.jolcraft.emberglass": "Emberglass",
+  "trim_material.jolcraft.frostvein": "Frostvein",
+  "trim_material.jolcraft.grimstone": "Grimstone",
+  "trim_material.jolcraft.ironheart": "Ironheart",
+  "trim_material.jolcraft.lumiere": "Lumiere",
+  "trim_material.jolcraft.moonshard": "Moonshard",
+  "trim_material.jolcraft.rustagate": "Rustagate",
+  "trim_material.jolcraft.skyburrow": "Skyburrow",
+  "trim_material.jolcraft.sungleam": "Sungleam",
+  "trim_material.jolcraft.verdanite": "Verdanite",
+  "trim_material.jolcraft.woecrystal": "Woecrystal",
+
   "item.jolcraft.inverix": "Inverix",
 
   "item.jolcraft.barley_seeds": "Barley Seeds",
@@ -152,7 +168,7 @@
   "tooltip.jolcraft.dwarven_lexicon.unlocked": "The key to dwarven speech lies within.",
 
   "tooltip.jolcraft.dwarven_tome.locked": "The pages are filled with unfamiliar symbols.",
-  "tooltip.jolcraft.dwarven_tome.unlocked": "An ancient tome.",
+  "tooltip.jolcraft.dwarven_tome.unlocked": "A record of everyday dwarven life.",
 
   "tooltip.jolcraft.tablet.locked": "The stone is marked with unfamiliar symbols.",
 

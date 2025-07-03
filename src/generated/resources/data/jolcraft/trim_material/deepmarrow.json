@@ -1,0 +1,8 @@
+{
+  "asset_name": "deepmarrow",
+  "description": {
+    "color": "#BBB2AC",
+    "translate": "trim_material.jolcraft.deepmarrow"
+  },
+  "ingredient": "jolcraft:deepmarrow"
+}

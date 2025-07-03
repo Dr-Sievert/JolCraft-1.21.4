@@ -1,0 +1,8 @@
+{
+  "asset_name": "lumiere",
+  "description": {
+    "color": "#F8F338",
+    "translate": "trim_material.jolcraft.lumiere"
+  },
+  "ingredient": "jolcraft:lumiere"
+}

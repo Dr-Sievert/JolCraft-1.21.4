@@ -5,34 +5,6 @@
       {
         "model": {
           "type": "minecraft:model",
-          "model": "minecraft:item/chainmail_leggings_lapis_trim"
-        },
-        "when": "minecraft:lapis"
-      },
-      {
-        "model": {
-          "type": "minecraft:model",
-          "model": "minecraft:item/chainmail_leggings_netherite_trim"
-        },
-        "when": "minecraft:netherite"
-      },
-      {
-        "model": {
-          "type": "minecraft:model",
-          "model": "minecraft:item/chainmail_leggings_diamond_trim"
-        },
-        "when": "minecraft:diamond"
-      },
-      {
-        "model": {
-          "type": "minecraft:model",
-          "model": "minecraft:item/chainmail_leggings_redstone_trim"
-        },
-        "when": "minecraft:redstone"
-      },
-      {
-        "model": {
-          "type": "minecraft:model",
           "model": "minecraft:item/chainmail_leggings_copper_trim"
         },
         "when": "minecraft:copper"
@@ -75,9 +47,142 @@
       {
         "model": {
           "type": "minecraft:model",
+          "model": "minecraft:item/chainmail_leggings_lapis_trim"
+        },
+        "when": "minecraft:lapis"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:item/chainmail_leggings_netherite_trim"
+        },
+        "when": "minecraft:netherite"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:item/chainmail_leggings_diamond_trim"
+        },
+        "when": "minecraft:diamond"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:item/chainmail_leggings_redstone_trim"
+        },
+        "when": "minecraft:redstone"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
           "model": "jolcraft:item/chainmail_leggings_deepslate_trim"
         },
         "when": "jolcraft:deepslate"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "jolcraft:item/chainmail_leggings_aegiscore_trim"
+        },
+        "when": "jolcraft:aegiscore"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "jolcraft:item/chainmail_leggings_ashfang_trim"
+        },
+        "when": "jolcraft:ashfang"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "jolcraft:item/chainmail_leggings_deepmarrow_trim"
+        },
+        "when": "jolcraft:deepmarrow"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "jolcraft:item/chainmail_leggings_earthblood_trim"
+        },
+        "when": "jolcraft:earthblood"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "jolcraft:item/chainmail_leggings_emberglass_trim"
+        },
+        "when": "jolcraft:emberglass"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "jolcraft:item/chainmail_leggings_frostvein_trim"
+        },
+        "when": "jolcraft:frostvein"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "jolcraft:item/chainmail_leggings_grimstone_trim"
+        },
+        "when": "jolcraft:grimstone"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "jolcraft:item/chainmail_leggings_ironheart_trim"
+        },
+        "when": "jolcraft:ironheart"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "jolcraft:item/chainmail_leggings_lumiere_trim"
+        },
+        "when": "jolcraft:lumiere"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "jolcraft:item/chainmail_leggings_moonshard_trim"
+        },
+        "when": "jolcraft:moonshard"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "jolcraft:item/chainmail_leggings_rustagate_trim"
+        },
+        "when": "jolcraft:rustagate"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "jolcraft:item/chainmail_leggings_skyburrow_trim"
+        },
+        "when": "jolcraft:skyburrow"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "jolcraft:item/chainmail_leggings_sungleam_trim"
+        },
+        "when": "jolcraft:sungleam"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "jolcraft:item/chainmail_leggings_verdanite_trim"
+        },
+        "when": "jolcraft:verdanite"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "jolcraft:item/chainmail_leggings_woecrystal_trim"
+        },
+        "when": "jolcraft:woecrystal"
       }
     ],
     "fallback": {

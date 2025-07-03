@@ -1,0 +1,8 @@
+{
+  "asset_name": "earthblood",
+  "description": {
+    "color": "#3E4206",
+    "translate": "trim_material.jolcraft.earthblood"
+  },
+  "ingredient": "jolcraft:earthblood"
+}

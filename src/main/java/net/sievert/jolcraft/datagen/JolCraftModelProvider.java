@@ -317,8 +317,34 @@ public class JolCraftModelProvider extends ModelProvider {
             }
         });
 
-
     }
+
+    private static final List<ItemModelGenerators.TrimMaterialData> JOLCRAFT_TRIMS = List.of(
+           //Armor = override
+            new ItemModelGenerators.TrimMaterialData(
+                    "deepslate",
+                    JolCraftTrimMaterials.DEEPSLATE,
+                    Map.of(JolCraftEquipmentAssets.DEEPSLATE_KEY, "deepslate_darker")
+            ),
+            // Gems (no override, use Map.of())
+            new ItemModelGenerators.TrimMaterialData("aegiscore", JolCraftTrimMaterials.AEGISCORE, Map.of()),
+            new ItemModelGenerators.TrimMaterialData("ashfang", JolCraftTrimMaterials.ASHFANG, Map.of()),
+            new ItemModelGenerators.TrimMaterialData("deepmarrow", JolCraftTrimMaterials.DEEPMARROW, Map.of()),
+            new ItemModelGenerators.TrimMaterialData("earthblood", JolCraftTrimMaterials.EARTHBLOOD, Map.of()),
+            new ItemModelGenerators.TrimMaterialData("emberglass", JolCraftTrimMaterials.EMBERGLASS, Map.of()),
+            new ItemModelGenerators.TrimMaterialData("frostvein", JolCraftTrimMaterials.FROSTVEIN, Map.of()),
+            new ItemModelGenerators.TrimMaterialData("grimstone", JolCraftTrimMaterials.GRIMSTONE, Map.of()),
+            new ItemModelGenerators.TrimMaterialData("ironheart", JolCraftTrimMaterials.IRONHEART, Map.of()),
+            new ItemModelGenerators.TrimMaterialData("lumiere", JolCraftTrimMaterials.LUMIERE, Map.of()),
+            new ItemModelGenerators.TrimMaterialData("moonshard", JolCraftTrimMaterials.MOONSHARD, Map.of()),
+            new ItemModelGenerators.TrimMaterialData("rustagate", JolCraftTrimMaterials.RUSTAGATE, Map.of()),
+            new ItemModelGenerators.TrimMaterialData("skyburrow", JolCraftTrimMaterials.SKYBURROW, Map.of()),
+            new ItemModelGenerators.TrimMaterialData("sungleam", JolCraftTrimMaterials.SUNGLEAM, Map.of()),
+            new ItemModelGenerators.TrimMaterialData("verdanite", JolCraftTrimMaterials.VERDANITE, Map.of()),
+            new ItemModelGenerators.TrimMaterialData("woecrystal", JolCraftTrimMaterials.WOECRYSTAL, Map.of())
+
+            // Add more trims as you implement them!
+    );
 
     //Custom Helpers!!
 
@@ -521,15 +547,6 @@ public class JolCraftModelProvider extends ModelProvider {
 
     // Helper method with custom trim list
     private static final String[] ARMOR_TYPES = {"helmet", "chestplate", "leggings", "boots"};
-
-    private static final List<ItemModelGenerators.TrimMaterialData> JOLCRAFT_TRIMS = List.of(
-            new ItemModelGenerators.TrimMaterialData(
-                    "deepslate",
-                    JolCraftTrimMaterials.DEEPSLATE,
-                    Map.of(JolCraftEquipmentAssets.DEEPSLATE_KEY, "deepslate_darker")
-            )
-            // Add more trims as you implement them!
-    );
 
     // At class level, or as a static final, define:
     private static final Map<String, ResourceKey<TrimMaterial>> VANILLA_TRIMS = Map.of(

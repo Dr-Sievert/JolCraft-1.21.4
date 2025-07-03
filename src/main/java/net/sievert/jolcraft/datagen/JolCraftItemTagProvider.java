@@ -158,7 +158,22 @@ public class JolCraftItemTagProvider extends ItemTagsProvider {
                 .add(JolCraftItems.DEEPSLATE_BOOTS.get());
 
         this.tag(ItemTags.TRIM_MATERIALS)
-                .add(JolCraftItems.DEEPSLATE_PLATE.get());
+                .add(JolCraftItems.DEEPSLATE_PLATE.get())
+                .add(JolCraftItems.AEGISCORE.get())
+                .add(JolCraftItems.ASHFANG.get())
+                .add(JolCraftItems.DEEPMARROW.get())
+                .add(JolCraftItems.EARTHBLOOD.get())
+                .add(JolCraftItems.EMBERGLASS.get())
+                .add(JolCraftItems.FROSTVEIN.get())
+                .add(JolCraftItems.GRIMSTONE.get())
+                .add(JolCraftItems.IRONHEART.get())
+                .add(JolCraftItems.LUMIERE.get())
+                .add(JolCraftItems.MOONSHARD.get())
+                .add(JolCraftItems.RUSTAGATE.get())
+                .add(JolCraftItems.SKYBURROW.get())
+                .add(JolCraftItems.SUNGLEAM.get())
+                .add(JolCraftItems.VERDANITE.get())
+                .add(JolCraftItems.WOECRYSTAL.get());
 
     }
 
