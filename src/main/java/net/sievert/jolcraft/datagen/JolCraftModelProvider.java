@@ -21,10 +21,12 @@ import net.minecraft.world.item.equipment.EquipmentAssets;
 import net.minecraft.world.item.equipment.trim.TrimMaterial;
 import net.minecraft.world.item.equipment.trim.TrimMaterials;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.block.JolCraftBlocks;
 import net.sievert.jolcraft.block.custom.BarleyCropBlock;
+import net.sievert.jolcraft.block.custom.FesterlingCropBlock;
 import net.sievert.jolcraft.block.custom.HopsCropBottomBlock;
 import net.sievert.jolcraft.block.custom.HopsCropTopBlock;
 import net.sievert.jolcraft.item.JolCraftEquipmentAssets;
@@ -236,10 +238,13 @@ public class JolCraftModelProvider extends ModelProvider {
 
         itemModels.generateFlatItem(JolCraftItems.MUFFHORN_SPAWN_EGG.get(), ModelTemplates.FLAT_ITEM);
 
-
-        //Blocks
-
         //Crops
+
+        blockModels.createPlantWithDefaultItem(JolCraftBlocks.DUSKCAP.get(), JolCraftBlocks.POTTED_DUSKCAP.get(), BlockModelGenerators.PlantType.NOT_TINTED);
+
+        createFesterlingCrop(blockModels);
+        blockModels.createPlantWithDefaultItem(JolCraftBlocks.FESTERLING.get(), JolCraftBlocks.POTTED_FESTERLING.get(), BlockModelGenerators.PlantType.NOT_TINTED);
+
         blockModels.createCropBlock(JolCraftBlocks.BARLEY_CROP.get(), BarleyCropBlock.AGE,  0, 1, 2, 3, 4, 5, 6, 7);
 
         blockModels.blockStateOutput.accept(new BlockStateGenerator() {
@@ -260,8 +265,6 @@ public class JolCraftModelProvider extends ModelProvider {
             }
         });
 
-
-        //Hops
         createTopCropBlock(
                 blockModels,
                 JolCraftBlocks.ASGARNIAN_CROP_TOP.get(),
@@ -297,6 +300,7 @@ public class JolCraftModelProvider extends ModelProvider {
         );
 
         blockModels.createCropBlock(JolCraftBlocks.YANILLIAN_CROP_BOTTOM.get(), HopsCropBottomBlock.AGE, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
+
 
 
         // For Fermenting Cauldron: custom blockstate with level property
@@ -599,6 +603,28 @@ public class JolCraftModelProvider extends ModelProvider {
 
         blockModels.blockStateOutput.accept(MultiVariantGenerator.multiVariant(block).with(dispatch));
     }
+
+    public void createFesterlingCrop(BlockModelGenerators blockModels) {
+        // Only handle blockstate with AGE-based variant for the crop
+        blockModels.blockStateOutput.accept(
+                MultiVariantGenerator.multiVariant(JolCraftBlocks.FESTERLING_CROP.get())
+                        .with(
+                                PropertyDispatch.property(FesterlingCropBlock.AGE)
+                                        .generate(age -> Variant.variant()
+                                                .with(
+                                                        VariantProperties.MODEL,
+                                                        blockModels.createSuffixedVariant(
+                                                                JolCraftBlocks.FESTERLING_CROP.get(),
+                                                                "_stage" + age,
+                                                                ModelTemplates.CROSS,
+                                                                TextureMapping::cross
+                                                        )
+                                                )
+                                        )
+                        )
+        );
+    }
+
 
     // Helper for the model property
     private static JsonObject modelObj(String modid, String path) {

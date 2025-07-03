@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "jolcraft:block/festerling_crop_stage0"
+  }
+}

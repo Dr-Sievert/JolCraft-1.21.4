@@ -8,6 +8,7 @@ import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Block;
@@ -24,10 +25,7 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCon
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.sievert.jolcraft.block.JolCraftBlocks;
-import net.sievert.jolcraft.block.custom.BarleyCropBlock;
-import net.sievert.jolcraft.block.custom.DeepslateBulbsCropBlock;
-import net.sievert.jolcraft.block.custom.HopsCropBottomBlock;
-import net.sievert.jolcraft.block.custom.HopsCropTopBlock;
+import net.sievert.jolcraft.block.custom.*;
 import net.sievert.jolcraft.item.JolCraftItems;
 
 import java.util.Set;
@@ -40,7 +38,34 @@ public class JolCraftBlockLootTableProvider extends BlockLootSubProvider {
     @Override
     protected void generate() {
 
+        dropSelf(JolCraftBlocks.DUSKCAP.get());
+        this.dropPottedContents(JolCraftBlocks.POTTED_DUSKCAP.get());
+
+        dropSelf(JolCraftBlocks.FESTERLING.get());
+        this.dropPottedContents(JolCraftBlocks.POTTED_FESTERLING.get());
+
+        this.add(JolCraftBlocks.FESTERLING_CROP.get(),
+                LootTable.lootTable()
+                        // Drop at age 0: Rotten Flesh
+                        .withPool(LootPool.lootPool()
+                                .when(LootItemBlockStatePropertyCondition
+                                        .hasBlockStateProperties(JolCraftBlocks.FESTERLING_CROP.get())
+                                        .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(FesterlingCropBlock.AGE, 0)))
+                                .setRolls(ConstantValue.exactly(1))
+                                .add(LootItem.lootTableItem(Items.ROTTEN_FLESH))
+                        )
+                        // Drop at age 3: Festerling
+                        .withPool(LootPool.lootPool()
+                                .when(LootItemBlockStatePropertyCondition
+                                        .hasBlockStateProperties(JolCraftBlocks.FESTERLING_CROP.get())
+                                        .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(FesterlingCropBlock.AGE, 3)))
+                                .setRolls(ConstantValue.exactly(1))
+                                .add(LootItem.lootTableItem(JolCraftBlocks.FESTERLING.get()))
+                        )
+        );
+
         dropSelf(JolCraftBlocks.BARLEY_BLOCK.get());
+
         dropSelf(JolCraftBlocks.MUFFHORN_FUR_BLOCK.get());
 
         this.add(JolCraftBlocks.BARLEY_CROP.get(),

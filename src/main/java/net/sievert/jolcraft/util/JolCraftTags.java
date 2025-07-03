@@ -60,14 +60,6 @@ public class JolCraftTags {
 
     }
 
-    public static class Fluids {
-        public static final TagKey<Fluid> FERMENTING_FLUID = tag("fermenting_fluid");
-
-        private static TagKey<Fluid> tag(String name) {
-            return TagKey.create(Registries.FLUID, ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, name));
-        }
-    }
-
     public interface Structures {
         public static final TagKey<Structure> ON_FORGE_EXPLORER_MAPS = create("on_forge_explorer_maps");
 

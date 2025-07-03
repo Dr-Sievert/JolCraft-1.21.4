@@ -13,7 +13,7 @@
   "item.jolcraft.deepslate_leggings": "Deepslate Leggings",
   "item.jolcraft.deepslate_boots": "Deepslate Boots",
 
-  "item.jolcraft.forge_armor_trim_smithing_template": "Forge Armor Trim Smithing Template",
+  "item.jolcraft.forge_armor_trim_smithing_template": "Forge Armor Trim",
   "trim_pattern.jolcraft.forge": "Forge Armor Trim",
   "trim_material.jolcraft.deepslate": "Deepslate",
 
@@ -57,12 +57,18 @@
   "block.jolcraft.yanillian_crop_top": "Yanillian Hops",
   "item.jolcraft.yanillian_hops": "Yanillian Hops",
   "block.jolcraft.fermenting_cauldron": "Fermenting Cauldron",
-  "block.jolcraft.fermenting_fluid": "Fermenting Fluid",
   "item.jolcraft.yeast": "Brewing Yeast",
   "item.jolcraft.glass_mug": "Glass Mug",
   "item.jolcraft.dwarven_brew": "Dwarven Brew",
   "item.jolcraft.deepslate_bulbs": "Deepslate Bulbs",
   "block.jolcraft.deepslate_bulbs_crop": "Deepslate Bulbs Crop",
+
+  "block.jolcraft.duskcap": "Duskcap",
+  "block.jolcraft.potted_duskcap": "Potted Duskcap",
+  "block.jolcraft.festerling_crop": "Cultivated Festerling",
+  "block.jolcraft.festerling": "Festerling",
+  "block.jolcraft.potted_festerling": "Potted Festerling",
+
 
   "item.jolcraft.muffhorn_milk_bucket": "Muffhorn Milk Bucket",
   "item.jolcraft.muffhorn_fur": "Muffhorn Fur",

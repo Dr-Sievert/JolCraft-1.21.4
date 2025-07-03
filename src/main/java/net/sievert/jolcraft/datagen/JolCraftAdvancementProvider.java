@@ -242,7 +242,7 @@ public class JolCraftAdvancementProvider implements AdvancementSubProvider {
         AdvancementHolder tradeguardAdv = Advancement.Builder.advancement()
                 .parent(rep1dummyAdv)
                 .display(
-                        Items.IRON_AXE,
+                        JolCraftItems.DEEPSLATE_AXE.get(),
                         Component.translatable("advancement.jolcraft.guard.trade.title"),
                         Component.translatable("advancement.jolcraft.guard.trade.description"),
                         null,

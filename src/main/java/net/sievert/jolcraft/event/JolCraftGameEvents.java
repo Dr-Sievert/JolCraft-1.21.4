@@ -1,9 +1,12 @@
 package net.sievert.jolcraft.event;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -20,6 +23,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LayeredCauldronBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.EntityInvulnerabilityCheckEvent;
@@ -55,11 +59,33 @@ public class JolCraftGameEvents {
         var level = event.getLevel();
         var pos = event.getPos();
         var state = level.getBlockState(pos);
+        var mainHandStack = player.getMainHandItem();
+
+        // === FESTERLING crop planting (rotten flesh on upright log) ===
+        if (mainHandStack.is(Items.ROTTEN_FLESH)) {
+            // Only allow clicking on top face of an upright log
+            if (event.getFace() == Direction.UP
+                    && state.is(BlockTags.LOGS)
+                    && state.hasProperty(BlockStateProperties.AXIS)
+                    && state.getValue(BlockStateProperties.AXIS) == Direction.Axis.Y) {
+
+                BlockPos above = pos.above();
+                if (level.getBlockState(above).isAir()) {
+                    level.setBlock(above, JolCraftBlocks.FESTERLING_CROP.get().defaultBlockState(), 3);
+                    level.playSound(null, above, SoundEvents.CROP_PLANTED, SoundSource.BLOCKS, 1.0F, 1.0F);
+
+                    if (!player.isCreative()) mainHandStack.shrink(1);
+
+                    event.setCancellationResult(InteractionResult.SUCCESS);
+                    event.setCanceled(true);
+                    return;
+                }
+            }
+        }
 
         if (!level.isClientSide()) {
             // Check that block is full water cauldron
             if (state.is(Blocks.WATER_CAULDRON) && state.getValue(LayeredCauldronBlock.LEVEL) == 3) {
-                var mainHandStack = player.getMainHandItem();
 
                 // === SUGAR logic for yeast creation ===
                 if (mainHandStack.is(Items.SUGAR)) {

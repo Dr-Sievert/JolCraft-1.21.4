@@ -1,4 +1,4 @@
-// 1.21.4	2025-07-02T11:34:58.066192	Advancements
+// 1.21.4	2025-07-03T13:47:19.04712	Advancements
 52465097e9e18d2b2bf0f4fe9f238ca724066c67 data/jolcraft/advancement/story/endorse_brewmaster.json
 18a4df34e306556f75e06e35c52093f35050e0f2 data/jolcraft/advancement/story/endorse_guard.json
 d7f5add90bdcad187cc8a733f817634f9fc0b3c5 data/jolcraft/advancement/story/endorse_historian.json
@@ -14,7 +14,7 @@ be575e7a8f9eee3564086a7a98ffc961c19a0198 data/jolcraft/advancement/story/rep_tru
 e8ca26b2e5f3c9f0cdacc7a2e7c85bdf09aec956 data/jolcraft/advancement/story/trade.json
 30424bd8a4a2de712429fc890a73915522d3e615 data/jolcraft/advancement/story/trade_brewmaster.json
 d4c6c6370e47785c33a074fc5b6cc36fab8c8daa data/jolcraft/advancement/story/trade_dummy.json
-80462b03ef62bacb0b8454479795732bed440ea6 data/jolcraft/advancement/story/trade_guard.json
+38db9c6ac8893f7bb5e9de7c1dcecb702003a627 data/jolcraft/advancement/story/trade_guard.json
 32463ab90ea49b3c224f3a761baaa11d843fe40a data/jolcraft/advancement/story/trade_historian.json
 e93a1b3bbc335ce96810634902f64a8dfba21091 data/jolcraft/advancement/story/trade_keeper.json
 1d4d0652e4a48d80e9b3dcb139ad995df05f6258 data/jolcraft/advancement/story/trade_merchant.json

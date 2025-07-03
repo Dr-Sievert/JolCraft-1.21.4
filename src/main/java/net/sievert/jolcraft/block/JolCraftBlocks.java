@@ -20,6 +20,58 @@ public class JolCraftBlocks {
     public static final DeferredRegister.Blocks BLOCKS =
             DeferredRegister.createBlocks(JolCraft.MOD_ID);
 
+    public static final DeferredBlock<DuskcapBlock> DUSKCAP = registerBlock(
+            "duskcap",
+            (properties) -> new DuskcapBlock(
+                    properties
+                            .mapColor(MapColor.COLOR_MAGENTA)
+                            .noCollission()
+                            .randomTicks()
+                            .instabreak()
+                            .sound(SoundType.GRASS)
+                            .lightLevel(state -> 4)
+                            .pushReaction(PushReaction.DESTROY)
+            ),
+            BlockBehaviour.Properties.of()
+    );
+
+    public static final DeferredBlock<FlowerPotBlock> POTTED_DUSKCAP = registerBlock(
+            "potted_duskcap",
+            (properties) -> new FlowerPotBlock(DUSKCAP.get(), properties),
+            flowerPotProperties()
+    );
+
+    public static final DeferredBlock<Block> FESTERLING_CROP = BLOCKS.registerBlock("festerling_crop",
+            (properties) -> new FesterlingCropBlock(properties
+                    .mapColor(MapColor.TERRACOTTA_LIGHT_GREEN)
+                    .noCollission()
+                    .randomTicks()
+                    .instabreak()
+                    .sound(SoundType.GRASS)
+                    .pushReaction(PushReaction.DESTROY)
+            )
+    );
+
+    public static final DeferredBlock<FesterlingBlock> FESTERLING = registerBlock(
+            "festerling",
+            (properties) -> new FesterlingBlock(
+                    properties
+                            .mapColor(MapColor.TERRACOTTA_LIGHT_GREEN)
+                            .noCollission()
+                            .randomTicks()
+                            .instabreak()
+                            .sound(SoundType.GRASS)
+                            .pushReaction(PushReaction.DESTROY)
+            ),
+            BlockBehaviour.Properties.of()
+    );
+
+    public static final DeferredBlock<FlowerPotBlock> POTTED_FESTERLING = registerBlock(
+            "potted_festerling",
+            (properties) -> new FlowerPotBlock(FESTERLING.get(), properties),
+            flowerPotProperties()
+    );
+
     public static final DeferredBlock<HayBlock> BARLEY_BLOCK = registerBlock("barley_block",
             (properties) -> new HayBlock(properties
                     .mapColor(MapColor.COLOR_YELLOW)
@@ -203,6 +255,10 @@ public class JolCraftBlocks {
     // Registers a BlockItem for an existing block
     private static <B extends Block> void registerBlockItem(String name, DeferredBlock<B> block) {
         JolCraftItems.ITEMS.registerItem(name, props -> new BlockItem(block.get(), props.useBlockDescriptionPrefix()));
+    }
+
+    private static BlockBehaviour.Properties flowerPotProperties() {
+        return BlockBehaviour.Properties.of().instabreak().noOcclusion().pushReaction(PushReaction.DESTROY);
     }
 
     public static void register(IEventBus eventBus) {

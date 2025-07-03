@@ -12,11 +12,17 @@
     "jolcraft:barley_seeds": {
       "chance": 0.25
     },
+    "jolcraft:duskcap": {
+      "chance": 0.65
+    },
     "jolcraft:duskhold_hops": {
       "chance": 0.45
     },
     "jolcraft:duskhold_seeds": {
       "chance": 0.25
+    },
+    "jolcraft:festerling": {
+      "chance": 0.65
     },
     "jolcraft:krandonian_hops": {
       "chance": 0.45

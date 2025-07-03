@@ -14,7 +14,7 @@
     },
     "icon": {
       "count": 1,
-      "id": "minecraft:iron_axe"
+      "id": "jolcraft:deepslate_axe"
     },
     "title": {
       "translate": "advancement.jolcraft.guard.trade.title"
