@@ -19,6 +19,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Blocks;
 import net.sievert.jolcraft.JolCraft;
+import net.sievert.jolcraft.block.JolCraftBlocks;
 import net.sievert.jolcraft.entity.ai.goal.*;
 import net.sievert.jolcraft.item.JolCraftItems;
 import net.sievert.jolcraft.villager.JolCraftDwarfTrades;
@@ -114,7 +115,7 @@ public class DwarfBrewmasterEntity extends AbstractDwarfEntity {
                     //Novice
                     1,
                     new VillagerTrades.ItemListing[]{
-                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.GLASS_MUG.get(), 3, 5, 500, 1),
+                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.GLASS_MUG.get(), 3, 5, 2, 1),
                             new JolCraftDwarfTrades.ItemsForGold(Items.SUGAR, 1, 2, 10, 1)
 
                     },
@@ -122,34 +123,32 @@ public class DwarfBrewmasterEntity extends AbstractDwarfEntity {
                     //Apprentice
                     2,
                     new VillagerTrades.ItemListing[]{
-                            new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.YEAST.get(), 3, 1, 5, 10),
-                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.BARLEY_MALT.get(), 1, 5, 10, 1)
+                            new JolCraftDwarfTrades.ItemsForGold(Items.CAULDRON, 10, 1, 3, 20),
+                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.BARLEY_MALT.get(), 10, 10, 10, 1)
 
                     },
 
                     //Journeyman
                     3,
                     new VillagerTrades.ItemListing[]{
-                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.ASGARNIAN_HOPS.get(), 2, 10, 4, 1),
-                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.ASGARNIAN_HOPS.get(), 2, 10, 4, 1),
-                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.ASGARNIAN_HOPS.get(), 2, 10, 4, 1),
-                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.ASGARNIAN_HOPS.get(), 2, 10, 4, 1)
-
+                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.ASGARNIAN_HOPS.get(), 2, 10, 15, 1),
+                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.DUSKHOLD_HOPS.get(), 2, 10, 15, 1),
+                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.KRANDONIAN_HOPS.get(), 2, 10, 15, 1),
+                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.YANILLIAN_HOPS.get(), 2, 10, 15, 1)
                     },
 
                     //Expert
                     4,
                     new VillagerTrades.ItemListing[]{
-                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.DWARVEN_BREW.get(), 1, 3, 10, 1),
-                            new JolCraftDwarfTrades.ItemsForGold(Items.CAULDRON, 10, 1, 3, 10)
-
+                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.DWARVEN_BREW.get(), 1, 5, 50, 3),
+                            new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.YEAST.get(), 5, 1, 5, 50),
                     },
 
                     //Master
                     5,
                     new VillagerTrades.ItemListing[]{
-                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.EMBERGLASS.get(), 1, 1, 5, 10),
-                            new JolCraftDwarfTrades.ItemsForGold(Items.DIAMOND, 1, 1, 5, 10)
+                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.EMBERGLASS.get(), 1, 1, 0, 30),
+                            new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.EMBERGLASS, 1, 30, JolCraftBlocks.HEARTH.get(), 1, 1, 0, 0.05F),
                     }
             )
     );

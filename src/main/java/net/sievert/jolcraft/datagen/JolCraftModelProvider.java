@@ -12,6 +12,7 @@ import net.minecraft.client.data.models.model.*;
 import net.minecraft.client.renderer.item.ItemModel;
 import net.minecraft.client.renderer.item.SelectItemModel;
 import net.minecraft.client.renderer.item.properties.select.TrimMaterialProperty;
+import net.minecraft.core.Direction;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -22,6 +23,8 @@ import net.minecraft.world.item.equipment.trim.TrimMaterial;
 import net.minecraft.world.item.equipment.trim.TrimMaterials;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.block.JolCraftBlocks;
@@ -34,10 +37,7 @@ import net.sievert.jolcraft.item.JolCraftItems;
 import net.sievert.jolcraft.item.JolCraftTrimMaterials;
 import net.minecraft.core.registries.BuiltInRegistries;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class JolCraftModelProvider extends ModelProvider {
 
@@ -56,6 +56,7 @@ public class JolCraftModelProvider extends ModelProvider {
         itemModels.generateFlatItem(JolCraftItems.DWARVEN_LEXICON.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(JolCraftItems.PARCHMENT.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(JolCraftItems.DEEPSLATE_PLATE.get(), ModelTemplates.FLAT_ITEM);
+        createHearth(JolCraftBlocks.HEARTH.get(), blockModels);
 
         //Weapons and Tools
         itemModels.generateFlatItem(JolCraftItems.DEEPSLATE_SWORD.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
@@ -106,7 +107,11 @@ public class JolCraftModelProvider extends ModelProvider {
         itemModels.generateFlatItem(JolCraftItems.GLASS_MUG.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(JolCraftItems.DWARVEN_BREW.get(), ModelTemplates.FLAT_ITEM);
 
-        //Other Crops
+        //Crops
+        itemModels.generateFlatItem(JolCraftItems.VERDANT_DUST.get(), ModelTemplates.FLAT_ITEM);
+        blockModels.createTrivialCube(JolCraftBlocks.VERDANT_SOIL.get());
+        createVerdantFarmland(blockModels);
+
         itemModels.generateFlatItem(JolCraftItems.DEEPSLATE_BULBS.get(), ModelTemplates.FLAT_ITEM);
 
         //Bounty
@@ -625,6 +630,106 @@ public class JolCraftModelProvider extends ModelProvider {
         );
     }
 
+    public void createVerdantFarmland(BlockModelGenerators blockModels) {
+        TextureMapping mapping = new TextureMapping()
+                .put(TextureSlot.DIRT, TextureMapping.getBlockTexture(JolCraftBlocks.VERDANT_SOIL.get()))
+                .put(TextureSlot.TOP, TextureMapping.getBlockTexture(JolCraftBlocks.VERDANT_FARMLAND.get()));
+
+        ResourceLocation model = ModelTemplates.FARMLAND.create(
+                JolCraftBlocks.VERDANT_FARMLAND.get(),
+                mapping,
+                blockModels.modelOutput
+        );
+
+        // Both "moist" and "dry" models are the same (you only have one hydrated model)
+        blockModels.blockStateOutput.accept(
+                MultiVariantGenerator.multiVariant(JolCraftBlocks.VERDANT_FARMLAND.get())
+                        .with(blockModels.createEmptyOrFullDispatch(BlockStateProperties.MOISTURE, 7, model, model))
+        );
+    }
+
+    private static VariantProperties.Rotation rotFromDegrees(int degrees) {
+        return switch (degrees) {
+            case 0 -> VariantProperties.Rotation.R0;
+            case 90 -> VariantProperties.Rotation.R90;
+            case 180 -> VariantProperties.Rotation.R180;
+            case 270 -> VariantProperties.Rotation.R270;
+            default -> VariantProperties.Rotation.R0;
+        };
+    }
+
+    private static int vanillaFacingY(Direction facing) {
+        // Map direction to correct vanilla blockstate y-rotation
+        // (so north = 0, east = 90, south = 180, west = 270)
+        return switch (facing) {
+            case NORTH -> 0;
+            case EAST  -> 90;
+            case SOUTH -> 180;
+            case WEST  -> 270;
+            default    -> 0;
+        };
+    }
+
+    public void createHearth(Block hearthBlock, BlockModelGenerators blockModels) {
+        // Model generation
+        TextureMapping baseMapping = new TextureMapping()
+                .put(TextureSlot.SIDE, TextureMapping.getBlockTexture(hearthBlock, "_side"))
+                .put(TextureSlot.TOP, TextureMapping.getBlockTexture(hearthBlock, "_top"))
+                .put(TextureSlot.FRONT, TextureMapping.getBlockTexture(hearthBlock, "_front"))
+                .put(TextureSlot.BOTTOM, TextureMapping.getBlockTexture(hearthBlock, "_top")) // <-- matches vanilla furnace
+                .put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(hearthBlock, "_front")); // or "_side"
+
+        ResourceLocation hearthModel = ModelTemplates.CUBE_ORIENTABLE_TOP_BOTTOM.create(
+                hearthBlock,
+                baseMapping,
+                blockModels.modelOutput
+        );
+
+        TextureMapping litMapping = new TextureMapping()
+                .put(TextureSlot.SIDE, TextureMapping.getBlockTexture(hearthBlock, "_side"))
+                .put(TextureSlot.TOP, TextureMapping.getBlockTexture(hearthBlock, "_top"))
+                .put(TextureSlot.FRONT, TextureMapping.getBlockTexture(hearthBlock, "_front_on"))
+                .put(TextureSlot.BOTTOM, TextureMapping.getBlockTexture(hearthBlock, "_top")) // <-- matches vanilla furnace
+                .put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(hearthBlock, "_front_on")); // or "_side"
+
+        ResourceLocation hearthOnModel = ModelTemplates.CUBE_ORIENTABLE_TOP_BOTTOM.createWithSuffix(
+                hearthBlock,
+                "_on",
+                litMapping,
+                blockModels.modelOutput
+        );
+
+        // Chimney model is assumed to be hand-written
+        ResourceLocation chimney = ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "block/hearth_chimney");
+
+        blockModels.blockStateOutput.accept(
+                MultiVariantGenerator.multiVariant(hearthBlock)
+                        .with(
+                                PropertyDispatch
+                                        .properties(
+                                                BlockStateProperties.DOUBLE_BLOCK_HALF,
+                                                BlockStateProperties.LIT,
+                                                BlockStateProperties.HORIZONTAL_FACING
+                                        )
+                                        .generate((half, lit, facing) -> {
+                                            VariantProperties.Rotation xRot = VariantProperties.Rotation.R0;
+                                            VariantProperties.Rotation yRot = rotFromDegrees(vanillaFacingY(facing));
+
+                                            if (half == DoubleBlockHalf.LOWER) {
+                                                return Variant.variant()
+                                                        .with(VariantProperties.MODEL, lit ? hearthOnModel : hearthModel)
+                                                        .with(VariantProperties.X_ROT, xRot)
+                                                        .with(VariantProperties.Y_ROT, yRot);
+                                            } else {
+                                                return Variant.variant()
+                                                        .with(VariantProperties.MODEL, chimney)
+                                                        .with(VariantProperties.X_ROT, xRot)
+                                                        .with(VariantProperties.Y_ROT, yRot);
+                                            }
+                                        })
+                        )
+        );
+    }
 
     // Helper for the model property
     private static JsonObject modelObj(String modid, String path) {
@@ -632,6 +737,5 @@ public class JolCraftModelProvider extends ModelProvider {
         obj.addProperty("model", modid + ":" + path);
         return obj;
     }
-
 
 }

@@ -11,6 +11,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.block.Blocks;
 import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.block.JolCraftBlocks;
 import net.sievert.jolcraft.util.JolCraftTags;
@@ -113,6 +114,15 @@ public class JolCraftRecipeProvider extends RecipeProvider {
                 RecipeCategory.MISC,
                 JolCraftBlocks.BARLEY_BLOCK.get() //Block
         );
+
+        shapeless(RecipeCategory.MISC, JolCraftItems.VERDANT_DUST.get())
+                .requires(JolCraftItems.VERDANITE.get())
+                .unlockedBy("has_verdanite", has(JolCraftItems.VERDANITE.get())).save(output);
+
+        shapeless(RecipeCategory.MISC, JolCraftBlocks.VERDANT_SOIL.get(), 1)
+                .requires(Blocks.MUD)
+                .requires(JolCraftItems.VERDANT_DUST.get())
+                .unlockedBy("has_verdant_dust", has(JolCraftItems.VERDANT_DUST.get())).save(output);
 
         // Barley -> Barley Malt (Smelting)
         SimpleCookingRecipeBuilder.smelting(

@@ -119,8 +119,8 @@ public class JolCraftDwarfTrades extends VillagerTrades {
         private final float priceMultiplier;
         private final Optional<ResourceKey<EnchantmentProvider>> enchantmentProvider;
 
-        public ItemsAndGoldToItems(ItemLike fromItem, int fromItemCount, int goldCost, Item toItem, int toItemCount, int maxUses, int villagerXp, float priceMultiplier) {
-            this(fromItem, fromItemCount, goldCost, new ItemStack(toItem), toItemCount, maxUses, villagerXp, priceMultiplier);
+        public ItemsAndGoldToItems(ItemLike fromItem, int fromItemCount, int goldCost, ItemLike toItem, int toItemCount, int maxUses, int villagerXp, float priceMultiplier) {
+            this(new ItemCost(fromItem, fromItemCount), goldCost, new ItemStack(toItem, toItemCount), maxUses, villagerXp, priceMultiplier, Optional.empty());
         }
 
         public ItemsAndGoldToItems(

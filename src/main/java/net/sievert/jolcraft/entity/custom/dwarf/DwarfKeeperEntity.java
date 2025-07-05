@@ -115,37 +115,40 @@ public class DwarfKeeperEntity extends AbstractDwarfEntity {
                     1,
                     new VillagerTrades.ItemListing[]{
                             new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.BARLEY_SEEDS.get(), 1, 1, 10, 1),
-                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.MUFFHORN_FUR.get(), 1, 5, 1, 2)
+                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.MUFFHORN_FUR.get(), 1, 5, 1, 2),
+                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.MUFFHORN_MILK_BUCKET.get(), 1, 3, 20, 3),
                     },
 
                     //Apprentice
                     2,
                     new VillagerTrades.ItemListing[]{
-                            new JolCraftDwarfTrades.ItemsAndGoldToItems(Items.DEEPSLATE, 4, 5, JolCraftItems.DEEPSLATE_BULBS.get(), 1, 3, 20, 0.05F),
-                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.MUFFHORN_MILK_BUCKET.get(), 1, 3, 20, 3),
+                            new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.ASGARNIAN_SEEDS.get(), 5, 1, 3, 15),
+                            new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.DUSKHOLD_SEEDS.get(), 5, 1, 3, 15),
+                            new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.KRANDONIAN_SEEDS.get(), 5, 1, 3, 15),
+                            new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.YANILLIAN_SEEDS.get(), 5, 1, 3, 15)
                     },
 
                     //Journeyman
                     3,
                     new VillagerTrades.ItemListing[]{
-                            new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.CONTRACT_BLANK.get(), 3, 1, 10, 1),
-                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.QUILL_EMPTY.get(), 2, 10, 4, 1)
+                            new JolCraftDwarfTrades.ItemsForGold(Items.BONE_MEAL, 3, 5, 5, 10),
+                            new JolCraftDwarfTrades.ItemsAndGoldToItems(Items.DEEPSLATE, 4, 5, JolCraftItems.DEEPSLATE_BULBS.get(), 1, 3, 50, 0.05F)
                     },
 
                     //Expert
                     4,
                     new VillagerTrades.ItemListing[]{
-                            new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.ASGARNIAN_SEEDS.get(), 5, 1, 3, 0),
-                            new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.DUSKHOLD_SEEDS.get(), 5, 1, 3, 0),
-                            new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.KRANDONIAN_SEEDS.get(), 5, 1, 3, 0),
-                            new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.YANILLIAN_SEEDS.get(), 5, 1, 3, 0),
+                            new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.ASGARNIAN_SEEDS.get(), 5, 1, 3, 50),
+                            new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.DUSKHOLD_SEEDS.get(), 5, 1, 3, 50),
+                            new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.KRANDONIAN_SEEDS.get(), 5, 1, 3, 50),
+                            new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.YANILLIAN_SEEDS.get(), 5, 1, 3, 50),
                     },
 
                     //Master
                     5,
                     new VillagerTrades.ItemListing[]{
                             new JolCraftDwarfTrades.GoldForItems(JolCraftItems.VERDANITE.get(), 30, 1, 0, 1),
-                            new JolCraftDwarfTrades.ItemsForGold(Items.EMERALD, 1, 1, 1, 0)
+                            new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.VERDANITE, 1, 5, JolCraftItems.VERDANT_DUST.get(), 3, 3, 0, 0.05F),
                     }
             )
     );

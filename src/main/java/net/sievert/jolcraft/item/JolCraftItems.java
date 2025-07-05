@@ -73,6 +73,9 @@ public class JolCraftItems {
     public static final DeferredItem<Item> INVERIX = ITEMS.registerItem("inverix",
             Item::new, new Item.Properties());
 
+    public static final DeferredItem<Item> VERDANT_DUST = ITEMS.registerItem("verdant_dust",
+            Item::new, new Item.Properties());
+
     //Bounty
     public static final DeferredItem<Item> PARCHMENT = ITEMS.registerSimpleItem("parchment");
 

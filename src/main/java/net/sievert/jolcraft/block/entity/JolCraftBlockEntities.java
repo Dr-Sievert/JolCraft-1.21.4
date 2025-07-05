@@ -1,5 +1,6 @@
 package net.sievert.jolcraft.block.entity;
 
+import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
@@ -10,7 +11,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.sievert.jolcraft.JolCraft;
-import net.sievert.jolcraft.block.JolCraftBlocks; // Assuming this contains FERMENTING_CAULDRON
+import net.sievert.jolcraft.block.JolCraftBlocks;
+
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Supplier;
 
 public class JolCraftBlockEntities {
@@ -19,17 +23,32 @@ public class JolCraftBlockEntities {
 
     public static final Supplier<BlockEntityType<FermentingCauldronBlockEntity>> FERMENTING_CAULDRON =
             BLOCK_ENTITIES.register("fermenting_cauldron", () ->
-                    new BlockEntityType<>(FermentingCauldronBlockEntity::new, JolCraftBlocks.FERMENTING_CAULDRON.get())
-            );
+                    new BlockEntityType<>(FermentingCauldronBlockEntity::new, Set.of(JolCraftBlocks.FERMENTING_CAULDRON.get())));
 
-    // Add this method for ticking block entities
+    public static final Supplier<BlockEntityType<HearthBlockEntity>> HEARTH =
+            BLOCK_ENTITIES.register("hearth", () ->
+                    new BlockEntityType<>(HearthBlockEntity::new, Set.of(JolCraftBlocks.HEARTH.get())));
+
+    private static final Map<Supplier<? extends BlockEntityType<?>>, BlockEntityTicker<?>> TICKERS = ImmutableMap.<Supplier<? extends BlockEntityType<?>>, BlockEntityTicker<?>>builder()
+            .put(FERMENTING_CAULDRON, (level, pos, state, blockEntity) -> {
+                if (level instanceof ServerLevel && blockEntity instanceof FermentingCauldronBlockEntity fermentingCauldron) {
+                    fermentingCauldron.tick();
+                }
+            })
+            .put(HEARTH, (level, pos, state, blockEntity) -> {
+                if (level instanceof ServerLevel && blockEntity instanceof HearthBlockEntity hearth) {
+                    hearth.tick();
+                }
+            })
+            .build();
+
+    @SuppressWarnings("unchecked")
     public static <T extends BlockEntity> BlockEntityTicker<T> createTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        if (type == FERMENTING_CAULDRON.get()) {
-            if (level instanceof ServerLevel) {  // Explicitly check for ServerLevel
-                return (lvl, pos, st, be) -> {
-                    // Cast safely as we're already in ServerLevel
-                    ((FermentingCauldronBlockEntity) be).tick();
-                };
+        if (!(level instanceof ServerLevel)) return null;
+
+        for (var entry : TICKERS.entrySet()) {
+            if (entry.getKey().get() == type) {
+                return (BlockEntityTicker<T>) entry.getValue();
             }
         }
         return null;
@@ -39,3 +58,4 @@ public class JolCraftBlockEntities {
         BLOCK_ENTITIES.register(eventBus);
     }
 }
+

@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "jolcraft:verdant_dust"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_verdanite": {
+      "conditions": {
+        "items": [
+          {
+            "items": "jolcraft:verdanite"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_verdanite"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "jolcraft:verdant_dust"
+    ]
+  }
+}

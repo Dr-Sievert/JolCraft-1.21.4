@@ -1,10 +1,14 @@
 package net.sievert.jolcraft.block;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.cauldron.CauldronInteraction;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.*;
 import net.neoforged.bus.api.IEventBus;
@@ -15,10 +19,43 @@ import net.sievert.jolcraft.block.custom.*;
 import net.sievert.jolcraft.item.JolCraftItems;
 
 import java.util.function.Function;
+import java.util.function.ToIntFunction;
 
 public class JolCraftBlocks {
     public static final DeferredRegister.Blocks BLOCKS =
             DeferredRegister.createBlocks(JolCraft.MOD_ID);
+
+    public static final DeferredBlock<Block> HEARTH = registerBlock("hearth",
+            (properties) -> new HearthBlock(properties
+                    .mapColor(MapColor.DEEPSLATE)
+                    .strength(4.5F, 3.0F)
+                    .requiresCorrectToolForDrops()
+                    .sound(SoundType.DEEPSLATE_TILES)
+                    .lightLevel(litBlockEmission(13))
+            ),
+            BlockBehaviour.Properties.of()
+    );
+
+    public static final DeferredBlock<Block> VERDANT_SOIL = registerBlock("verdant_soil",
+            (properties) -> new VerdantSoilBlock(properties
+                    .mapColor(MapColor.COLOR_LIGHT_GREEN)
+                    .strength(0.5F)
+                    .sound(SoundType.MUD)
+            ),
+            BlockBehaviour.Properties.of()
+    );
+
+    public static final DeferredBlock<Block> VERDANT_FARMLAND = registerBlock("verdant_farmland",
+            (properties) -> new VerdantFarmBlock(properties
+                    .mapColor(MapColor.COLOR_LIGHT_GREEN)
+                    .randomTicks()
+                    .strength(0.6F)
+                    .sound(SoundType.MUD)
+                    .isViewBlocking(JolCraftBlocks::always)
+                    .isSuffocating(JolCraftBlocks::always)
+            ),
+            BlockBehaviour.Properties.of()
+    );
 
     public static final DeferredBlock<DuskcapBlock> DUSKCAP = registerBlock(
             "duskcap",
@@ -259,6 +296,14 @@ public class JolCraftBlocks {
 
     private static BlockBehaviour.Properties flowerPotProperties() {
         return BlockBehaviour.Properties.of().instabreak().noOcclusion().pushReaction(PushReaction.DESTROY);
+    }
+
+    private static boolean always(BlockState state, BlockGetter blockGetter, BlockPos pos) {
+        return true;
+    }
+
+    private static ToIntFunction<BlockState> litBlockEmission(int lightValue) {
+        return p_50763_ -> p_50763_.getValue(BlockStateProperties.LIT) ? lightValue : 0;
     }
 
     public static void register(IEventBus eventBus) {

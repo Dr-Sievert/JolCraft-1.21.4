@@ -13,6 +13,7 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -37,6 +38,13 @@ public class JolCraftBlockLootTableProvider extends BlockLootSubProvider {
 
     @Override
     protected void generate() {
+
+        this.add(JolCraftBlocks.HEARTH.get(), block ->
+                this.createSinglePropConditionTable(block, HearthBlock.HALF, DoubleBlockHalf.LOWER)
+        );
+
+        dropSelf(JolCraftBlocks.VERDANT_SOIL.get());
+        dropOther(JolCraftBlocks.VERDANT_FARMLAND.get(), JolCraftBlocks.VERDANT_SOIL.get());
 
         dropSelf(JolCraftBlocks.DUSKCAP.get());
         this.dropPottedContents(JolCraftBlocks.POTTED_DUSKCAP.get());

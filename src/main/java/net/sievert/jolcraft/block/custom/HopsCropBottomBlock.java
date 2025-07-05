@@ -18,6 +18,7 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.common.util.TriState;
+import net.sievert.jolcraft.block.JolCraftBlocks;
 import net.sievert.jolcraft.util.JolCraftTags;
 
 import javax.annotation.Nullable;
@@ -91,23 +92,36 @@ public class HopsCropBottomBlock extends CropBlock {
             return;
         }
 
-        if (!hasSufficientDarkness(level, pos)) return;
+        BlockState soil = level.getBlockState(pos.below());
 
         // Growth logic (only if not max age and not blocked above)
         if (age < MAX_AGE) {
             if (aboveState.isAir() || aboveState.is(JolCraftTags.Blocks.HOPS_TOP)) {
-                float growthSpeed = getGrowthSpeed(state, level, pos);
-                if (random.nextInt((int) (25.0F / growthSpeed) + 1) == 0) {
-                    int newAge = age + 1;
-                    BlockState newState = this.getStateForAge(newAge);
-                    level.setBlock(pos, newState, 2);
-                    age = newAge; // update age so sync is correct
+                // If on Verdant Farmland: ignore darkness check, always allow growth
+                boolean canGrow = soil.is(JolCraftBlocks.VERDANT_FARMLAND.get()) || hasSufficientDarkness(level, pos);
+                if (canGrow) {
+                    float growthSpeed = getGrowthSpeed(state, level, pos);
+                    if (random.nextInt((int) (25.0F / growthSpeed) + 1) == 0) {
+                        int newAge = age + 1;
+                        BlockState newState = this.getStateForAge(newAge);
+                        level.setBlock(pos, newState, 2);
+                        age = newAge; // update age so sync is correct
+                    }
                 }
             }
         }
         syncTopBlock(level, pos, age);
-
     }
+
+    protected static float getGrowthSpeed(BlockState blockState, BlockGetter level, BlockPos pos) {
+        float base = CropBlock.getGrowthSpeed(blockState, level, pos);
+        BlockState soil = level.getBlockState(pos.below());
+        if (soil.is(JolCraftBlocks.VERDANT_SOIL.get())) {
+            return base * 1.5F; // 20% faster
+        }
+        return base;
+    }
+
 
     @Override
     public void growCrops(Level level, BlockPos pos, BlockState state) {
@@ -137,22 +151,28 @@ public class HopsCropBottomBlock extends CropBlock {
     @Override
     public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
         BlockState soil = level.getBlockState(pos.below());
-        boolean soilOk = false;
+
+        // If on Verdant Farmland, always survive (ignore light and darkness)
+        if (soil.is(JolCraftBlocks.VERDANT_FARMLAND.get())) {
+            return true;
+        }
+
         // NeoForge/vanilla's TriState for plant support
         TriState soilDecision = soil.canSustainPlant(level, pos.below(), Direction.UP, state);
+        boolean soilOk;
         if (!soilDecision.isDefault()) {
             soilOk = soilDecision.isTrue();
-        } else if (soil.getBlock() instanceof FarmBlock) {
-            soilOk = true;
+        } else {
+            soilOk = soil.getBlock() instanceof FarmBlock;
         }
 
         boolean darkOk = hasSufficientDarkness(level, pos);
 
-        // Registry name for debug (avoids NPE, but should always be present)
-        ResourceLocation soilName = BuiltInRegistries.BLOCK.getKey(soil.getBlock());
 
+        // Must have both good soil and darkness if not on Verdant Farmland
         return soilOk && darkOk;
     }
+
 
     @Override
     protected boolean mayPlaceOn(BlockState state, BlockGetter level, BlockPos pos) {

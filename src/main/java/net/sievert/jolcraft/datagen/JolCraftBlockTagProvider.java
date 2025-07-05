@@ -21,12 +21,19 @@ public class JolCraftBlockTagProvider extends BlockTagsProvider {
 
         tag(BlockTags.MINEABLE_WITH_PICKAXE)
                 .add(JolCraftBlocks.DEEPSLATE_BULBS_CROP.get())
+                .add(JolCraftBlocks.HEARTH.get())
                 .add(JolCraftBlocks.FERMENTING_CAULDRON.get());
 
         tag(BlockTags.MINEABLE_WITH_HOE)
                 .add(JolCraftBlocks.BARLEY_BLOCK.get());
 
+
+        tag(BlockTags.MUSHROOM_GROW_BLOCK)
+                .add(JolCraftBlocks.VERDANT_SOIL.get());
+
+
         tag(JolCraftTags.Blocks.DEEPSLATE_BULBS_PLANTABLE)
+                .add(JolCraftBlocks.VERDANT_SOIL.get())
                 .add(Blocks.DEEPSLATE)
                 .add(Blocks.POLISHED_DEEPSLATE);
 

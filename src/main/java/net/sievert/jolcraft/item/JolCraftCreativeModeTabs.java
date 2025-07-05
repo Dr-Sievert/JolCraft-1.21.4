@@ -23,11 +23,15 @@ public class JolCraftCreativeModeTabs {
                     .displayItems((pParameters, pOutput) -> {
                         pOutput.accept(JolCraftItems.DWARVEN_LEXICON);
                         pOutput.accept(JolCraftItems.GOLD_COIN);
+                        pOutput.accept(JolCraftBlocks.HEARTH);
 
                         pOutput.accept(JolCraftItems.MUFFHORN_MILK_BUCKET);
                         pOutput.accept(JolCraftItems.MUFFHORN_FUR);
                         pOutput.accept(JolCraftBlocks.MUFFHORN_FUR_BLOCK);
 
+                        pOutput.accept(JolCraftBlocks.VERDANT_SOIL);
+                        pOutput.accept(JolCraftBlocks.VERDANT_FARMLAND);
+                        pOutput.accept(JolCraftItems.BARLEY_SEEDS);
                         pOutput.accept(JolCraftItems.BARLEY_SEEDS);
                         pOutput.accept(JolCraftItems.BARLEY);
                         pOutput.accept(JolCraftBlocks.BARLEY_BLOCK);
@@ -45,6 +49,7 @@ public class JolCraftCreativeModeTabs {
                         pOutput.accept(JolCraftItems.DWARVEN_BREW);
 
                         pOutput.accept(JolCraftItems.INVERIX);
+                        pOutput.accept(JolCraftItems.VERDANT_DUST);
 
                         pOutput.accept(JolCraftBlocks.DUSKCAP);
                         pOutput.accept(JolCraftBlocks.FESTERLING);

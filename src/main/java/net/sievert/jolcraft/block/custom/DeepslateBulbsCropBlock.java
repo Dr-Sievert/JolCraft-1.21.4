@@ -3,8 +3,8 @@ package net.sievert.jolcraft.block.custom;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.monster.Ravager;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
@@ -17,6 +17,7 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.common.util.TriState;
+import net.sievert.jolcraft.block.JolCraftBlocks;
 import net.sievert.jolcraft.item.JolCraftItems;
 import net.sievert.jolcraft.util.JolCraftTags;
 
@@ -79,6 +80,11 @@ public class DeepslateBulbsCropBlock extends CropBlock {
     public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
         BlockState below = level.getBlockState(pos.below());
 
+        // If on Verdant Farmland, always survive (ignore Y and light)
+        if (below.is(JolCraftBlocks.VERDANT_SOIL.get())) {
+            return true;
+        }
+
         // Hard Y-level gate: must be below surface
         if (pos.getY() > 32) return false;
 
@@ -89,10 +95,10 @@ public class DeepslateBulbsCropBlock extends CropBlock {
 
         boolean darkOk = hasSufficientDarkness(level, pos);
 
-
         // Restrict to tagged deepslate surfaces
         return below.is(JolCraftTags.Blocks.DEEPSLATE_BULBS_PLANTABLE) && darkOk;
     }
+
 
     @Override
     protected void entityInside(BlockState state, Level level, BlockPos pos, net.minecraft.world.entity.Entity entity) {
@@ -113,8 +119,11 @@ public class DeepslateBulbsCropBlock extends CropBlock {
             return;
         }
 
-        // Custom gate: only grow if it's dark enough
-        if (!hasSufficientDarkness(level, pos)) return;
+        BlockState below = level.getBlockState(pos.below());
+        boolean onVerdant = below.is(JolCraftBlocks.VERDANT_SOIL.get());
+
+        // PATCH: Only require darkness if NOT on Verdant Farmland
+        if (!onVerdant && !hasSufficientDarkness(level, pos)) return;
 
         int age = this.getAge(state);
         if (age >= this.getMaxAge()) return;
@@ -127,6 +136,31 @@ public class DeepslateBulbsCropBlock extends CropBlock {
         }
     }
 
+    protected static float getGrowthSpeed(BlockState blockState, BlockGetter level, BlockPos pos) {
+        float base = CropBlock.getGrowthSpeed(blockState, level, pos);
+        BlockState soil = level.getBlockState(pos.below());
+        if (soil.is(JolCraftBlocks.VERDANT_SOIL.get())) {
+            return base * 1.5F; // 20% faster
+        }
+        return base;
+    }
+
+
+    // ---- Bonemeal Support ----
+    @Override
+    public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state) {
+        return false;
+    }
+
+    @Override
+    public boolean isBonemealSuccess(Level level, RandomSource random, BlockPos pos, BlockState state) {
+        return false;
+    }
+
+    @Override
+    public void performBonemeal(ServerLevel level, RandomSource random, BlockPos pos, BlockState state) {
+
+    }
 
 
 }

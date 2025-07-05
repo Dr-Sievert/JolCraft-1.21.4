@@ -61,25 +61,29 @@ public class JolCraftGameEvents {
         var state = level.getBlockState(pos);
         var mainHandStack = player.getMainHandItem();
 
-        // === FESTERLING crop planting (rotten flesh on upright log) ===
+        // Only allow clicking on the top face
         if (mainHandStack.is(Items.ROTTEN_FLESH)) {
-            // Only allow clicking on top face of an upright log
-            if (event.getFace() == Direction.UP
+            BlockPos above = pos.above();
+
+            boolean onLog = (event.getFace() == Direction.UP
                     && state.is(BlockTags.LOGS)
                     && state.hasProperty(BlockStateProperties.AXIS)
-                    && state.getValue(BlockStateProperties.AXIS) == Direction.Axis.Y) {
+                    && state.getValue(BlockStateProperties.AXIS) == Direction.Axis.Y);
 
-                BlockPos above = pos.above();
-                if (level.getBlockState(above).isAir()) {
-                    level.setBlock(above, JolCraftBlocks.FESTERLING_CROP.get().defaultBlockState(), 3);
-                    level.playSound(null, above, SoundEvents.CROP_PLANTED, SoundSource.BLOCKS, 1.0F, 1.0F);
+            boolean onSoil = (event.getFace() == Direction.UP
+                    && (state.is(JolCraftBlocks.VERDANT_SOIL.get())));
 
-                    if (!player.isCreative()) mainHandStack.shrink(1);
+            boolean canPlant = onLog || onSoil;
 
-                    event.setCancellationResult(InteractionResult.SUCCESS);
-                    event.setCanceled(true);
-                    return;
-                }
+            // Must be air above
+            if (canPlant && level.getBlockState(above).isAir()) {
+                level.setBlock(above, JolCraftBlocks.FESTERLING_CROP.get().defaultBlockState(), 3);
+                level.playSound(null, above, SoundEvents.CROP_PLANTED, SoundSource.BLOCKS, 1.0F, 1.0F);
+
+                if (!player.isCreative()) mainHandStack.shrink(1);
+
+                event.setCancellationResult(InteractionResult.SUCCESS);
+                event.setCanceled(true);
             }
         }
 

@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/template_farmland",
+  "textures": {
+    "dirt": "jolcraft:block/verdant_soil",
+    "top": "jolcraft:block/verdant_farmland"
+  }
+}

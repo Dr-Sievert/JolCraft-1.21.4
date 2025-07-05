@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "jolcraft:verdanite"
+  ],
+  "result": {
+    "count": 1,
+    "id": "jolcraft:verdant_dust"
+  }
+}

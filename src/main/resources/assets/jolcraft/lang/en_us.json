@@ -35,6 +35,15 @@
 
   "item.jolcraft.inverix": "Inverix",
 
+  "item.jolcraft.verdant_dust": "Verdant Dust",
+  "jolcraft.hearth.not_safe": "Verdant Soil",
+  "block.jolcraft.verdant_farmland": "Verdant Farmland",
+
+  "block.jolcraft.hearth": "Hearth",
+  "block.jolcraft.hearth.need_coal": "You need coal to fuel this.",
+  "block.jolcraft.hearth.not_safe": "Cannot activate with monsters nearby!",
+  "block.jolcraft.hearth.no_bed_nearby": "No claimed bed nearby.",
+
   "item.jolcraft.barley_seeds": "Barley Seeds",
   "block.jolcraft.barley_crop": "Barley Crops",
   "item.jolcraft.barley": "Barley",

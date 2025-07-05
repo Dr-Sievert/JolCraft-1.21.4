@@ -59,6 +59,11 @@ public class FesterlingCropBlock extends BushBlock implements BonemealableBlock 
     @Override
     protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
         BlockState below = level.getBlockState(pos.below());
+        // If on Verdant Farmland, always survive (ignore Y and light)
+        if (below.is(JolCraftBlocks.VERDANT_SOIL.get())) {
+            return true;
+        }
+
         return isUprightLog(below);
     }
 
@@ -78,6 +83,14 @@ public class FesterlingCropBlock extends BushBlock implements BonemealableBlock 
             return;
         }
         int age = state.getValue(AGE);
+
+        // PATCH: Only allow growth on upright log or Verdant Farmland
+        BlockState below = level.getBlockState(pos.below());
+        boolean isOnLog = isUprightLog(below);
+        boolean isOnVerdant = below.is(JolCraftBlocks.VERDANT_SOIL.get());
+
+        if (!(isOnLog || isOnVerdant)) return; // Don't grow if on invalid substrate
+
         if (age < MAX_AGE) {
             float growthChance = getGrowthSpeed(state, level, pos);
             if (random.nextInt((int) (25.0F / growthChance) + 1) == 0) {
@@ -101,8 +114,29 @@ public class FesterlingCropBlock extends BushBlock implements BonemealableBlock 
         }
     }
 
+
     protected static float getGrowthSpeed(BlockState state, BlockGetter level, BlockPos pos) {
         float speed = 1.0F;
+        BlockPos below = pos.below();
+
+        // If planted ON Verdant Soil/Farmland, multiply base speed
+        BlockState soil = level.getBlockState(below);
+        if (soil.is(JolCraftBlocks.VERDANT_SOIL.get()) || soil.is(JolCraftBlocks.VERDANT_FARMLAND.get())) {
+            speed *= 1.5F;
+        }
+
+        // For each adjacent block in 3x3 below, add +2 if Verdant Soil/Farmland
+        for (int dx = -1; dx <= 1; dx++) {
+            for (int dz = -1; dz <= 1; dz++) {
+                if (dx == 0 && dz == 0) continue;
+                BlockState neighborSoil = level.getBlockState(below.offset(dx, 0, dz));
+                if (neighborSoil.is(JolCraftBlocks.VERDANT_SOIL.get()) || neighborSoil.is(JolCraftBlocks.VERDANT_FARMLAND.get())) {
+                    speed += 2.0F; // Strong bonus per verdant block
+                }
+            }
+        }
+
+        // Upright log support, as before
         for (Direction dir : Direction.Plane.HORIZONTAL) {
             BlockState neighbor = level.getBlockState(pos.relative(dir));
             if (neighbor.is(BlockTags.LOGS)
@@ -111,8 +145,10 @@ public class FesterlingCropBlock extends BushBlock implements BonemealableBlock 
                 speed += 0.5F;
             }
         }
+
         return speed;
     }
+
 
     // ---- Bonemeal Support ----
 
