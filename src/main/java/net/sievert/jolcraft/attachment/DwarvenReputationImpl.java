@@ -1,4 +1,4 @@
-package net.sievert.jolcraft.capability;
+package net.sievert.jolcraft.attachment;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;

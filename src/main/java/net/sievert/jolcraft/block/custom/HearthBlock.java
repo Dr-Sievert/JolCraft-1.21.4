@@ -40,6 +40,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.sievert.jolcraft.attachment.Hearth;
 import net.sievert.jolcraft.block.entity.JolCraftBlockEntities;
 import org.jetbrains.annotations.Nullable;
 import net.sievert.jolcraft.block.entity.HearthBlockEntity;
@@ -168,6 +169,30 @@ public class HearthBlock extends BaseEntityBlock {
             return InteractionResult.CONSUME;
         }
 
+        //Creative player can always light it
+        if (player.isCreative() && !state.getValue(LIT)) {
+            BlockEntity be = level.getBlockEntity(pos);
+            if (be instanceof HearthBlockEntity hearth) {
+                boolean wasNew = hearth.activateFor(player.getUUID());
+                if (wasNew) {
+                    level.setBlock(pos, state.setValue(LIT, true), 3);
+                    level.playSound(null, pos, SoundEvents.BLAZE_SHOOT, SoundSource.BLOCKS, 1.0F, 0.8F);
+                }
+            }
+            return InteractionResult.SUCCESS;
+        }
+
+        // --- Daily use check ---
+        if (!player.isCreative()) {
+            Hearth hearthAttachment = Hearth.get(player);
+            if (hearthAttachment.hasLitThisDay()) {
+                player.displayClientMessage(
+                        net.minecraft.network.chat.Component.translatable("block.jolcraft.hearth.cooldown").withStyle(ChatFormatting.GRAY), true
+                );
+                return InteractionResult.SUCCESS;
+            }
+        }
+
         // Only allow lighting if holding coal or charcoal
         boolean isCoal = stack.is(Items.COAL) || stack.is(Items.CHARCOAL);
         // If no coal, show message (optional)
@@ -224,6 +249,7 @@ public class HearthBlock extends BaseEntityBlock {
                     level.setBlock(pos, state.setValue(LIT, true), 3);
                     level.playSound(null, pos, SoundEvents.BLAZE_SHOOT, SoundSource.BLOCKS, 1.0F, 0.8F);
                     if (!player.isCreative()) {
+                        Hearth.get(player).setLitThisDay(true); // Set the cooldown flag
                         stack.shrink(1); // Consume one coal/charcoal
                     }
                 }

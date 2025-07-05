@@ -40,8 +40,9 @@
   "block.jolcraft.verdant_farmland": "Verdant Farmland",
 
   "block.jolcraft.hearth": "Hearth",
-  "block.jolcraft.hearth.need_coal": "You need coal to fuel this.",
-  "block.jolcraft.hearth.not_safe": "Cannot activate with monsters nearby!",
+  "block.jolcraft.hearth.cooldown": "You must rest before light a hearth.",
+  "block.jolcraft.hearth.need_coal": "You need coal to light this.",
+  "block.jolcraft.hearth.not_safe": "Cannot light with monsters nearby!",
   "block.jolcraft.hearth.no_bed_nearby": "No claimed bed nearby.",
 
   "item.jolcraft.barley_seeds": "Barley Seeds",
@@ -298,6 +299,7 @@
 
   "entity.jolcraft.muffhorn": "Muffhorn",
 
+  "effect.jolcraft.homestead": "Homestead",
 
   "filled_map.forge": "Map to a Dwarven Forge"
 }

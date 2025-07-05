@@ -1,4 +1,4 @@
-package net.sievert.jolcraft.util;
+package net.sievert.jolcraft.util.random;
 
 import java.util.HashMap;
 import java.util.Map;

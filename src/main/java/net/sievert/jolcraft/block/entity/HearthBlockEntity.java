@@ -15,6 +15,7 @@ import net.minecraft.world.level.block.BedBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.sievert.jolcraft.block.custom.HearthBlock;
+import net.sievert.jolcraft.effect.JolCraftEffects;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -89,7 +90,7 @@ public class HearthBlockEntity extends BlockEntity {
 
                 double distSq = player.blockPosition().distSqr(this.getBlockPos());
                 if (distSq <= 100) { // 10 block radius (10*10)
-                    player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 200, 0, true, true));
+                    player.addEffect(new MobEffectInstance(JolCraftEffects.HOMESTEAD, 300, 0, true, true));
                 }
             }
         }

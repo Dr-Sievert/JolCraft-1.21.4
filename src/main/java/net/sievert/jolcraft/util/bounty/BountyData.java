@@ -1,4 +1,4 @@
-package net.sievert.jolcraft.util;
+package net.sievert.jolcraft.util.bounty;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;

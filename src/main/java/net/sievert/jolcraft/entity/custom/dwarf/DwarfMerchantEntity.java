@@ -35,13 +35,13 @@ import net.minecraft.world.phys.Vec3;
 import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.advancement.JolCraftCriteriaTriggers;
 import net.sievert.jolcraft.component.JolCraftDataComponents;
-import net.sievert.jolcraft.util.BountyData;
+import net.sievert.jolcraft.util.bounty.BountyData;
 import net.sievert.jolcraft.entity.ai.goal.*;
 import net.sievert.jolcraft.item.JolCraftItems;
 import net.sievert.jolcraft.sound.JolCraftSounds;
-import net.sievert.jolcraft.util.BountyGenerator;
-import net.sievert.jolcraft.util.BountyReward;
-import net.sievert.jolcraft.util.RandomAdapter;
+import net.sievert.jolcraft.util.bounty.BountyGenerator;
+import net.sievert.jolcraft.util.bounty.BountyReward;
+import net.sievert.jolcraft.util.random.RandomAdapter;
 import net.sievert.jolcraft.villager.JolCraftDwarfTrades;
 
 import java.util.ArrayList;

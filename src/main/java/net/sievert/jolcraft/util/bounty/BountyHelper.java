@@ -1,4 +1,4 @@
-package net.sievert.jolcraft.util;
+package net.sievert.jolcraft.util.bounty;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.core.component.DataComponentType;

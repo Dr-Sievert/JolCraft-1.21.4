@@ -1,4 +1,4 @@
-package net.sievert.jolcraft.util;
+package net.sievert.jolcraft.util.bounty;
 
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;

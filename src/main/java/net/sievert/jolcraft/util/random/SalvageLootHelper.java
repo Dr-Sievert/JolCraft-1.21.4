@@ -1,8 +1,9 @@
-package net.sievert.jolcraft.util;
+package net.sievert.jolcraft.util.random;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.sievert.jolcraft.item.JolCraftItems;
+import net.sievert.jolcraft.util.JolCraftTags;
 
 import java.util.ArrayList;
 import java.util.List;

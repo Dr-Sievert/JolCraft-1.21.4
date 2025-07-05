@@ -30,20 +30,22 @@ import net.neoforged.neoforge.event.entity.EntityInvulnerabilityCheckEvent;
 import net.neoforged.neoforge.event.entity.player.AdvancementEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerWakeUpEvent;
 import net.neoforged.neoforge.event.village.VillagerTradesEvent;
 import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.advancement.JolCraftCriteriaTriggers;
+import net.sievert.jolcraft.attachment.Hearth;
 import net.sievert.jolcraft.block.custom.FermentingCauldronBlock;
 import net.sievert.jolcraft.block.custom.FermentingStage;
-import net.sievert.jolcraft.capability.DwarvenLanguageImpl;
-import net.sievert.jolcraft.capability.JolCraftAttachments;
+import net.sievert.jolcraft.attachment.DwarvenLanguageImpl;
+import net.sievert.jolcraft.attachment.JolCraftAttachments;
 import net.sievert.jolcraft.util.JolCraftTags;
 import net.sievert.jolcraft.entity.custom.dwarf.DwarfGuardEntity;
 import net.sievert.jolcraft.item.JolCraftItems;
 import net.sievert.jolcraft.item.custom.SpannerItem;
 import net.sievert.jolcraft.network.packet.ClientboundSyncEndorsementsPacket;
 import net.sievert.jolcraft.network.packet.ClientboundSyncReputationPacket;
-import net.sievert.jolcraft.util.SalvageLootHelper;
+import net.sievert.jolcraft.util.random.SalvageLootHelper;
 import net.sievert.jolcraft.network.JolCraftNetworking;
 import net.sievert.jolcraft.network.packet.ClientboundSyncLanguagePacket;
 import net.sievert.jolcraft.block.JolCraftBlocks;
@@ -127,6 +129,13 @@ public class JolCraftGameEvents {
             }
 
         }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerWakeUp(PlayerWakeUpEvent event) {
+        Player player = event.getEntity();
+        Hearth hearth = Hearth.get(player);
+        hearth.setLitThisDay(false);
     }
 
     @SubscribeEvent

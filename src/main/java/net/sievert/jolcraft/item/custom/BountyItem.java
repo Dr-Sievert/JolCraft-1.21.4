@@ -7,7 +7,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.sievert.jolcraft.util.BountyHelper;
+import net.sievert.jolcraft.util.bounty.BountyHelper;
 import net.sievert.jolcraft.client.data.MyClientLanguageData;
 
 import java.util.List;

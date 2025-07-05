@@ -1,4 +1,4 @@
-package net.sievert.jolcraft.capability;
+package net.sievert.jolcraft.attachment;
 
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.attachment.AttachmentType;
@@ -26,6 +26,14 @@ public class JolCraftAttachments {
                             .copyOnDeath()
                             .build()
             );
+
+    public static final Supplier<AttachmentType<HearthImpl>> HEARTH =
+            ATTACHMENT_TYPES.register("hearth", () ->
+                    AttachmentType.serializable(HearthImpl::new)
+                            .copyOnDeath()
+                            .build()
+            );
+
 
     public static void register(IEventBus bus) {
         ATTACHMENT_TYPES.register(bus);

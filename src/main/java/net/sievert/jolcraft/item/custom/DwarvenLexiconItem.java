@@ -1,7 +1,6 @@
 package net.sievert.jolcraft.item.custom;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -16,7 +15,7 @@ import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.sievert.jolcraft.advancement.JolCraftCriteriaTriggers;
-import net.sievert.jolcraft.capability.JolCraftAttachments;
+import net.sievert.jolcraft.attachment.JolCraftAttachments;
 import net.sievert.jolcraft.client.data.MyClientLanguageData;
 import net.sievert.jolcraft.network.JolCraftNetworking;
 import net.sievert.jolcraft.network.packet.ClientboundSyncLanguagePacket;

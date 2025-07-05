@@ -28,8 +28,8 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
 import net.sievert.jolcraft.advancement.JolCraftCriteriaTriggers;
-import net.sievert.jolcraft.capability.DwarvenReputationImpl;
-import net.sievert.jolcraft.capability.JolCraftAttachments;
+import net.sievert.jolcraft.attachment.DwarvenReputationImpl;
+import net.sievert.jolcraft.attachment.JolCraftAttachments;
 import net.sievert.jolcraft.client.data.MyClientReputationData;
 import net.sievert.jolcraft.component.JolCraftDataComponents;
 import net.sievert.jolcraft.util.JolCraftTags;
@@ -39,7 +39,7 @@ import net.sievert.jolcraft.network.JolCraftNetworking;
 import net.sievert.jolcraft.network.packet.ClientboundSyncEndorsementsPacket;
 import net.sievert.jolcraft.network.packet.ClientboundSyncReputationPacket;
 import net.sievert.jolcraft.sound.JolCraftSounds;
-import net.sievert.jolcraft.util.DwarvenReputationLevels;
+import net.sievert.jolcraft.util.random.DwarvenReputationLevels;
 import net.sievert.jolcraft.villager.JolCraftDwarfTrades;
 
 public class DwarfGuildmasterEntity extends AbstractDwarfEntity {

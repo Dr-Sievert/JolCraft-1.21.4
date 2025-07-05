@@ -23,7 +23,7 @@ import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.common.extensions.IItemExtension;
 import net.sievert.jolcraft.client.data.MyClientLanguageData;
 import net.sievert.jolcraft.component.JolCraftDataComponents;
-import net.sievert.jolcraft.util.BountyData;
+import net.sievert.jolcraft.util.bounty.BountyData;
 
 import java.util.List;
 import java.util.Optional;
