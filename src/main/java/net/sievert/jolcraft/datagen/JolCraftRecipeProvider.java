@@ -235,6 +235,13 @@ public class JolCraftRecipeProvider extends RecipeProvider {
                 .define('B', JolCraftItems.DEEPSLATE_PLATE.get())
                 .unlockedBy("has_deepslate_plate", has(JolCraftItems.DEEPSLATE_PLATE.get())).save(output);
 
+        shaped(RecipeCategory.MISC, JolCraftItems.STRONGBOX_ITEM.get())
+                .pattern("BBB")
+                .pattern("B B")
+                .pattern("BBB")
+                .define('B', JolCraftItems.DEEPSLATE_PLATE.get())
+                .unlockedBy("has_deepslate_plate", has(JolCraftItems.DEEPSLATE_PLATE.get())).save(output);
+
         shapeless(RecipeCategory.BREWING, JolCraftItems.INVERIX.get(), 3)
                 .requires(JolCraftItems.MUFFHORN_MILK_BUCKET.get())
                 .requires(Items.COAL)

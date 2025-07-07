@@ -4,6 +4,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.Consumables;
+import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.world.item.equipment.ArmorType;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;
@@ -29,8 +30,12 @@ public class JolCraftItems {
                     new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
 
     public static final DeferredItem<BlockItem> STRONGBOX_ITEM = JolCraftItems.ITEMS.registerItem("strongbox",
-            props -> new BlockItem(JolCraftBlocks.STRONGBOX.get(), props.stacksTo(1))
+            props -> new StrongboxItem(JolCraftBlocks.STRONGBOX.get(), props
+                    .stacksTo(1)
+                    .component(DataComponents.CONTAINER, ItemContainerContents.EMPTY))
     );
+
+
 
     //Materials, Armors, Trims, Tools and Weapons
     public static final DeferredItem<Item> DEEPSLATE_PLATE = ITEMS.registerItem("deepslate_plate",

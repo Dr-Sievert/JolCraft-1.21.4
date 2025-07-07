@@ -192,8 +192,6 @@
   "tooltip.jolcraft.dwarf.cannot_sign": "This dwarf cannot sign contracts.",
   "tooltip.jolcraft.dwarf.cannot_promote": "This dwarf cannot accept a new contract.",
 
-
-
   "tooltip.jolcraft.dwarven_lexicon.locked": "The pages are filled with unfamiliar symbols.",
   "tooltip.jolcraft.dwarven_lexicon.unlocked": "The key to dwarven speech lies within.",
 
@@ -201,6 +199,9 @@
   "tooltip.jolcraft.dwarven_tome.unlocked": "A record of everyday dwarven life.",
 
   "tooltip.jolcraft.tablet.locked": "The stone is marked with unfamiliar symbols.",
+
+  "tooltip.jolcraft.strongbox.not_empty": "This strongbox has items inside.",
+  "tooltip.jolcraft.strongbox.loot": "This strongbox has loot inside.",
 
   "tooltip.jolcraft.bounty.locked": "Bounty info locked",
   "tooltip.jolcraft.bounty.invalid": "Bounty Tier: Invalid",

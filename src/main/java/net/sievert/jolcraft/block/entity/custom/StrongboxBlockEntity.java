@@ -5,6 +5,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.ContainerHelper;
@@ -20,9 +21,12 @@ import net.minecraft.world.level.block.entity.ContainerOpenersCounter;
 import net.minecraft.world.level.block.entity.LidBlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.loot.LootTable;
 import net.sievert.jolcraft.block.entity.JolCraftBlockEntities;
 import net.sievert.jolcraft.screen.custom.StrongboxMenu;
 import net.sievert.jolcraft.sound.JolCraftSounds;  // Import your custom sounds
+
+import javax.annotation.Nullable;
 
 public class StrongboxBlockEntity extends RandomizableContainerBlockEntity implements LidBlockEntity, MenuProvider {
     private NonNullList<ItemStack> items = NonNullList.withSize(18, ItemStack.EMPTY); // 2x9
@@ -55,13 +59,19 @@ public class StrongboxBlockEntity extends RandomizableContainerBlockEntity imple
     }
 
     @Override
+    public void setLootTable(@Nullable ResourceKey<LootTable> lootTable) {
+        this.lootTable = lootTable;
+        System.out.println("Loot table set: " + lootTable);  // For debugging purposes
+    }
+
+    @Override
     public int getContainerSize() { return items.size(); }
 
     @Override
-    protected NonNullList<ItemStack> getItems() { return items; }
+    public NonNullList<ItemStack> getItems() { return items; }
 
     @Override
-    protected void setItems(NonNullList<ItemStack> items) { this.items = items; }
+    public void setItems(NonNullList<ItemStack> items) { this.items = items; }
 
     @Override
     protected Component getDefaultName() {
@@ -140,5 +150,14 @@ public class StrongboxBlockEntity extends RandomizableContainerBlockEntity imple
         return Component.translatable("container.jolcraft.strongbox");
     }
 
+    private boolean silkTouched = false;
+
+    public void setSilkTouched(boolean value) {
+        this.silkTouched = value;
+    }
+
+    public boolean wasSilkTouched() {
+        return this.silkTouched;
+    }
 
 }

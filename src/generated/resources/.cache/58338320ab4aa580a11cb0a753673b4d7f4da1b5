@@ -1,4 +1,4 @@
-// 1.21.4	2025-07-06T01:35:32.4582636	JolCraft Recipes
+// 1.21.4	2025-07-07T16:43:57.7451281	JolCraft Recipes
 1df426c9e91766cc2bbbb8c25ed899f5c1980ed8 data/jolcraft/advancement/recipes/misc/contract_blank.json
 63834c714e4e2f7e8e9b71d845d808a0b5084060 data/jolcraft/advancement/recipes/misc/contract_guildmaster.json
 ada4a17760326ccc90beda85717afe773cd6dd4d data/jolcraft/advancement/recipes/misc/contract_written.json
@@ -19,6 +19,7 @@ b07701eeef93cbde3b7aaffbe2a161fb57acfa92 data/jolcraft/advancement/recipes/misc/
 1447383975895d6df8295a37e4c1138139eac5f3 data/jolcraft/advancement/recipes/misc/quill_empty.json
 a7b30f357ea962cdffb8c694f89a20d48b144b74 data/jolcraft/advancement/recipes/misc/quill_full.json
 b99ba9ea5f08b2061a1bc40ab7f9425d96c74912 data/jolcraft/advancement/recipes/misc/smithing_trim_forge.json
+4956c68ef9258b5fb187576078f47d1df0ee820c data/jolcraft/advancement/recipes/misc/strongbox.json
 43806d02aa2f2db43e2823c123de74aa1c8d073e data/jolcraft/advancement/recipes/misc/verdant_dust.json
 7e31d8a55c1e5bd5c441bb19e3e3882f26518644 data/jolcraft/advancement/recipes/misc/verdant_soil.json
 767322b4f2c276b601c629aba9036561e609c594 data/jolcraft/recipe/contract_blank.json
@@ -41,6 +42,7 @@ cf5535d74b902e643eacfb3947d0c682111591b5 data/jolcraft/recipe/parchment.json
 9dec8f06b849724f07954ee01db88e401b0083e9 data/jolcraft/recipe/quill_empty.json
 78552aa06ca079e677f64212a2cfa0564bf0168b data/jolcraft/recipe/quill_full.json
 3b24e9ef13ac739449a5da1a157e3bb58f263f7a data/jolcraft/recipe/smithing_trim_forge.json
+b6fcc730d497f9f2153db61a50b201a0870e0e42 data/jolcraft/recipe/strongbox.json
 5ad70bda8d613a482c74e53e08556da31cfd614d data/jolcraft/recipe/verdant_dust.json
 2922b03b465e5385fe36a2cae344dd06fb30e7c7 data/jolcraft/recipe/verdant_soil.json
 3db9d8d78021beec33628f4d59fd26230ce83121 data/minecraft/advancement/recipes/brewing/inverix_charcoal.json

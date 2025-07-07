@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.sievert.jolcraft.JolCraft;
@@ -50,6 +51,15 @@ public class JolCraftDataComponents {
 
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<String>> HOPS =
             register("hops", builder -> builder.persistent(Codec.STRING));
+
+    //Strongbox
+
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<String>> LOOT_TABLE =
+            register("loot_table", builder -> builder.persistent(Codec.STRING));
+
+    // Similarly for LOOT_SEED
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<String>> LOOT_SEED =
+            register("loot_seed", builder -> builder.persistent(Codec.STRING));
 
 
     private static <T>DeferredHolder<DataComponentType<?>, DataComponentType<T>> register(String name,
