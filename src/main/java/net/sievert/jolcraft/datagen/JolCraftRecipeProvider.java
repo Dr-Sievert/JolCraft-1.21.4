@@ -115,11 +115,15 @@ public class JolCraftRecipeProvider extends RecipeProvider {
                 JolCraftBlocks.BARLEY_BLOCK.get() //Block
         );
 
+        shapeless(RecipeCategory.MISC, JolCraftItems.DEEPMARROW_DUST.get())
+                .requires(JolCraftItems.DEEPMARROW.get())
+                .unlockedBy("has_deepmarrow", has(JolCraftItems.DEEPMARROW.get())).save(output);
+
         shapeless(RecipeCategory.MISC, JolCraftItems.VERDANT_DUST.get())
                 .requires(JolCraftItems.VERDANITE.get())
                 .unlockedBy("has_verdanite", has(JolCraftItems.VERDANITE.get())).save(output);
 
-        shapeless(RecipeCategory.MISC, JolCraftBlocks.VERDANT_SOIL.get(), 1)
+        shapeless(RecipeCategory.MISC, JolCraftBlocks.VERDANT_SOIL.get())
                 .requires(Blocks.MUD)
                 .requires(JolCraftItems.VERDANT_DUST.get())
                 .unlockedBy("has_verdant_dust", has(JolCraftItems.VERDANT_DUST.get())).save(output);

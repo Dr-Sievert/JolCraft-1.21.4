@@ -1,4 +1,4 @@
-package net.sievert.jolcraft.block.entity;
+package net.sievert.jolcraft.block.entity.custom;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
@@ -13,6 +13,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.sievert.jolcraft.block.custom.FermentingCauldronBlock;
 import net.sievert.jolcraft.block.custom.FermentingStage;
 import net.sievert.jolcraft.block.custom.HopsType;
+import net.sievert.jolcraft.block.entity.JolCraftBlockEntities;
 
 import javax.annotation.Nullable;
 import java.util.HashSet;

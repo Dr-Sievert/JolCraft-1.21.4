@@ -5,6 +5,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -43,7 +44,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.sievert.jolcraft.attachment.Hearth;
 import net.sievert.jolcraft.block.entity.JolCraftBlockEntities;
 import org.jetbrains.annotations.Nullable;
-import net.sievert.jolcraft.block.entity.HearthBlockEntity;
+import net.sievert.jolcraft.block.entity.custom.HearthBlockEntity;
 
 
 public class HearthBlock extends BaseEntityBlock {
@@ -193,13 +194,14 @@ public class HearthBlock extends BaseEntityBlock {
             }
         }
 
-        // Only allow lighting if holding coal or charcoal
         boolean isCoal = stack.is(Items.COAL) || stack.is(Items.CHARCOAL);
-        // If no coal, show message (optional)
+
+        // Only show message if not holding coal/charcoal and the hearth is not lit
         if (!isCoal && !state.getValue(LIT)) {
             player.displayClientMessage(
-                    net.minecraft.network.chat.Component.translatable("block.jolcraft.hearth.need_coal").withStyle(ChatFormatting.GRAY), true
+                    Component.translatable("block.jolcraft.hearth.need_coal").withStyle(ChatFormatting.GRAY), true
             );
+            return InteractionResult.CONSUME;
         }
 
         if (isCoal && !state.getValue(LIT)) {

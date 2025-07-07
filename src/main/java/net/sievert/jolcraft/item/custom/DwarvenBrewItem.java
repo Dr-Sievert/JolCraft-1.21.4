@@ -55,7 +55,7 @@ public class DwarvenBrewItem extends Item {
                 tooltip.add(Component.translatable("tooltip.jolcraft.hops." + hop.name().toLowerCase()).withStyle(ChatFormatting.DARK_GREEN));
             }
         } else {
-            tooltip.add(Component.translatable("tooltip.jolcraft.brew.hops_added").withStyle(ChatFormatting.GRAY));
+            tooltip.add(Component.translatable("tooltip.jolcraft.brew.no_hops_added").withStyle(ChatFormatting.GRAY));
         }
     }
 

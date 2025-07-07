@@ -1,14 +1,22 @@
 package net.sievert.jolcraft.entity.custom.dwarf;
 
+import com.google.common.collect.ImmutableMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.stats.Stats;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -17,6 +25,10 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.AbstractSkeleton;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.monster.piglin.AbstractPiglin;
+import net.minecraft.world.entity.npc.VillagerData;
+import net.minecraft.world.entity.npc.VillagerProfession;
+import net.minecraft.world.entity.npc.VillagerTrades;
+import net.minecraft.world.entity.npc.VillagerType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.item.ItemStack;
@@ -27,12 +39,11 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.phys.Vec3;
 import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.entity.ai.goal.*;
-import net.sievert.jolcraft.entity.client.dwarf.DwarfAnimationType;
 import net.sievert.jolcraft.item.JolCraftItems;
 import net.sievert.jolcraft.sound.JolCraftSounds;
+import net.sievert.jolcraft.villager.JolCraftDwarfTrades;
 
 import javax.annotation.Nullable;
 
@@ -41,10 +52,7 @@ public class DwarfGuardEntity extends AbstractDwarfEntity {
     public DwarfGuardEntity(EntityType<? extends AbstractDwarfEntity> entityType, Level level) {
         super(entityType, level);
         this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(JolCraftItems.DEEPSLATE_AXE.get()));
-        this.setItemSlot(EquipmentSlot.HEAD, new ItemStack(JolCraftItems.DEEPSLATE_HELMET.get()));
-        this.setItemSlot(EquipmentSlot.CHEST, new ItemStack(JolCraftItems.DEEPSLATE_CHESTPLATE.get()));
-        this.setItemSlot(EquipmentSlot.LEGS, new ItemStack(JolCraftItems.DEEPSLATE_LEGGINGS.get()));
-        this.setItemSlot(EquipmentSlot.FEET, new ItemStack(JolCraftItems.DEEPSLATE_BOOTS.get()));
+        this.setVillagerData(new VillagerData(VillagerType.PLAINS, VillagerProfession.NONE, 1));
     }
 
     //Attributes
@@ -56,13 +64,14 @@ public class DwarfGuardEntity extends AbstractDwarfEntity {
                 .add(Attributes.TEMPT_RANGE, 16D)
                 .add(Attributes.ATTACK_DAMAGE, 9.0D)
                 .add(Attributes.ARMOR, 0.0)
-                .add(Attributes.KNOCKBACK_RESISTANCE, 0.2);
+                .add(Attributes.KNOCKBACK_RESISTANCE, 0.0);
     }
 
     //Core
     @Override
     public boolean canTrade() {
-        return false;
+        // Only allow trading at master level (level 5)
+        return this.getVillagerData().getLevel() == 5;
     }
 
     @Override
@@ -108,29 +117,130 @@ public class DwarfGuardEntity extends AbstractDwarfEntity {
 
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
-        ItemStack itemstack = player.getItemInHand(hand);
-        boolean client = this.level().isClientSide;
+        ItemStack stack = player.getItemInHand(hand);
+        boolean client = level().isClientSide;
+        // 1. Only custom-guard logic: armor hand-in
+        EquipmentSlot slot = getSlotForArmor(stack);
+        if (!isPerformingAction() && slot != null && this.getItemBySlot(slot).isEmpty()) {
+            ItemStack armorCopy = stack.copyWithCount(1);
+            ItemStack prevMain = this.getMainHandItem().copy();
+            if (!client) {
+                this.setItemSlot(EquipmentSlot.MAINHAND, armorCopy);
+                this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_YES.get(), SoundSource.NEUTRAL, 1.0F, this.getVoicePitch());
+            }
+            // Always call beginAction on BOTH SIDES
+            beginAction(player, 40, ACTION_PROFESSION, armorCopy, prevMain, () -> {
+                this.setInspecting(false);
+                this.setItemSlot(slot, armorCopy);
+                this.level().playSound(null, blockPosition(), JolCraftSounds.ARMOR_EQUIP_DEEPSLATE.get(), SoundSource.NEUTRAL, 1.0F, 1.15F);
+                this.setItemSlot(EquipmentSlot.MAINHAND, JolCraftItems.DEEPSLATE_AXE.get().getDefaultInstance());
+                if (!client) {
+                    this.increaseMerchantCareer();
+                    this.updateMerchantTimer = 40; // Block repeated hand-ins
 
-        // 🧠 Language check
-        InteractionResult langCheck = this.languageCheck(player);
-        if (langCheck != InteractionResult.SUCCESS) {
-            return langCheck;
+                    if (this.currentActionPlayer != null) {
+                        int newLevel = getVillagerData().getLevel();
+                        Component rank = Component.translatable("merchant.level." + newLevel);
+                        this.currentActionPlayer.displayClientMessage(
+                                Component.translatable("tooltip.jolcraft.guard.promotion", rank)
+                                        .withStyle(ChatFormatting.GRAY),
+                                true
+                        );
+                    }
+                    // Only shrink item on server and after successful promotion
+                    if(!player.isCreative()){
+                        player.getItemInHand(hand).shrink(1);
+                    }
+                }
+            });
+            return InteractionResult.SUCCESS;
         }
 
-        // Reputation check
-        InteractionResult repCheck = this.reputationCheck(player, 1);
-        if (repCheck != InteractionResult.SUCCESS) {
-            return repCheck;
+
+
+        // 2. Already has this armor slot? No!
+        if (slot != null && !this.getItemBySlot(slot).isEmpty()) {
+            if (!client)
+                level().playSound(null, blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, this.getVoicePitch());
+            return InteractionResult.SUCCESS;
         }
 
-        // Call parent for all other interactions (contracts, trades, etc)
+        // 3. Guard-specific trade logic (if needed) — otherwise delete this section
+        if (canTrade() && stack.isEmpty() && !this.isBaby() && (player.getAbilities() == null || !player.getAbilities().instabuild || player.getInventory().getSelected().isEmpty())) {
+            if (hand == InteractionHand.MAIN_HAND) {
+                player.awardStat(Stats.TALKED_TO_VILLAGER);
+            }
+            if (!this.level().isClientSide) {
+                if (this.getOffers().isEmpty()) {
+                    return InteractionResult.FAIL;
+                }
+                this.setTradingPlayer(player);
+                this.openTradingScreen(player, this.getDisplayName(), this.getVillagerData().getLevel());
+            }
+            return InteractionResult.SUCCESS;
+        }
+
+        // 4. All other logic (contracts, tablets, promotions, endorsements, etc) goes to abstract!
         return super.mobInteract(player, hand);
+    }
+
+    @Override
+    public void aiStep() {
+        // --- Guard Level-Up Tick Logic ---
+        if (this.updateMerchantTimer > 0) {
+            --this.updateMerchantTimer;
+            if (this.updateMerchantTimer == 0) {
+                // Level-up finished: play effects (optional)
+                this.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 100, 0));
+                this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_YES.get(), SoundSource.NEUTRAL, 1.0F, this.getVoicePitch());
+            }
+        }
+
+        super.aiStep();
+    }
+
+
+    // Helper for armor slot
+    @Nullable
+    private EquipmentSlot getSlotForArmor(ItemStack stack) {
+        if (stack.is(JolCraftItems.DEEPSLATE_HELMET.get())) return EquipmentSlot.HEAD;
+        if (stack.is(JolCraftItems.DEEPSLATE_CHESTPLATE.get())) return EquipmentSlot.CHEST;
+        if (stack.is(JolCraftItems.DEEPSLATE_LEGGINGS.get())) return EquipmentSlot.LEGS;
+        if (stack.is(JolCraftItems.DEEPSLATE_BOOTS.get())) return EquipmentSlot.FEET;
+        return null;
+    }
+
+    //Trades
+    public static final Int2ObjectMap<VillagerTrades.ItemListing[]> TRADES = toIntMap(
+            ImmutableMap.of(
+                    //Master
+                    5,
+                    new VillagerTrades.ItemListing[]{
+                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.AEGISCORE.get(), 1, 1, 0, 30),
+                            new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.AEGISCORE.get(), 1, 30, JolCraftItems.FORGE_ARMOR_TRIM_SMITHING_TEMPLATE.get(), 1, 1, 0, 0.05F)
+                    }
+            )
+    );
+
+    private static Int2ObjectMap<VillagerTrades.ItemListing[]> toIntMap(ImmutableMap<Integer, VillagerTrades.ItemListing[]> pMap) {
+
+        return new Int2ObjectOpenHashMap<>(pMap);
+    }
+
+    @Override
+    protected void updateTrades() {
+        int level = this.getVillagerData().getLevel();
+        VillagerTrades.ItemListing[] listings = TRADES.get(level);
+        if (listings != null) {
+            this.addOffersFromItemListings(this.getOffers(), listings, 2); // 2 = max trades for that level
+        }
     }
 
     //Spawning
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, EntitySpawnReason spawnType, @org.jetbrains.annotations.Nullable SpawnGroupData spawnGroupData) {
         this.setLeftHanded(false);
+        this.setVillagerData(new VillagerData(VillagerType.PLAINS, VillagerProfession.NONE, 1));
         return super.finalizeSpawn(level, difficulty, spawnType, spawnGroupData);
     }
 

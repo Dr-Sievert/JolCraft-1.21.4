@@ -8,10 +8,14 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.monster.Ravager;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.FarmBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
@@ -193,16 +197,35 @@ public class HopsCropBottomBlock extends CropBlock {
 
     @Override
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
-        // Only run this if the block is really being destroyed/replaced (not just aging)
         if (newState.getBlock() != this) {
+            // Remove the top half if it exists (never drops)
             BlockPos abovePos = pos.above();
-            BlockState topState = level.getBlockState(abovePos);
-            if (topState.is(JolCraftTags.Blocks.HOPS_TOP)) {
-                level.destroyBlock(abovePos, true);
+            BlockState aboveState = level.getBlockState(abovePos);
+            if (aboveState.is(JolCraftTags.Blocks.HOPS_TOP)) {
+                level.setBlock(abovePos, Blocks.AIR.defaultBlockState(), 35);
             }
         }
         super.onRemove(state, level, pos, newState, isMoving);
     }
+
+    @Override
+    public void playerDestroy(Level level, Player player, BlockPos pos, BlockState state, @Nullable BlockEntity blockEntity, ItemStack tool) {
+        if (!player.isCreative()) {
+            // Drop loot as normal (vanilla does this)
+            super.playerDestroy(level, player, pos, state, blockEntity, tool);
+        } else {
+            // In creative, just remove block with no drops
+            level.setBlock(pos, Blocks.AIR.defaultBlockState(), 35);
+        }
+        // Remove the other half (never drops)
+        BlockPos otherHalf = pos.above();
+        BlockState otherState = level.getBlockState(otherHalf);
+        if (otherState.is(JolCraftTags.Blocks.HOPS_TOP)) {
+            level.setBlock(otherHalf, Blocks.AIR.defaultBlockState(), 35);
+        }
+    }
+
+
 
 
 

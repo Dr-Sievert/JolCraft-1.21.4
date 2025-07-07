@@ -22,6 +22,10 @@ public class JolCraftSounds {
     public static final Supplier<SoundEvent> LEVEL_UP = registerSoundEvent("level_up");
     public static final Supplier<SoundEvent> POOF = registerSoundEvent("poof");
 
+    //Blocks
+    public static final Supplier<SoundEvent> STRONGBOX_OPEN = registerSoundEvent("strongbox_open");
+    public static final Supplier<SoundEvent> STRONGBOX_CLOSE = registerSoundEvent("strongbox_close");
+
     //Dwarf
     public static final Supplier<SoundEvent> DWARF_AMBIENT = registerSoundEvent("dwarf_ambient");
     public static final Supplier<SoundEvent> DWARF_HURT = registerSoundEvent("dwarf_hurt");

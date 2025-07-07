@@ -13,6 +13,7 @@ import net.minecraft.client.renderer.item.ItemModel;
 import net.minecraft.client.renderer.item.SelectItemModel;
 import net.minecraft.client.renderer.item.properties.select.TrimMaterialProperty;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -38,6 +39,7 @@ import net.sievert.jolcraft.item.JolCraftTrimMaterials;
 import net.minecraft.core.registries.BuiltInRegistries;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 public class JolCraftModelProvider extends ModelProvider {
 
@@ -85,6 +87,7 @@ public class JolCraftModelProvider extends ModelProvider {
 
         //Alchemy
         itemModels.generateFlatItem(JolCraftItems.INVERIX.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.DEEPMARROW_DUST.get(), ModelTemplates.FLAT_ITEM);
 
         //Animal-related
         itemModels.generateFlatItem(JolCraftItems.MUFFHORN_MILK_BUCKET.get(), ModelTemplates.FLAT_ITEM);
@@ -325,6 +328,7 @@ public class JolCraftModelProvider extends ModelProvider {
                 return JolCraftBlocks.FERMENTING_CAULDRON.get();
             }
         });
+
 
     }
 
@@ -737,5 +741,21 @@ public class JolCraftModelProvider extends ModelProvider {
         obj.addProperty("model", modid + ":" + path);
         return obj;
     }
+
+    @Override
+    protected Stream<? extends Holder<Block>> getKnownBlocks() {
+        return BuiltInRegistries.BLOCK.listElements()
+                .filter(holder -> holder.getKey().location().getNamespace().equals(modId))
+                .filter(holder -> !holder.value().equals(JolCraftBlocks.STRONGBOX.get()))
+                .filter(holder -> !holder.value().equals(JolCraftBlocks.STRONGBOX_DUMMY.get()));
+    }
+
+    @Override
+    protected Stream<? extends Holder<Item>> getKnownItems() {
+        return BuiltInRegistries.ITEM.listElements()
+                .filter(holder -> holder.getKey().location().getNamespace().equals(modId))
+                .filter(holder -> !holder.value().equals(JolCraftItems.STRONGBOX_ITEM.get()));
+    }
+
 
 }

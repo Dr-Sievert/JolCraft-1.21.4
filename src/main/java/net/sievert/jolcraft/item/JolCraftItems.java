@@ -28,6 +28,10 @@ public class JolCraftItems {
             ITEMS.registerItem("dwarven_lexicon", DwarvenLexiconItem::new,
                     new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
 
+    public static final DeferredItem<BlockItem> STRONGBOX_ITEM = JolCraftItems.ITEMS.registerItem("strongbox",
+            props -> new BlockItem(JolCraftBlocks.STRONGBOX.get(), props.stacksTo(1))
+    );
+
     //Materials, Armors, Trims, Tools and Weapons
     public static final DeferredItem<Item> DEEPSLATE_PLATE = ITEMS.registerItem("deepslate_plate",
             Item::new, new Item.Properties());
@@ -71,6 +75,9 @@ public class JolCraftItems {
 
     //Alchemy
     public static final DeferredItem<Item> INVERIX = ITEMS.registerItem("inverix",
+            Item::new, new Item.Properties());
+
+    public static final DeferredItem<Item> DEEPMARROW_DUST = ITEMS.registerItem("deepmarrow_dust",
             Item::new, new Item.Properties());
 
     public static final DeferredItem<Item> VERDANT_DUST = ITEMS.registerItem("verdant_dust",

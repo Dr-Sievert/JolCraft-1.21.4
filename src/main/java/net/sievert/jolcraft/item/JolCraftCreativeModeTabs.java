@@ -5,10 +5,14 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.alchemy.PotionContents;
+import net.minecraft.world.item.alchemy.Potions;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.block.JolCraftBlocks;
+import net.sievert.jolcraft.potion.JolCraftPotions;
 
 import java.util.function.Supplier;
 
@@ -24,6 +28,7 @@ public class JolCraftCreativeModeTabs {
                         pOutput.accept(JolCraftItems.DWARVEN_LEXICON);
                         pOutput.accept(JolCraftItems.GOLD_COIN);
                         pOutput.accept(JolCraftBlocks.HEARTH);
+                        pOutput.accept(JolCraftItems.STRONGBOX_ITEM);
 
                         pOutput.accept(JolCraftItems.MUFFHORN_MILK_BUCKET);
                         pOutput.accept(JolCraftItems.MUFFHORN_FUR);
@@ -49,6 +54,8 @@ public class JolCraftCreativeModeTabs {
                         pOutput.accept(JolCraftItems.DWARVEN_BREW);
 
                         pOutput.accept(JolCraftItems.INVERIX);
+                        pOutput.accept(JolCraftItems.DEEPMARROW_DUST);
+                        pOutput.accept(PotionContents.createItemStack(Items.POTION, JolCraftPotions.ANCIENT_MEMORY));
                         pOutput.accept(JolCraftItems.VERDANT_DUST);
 
                         pOutput.accept(JolCraftBlocks.DUSKCAP);

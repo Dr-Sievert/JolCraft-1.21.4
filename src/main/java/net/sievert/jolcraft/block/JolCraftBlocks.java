@@ -25,6 +25,32 @@ public class JolCraftBlocks {
     public static final DeferredRegister.Blocks BLOCKS =
             DeferredRegister.createBlocks(JolCraft.MOD_ID);
 
+    // Only register the block, NOT the item
+    public static final DeferredBlock<Block> STRONGBOX = registerBlock(
+            "strongbox",
+            (properties) -> new StrongboxBlock(properties
+                    .mapColor(MapColor.DEEPSLATE)
+                    .strength(5.0F, 8.0F)
+                    .instrument(NoteBlockInstrument.BASS)
+                    .requiresCorrectToolForDrops()
+                    .sound(SoundType.DEEPSLATE_TILES)
+                    .noOcclusion()
+            ),
+            BlockBehaviour.Properties.of(), false
+    );
+
+    // Register dummy block WITHOUT item
+    public static final DeferredBlock<Block> STRONGBOX_DUMMY = BLOCKS.registerBlock("strongbox_dummy",
+            (properties) -> new StrongboxBlock(properties
+                    .mapColor(MapColor.DEEPSLATE)
+                    .strength(5.0F, 8.0F)
+                    .instrument(NoteBlockInstrument.BASS)
+                    .requiresCorrectToolForDrops()
+                    .sound(SoundType.DEEPSLATE_TILES)
+                    .noOcclusion()
+            )
+    );
+
     public static final DeferredBlock<Block> HEARTH = registerBlock("hearth",
             (properties) -> new HearthBlock(properties
                     .mapColor(MapColor.DEEPSLATE)
@@ -33,7 +59,7 @@ public class JolCraftBlocks {
                     .sound(SoundType.DEEPSLATE_TILES)
                     .lightLevel(litBlockEmission(13))
             ),
-            BlockBehaviour.Properties.of()
+            BlockBehaviour.Properties.of(), true
     );
 
     public static final DeferredBlock<Block> VERDANT_SOIL = registerBlock("verdant_soil",
@@ -42,7 +68,7 @@ public class JolCraftBlocks {
                     .strength(0.5F)
                     .sound(SoundType.MUD)
             ),
-            BlockBehaviour.Properties.of()
+            BlockBehaviour.Properties.of(), true
     );
 
     public static final DeferredBlock<Block> VERDANT_FARMLAND = registerBlock("verdant_farmland",
@@ -54,7 +80,7 @@ public class JolCraftBlocks {
                     .isViewBlocking(JolCraftBlocks::always)
                     .isSuffocating(JolCraftBlocks::always)
             ),
-            BlockBehaviour.Properties.of()
+            BlockBehaviour.Properties.of(), true
     );
 
     public static final DeferredBlock<DuskcapBlock> DUSKCAP = registerBlock(
@@ -69,13 +95,13 @@ public class JolCraftBlocks {
                             .lightLevel(state -> 4)
                             .pushReaction(PushReaction.DESTROY)
             ),
-            BlockBehaviour.Properties.of()
+            BlockBehaviour.Properties.of(), true
     );
 
     public static final DeferredBlock<FlowerPotBlock> POTTED_DUSKCAP = registerBlock(
             "potted_duskcap",
             (properties) -> new FlowerPotBlock(DUSKCAP.get(), properties),
-            flowerPotProperties()
+            flowerPotProperties(), false
     );
 
     public static final DeferredBlock<Block> FESTERLING_CROP = BLOCKS.registerBlock("festerling_crop",
@@ -100,13 +126,13 @@ public class JolCraftBlocks {
                             .sound(SoundType.GRASS)
                             .pushReaction(PushReaction.DESTROY)
             ),
-            BlockBehaviour.Properties.of()
+            BlockBehaviour.Properties.of(), true
     );
 
     public static final DeferredBlock<FlowerPotBlock> POTTED_FESTERLING = registerBlock(
             "potted_festerling",
             (properties) -> new FlowerPotBlock(FESTERLING.get(), properties),
-            flowerPotProperties()
+            flowerPotProperties(), false
     );
 
     public static final DeferredBlock<HayBlock> BARLEY_BLOCK = registerBlock("barley_block",
@@ -117,7 +143,7 @@ public class JolCraftBlocks {
                     .instrument(NoteBlockInstrument.BANJO)
                     .ignitedByLava()
             ),
-            BlockBehaviour.Properties.of()
+            BlockBehaviour.Properties.of(), true
     );
 
     public static final DeferredBlock<Block> MUFFHORN_FUR_BLOCK = registerBlock("muffhorn_fur_block",
@@ -128,7 +154,7 @@ public class JolCraftBlocks {
                     .instrument(NoteBlockInstrument.GUITAR)
                     .ignitedByLava()
             ),
-            BlockBehaviour.Properties.of() // use the same props passed to the block
+            BlockBehaviour.Properties.of(), true
     );
 
 
@@ -149,8 +175,7 @@ public class JolCraftBlocks {
                     .mapColor(MapColor.DEEPSLATE)
                     .noCollission()
                     .randomTicks()
-                    .requiresCorrectToolForDrops()
-                    .strength(2.0F, 6.0F)
+                    .strength(3.5F, 6.0F)
                     .sound(SoundType.DEEPSLATE)
                     .pushReaction(PushReaction.DESTROY)
             )
@@ -283,9 +308,16 @@ public class JolCraftBlocks {
 
 
     // Registers a block and its corresponding item
-    private static <B extends Block> DeferredBlock<B> registerBlock(String name, Function<BlockBehaviour.Properties, ? extends B> builder, BlockBehaviour.Properties properties) {
+    private static <B extends Block> DeferredBlock<B> registerBlock(
+            String name,
+            Function<BlockBehaviour.Properties, ? extends B> builder,
+            BlockBehaviour.Properties properties,
+            boolean registerItem // NEW param
+    ) {
         DeferredBlock<B> block = BLOCKS.registerBlock(name, builder);
-        registerBlockItem(name, block);
+        if (registerItem) {
+            registerBlockItem(name, block);
+        }
         return block;
     }
 

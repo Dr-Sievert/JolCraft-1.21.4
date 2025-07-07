@@ -5,23 +5,9 @@
       {
         "model": {
           "type": "minecraft:model",
-          "model": "minecraft:item/leather_boots_redstone_trim"
+          "model": "minecraft:item/leather_boots_iron_trim"
         },
-        "when": "minecraft:redstone"
-      },
-      {
-        "model": {
-          "type": "minecraft:model",
-          "model": "minecraft:item/leather_boots_diamond_trim"
-        },
-        "when": "minecraft:diamond"
-      },
-      {
-        "model": {
-          "type": "minecraft:model",
-          "model": "minecraft:item/leather_boots_netherite_trim"
-        },
-        "when": "minecraft:netherite"
+        "when": "minecraft:iron"
       },
       {
         "model": {
@@ -33,30 +19,30 @@
       {
         "model": {
           "type": "minecraft:model",
-          "model": "minecraft:item/leather_boots_iron_trim"
+          "model": "minecraft:item/leather_boots_netherite_trim"
         },
-        "when": "minecraft:iron"
+        "when": "minecraft:netherite"
       },
       {
         "model": {
           "type": "minecraft:model",
-          "model": "minecraft:item/leather_boots_quartz_trim"
+          "model": "minecraft:item/leather_boots_diamond_trim"
         },
-        "when": "minecraft:quartz"
+        "when": "minecraft:diamond"
       },
       {
         "model": {
           "type": "minecraft:model",
-          "model": "minecraft:item/leather_boots_emerald_trim"
+          "model": "minecraft:item/leather_boots_redstone_trim"
         },
-        "when": "minecraft:emerald"
+        "when": "minecraft:redstone"
       },
       {
         "model": {
           "type": "minecraft:model",
-          "model": "minecraft:item/leather_boots_amethyst_trim"
+          "model": "minecraft:item/leather_boots_copper_trim"
         },
-        "when": "minecraft:amethyst"
+        "when": "minecraft:copper"
       },
       {
         "model": {
@@ -68,9 +54,23 @@
       {
         "model": {
           "type": "minecraft:model",
-          "model": "minecraft:item/leather_boots_copper_trim"
+          "model": "minecraft:item/leather_boots_amethyst_trim"
         },
-        "when": "minecraft:copper"
+        "when": "minecraft:amethyst"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:item/leather_boots_emerald_trim"
+        },
+        "when": "minecraft:emerald"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:item/leather_boots_quartz_trim"
+        },
+        "when": "minecraft:quartz"
       },
       {
         "model": {

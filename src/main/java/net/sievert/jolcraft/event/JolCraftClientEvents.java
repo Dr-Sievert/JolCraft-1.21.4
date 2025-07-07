@@ -1,16 +1,20 @@
 package net.sievert.jolcraft.event;
 
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.api.distmarker.Dist;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.block.JolCraftBlocks;
 import net.sievert.jolcraft.block.custom.FermentingCauldronBlock;
 import net.sievert.jolcraft.block.custom.FermentingStage;
 import net.sievert.jolcraft.block.custom.HopsType;
-import net.sievert.jolcraft.block.entity.FermentingCauldronBlockEntity;
+import net.sievert.jolcraft.block.entity.JolCraftBlockEntities;
+import net.sievert.jolcraft.entity.client.render.block.StrongboxRenderer;
+import net.sievert.jolcraft.screen.JolCraftMenuTypes;
+import net.sievert.jolcraft.screen.custom.StrongboxScreen;
 
 @EventBusSubscriber(modid = JolCraft.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class JolCraftClientEvents {
@@ -103,4 +107,5 @@ public class JolCraftClientEvents {
 
         return (a << 24) | (r << 16) | (g << 8) | b;
     }
+
 }

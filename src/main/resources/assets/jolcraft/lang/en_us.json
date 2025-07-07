@@ -1,6 +1,9 @@
 {
   "item.jolcraft.gold_coin": "Gold Coin",
   "item.jolcraft.dwarven_lexicon": "Dwarven Lexicon",
+  "item.jolcraft.strongbox": "Strongbox",
+  "block.jolcraft.strongbox": "Strongbox",
+  "container.jolcraft.strongbox": "Strongbox",
 
   "item.jolcraft.deepslate_plate": "Deepslate Plate",
   "item.jolcraft.deepslate_sword": "Deepslate Sword",
@@ -34,9 +37,20 @@
   "trim_material.jolcraft.woecrystal": "Woecrystal",
 
   "item.jolcraft.inverix": "Inverix",
+  "item.jolcraft.deepmarrow_dust": "Powdered Deepmarrow",
+
+  "effect.jolcraft.homestead": "Homestead",
+  "effect.jolcraft.ancient_memory": "Ancient Memory",
+
+  "item.minecraft.potion.effect.ancient_memory": "Ancient Memory Potion",
+  "item.minecraft.potion.effect.long_ancient_memory": "Ancient Memory Potion",
+  "item.minecraft.splash_potion.effect.ancient_memory": "Ancient Memory Splash Potion",
+  "item.minecraft.splash_potion.effect.long_ancient_memory": "Ancient Memory Splash Potion",
+  "item.minecraft.lingering_potion.effect.ancient_memory": "Ancient Memory Lingering Potion",
+  "item.minecraft.lingering_potion.effect.long_ancient_memory": "Ancient Memory Lingering Potion",
 
   "item.jolcraft.verdant_dust": "Verdant Dust",
-  "jolcraft.hearth.not_safe": "Verdant Soil",
+  "block.jolcraft.verdant_soil": "Verdant Soil",
   "block.jolcraft.verdant_farmland": "Verdant Farmland",
 
   "block.jolcraft.hearth": "Hearth",
@@ -228,13 +242,14 @@
   "tooltip.jolcraft.reputation.level_up": "You have advanced in dwarven reputation!",
 
   "tooltip.jolcraft.brewing.hops": "You already added this hops type to the brew.",
-  "tooltip.jolcraft.brew.hops_added": "No hops added.",
+  "tooltip.jolcraft.brew.no_hops_added": "No hops added.",
   "tooltip.jolcraft.brew.hops_added": "Hops:",
   "tooltip.jolcraft.hops.asgarnian": "Asgarnian",
   "tooltip.jolcraft.hops.duskhold": "Duskhold",
   "tooltip.jolcraft.hops.krandonian": "Krandonian",
   "tooltip.jolcraft.hops.yanillian": "Yanillian",
 
+  "tooltip.jolcraft.guard.promotion": "Guard promoted to %s!",
 
   "itemGroup.jolcraft.jolcraft_items_tab": "JolCraft",
   "itemGroup.jolcraft.jolcraft_egg_tab": "JolCraft Spawn Eggs",
@@ -298,8 +313,6 @@
   "entity.jolcraft.dwarf_keeper": "Keeper",
 
   "entity.jolcraft.muffhorn": "Muffhorn",
-
-  "effect.jolcraft.homestead": "Homestead",
 
   "filled_map.forge": "Map to a Dwarven Forge"
 }

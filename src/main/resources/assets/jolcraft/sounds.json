@@ -124,5 +124,27 @@
       }
     ],
     "subtitle": "sounds.jolcraft.armor_equip_deepslate"
+  },
+  "strongbox_open": {
+    "sounds": [
+      {
+        "name": "jolcraft:block/strongbox/strongbox_open1"
+      },
+      {
+        "name": "jolcraft:block/strongbox/strongbox_open2"
+      }
+    ],
+    "subtitle": "sounds.jolcraft.strongbox_open"
+  },
+  "strongbox_close": {
+    "sounds": [
+      {
+        "name": "jolcraft:block/strongbox/strongbox_close1"
+      },
+      {
+        "name": "jolcraft:block/strongbox/strongbox_close2"
+      }
+    ],
+    "subtitle": "sounds.jolcraft.strongbox_close"
   }
 }

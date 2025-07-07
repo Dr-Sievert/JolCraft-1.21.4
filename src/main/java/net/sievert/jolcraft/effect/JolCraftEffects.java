@@ -15,6 +15,9 @@ public class JolCraftEffects {
     public static final Holder<MobEffect> HOMESTEAD = MOB_EFFECTS.register("homestead",
             () -> new HomesteadEffect(MobEffectCategory.BENEFICIAL, 0x6e6d6d));
 
+    public static final Holder<MobEffect> ANCIENT_MEMORY = MOB_EFFECTS.register("ancient_memory",
+            () -> new AncientMemoryEffect(MobEffectCategory.BENEFICIAL, 0x8bb386));
+
     public static void register(IEventBus eventBus) {
         MOB_EFFECTS.register(eventBus);
     }

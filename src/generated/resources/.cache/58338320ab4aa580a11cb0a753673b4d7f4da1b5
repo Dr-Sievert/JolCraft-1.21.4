@@ -1,7 +1,8 @@
-// 1.21.4	2025-07-04T23:56:30.0901407	JolCraft Recipes
+// 1.21.4	2025-07-06T01:35:32.4582636	JolCraft Recipes
 1df426c9e91766cc2bbbb8c25ed899f5c1980ed8 data/jolcraft/advancement/recipes/misc/contract_blank.json
 63834c714e4e2f7e8e9b71d845d808a0b5084060 data/jolcraft/advancement/recipes/misc/contract_guildmaster.json
 ada4a17760326ccc90beda85717afe773cd6dd4d data/jolcraft/advancement/recipes/misc/contract_written.json
+4a8743b4d013b27e6e624e3919c6f20459edb332 data/jolcraft/advancement/recipes/misc/deepmarrow_dust.json
 ccb1a77437622e97668cf737274adefe64e2a31e data/jolcraft/advancement/recipes/misc/deepslate_boots.json
 1dcf128cb446204e0aef8c1013ea687e4320eed5 data/jolcraft/advancement/recipes/misc/deepslate_chestplate.json
 c9c5d5fc7d295589b85fec9a6ae71ed185cf02a1 data/jolcraft/advancement/recipes/misc/deepslate_helmet.json
@@ -23,6 +24,7 @@ b99ba9ea5f08b2061a1bc40ab7f9425d96c74912 data/jolcraft/advancement/recipes/misc/
 767322b4f2c276b601c629aba9036561e609c594 data/jolcraft/recipe/contract_blank.json
 a24e95518f3bc666e6220f72e4102643b07b021b data/jolcraft/recipe/contract_guildmaster.json
 8d74eb5de1c608461375e0aa24d385430635d6b0 data/jolcraft/recipe/contract_written.json
+64405fb76e5802ed8c359734ac43244991f247ae data/jolcraft/recipe/deepmarrow_dust.json
 8a34ad97a342d039aa95e738963b9fa1bb38b303 data/jolcraft/recipe/deepslate_boots.json
 9b334c0d0e4a2de45edb5443b350a55253b54243 data/jolcraft/recipe/deepslate_chestplate.json
 623bca4b2de74bdedf2410e799123e5607ef834d data/jolcraft/recipe/deepslate_helmet.json

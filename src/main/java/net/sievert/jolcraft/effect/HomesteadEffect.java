@@ -6,14 +6,14 @@ import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
 
 class HomesteadEffect extends MobEffect {
-    protected HomesteadEffect(MobEffectCategory p_296242_, int p_294288_) {
-        super(p_296242_, p_294288_);
+    protected HomesteadEffect(MobEffectCategory category, int color) {
+        super(category, color);
     }
 
     @Override
-    public boolean applyEffectTick(ServerLevel p_376742_, LivingEntity p_295924_, int p_296417_) {
-        if (p_295924_.getHealth() < p_295924_.getMaxHealth()) {
-            p_295924_.heal(1.0F);
+    public boolean applyEffectTick(ServerLevel serverLevel, LivingEntity entity, int amplifier) {
+        if (entity.getHealth() < entity.getMaxHealth()) {
+            entity.heal(1.0F);
         }
 
         return true;

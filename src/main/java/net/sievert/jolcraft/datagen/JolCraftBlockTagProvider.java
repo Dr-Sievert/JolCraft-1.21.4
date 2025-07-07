@@ -20,6 +20,7 @@ public class JolCraftBlockTagProvider extends BlockTagsProvider {
     protected void addTags(HolderLookup.Provider provider) {
 
         tag(BlockTags.MINEABLE_WITH_PICKAXE)
+                .add(JolCraftBlocks.STRONGBOX.get())
                 .add(JolCraftBlocks.DEEPSLATE_BULBS_CROP.get())
                 .add(JolCraftBlocks.HEARTH.get())
                 .add(JolCraftBlocks.FERMENTING_CAULDRON.get());

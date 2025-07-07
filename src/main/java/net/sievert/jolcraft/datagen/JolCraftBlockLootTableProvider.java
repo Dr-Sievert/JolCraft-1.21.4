@@ -39,6 +39,10 @@ public class JolCraftBlockLootTableProvider extends BlockLootSubProvider {
     @Override
     protected void generate() {
 
+        dropOther(JolCraftBlocks.STRONGBOX.get(), JolCraftItems.STRONGBOX_ITEM.get());
+        this.add(JolCraftBlocks.STRONGBOX_DUMMY.get(), LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(0))));
+
+
         this.add(JolCraftBlocks.HEARTH.get(), block ->
                 this.createSinglePropConditionTable(block, HearthBlock.HALF, DoubleBlockHalf.LOWER)
         );
@@ -171,39 +175,59 @@ public class JolCraftBlockLootTableProvider extends BlockLootSubProvider {
             IntegerProperty topAge,
             int topMaxAge
     ) {
-        // --- Bottom Block: always drops 1 seed, +1 extra seed at max age (20% chance)
-        LootItemCondition.Builder isMature = LootItemBlockStatePropertyCondition
+        // Bottom loot table: use bottom age
+        LootItemCondition.Builder isMatureBottom = LootItemBlockStatePropertyCondition
                 .hasBlockStateProperties(bottom)
                 .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(bottomAge, bottomMaxAge));
 
-        this.add(bottom,
-                LootTable.lootTable()
-                        .withPool(LootPool.lootPool()
-                                .setRolls(ConstantValue.exactly(1))
-                                .add(LootItem.lootTableItem(seed))
+        LootTable.Builder bottomLoot = LootTable.lootTable()
+                .withPool(LootPool.lootPool()
+                        .setRolls(ConstantValue.exactly(1))
+                        .add(LootItem.lootTableItem(seed))
+                )
+                .withPool(LootPool.lootPool()
+                        .setRolls(ConstantValue.exactly(1))
+                        .add(LootItem.lootTableItem(seed)
+                                .when(isMatureBottom)
+                                .when(LootItemRandomChanceCondition.randomChance(0.2F))
                         )
-                        .withPool(LootPool.lootPool()
-                                .setRolls(ConstantValue.exactly(1))
-                                .add(LootItem.lootTableItem(seed)
-                                        .when(isMature)
-                                        .when(LootItemRandomChanceCondition.randomChance(0.2F))
-                                )
+                )
+                .withPool(LootPool.lootPool()
+                        .setRolls(ConstantValue.exactly(1))
+                        .add(LootItem.lootTableItem(hops)
+                                .when(isMatureBottom)
                         )
-        );
+                );
 
-        // --- Top Block: only drops hops if at max visual age
-        LootItemCondition.Builder topAgeMax = LootItemBlockStatePropertyCondition
+        // Top loot table: use top age
+        LootItemCondition.Builder isMatureTop = LootItemBlockStatePropertyCondition
                 .hasBlockStateProperties(top)
                 .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(topAge, topMaxAge));
 
-        this.add(top,
-                LootTable.lootTable()
-                        .withPool(LootPool.lootPool()
-                                .setRolls(ConstantValue.exactly(1))
-                                .add(LootItem.lootTableItem(hops).when(topAgeMax))
+        LootTable.Builder topLoot = LootTable.lootTable()
+                .withPool(LootPool.lootPool()
+                        .setRolls(ConstantValue.exactly(1))
+                        .add(LootItem.lootTableItem(seed))
+                )
+                .withPool(LootPool.lootPool()
+                        .setRolls(ConstantValue.exactly(1))
+                        .add(LootItem.lootTableItem(seed)
+                                .when(isMatureTop)
+                                .when(LootItemRandomChanceCondition.randomChance(0.2F))
                         )
-        );
+                )
+                .withPool(LootPool.lootPool()
+                        .setRolls(ConstantValue.exactly(1))
+                        .add(LootItem.lootTableItem(hops)
+                                .when(isMatureTop)
+                        )
+                );
+
+        this.add(bottom, bottomLoot);
+        this.add(top, topLoot);
     }
+
+
 
     protected LootTable.Builder createSelfDropStoneCropDrops(Block cropBlock, Item item, IntegerProperty ageProperty, int maxAge) {
         HolderLookup.RegistryLookup<Enchantment> registrylookup = this.registries.lookupOrThrow(Registries.ENCHANTMENT);

@@ -126,6 +126,7 @@ public class DwarfHistorianEntity extends AbstractDwarfEntity {
                     5,
                     new VillagerTrades.ItemListing[]{
                             new JolCraftDwarfTrades.GoldForItems(JolCraftItems.DEEPMARROW.get(), 1, 3, 0, 32),
+                            new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.DEEPMARROW, 1, 5, JolCraftItems.DEEPMARROW_DUST.get(), 3, 3, 0, 0.05F),
                             new JolCraftDwarfTrades.ItemsAndGoldToItems(Items.CHISELED_DEEPSLATE, 1, 15, JolCraftItems.REPUTATION_TABLET_0.get(), 1, 1, 0, 0.05F)
                     }
             )
@@ -141,7 +142,7 @@ public class DwarfHistorianEntity extends AbstractDwarfEntity {
         int level = this.getVillagerData().getLevel();
         VillagerTrades.ItemListing[] listings = TRADES.get(level);
         if (listings != null) {
-            this.addOffersFromItemListings(this.getOffers(), listings, 2); // 2 = max trades for that level
+            this.addOffersFromItemListings(this.getOffers(), listings, 3);
         }
     }
 

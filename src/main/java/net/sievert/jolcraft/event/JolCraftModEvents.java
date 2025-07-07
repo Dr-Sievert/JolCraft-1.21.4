@@ -3,13 +3,19 @@ package net.sievert.jolcraft.event;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.sievert.jolcraft.JolCraft;
+import net.sievert.jolcraft.block.entity.JolCraftBlockEntities;
 import net.sievert.jolcraft.entity.JolCraftEntities;
 import net.sievert.jolcraft.entity.client.model.animal.MuffhornModel;
+import net.sievert.jolcraft.entity.client.model.block.StrongboxModel;
 import net.sievert.jolcraft.entity.client.model.dwarf.*;
+import net.sievert.jolcraft.entity.client.render.block.StrongboxRenderer;
 import net.sievert.jolcraft.entity.custom.animal.MuffhornEntity;
 import net.sievert.jolcraft.entity.custom.dwarf.*;
+import net.sievert.jolcraft.screen.JolCraftMenuTypes;
+import net.sievert.jolcraft.screen.custom.StrongboxScreen;
 
 @EventBusSubscriber(modid = JolCraft.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class JolCraftModEvents {
@@ -34,6 +40,9 @@ public class JolCraftModEvents {
                 MuffhornModel.BABY_LAYER_LOCATION,
                 () -> MuffhornModel.createBodyLayer().apply(MuffhornModel.BABY_TRANSFORMER)
         );
+
+        //Blocks
+        event.registerLayerDefinition(StrongboxModel.LAYER_LOCATION, StrongboxModel::createBodyLayer);
 
     }
 

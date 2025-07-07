@@ -4,8 +4,12 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
@@ -13,6 +17,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.sievert.jolcraft.util.JolCraftTags;
 
+import javax.annotation.Nullable;
 import java.util.function.Supplier;
 
 public class HopsCropTopBlock extends HopsCropBottomBlock {
@@ -103,19 +108,6 @@ public class HopsCropTopBlock extends HopsCropBottomBlock {
     }
 
     @Override
-    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
-        super.onRemove(state, level, pos, newState, isMoving);
-        // Only break bottom if this was a player break (manual, not logic/survival)
-        if (newState.isAir() && !isMoving) {
-            BlockPos below = pos.below();
-            BlockState belowState = level.getBlockState(below);
-            if (belowState.is(JolCraftTags.Blocks.HOPS_BOTTOM)) {
-                level.destroyBlock(below, true);
-            }
-        }
-    }
-
-    @Override
     protected boolean mayPlaceOn(BlockState state, BlockGetter level, BlockPos pos) {
         return state.getBlock() instanceof HopsCropBottomBlock;
     }
@@ -138,6 +130,46 @@ public class HopsCropTopBlock extends HopsCropBottomBlock {
             }
         }
     }
+
+    @Override
+    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
+        super.onRemove(state, level, pos, newState, isMoving);
+        if (newState.getBlock() != this) {
+            // Remove the bottom half (never drops)
+            BlockPos below = pos.below();
+            BlockState belowState = level.getBlockState(below);
+            if (belowState.is(JolCraftTags.Blocks.HOPS_BOTTOM)) {
+                level.setBlock(below, Blocks.AIR.defaultBlockState(), 35);
+            }
+        }
+    }
+
+    @Override
+    public void playerDestroy(Level level, Player player, BlockPos pos, BlockState state, @Nullable BlockEntity blockEntity, ItemStack tool) {
+        if (!player.isCreative()) {
+            // Drop this block's loot (works if loot table is assigned to top)
+            super.playerDestroy(level, player, pos, state, blockEntity, tool);
+        } else {
+            // In creative, just remove block with no drops
+            level.setBlock(pos, Blocks.AIR.defaultBlockState(), 35);
+        }
+        // Remove the other half (never drops)
+        BlockPos otherHalf = pos.below();
+        BlockState otherState = level.getBlockState(otherHalf);
+        if (otherState.is(JolCraftTags.Blocks.HOPS_BOTTOM)) {
+            level.setBlock(otherHalf, Blocks.AIR.defaultBlockState(), 35);
+        }
+    }
+
+
+
+
+
+
+
+
+
+
 
 
 }

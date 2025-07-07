@@ -33,6 +33,25 @@
         }
       ],
       "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "block": "jolcraft:asgarnian_crop_bottom",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "age": "9"
+              }
+            }
+          ],
+          "name": "jolcraft:asgarnian_hops"
+        }
+      ],
+      "rolls": 1.0
     }
   ],
   "random_sequence": "jolcraft:blocks/asgarnian_crop_bottom"

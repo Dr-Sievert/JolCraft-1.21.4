@@ -1,6 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "jolcraft:block/potted_duskcap"
+    "model": "jolcraft:item/deepmarrow_dust"
   }
 }

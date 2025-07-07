@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "jolcraft:deepmarrow"
+  ],
+  "result": {
+    "count": 1,
+    "id": "jolcraft:deepmarrow_dust"
+  }
+}

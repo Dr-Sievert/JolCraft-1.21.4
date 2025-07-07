@@ -286,11 +286,16 @@ public class AbstractDwarfEntity extends AbstractVillager {
     public static final ResourceLocation ACTION_CONTRACT_SIGNING =
             ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "contract_signing");
 
+    public static final ResourceLocation ACTION_PROFESSION =
+            ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "profession");
+
     public static final ResourceLocation ACTION_PROFESSION_PROMOTION =
             ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "profession_promotion");
 
     public static final ResourceLocation ACTION_REPUTATION_ENDORSEMENT =
             ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "reputation_endorsement");
+
+
 
     //Guildmaster
 
@@ -344,7 +349,7 @@ public class AbstractDwarfEntity extends AbstractVillager {
                 player.getData(JolCraftAttachments.DWARVEN_LANGUAGE).knowsLanguage());
 
         if (!knowsLanguage) {
-            this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
+            this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, this.getVoicePitch());
 
             if (client) {
                 player.displayClientMessage(
@@ -369,7 +374,7 @@ public class AbstractDwarfEntity extends AbstractVillager {
                 : 0);
 
         if (playerTier < requiredTier) {
-            this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
+            this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, this.getVoicePitch());
 
             if (client) {
                 player.displayClientMessage(
@@ -403,7 +408,7 @@ public class AbstractDwarfEntity extends AbstractVillager {
                         Component.translatable("tooltip.jolcraft.dwarf.busy").withStyle(ChatFormatting.GRAY), true
                 );
             }else{
-                this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
+                this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, this.getVoicePitch());
             }
             return InteractionResult.FAIL; // ❌ Block interaction if any condition is met
         }
@@ -439,7 +444,7 @@ public class AbstractDwarfEntity extends AbstractVillager {
             }
 
             // ❌ If the dwarf is neither in love nor a baby, play sound indicating invalid action
-            this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, this.isBaby() ? 1.5F : 1.0F);
+            this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, this.isBaby() ? 1.5F : this.getVoicePitch());
         }
 
         // 🔇 Fallback to generic common interaction logic
@@ -478,7 +483,7 @@ public class AbstractDwarfEntity extends AbstractVillager {
                             Component.translatable("tooltip.jolcraft.dwarf.cannot_sign").withStyle(ChatFormatting.GRAY), true
                     );
                 }
-                this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
+                this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, this.getVoicePitch());
                 return client ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
             }
 
@@ -489,13 +494,13 @@ public class AbstractDwarfEntity extends AbstractVillager {
                             Component.translatable("tooltip.jolcraft.dwarf.not_paid").withStyle(ChatFormatting.GRAY), true
                     );
                 }
-                this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
+                this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, this.getVoicePitch());
                 return client ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
             }
 
             // ✅ All clear: proceed with contract signing
             this.usePlayerItem(player, hand, itemstack);
-            this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_YES.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
+            this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_YES.get(), SoundSource.NEUTRAL, 1.0F, this.getVoicePitch());
             ItemStack prevMainHand = this.getMainHandItem().copy();
             this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(JolCraftItems.CONTRACT_WRITTEN.get()));
 
@@ -535,7 +540,7 @@ public class AbstractDwarfEntity extends AbstractVillager {
                             Component.translatable("tooltip.jolcraft.dwarf.cannot_promote").withStyle(ChatFormatting.GRAY), true
                     );
                 }
-                this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
+                this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, this.getVoicePitch());
                 return client ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
             }
 
@@ -546,7 +551,7 @@ public class AbstractDwarfEntity extends AbstractVillager {
                             Component.translatable("tooltip.jolcraft.dwarf.not_paid").withStyle(ChatFormatting.GRAY), true
                     );
                 }
-                this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
+                this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, this.getVoicePitch());
                 return client ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
             }
 
@@ -591,7 +596,7 @@ public class AbstractDwarfEntity extends AbstractVillager {
                     player.displayClientMessage(
                             Component.translatable("tooltip.jolcraft.reputation.already_endorsed").withStyle(ChatFormatting.GRAY), true);
                 }
-                this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
+                this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, this.getVoicePitch());
                 return client ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
             }
 
@@ -600,7 +605,7 @@ public class AbstractDwarfEntity extends AbstractVillager {
                 if (!this.level().isClientSide) {
                     player.displayClientMessage(Component.translatable("tooltip.jolcraft.reputation.never_endorse").withStyle(ChatFormatting.GRAY), true);
                 }
-                this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
+                this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, this.getVoicePitch());
                 return this.level().isClientSide ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
             }
 
@@ -609,7 +614,7 @@ public class AbstractDwarfEntity extends AbstractVillager {
                 if (!this.level().isClientSide) {
                     player.displayClientMessage(Component.translatable("tooltip.jolcraft.reputation.cannot_endorse").withStyle(ChatFormatting.GRAY), true);
                 }
-                this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
+                this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, this.getVoicePitch());
                 return this.level().isClientSide ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
             }
 
@@ -619,7 +624,7 @@ public class AbstractDwarfEntity extends AbstractVillager {
                 if (!this.level().isClientSide) {
                     player.displayClientMessage(Component.translatable("tooltip.jolcraft.dwarf.not_paid").withStyle(ChatFormatting.GRAY), true);
                 }
-                this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
+                this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, this.getVoicePitch());
                 return this.level().isClientSide ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
             }
 
@@ -628,7 +633,7 @@ public class AbstractDwarfEntity extends AbstractVillager {
             ItemStack tabletUsed = itemstack.copy();
             this.setItemSlot(EquipmentSlot.MAINHAND, tabletUsed.copy());
             this.usePlayerItem(player, hand, itemstack);
-            this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_YES.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
+            this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_YES.get(), SoundSource.NEUTRAL, 1.0F, this.getVoicePitch());
 
             beginAction(player, 40, ACTION_REPUTATION_ENDORSEMENT, tabletUsed, prevMainHand, () -> {
                 this.setInspecting(false);
@@ -719,7 +724,7 @@ public class AbstractDwarfEntity extends AbstractVillager {
             return InteractionResult.SUCCESS;
         }
 
-        this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, this.isBaby() ? 1.5F : 1.0F);
+        this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, this.isBaby() ? 1.5F : this.getVoicePitch());
         return InteractionResult.FAIL; // ❌ Block any fallback actions
     }
 
@@ -741,7 +746,7 @@ public class AbstractDwarfEntity extends AbstractVillager {
 
                 }
                 this.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 200, 0));
-                this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_YES.get(), SoundSource.NEUTRAL, 1.0F, 1.4F);
+                this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_YES.get(), SoundSource.NEUTRAL, 1.0F, this.getVoicePitch());
             }
         }
 
@@ -842,6 +847,11 @@ public class AbstractDwarfEntity extends AbstractVillager {
             if (currentActionTicks == 25 || currentActionTicks == 15) {
                 this.level().playSound(null, this.blockPosition(), SoundEvents.VILLAGER_WORK_CARTOGRAPHER, SoundSource.NEUTRAL, 1.2F, 0.6F);
             }
+        }
+
+        // Profession interaction (guard, etc)
+        if (ACTION_PROFESSION.equals(currentActionId)) {
+            this.setInspecting(true);
         }
 
         // Universal animation reset: runs if NO action is running

@@ -1,24 +1,41 @@
 package net.sievert.jolcraft;
 
 
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.entity.EntityRenderers;
+import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemDisplayContext;
+import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
+import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
+import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.sievert.jolcraft.advancement.JolCraftCriteriaTriggers;
 import net.sievert.jolcraft.block.JolCraftBlocks;
 import net.sievert.jolcraft.block.entity.JolCraftBlockEntities;
 import net.sievert.jolcraft.attachment.JolCraftAttachments;
+import net.sievert.jolcraft.block.entity.custom.StrongboxBlockEntity;
 import net.sievert.jolcraft.component.JolCraftDataComponents;
 import net.sievert.jolcraft.effect.JolCraftEffects;
 import net.sievert.jolcraft.entity.JolCraftEntities;
 import net.sievert.jolcraft.entity.client.render.animal.MuffhornRenderer;
+import net.sievert.jolcraft.entity.client.render.block.StrongboxRenderer;
 import net.sievert.jolcraft.entity.client.render.dwarf.*;
 import net.sievert.jolcraft.item.JolCraftCreativeModeTabs;
 import net.sievert.jolcraft.item.JolCraftEquipmentAssets;
 import net.sievert.jolcraft.item.JolCraftItems;
 import net.sievert.jolcraft.loot.JolCraftLootModifiers;
 import net.sievert.jolcraft.network.JolCraftNetworking;
+import net.sievert.jolcraft.potion.JolCraftPotions;
+import net.sievert.jolcraft.screen.JolCraftMenuTypes;
+import net.sievert.jolcraft.screen.custom.StrongboxMenu;
+import net.sievert.jolcraft.screen.custom.StrongboxScreen;
 import net.sievert.jolcraft.sound.JolCraftSounds;
 import net.sievert.jolcraft.world.processor.JolCraftProcessors;
 import net.sievert.jolcraft.world.structure.JolCraftStructures;
@@ -57,11 +74,13 @@ public class JolCraft
         JolCraftItems.register(modEventBus);
         JolCraftEntities.register(modEventBus);
         JolCraftBlockEntities.register(modEventBus);
+        JolCraftMenuTypes.register(modEventBus);
         JolCraftCreativeModeTabs.register(modEventBus);
         JolCraftDataComponents.register(modEventBus);
         JolCraftLootModifiers.register(modEventBus);
         JolCraftSounds.register(modEventBus);
         JolCraftEffects.register(modEventBus);
+        JolCraftPotions.register(modEventBus);
         JolCraftProcessors.register(modEventBus);
         JolCraftAttachments.register(modEventBus);
         JolCraftEquipmentAssets.register(modEventBus);
@@ -120,6 +139,29 @@ public class JolCraft
     public static class ClientModEvents
     {
         @SubscribeEvent
+        public static void registerBER(EntityRenderersEvent.RegisterRenderers event) {
+            event.registerBlockEntityRenderer(JolCraftBlockEntities.STRONGBOX.get(), StrongboxRenderer::new);
+        }
+
+        @SubscribeEvent
+        public static void registerScreens(RegisterMenuScreensEvent event) {
+            event.register(JolCraftMenuTypes.STRONGBOX_MENU.get(), StrongboxScreen::new);
+        }
+
+        @SubscribeEvent
+        public static void onRegisterClientExtensions(RegisterClientExtensionsEvent event) {
+            event.registerItem(new IClientItemExtensions() {
+                public void renderByItem(ItemStack stack, ItemDisplayContext displayContext, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay) {
+                    // Create a dummy BE instance with default state for rendering
+                    StrongboxBlockEntity be = new StrongboxBlockEntity(BlockPos.ZERO, JolCraftBlocks.STRONGBOX.get().defaultBlockState());
+
+                    // Render the BE as an item
+                    Minecraft.getInstance().getBlockEntityRenderDispatcher().render(be, 0.0f, poseStack, buffer);
+                }
+            }, JolCraftItems.STRONGBOX_ITEM.get());
+        }
+
+        @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event)
         {
             //Dwarves
@@ -136,6 +178,8 @@ public class JolCraft
             EntityRenderers.register(JolCraftEntities.MUFFHORN.get(), MuffhornRenderer::new);
 
             //Blocks
+            //ItemBlockRenderTypes.setRenderLayer(JolCraftBlocks.STRONGBOX.get(), RenderType.cutout());
+
             ItemBlockRenderTypes.setRenderLayer(JolCraftBlocks.VERDANT_FARMLAND.get(), RenderType.cutout());
             ItemBlockRenderTypes.setRenderLayer(JolCraftBlocks.BARLEY_CROP.get(), RenderType.cutout());
             ItemBlockRenderTypes.setRenderLayer(JolCraftBlocks.DEEPSLATE_BULBS_CROP.get(), RenderType.cutout());
