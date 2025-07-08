@@ -1,7 +1,8 @@
-package net.sievert.jolcraft.screen.custom.strongbox;
+package net.sievert.jolcraft.screen.custom.slot;
 
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.sievert.jolcraft.screen.custom.strongbox.LockMenu;
 
 public class ButtonSlot extends Slot {
     private final LockMenu menu;
@@ -20,6 +21,6 @@ public class ButtonSlot extends Slot {
 
     @Override
     public boolean isActive() {
-        return true; // Always active for clicks
+        return menu.isActive();  // Only activate button if lockpick is in the slot
     }
 }

@@ -2,6 +2,7 @@ package net.sievert.jolcraft.screen.custom.strongbox;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -11,24 +12,21 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.sievert.jolcraft.block.entity.custom.StrongboxBlockEntity;
 import net.sievert.jolcraft.screen.JolCraftMenuTypes;
+import net.sievert.jolcraft.screen.custom.slot.ButtonSlot;
+import net.sievert.jolcraft.screen.custom.slot.LockpickSlot;
+import net.sievert.jolcraft.sound.JolCraftSounds;
+
+import java.util.Random;
+
 
 public class LockMenu extends AbstractContainerMenu {
     public final StrongboxBlockEntity blockEntity;
     private final Level level;
+    private final Random random = new Random();  // Random instance for sprite selection
 
     // Used by NeoForge's auto-gui opening
     public LockMenu(int id, Inventory inv, FriendlyByteBuf extraData) {
         this(id, inv, inv.player.level().getBlockEntity(extraData.readBlockPos()));
-    }
-
-    public StrongboxBlockEntity getBlockEntity() {
-        return blockEntity;
-    }
-
-    // Get the lockpick slot item (Slot 0 is the lockpick slot)
-    public ItemStack getLockpickSlotItem() {
-        Slot lockpickSlot = this.slots.get(0);  // Slot 0 is the lockpick slot
-        return lockpickSlot.getItem();  // Return the actual ItemStack in the lockpick slot
     }
 
     // Main constructor for the LockMenu
@@ -39,11 +37,12 @@ public class LockMenu extends AbstractContainerMenu {
 
         // Add the lockpick slot (1 slot)
         this.addSlot(new LockpickSlot(this.blockEntity, 0, 16, 16));  // Lockpick slot
+
         // Add the button slots (for button clicks)
-        this.addSlot(new ButtonSlot(this, 0, 48, 31));  // First button
-        this.addSlot(new ButtonSlot(this, 1, 80, 31));  // Second button
-        this.addSlot(new ButtonSlot(this, 2, 112, 31));  // Third button
-        
+        this.addSlot(new ButtonSlot(this, 1, 48, 31));  // First button
+        this.addSlot(new ButtonSlot(this, 2, 80, 31));  // Second button
+        this.addSlot(new ButtonSlot(this, 3, 112, 31));  // Third button
+
         // Add Player inventory slots
         for (int row = 0; row < 3; ++row) {
             for (int col = 0; col < 9; ++col) {
@@ -77,8 +76,31 @@ public class LockMenu extends AbstractContainerMenu {
 
     }
 
+    @Override
+    public void clicked(int slotId, int button, ClickType clickType, Player player) {
+        Slot lockpickslot = this.slots.getFirst();
+        Slot clickedSlot = this.slots.get(slotId);
 
-    // Shift-click logic for Lock Menu
+        // Only process button slots (1, 2, 3) and ensure we are not already processing
+        if (slotId >= 1 && slotId <= 3) {
+            if (clickedSlot instanceof ButtonSlot buttonSlot) {
+                int buttonIndex = buttonSlot.buttonIndex;
+                if (buttonIndex == 1 || buttonIndex == 2 || buttonIndex == 3) {
+                    blockEntity.lockpickProgress += 20;  // Increment by 10
+                    player.playSound(JolCraftSounds.STRONGBOX_LOCKPICK.get(), 1.0F, 1.0F);
+                    blockEntity.setChanged();
+                }
+            } else {
+
+            }
+        }
+
+        super.clicked(slotId, button, clickType, player);
+
+    }
+
+
+
     @Override
     public ItemStack quickMoveStack(Player player, int index) {
         Slot slot = this.slots.get(index);
@@ -101,9 +123,17 @@ public class LockMenu extends AbstractContainerMenu {
             if (!moveItemStackTo(stack, 0, lockSize, false)) return ItemStack.EMPTY;
         }
 
-        // Ensure the lockpick is treated as the carried item
+        // Handle placing the lockpick into the lock slot (normal or shift-click)
         if (index == 0) {
             this.setCarried(stack);  // Set the carried item as the lockpick when placed in the lock slot
+
+            // Trigger button randomization when the lockpick is placed in the slot (normal or shift-click)
+            if (!stack.isEmpty()) {
+            }
+
+            // If the lockpick is removed from the slot, reset button states
+            if (stack.isEmpty()) {
+            }
         }
 
         if (stack.isEmpty()) slot.set(ItemStack.EMPTY);
@@ -111,6 +141,7 @@ public class LockMenu extends AbstractContainerMenu {
 
         return copy;
     }
+
 
 
     // Check if the menu is still valid (if the Strongbox is still there)
@@ -123,11 +154,11 @@ public class LockMenu extends AbstractContainerMenu {
     @Override
     public void removed(Player player) {
         super.removed(player);  // Ensure the carried item is returned to the player's inventory
-
         // Reset the current interacting player when the menu is removed
         if (blockEntity instanceof StrongboxBlockEntity strongbox) {
             if (strongbox.getCurrentInteractingPlayer() == player) {
                 strongbox.currentInteractingPlayer = null;  // Clear the reference to the interacting player in the BE
+                blockEntity.lockpickProgress = 0;
             }
         }
 
@@ -164,40 +195,22 @@ public class LockMenu extends AbstractContainerMenu {
             player.getInventory().placeItemBackInInventory(stack);
         }
     }
-    @Override
-    public void clicked(int slotId, int button, ClickType clickType, Player player) {
-        // Only handle click for button slots (button slots have specific slot IDs)
-        Slot clickedSlot = this.slots.get(slotId); // Get the clicked slot
-        if (clickedSlot instanceof ButtonSlot buttonSlot) {
-            // buttonIndex is available from the ButtonSlot instance
-            int buttonIndex = buttonSlot.buttonIndex;
 
-            // Handle button click based on the buttonIndex
-            switch (buttonIndex) {
-                case 0:
-                    blockEntity.lockpickProgress += 10;  // Increment by 10
-                    break;
-                case 1:
-                    blockEntity.lockpickProgress += 20;  // Increment by 20
-                    break;
-                case 2:
-                    blockEntity.lockpickProgress += 30;  // Increment by 30
-                    break;
-            }
-
-            // Ensure the BlockEntity is marked as changed and synced
-            blockEntity.setChanged();
-        } else {
-            // If it's not a button slot, call the default click behavior for item slots
-            super.clicked(slotId, button, clickType, player);
-        }
+    // Check if the lockpick slot has a lockpick (button should be active only if lockpick is in the slot)
+    public boolean isActive() {
+        ItemStack lockpick = getLockpickSlotItem();  // Get the lockpick from the menu
+        return !lockpick.isEmpty();  // Only activate button if lockpick is in the slot
     }
 
+    // Get the lockpick slot item (Slot 0 is the lockpick slot)
+    public ItemStack getLockpickSlotItem() {
+        Slot lockpickSlot = this.slots.getFirst();  // Slot 0 is the lockpick slot
+        return lockpickSlot.getItem();  // Return the actual ItemStack in the lockpick slot
+    }
 
-
-
-
-
+    public StrongboxBlockEntity getBlockEntity() {
+        return blockEntity;
+    }
 
 
 }

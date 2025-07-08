@@ -293,31 +293,22 @@ public class StrongboxBlockEntity extends RandomizableContainerBlockEntity imple
     }
 
 
-    // Modified serverTick to handle the lockpick progress
     public static void serverTick(ServerLevel level, BlockPos pos, BlockState state, StrongboxBlockEntity strongbox) {
         boolean flag = strongbox.isLocked();  // Is the strongbox locked?
         boolean stateChanged = false;
 
-        if (!flag) {
+        // If the strongbox is not locked or the progress is 0, return early
+        if (!flag || strongbox.lockpickProgress == 0) {
             return;
         }
 
         // Ensure there's a player interacting with the strongbox
         Player player = strongbox.getCurrentInteractingPlayer();
         if (player != null && player.containerMenu instanceof LockMenu lockMenu) {
-            // Get the lockpick slot item from the LockMenu
-            ItemStack lockpick = lockMenu.getLockpickSlotItem(); // Get the lockpick from the menu
-
-            if (!lockpick.isEmpty() && strongbox.lockpickProgress < StrongboxBlockEntity.MAX_PROGRESS) {
-                // Increment progress if lockpick is in the slot
-                strongbox.lockpickProgress++;
+            // Decrease progress if lockpick is not in the slot and progress is greater than 0
+            if (strongbox.lockpickProgress > 0) {
+                strongbox.lockpickProgress--;  // Decrease progress
                 stateChanged = true;
-                System.out.println("Lockpick progress: " + strongbox.lockpickProgress);  // Debug log for progress
-            } else if (lockpick.isEmpty() && strongbox.lockpickProgress > 0) {
-                // Decrement progress if no lockpick is in the slot
-                strongbox.lockpickProgress--;
-                stateChanged = true;
-                System.out.println("Lockpick progress decreased: " + strongbox.lockpickProgress);  // Debug log for progress decrease
             }
 
             // If the progress reaches MAX_PROGRESS, unlock the strongbox
@@ -327,19 +318,16 @@ public class StrongboxBlockEntity extends RandomizableContainerBlockEntity imple
                 // Reset progress after unlocking
                 strongbox.lockpickProgress = 0;
                 stateChanged = true;
-                System.out.println("Strongbox Unlocked!");  // Debug log for unlocking
 
                 // Update the block state to unlocked (LOCKED = false)
                 state = state.setValue(StrongboxBlock.LOCKED, false);
                 level.setBlock(pos, state, 3);
-                System.out.println("Strongbox state changed to LOCKED = " + false);  // Debug log for state change
             }
         }
 
         // If any state changed, mark the block as changed to notify the world and client
         if (stateChanged) {
             strongbox.setChanged();
-            System.out.println("Block state marked as changed.");
         }
     }
 
@@ -350,33 +338,6 @@ public class StrongboxBlockEntity extends RandomizableContainerBlockEntity imple
     public float getLockpickProgress() {
         return this.lockpickProgress;  // Return the current lockpick progress
     }
-
-    // ContainerData to sync the progress
-    private final ContainerData containerData = new ContainerData() {
-        @Override
-        public int get(int index) {
-            switch (index) {
-                case 0: // Lockpick progress
-                    return Mth.floor(lockpickProgress); // Ensure the progress fits within a valid range
-                default:
-                    return 0;
-            }
-        }
-
-        @Override
-        public void set(int index, int value) {
-            if (index == 0) {
-                lockpickProgress = value;  // Update progress when set from the client
-            }
-        }
-
-        @Override
-        public int getCount() {
-            return 1;  // Only syncing one piece of data: lockpick progress
-        }
-
-
-    };
 
     // ContainerData getter
     public ContainerData getContainerData() {

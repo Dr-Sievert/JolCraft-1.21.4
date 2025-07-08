@@ -1,4 +1,4 @@
-package net.sievert.jolcraft.screen.custom.strongbox;
+package net.sievert.jolcraft.screen.custom.slot;
 
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.Container;

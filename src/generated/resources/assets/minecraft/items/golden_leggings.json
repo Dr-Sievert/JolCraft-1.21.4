@@ -5,13 +5,6 @@
       {
         "model": {
           "type": "minecraft:model",
-          "model": "minecraft:item/golden_leggings_copper_trim"
-        },
-        "when": "minecraft:copper"
-      },
-      {
-        "model": {
-          "type": "minecraft:model",
           "model": "minecraft:item/golden_leggings_redstone_trim"
         },
         "when": "minecraft:redstone"
@@ -71,6 +64,13 @@
           "model": "minecraft:item/golden_leggings_gold_trim"
         },
         "when": "minecraft:gold"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:item/golden_leggings_copper_trim"
+        },
+        "when": "minecraft:copper"
       },
       {
         "model": {
