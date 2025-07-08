@@ -34,19 +34,20 @@ public class LockScreen extends AbstractContainerScreen<LockMenu> {
 
     private void renderLockpickProgress(GuiGraphics guiGraphics, int x, int y) {
 
-        // Get the lockpick progress from the BlockEntity
+        // Get the lockpick progress from the BlockEntity (menu's block entity)
         float progress = this.menu.getBlockEntity().getLockpickProgress();
 
+        // Debugging to check the lockpick progress
         System.out.println("Lockpick progress (screen): " + progress);
 
         // Define the size of the progress bar
         int progressWidth = 108;  // Width of the progress bar
         int progressHeight = 16;  // Height of the progress bar
-        int progressX = x + 16;   // X position for the progress bar
-        int progressY = y + 34;  // Y position for the progress bar (adjust as needed)
+        int progressX = x + 34;   // X position for the progress bar
+        int progressY = y + 16;   // Y position for the progress bar (adjust as needed)
 
-        // Calculate the width of the progress bar based on progress
-        int progressBarWidth = (int) (progress * progressWidth / 200);  // Scale the width based on progress
+        // Calculate the width of the progress bar based on progress (scale the width based on progress)
+        int progressBarWidth = (int) (progress * progressWidth / 200);  // Scaling progress from 0 to 200 max value
 
         // Draw the progress using your custom texture
         guiGraphics.blit(RenderType.GUI_TEXTURED, PROGRESS_TEXTURE, progressX, progressY, 0, 0, progressBarWidth, progressHeight, progressWidth, progressHeight);

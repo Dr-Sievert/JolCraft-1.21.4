@@ -6,9 +6,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ContainerLevelAccess;
-import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -54,6 +52,26 @@ public class LockMenu extends AbstractContainerMenu {
         for (int col = 0; col < 9; ++col) {
             this.addSlot(new Slot(inv, col, 8 + col * 18, 126));
         }
+
+        this.addDataSlot(new DataSlot() {
+            @Override
+            public int get() {
+                // Safely cast the blockEntity to StrongboxBlockEntity
+                if (blockEntity instanceof StrongboxBlockEntity strongbox) {
+                    return strongbox.getContainerData().get(0);  // Access the lockpick progress
+                }
+                return 0;  // Fallback value if blockEntity is not StrongboxBlockEntity
+            }
+
+            @Override
+            public void set(int value) {
+                // Safely cast the blockEntity to StrongboxBlockEntity
+                if (blockEntity instanceof StrongboxBlockEntity strongbox) {
+                    strongbox.getContainerData().set(0, value);  // Set the lockpick progress
+                }
+            }
+        });
+
     }
 
 
