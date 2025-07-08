@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": "minecraft:iron_nugget"
+  },
+  "pattern": [
+    "B  ",
+    " B ",
+    "  B"
+  ],
+  "result": {
+    "count": 1,
+    "id": "jolcraft:lockpick"
+  }
+}

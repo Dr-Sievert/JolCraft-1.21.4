@@ -1,4 +1,4 @@
-// 1.21.4	2025-07-07T16:43:57.7451281	JolCraft Recipes
+// 1.21.4	2025-07-07T21:34:27.2296568	JolCraft Recipes
 1df426c9e91766cc2bbbb8c25ed899f5c1980ed8 data/jolcraft/advancement/recipes/misc/contract_blank.json
 63834c714e4e2f7e8e9b71d845d808a0b5084060 data/jolcraft/advancement/recipes/misc/contract_guildmaster.json
 ada4a17760326ccc90beda85717afe773cd6dd4d data/jolcraft/advancement/recipes/misc/contract_written.json
@@ -42,7 +42,7 @@ cf5535d74b902e643eacfb3947d0c682111591b5 data/jolcraft/recipe/parchment.json
 9dec8f06b849724f07954ee01db88e401b0083e9 data/jolcraft/recipe/quill_empty.json
 78552aa06ca079e677f64212a2cfa0564bf0168b data/jolcraft/recipe/quill_full.json
 3b24e9ef13ac739449a5da1a157e3bb58f263f7a data/jolcraft/recipe/smithing_trim_forge.json
-b6fcc730d497f9f2153db61a50b201a0870e0e42 data/jolcraft/recipe/strongbox.json
+6d7d6894970005d55e61213db2ed2d8e64961961 data/jolcraft/recipe/strongbox.json
 5ad70bda8d613a482c74e53e08556da31cfd614d data/jolcraft/recipe/verdant_dust.json
 2922b03b465e5385fe36a2cae344dd06fb30e7c7 data/jolcraft/recipe/verdant_soil.json
 3db9d8d78021beec33628f4d59fd26230ce83121 data/minecraft/advancement/recipes/brewing/inverix_charcoal.json
@@ -55,6 +55,8 @@ f1dcafcb26d1001b3184081ab1595ea7d6fa6fcf data/minecraft/advancement/recipes/misc
 a69ef43e8984d9bd6c4e2fab3b108be609447006 data/minecraft/advancement/recipes/misc/deepslate_axe_right.json
 9817f3dc1eece3c6535ae4844e6fe75a94190198 data/minecraft/advancement/recipes/misc/deepslate_hoe_left.json
 799f5b61cac053ba8152dce2c5290b1756910301 data/minecraft/advancement/recipes/misc/deepslate_hoe_right.json
+2b3f3dcadad206c8616d874b29ef3628aad3ef60 data/minecraft/advancement/recipes/misc/lockpick_left.json
+ee44787421183cbaecc7c56c50aaa009240bf2db data/minecraft/advancement/recipes/misc/lockpick_right.json
 001cea79447ee93d22a9578e5191e435e37f14ac data/minecraft/advancement/recipes/misc/quill_full_refill.json
 c56c85cb633b44cad5754b11bb920bd5f6bf7491 data/minecraft/advancement/recipes/misc/scrap.json
 a0ceb88edb2af388b9e772c26dfb1cfdb49078ae data/minecraft/advancement/recipes/misc/scrap_heap.json
@@ -68,6 +70,8 @@ c87b2e59bb6bc8333fd6d0d2c6d82d888c72af16 data/minecraft/recipe/deepslate_hoe_lef
 24c44b638fd68525903031d0ca400796c1cf1116 data/minecraft/recipe/deepslate_hoe_right.json
 22c9f79b769f6c7ceae085771e5136dfa7447ded data/minecraft/recipe/inverix_charcoal.json
 2315bd09991c27877af368e4753489b1709c356e data/minecraft/recipe/inverix_coal.json
+5aef02cf3bf4a8b7302caf0c60dfd1730ab4f67d data/minecraft/recipe/lockpick_left.json
+b5e07a6383eaab3bea90295d971fa8781788d817 data/minecraft/recipe/lockpick_right.json
 101522e20d678cec20930777f3026ee7bbf86433 data/minecraft/recipe/quill_full_refill.json
 10c6f28a6983cce34861742f97c3377a1c79ded2 data/minecraft/recipe/scrap.json
 d797a5d97f66c0d4f583bd16025babfd84c29474 data/minecraft/recipe/scrap_heap.json

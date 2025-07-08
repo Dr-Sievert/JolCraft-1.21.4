@@ -4,6 +4,9 @@
   "item.jolcraft.strongbox": "Strongbox",
   "block.jolcraft.strongbox": "Strongbox",
   "container.jolcraft.strongbox": "Strongbox",
+  "container.jolcraft.strongbox_locked": "Locked Strongbox",
+  "item.jolcraft.lockpick": "Lockpick",
+
 
   "item.jolcraft.deepslate_plate": "Deepslate Plate",
   "item.jolcraft.deepslate_sword": "Deepslate Sword",
@@ -202,6 +205,7 @@
 
   "tooltip.jolcraft.strongbox.not_empty": "This strongbox has items inside.",
   "tooltip.jolcraft.strongbox.loot": "This strongbox has loot inside.",
+  "tooltip.jolcraft.strongbox.locked": "Strongbox locked.",
 
   "tooltip.jolcraft.bounty.locked": "Bounty info locked",
   "tooltip.jolcraft.bounty.invalid": "Bounty Tier: Invalid",

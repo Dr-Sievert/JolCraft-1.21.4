@@ -57,9 +57,11 @@ public class JolCraftDataComponents {
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<String>> LOOT_TABLE =
             register("loot_table", builder -> builder.persistent(Codec.STRING));
 
-    // Similarly for LOOT_SEED
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<String>> LOOT_SEED =
             register("loot_seed", builder -> builder.persistent(Codec.STRING));
+
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Boolean>> LOCKED =
+            register("locked", builder -> builder.persistent(Codec.BOOL));
 
 
     private static <T>DeferredHolder<DataComponentType<?>, DataComponentType<T>> register(String name,

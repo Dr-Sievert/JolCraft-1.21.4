@@ -35,6 +35,7 @@ public class JolCraftBlocks {
                     .requiresCorrectToolForDrops()
                     .sound(SoundType.DEEPSLATE_TILES)
                     .noOcclusion()
+                    .randomTicks()
             ),
             BlockBehaviour.Properties.of(), false
     );

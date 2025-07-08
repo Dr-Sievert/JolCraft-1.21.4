@@ -48,7 +48,16 @@ public class JolCraftBlockEntities {
                             hearth.tick();
                         }
                     })
-                    // NO STRONGBOX HERE!
+                    .put(STRONGBOX, (level, pos, state, blockEntity) -> {
+                        // Ensure that the blockEntity is of the correct type (StrongboxBlockEntity)
+                        if (blockEntity instanceof StrongboxBlockEntity) {
+                            StrongboxBlockEntity strongbox = (StrongboxBlockEntity) blockEntity;
+                            if (level instanceof ServerLevel) {
+                                // Call the serverTick method with correct arguments
+                                strongbox.serverTick((ServerLevel) level, pos, state, strongbox);
+                            }
+                        }
+                    })
                     .build();
 
     @SuppressWarnings("unchecked")

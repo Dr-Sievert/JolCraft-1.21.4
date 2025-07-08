@@ -58,7 +58,11 @@ public class JolCraftModelProvider extends ModelProvider {
         itemModels.generateFlatItem(JolCraftItems.DWARVEN_LEXICON.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(JolCraftItems.PARCHMENT.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(JolCraftItems.DEEPSLATE_PLATE.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.LOCKPICK.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
+
         createHearth(JolCraftBlocks.HEARTH.get(), blockModels);
+
+
 
         //Weapons and Tools
         itemModels.generateFlatItem(JolCraftItems.DEEPSLATE_SWORD.get(), ModelTemplates.FLAT_HANDHELD_ITEM);

@@ -146,5 +146,47 @@
       }
     ],
     "subtitle": "sounds.jolcraft.strongbox_close"
+  },
+  "strongbox_lockpick": {
+    "sounds": [
+      {
+        "name": "jolcraft:block/strongbox/strongbox_lockpick1"
+      },
+      {
+        "name": "jolcraft:block/strongbox/strongbox_lockpick2"
+      },
+      {
+        "name": "jolcraft:block/strongbox/strongbox_lockpick3"
+      },
+      {
+        "name": "jolcraft:block/strongbox/strongbox_lockpick4"
+      }
+    ],
+    "subtitle": "sounds.jolcraft.strongbox_lockpick"
+  },
+  "strongbox_lockpick_break": {
+    "sounds": [
+      {
+        "name": "jolcraft:block/strongbox/strongbox_lockpick_break1"
+      },
+      {
+        "name": "jolcraft:block/strongbox/strongbox_lockpick_break2"
+      },
+      {
+        "name": "jolcraft:block/strongbox/strongbox_lockpick_break3"
+      }
+    ],
+    "subtitle": "sounds.jolcraft.strongbox_lockpick_break"
+  },
+  "strongbox_unlock": {
+    "sounds": [
+      {
+        "name": "jolcraft:block/strongbox/strongbox_unlock1"
+      },
+      {
+        "name": "jolcraft:block/strongbox/strongbox_unlock2"
+      }
+    ],
+    "subtitle": "sounds.jolcraft.strongbox_unlock"
   }
 }

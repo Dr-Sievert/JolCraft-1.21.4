@@ -83,4 +83,6 @@ public class StrongboxMenu extends AbstractContainerMenu {
         return stillValid(ContainerLevelAccess.create(level, blockEntity.getBlockPos()),
                 player, blockEntity.getBlockState().getBlock());
     }
+
+
 }

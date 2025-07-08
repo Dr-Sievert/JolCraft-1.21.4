@@ -29,6 +29,7 @@ public class JolCraftCreativeModeTabs {
                         pOutput.accept(JolCraftItems.GOLD_COIN);
                         pOutput.accept(JolCraftBlocks.HEARTH);
                         pOutput.accept(JolCraftItems.STRONGBOX_ITEM);
+                        pOutput.accept(JolCraftItems.LOCKPICK);
 
                         pOutput.accept(JolCraftItems.MUFFHORN_MILK_BUCKET);
                         pOutput.accept(JolCraftItems.MUFFHORN_FUR);

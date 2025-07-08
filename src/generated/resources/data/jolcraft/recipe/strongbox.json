@@ -2,12 +2,13 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "B": "jolcraft:deepslate_plate"
+    "B": "jolcraft:deepslate_plate",
+    "X": "minecraft:deepslate_tiles"
   },
   "pattern": [
-    "BBB",
-    "B B",
-    "BBB"
+    "BXB",
+    "X X",
+    "BXB"
   ],
   "result": {
     "count": 1,

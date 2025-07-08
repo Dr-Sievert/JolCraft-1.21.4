@@ -9,6 +9,7 @@ import net.neoforged.neoforge.network.IContainerFactory;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.sievert.jolcraft.JolCraft;
+import net.sievert.jolcraft.screen.custom.LockMenu;
 import net.sievert.jolcraft.screen.custom.StrongboxMenu;
 
 public class JolCraftMenuTypes {
@@ -18,6 +19,9 @@ public class JolCraftMenuTypes {
 
     public static final DeferredHolder<MenuType<?>, MenuType<StrongboxMenu>> STRONGBOX_MENU =
             registerMenuType("strongbox_menu", StrongboxMenu::new);
+
+    public static final DeferredHolder<MenuType<?>, MenuType<LockMenu>> LOCK_MENU =
+            registerMenuType("lock_menu", LockMenu::new);
 
     private static <T extends AbstractContainerMenu>DeferredHolder<MenuType<?>, MenuType<T>> registerMenuType(String name,
                                                                                                               IContainerFactory<T> factory) {

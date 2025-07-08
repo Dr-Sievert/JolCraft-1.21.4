@@ -25,6 +25,9 @@ public class JolCraftSounds {
     //Blocks
     public static final Supplier<SoundEvent> STRONGBOX_OPEN = registerSoundEvent("strongbox_open");
     public static final Supplier<SoundEvent> STRONGBOX_CLOSE = registerSoundEvent("strongbox_close");
+    public static final Supplier<SoundEvent> STRONGBOX_LOCKPICK = registerSoundEvent("strongbox_lockpick");
+    public static final Supplier<SoundEvent> STRONGBOX_LOCKPICK_BREAK = registerSoundEvent("strongbox_lockpick_break");
+    public static final Supplier<SoundEvent> STRONGBOX_UNLOCK = registerSoundEvent("strongbox_unlock");
 
     //Dwarf
     public static final Supplier<SoundEvent> DWARF_AMBIENT = registerSoundEvent("dwarf_ambient");

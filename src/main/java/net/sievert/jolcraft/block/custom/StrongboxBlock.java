@@ -51,6 +51,7 @@ import net.sievert.jolcraft.block.entity.JolCraftBlockEntities;
 import net.sievert.jolcraft.block.entity.custom.StrongboxBlockEntity;
 import net.sievert.jolcraft.component.JolCraftDataComponents;
 import net.sievert.jolcraft.item.JolCraftItems;
+import net.sievert.jolcraft.screen.custom.LockMenu;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -195,6 +196,10 @@ public class StrongboxBlock extends BaseEntityBlock implements SimpleWaterlogged
                             drop.set(JolCraftDataComponents.LOOT_SEED, String.valueOf(lootTableSeed));  // Store loot table seed as a String
                         }
 
+                        if (state.getValue(StrongboxBlock.LOCKED)) {
+                            drop.set(JolCraftDataComponents.LOCKED, true);  // Add LOCKED component to the dropped item
+                        }
+
                         // Drop the Strongbox item with loot table information attached
                         if(!breakingPlayer.isCreative()){
                             Block.popResource(level, pos, drop);
@@ -204,15 +209,14 @@ public class StrongboxBlock extends BaseEntityBlock implements SimpleWaterlogged
                          else {
                         // Default behavior when Silk Touch is not used
                         if (strongbox.getLootTable() != null && state.getValue(LOCKED)){
-                            // Drop the Strongbox item only
                             if(!breakingPlayer.isCreative()){
-                                Block.popResource(level, pos, new ItemStack(JolCraftItems.STRONGBOX_ITEM.get())); // Drop the Strongbox item without loot table
+                                Block.popResource(level, pos, new ItemStack(JolCraftItems.STRONGBOX_ITEM.get())); // Drop the Strongbox item (no loot)
                             }
                         } else {
                             if(!breakingPlayer.isCreative()){
                                 // If no loot table, drop the Strongbox item and contents
                                 Containers.dropContents(level, pos, strongbox);  // Drop the contents of the Strongbox
-                                Block.popResource(level, pos, new ItemStack(JolCraftItems.STRONGBOX_ITEM.get())); // Drop the Strongbox item without loot table
+                                Block.popResource(level, pos, new ItemStack(JolCraftItems.STRONGBOX_ITEM.get())); // Drop the Strongbox item
                             }
 
                         }
@@ -239,7 +243,13 @@ public class StrongboxBlock extends BaseEntityBlock implements SimpleWaterlogged
                 be.setItems(items);
             }
 
-            // Handle Loot Table separately
+            // Handle LOCKED state separately
+            if (stack.has(JolCraftDataComponents.LOCKED)) {
+                boolean isLocked = stack.get(JolCraftDataComponents.LOCKED);
+                level.setBlock(pos, state.setValue(StrongboxBlock.LOCKED, isLocked), 3);  // Set the LOCKED state of the block
+            }
+
+            // Ensure LootTable is set, but not nullified when locked
             if (stack.has(JolCraftDataComponents.LOOT_TABLE)) {
                 String lootTableString = stack.get(JolCraftDataComponents.LOOT_TABLE);
 
@@ -248,7 +258,7 @@ public class StrongboxBlock extends BaseEntityBlock implements SimpleWaterlogged
 
                 // Set the loot table in the block entity
                 be.setLootTable(lootTableKey, be.getLootTableSeed());  // Use the current lootTableSeed
-                level.setBlock(pos, state.setValue(LOCKED, true), 3);
+
             }
 
             // Handle Loot Table Seed separately
@@ -269,6 +279,8 @@ public class StrongboxBlock extends BaseEntityBlock implements SimpleWaterlogged
             be.setChanged();  // This ensures the block entity is synced with the client
         }
     }
+
+
     @Override
     protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (level.isClientSide()) return InteractionResult.CONSUME; // Only handle this on the server side
@@ -276,18 +288,15 @@ public class StrongboxBlock extends BaseEntityBlock implements SimpleWaterlogged
         // Check if the player is holding coal or charcoal first
         boolean isCoal = stack.is(Items.COAL) || stack.is(Items.CHARCOAL);
 
-
         //FOR TESTING FOR NOW!
         // If the player is holding coal/charcoal and the Strongbox is not locked, lock the Strongbox and show a message
         if (isCoal && !state.getValue(LOCKED)) {
             // Lock the Strongbox
             level.setBlock(pos, state.setValue(LOCKED, true), 3);
-
             // Display a message to the player
             player.displayClientMessage(
-                    Component.translatable("block.jolcraft.hearth.need_coal").withStyle(ChatFormatting.GRAY), true
+                    Component.translatable("tooltip.jolcraft.strongbox.locked").withStyle(ChatFormatting.GRAY), true
             );
-
             return InteractionResult.SUCCESS; // Consume the interaction to prevent further actions
         }
 
@@ -300,9 +309,9 @@ public class StrongboxBlock extends BaseEntityBlock implements SimpleWaterlogged
             }
 
             // Unlock the Strongbox if it is locked
-            if (state.getValue(LOCKED)) {
-                level.setBlock(pos, state.setValue(LOCKED, false), 3); // Set LOCKED to false (unlock it)
-            }
+//            if (state.getValue(LOCKED)) {
+//                level.setBlock(pos, state.setValue(LOCKED, false), 3); // Set LOCKED to false (unlock it)
+//            }
 
             return InteractionResult.SUCCESS; // Return SUCCESS to indicate the interaction was handled
         }
@@ -310,8 +319,6 @@ public class StrongboxBlock extends BaseEntityBlock implements SimpleWaterlogged
         // Return PASS if it's neither coal/charcoal nor an empty hand
         return InteractionResult.PASS;
     }
-
-
 
 
     @Override
@@ -326,14 +333,20 @@ public class StrongboxBlock extends BaseEntityBlock implements SimpleWaterlogged
         BlockEntity be = level.getBlockEntity(pos);
         return (be instanceof MenuProvider menuProvider) ? menuProvider : null;
     }
+
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
         if (level.isClientSide) {
+            // Keep the lid animation logic for the client side
             return createTickerHelper(type, JolCraftBlockEntities.STRONGBOX.get(), StrongboxBlockEntity::lidAnimateTick);
         } else {
+            // Keep the recheckOpen logic for the server side, and also call the tick method to update progress
             return createTickerHelper(type, JolCraftBlockEntities.STRONGBOX.get(), (serverLevel, pos, blockState, be) -> {
                 if (be instanceof StrongboxBlockEntity strongbox) {
+                    // Recheck if the strongbox is open
                     strongbox.recheckOpen();
+                    // Call the tick method to update lockpick progress
+                    strongbox.serverTick((ServerLevel) level, pos, state, strongbox);  // Update the lockpick progress on the server side
                 }
             });
         }
@@ -381,7 +394,6 @@ public class StrongboxBlock extends BaseEntityBlock implements SimpleWaterlogged
 
         return stack;
     }
-
 
 
 

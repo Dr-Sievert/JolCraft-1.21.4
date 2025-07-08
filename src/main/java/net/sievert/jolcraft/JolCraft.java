@@ -34,6 +34,7 @@ import net.sievert.jolcraft.loot.JolCraftLootModifiers;
 import net.sievert.jolcraft.network.JolCraftNetworking;
 import net.sievert.jolcraft.potion.JolCraftPotions;
 import net.sievert.jolcraft.screen.JolCraftMenuTypes;
+import net.sievert.jolcraft.screen.custom.LockScreen;
 import net.sievert.jolcraft.screen.custom.StrongboxMenu;
 import net.sievert.jolcraft.screen.custom.StrongboxScreen;
 import net.sievert.jolcraft.sound.JolCraftSounds;
@@ -146,19 +147,7 @@ public class JolCraft
         @SubscribeEvent
         public static void registerScreens(RegisterMenuScreensEvent event) {
             event.register(JolCraftMenuTypes.STRONGBOX_MENU.get(), StrongboxScreen::new);
-        }
-
-        @SubscribeEvent
-        public static void onRegisterClientExtensions(RegisterClientExtensionsEvent event) {
-            event.registerItem(new IClientItemExtensions() {
-                public void renderByItem(ItemStack stack, ItemDisplayContext displayContext, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay) {
-                    // Create a dummy BE instance with default state for rendering
-                    StrongboxBlockEntity be = new StrongboxBlockEntity(BlockPos.ZERO, JolCraftBlocks.STRONGBOX.get().defaultBlockState());
-
-                    // Render the BE as an item
-                    Minecraft.getInstance().getBlockEntityRenderDispatcher().render(be, 0.0f, poseStack, buffer);
-                }
-            }, JolCraftItems.STRONGBOX_ITEM.get());
+            event.register(JolCraftMenuTypes.LOCK_MENU.get(), LockScreen::new);
         }
 
         @SubscribeEvent

@@ -236,11 +236,26 @@ public class JolCraftRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_deepslate_plate", has(JolCraftItems.DEEPSLATE_PLATE.get())).save(output);
 
         shaped(RecipeCategory.MISC, JolCraftItems.STRONGBOX_ITEM.get())
-                .pattern("BBB")
-                .pattern("B B")
-                .pattern("BBB")
+                .pattern("BXB")
+                .pattern("X X")
+                .pattern("BXB")
                 .define('B', JolCraftItems.DEEPSLATE_PLATE.get())
+                .define('X', Items.DEEPSLATE_TILES)
                 .unlockedBy("has_deepslate_plate", has(JolCraftItems.DEEPSLATE_PLATE.get())).save(output);
+
+        shaped(RecipeCategory.MISC, JolCraftItems.LOCKPICK.get())
+                .pattern("  B")
+                .pattern(" B ")
+                .pattern("B  ")
+                .define('B', Items.IRON_NUGGET)
+                .unlockedBy("has_iron_nugget", has(Items.IRON_NUGGET)).save(output, "lockpick_right");
+
+        shaped(RecipeCategory.MISC, JolCraftItems.LOCKPICK.get())
+                .pattern("B  ")
+                .pattern(" B ")
+                .pattern("  B")
+                .define('B', Items.IRON_NUGGET)
+                .unlockedBy("has_iron_nugget", has(Items.IRON_NUGGET)).save(output, "lockpick_left");
 
         shapeless(RecipeCategory.BREWING, JolCraftItems.INVERIX.get(), 3)
                 .requires(JolCraftItems.MUFFHORN_MILK_BUCKET.get())

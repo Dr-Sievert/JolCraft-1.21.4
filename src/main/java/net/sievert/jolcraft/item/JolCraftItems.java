@@ -35,6 +35,9 @@ public class JolCraftItems {
                     .component(DataComponents.CONTAINER, ItemContainerContents.EMPTY))
     );
 
+    public static final DeferredItem<Item> LOCKPICK = ITEMS.registerItem("lockpick",
+            Item::new, new Item.Properties());
+
 
 
     //Materials, Armors, Trims, Tools and Weapons
