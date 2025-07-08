@@ -205,7 +205,8 @@
 
   "tooltip.jolcraft.strongbox.not_empty": "This strongbox has items inside.",
   "tooltip.jolcraft.strongbox.loot": "This strongbox has loot inside.",
-  "tooltip.jolcraft.strongbox.locked": "Strongbox locked.",
+  "tooltip.jolcraft.strongbox.set_locked": "You have locked this strongbox.",
+  "tooltip.jolcraft.strongbox.locked": "This strongbox is locked.",
 
   "tooltip.jolcraft.bounty.locked": "Bounty info locked",
   "tooltip.jolcraft.bounty.invalid": "Bounty Tier: Invalid",

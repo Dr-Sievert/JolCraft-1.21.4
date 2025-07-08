@@ -1,4 +1,4 @@
-package net.sievert.jolcraft.screen.custom;
+package net.sievert.jolcraft.screen.custom.strongbox;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;

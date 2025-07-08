@@ -27,8 +27,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.sievert.jolcraft.block.custom.StrongboxBlock;
 import net.sievert.jolcraft.block.entity.JolCraftBlockEntities;
-import net.sievert.jolcraft.screen.custom.LockMenu;
-import net.sievert.jolcraft.screen.custom.StrongboxMenu;
+import net.sievert.jolcraft.screen.custom.strongbox.LockMenu;
+import net.sievert.jolcraft.screen.custom.strongbox.StrongboxMenu;
 import net.sievert.jolcraft.sound.JolCraftSounds;
 
 import javax.annotation.Nullable;

@@ -9,8 +9,8 @@ import net.neoforged.neoforge.network.IContainerFactory;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.sievert.jolcraft.JolCraft;
-import net.sievert.jolcraft.screen.custom.LockMenu;
-import net.sievert.jolcraft.screen.custom.StrongboxMenu;
+import net.sievert.jolcraft.screen.custom.strongbox.LockMenu;
+import net.sievert.jolcraft.screen.custom.strongbox.StrongboxMenu;
 
 public class JolCraftMenuTypes {
     public static final DeferredRegister<MenuType<?>> MENUS =

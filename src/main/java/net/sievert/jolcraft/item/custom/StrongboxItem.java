@@ -21,11 +21,10 @@ public class StrongboxItem extends BlockItem {
 
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext ctx, List<Component> tooltip, TooltipFlag flag) {
-        // Check if the Strongbox has contents
-        ItemContainerContents contents = stack.get(DataComponents.CONTAINER);
-        if (contents != null && !Iterables.isEmpty(contents.nonEmptyItems())) {
-            tooltip.add(Component.translatable("tooltip.jolcraft.strongbox.not_empty")
-                    .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
+        // Check if it is locked
+        if (stack.has(JolCraftDataComponents.LOCKED)) {
+            tooltip.add(Component.translatable("tooltip.jolcraft.strongbox.locked")
+                    .withStyle(ChatFormatting.RED, ChatFormatting.ITALIC));
         }
 
         // Check if the Strongbox has a loot table
@@ -34,9 +33,17 @@ public class StrongboxItem extends BlockItem {
                     .withStyle(ChatFormatting.GREEN, ChatFormatting.ITALIC));
         }
 
+        // Check if the Strongbox has contents
+        ItemContainerContents contents = stack.get(DataComponents.CONTAINER);
+        if (contents != null && !Iterables.isEmpty(contents.nonEmptyItems())) {
+            tooltip.add(Component.translatable("tooltip.jolcraft.strongbox.not_empty")
+                    .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
+        }
+
         // Call super to retain any default hover text functionality
         super.appendHoverText(stack, ctx, tooltip, flag);
     }
+
 
 
 

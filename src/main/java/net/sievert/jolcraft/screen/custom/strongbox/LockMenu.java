@@ -1,8 +1,7 @@
-package net.sievert.jolcraft.screen.custom;
+package net.sievert.jolcraft.screen.custom.strongbox;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -40,7 +39,11 @@ public class LockMenu extends AbstractContainerMenu {
 
         // Add the lockpick slot (1 slot)
         this.addSlot(new LockpickSlot(this.blockEntity, 0, 16, 16));  // Lockpick slot
-
+        // Add the button slots (for button clicks)
+        this.addSlot(new ButtonSlot(this, 0, 48, 31));  // First button
+        this.addSlot(new ButtonSlot(this, 1, 80, 31));  // Second button
+        this.addSlot(new ButtonSlot(this, 2, 112, 31));  // Third button
+        
         // Add Player inventory slots
         for (int row = 0; row < 3; ++row) {
             for (int col = 0; col < 9; ++col) {
@@ -84,7 +87,7 @@ public class LockMenu extends AbstractContainerMenu {
         ItemStack stack = slot.getItem();
         ItemStack copy = stack.copy();
 
-        int lockSize = 1;  // Lockpick slot
+        int lockSize = 1;
         int invStart = lockSize;
         int invEnd = invStart + 27;
         int hotbarStart = invEnd;
@@ -161,6 +164,39 @@ public class LockMenu extends AbstractContainerMenu {
             player.getInventory().placeItemBackInInventory(stack);
         }
     }
+    @Override
+    public void clicked(int slotId, int button, ClickType clickType, Player player) {
+        // Only handle click for button slots (button slots have specific slot IDs)
+        Slot clickedSlot = this.slots.get(slotId); // Get the clicked slot
+        if (clickedSlot instanceof ButtonSlot buttonSlot) {
+            // buttonIndex is available from the ButtonSlot instance
+            int buttonIndex = buttonSlot.buttonIndex;
+
+            // Handle button click based on the buttonIndex
+            switch (buttonIndex) {
+                case 0:
+                    blockEntity.lockpickProgress += 10;  // Increment by 10
+                    break;
+                case 1:
+                    blockEntity.lockpickProgress += 20;  // Increment by 20
+                    break;
+                case 2:
+                    blockEntity.lockpickProgress += 30;  // Increment by 30
+                    break;
+            }
+
+            // Ensure the BlockEntity is marked as changed and synced
+            blockEntity.setChanged();
+        } else {
+            // If it's not a button slot, call the default click behavior for item slots
+            super.clicked(slotId, button, clickType, player);
+        }
+    }
+
+
+
+
+
 
 
 

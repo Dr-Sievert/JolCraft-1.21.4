@@ -1,4 +1,4 @@
-package net.sievert.jolcraft.screen.custom;
+package net.sievert.jolcraft.screen.custom.strongbox;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;

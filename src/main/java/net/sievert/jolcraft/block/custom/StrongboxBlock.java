@@ -51,7 +51,6 @@ import net.sievert.jolcraft.block.entity.JolCraftBlockEntities;
 import net.sievert.jolcraft.block.entity.custom.StrongboxBlockEntity;
 import net.sievert.jolcraft.component.JolCraftDataComponents;
 import net.sievert.jolcraft.item.JolCraftItems;
-import net.sievert.jolcraft.screen.custom.LockMenu;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -295,7 +294,7 @@ public class StrongboxBlock extends BaseEntityBlock implements SimpleWaterlogged
             level.setBlock(pos, state.setValue(LOCKED, true), 3);
             // Display a message to the player
             player.displayClientMessage(
-                    Component.translatable("tooltip.jolcraft.strongbox.locked").withStyle(ChatFormatting.GRAY), true
+                    Component.translatable("tooltip.jolcraft.strongbox.set_locked").withStyle(ChatFormatting.GRAY), true
             );
             return InteractionResult.SUCCESS; // Consume the interaction to prevent further actions
         }
