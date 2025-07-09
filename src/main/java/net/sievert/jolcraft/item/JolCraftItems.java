@@ -22,6 +22,9 @@ public class JolCraftItems {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(JolCraft.MOD_ID);
 
     //Core Items
+    public static final DeferredItem<Item> DEV_KEY = ITEMS.registerItem("dev_key",
+            Item::new, new Item.Properties().rarity(Rarity.EPIC));
+
     public static final DeferredItem<Item> GOLD_COIN = ITEMS.registerItem("gold_coin",
             Item::new, new Item.Properties().rarity(Rarity.UNCOMMON));
 

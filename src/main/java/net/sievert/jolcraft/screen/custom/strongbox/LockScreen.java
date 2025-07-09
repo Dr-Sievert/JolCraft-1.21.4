@@ -14,8 +14,8 @@ import java.util.List;
 import java.util.Random;
 
 public class LockScreen extends AbstractContainerScreen<LockMenu> {
-    private long lastTickTime = 0;
     private final Random guiRandom = new Random();
+    private int lastSeenPulse = 0;
 
     private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "textures/gui/container/strongbox_lock.png");
     private static final ResourceLocation PROGRESS_TEXTURE = ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "textures/gui/container/sprites/lockpick/lockpick_progress.png");
@@ -44,37 +44,25 @@ public class LockScreen extends AbstractContainerScreen<LockMenu> {
     }
 
     @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
-        long currentTime = System.currentTimeMillis();
-        if (currentTime - lastTickTime > 50) { // ~1 game tick = 50ms
-            this.menu.tick();
-            lastTickTime = currentTime;
-        }
-        super.render(guiGraphics, mouseX, mouseY, partialTicks);
-    }
-
-    @Override
     protected void renderBg(GuiGraphics guiGraphics, float partialTicks, int mouseX, int mouseY) {
         // Set up the background texture
         int x = (this.width - this.imageWidth) / 2;
         int y = (this.height - this.imageHeight) / 2;
+        int pulse = this.menu.getButtonLayerUpdatePulse();
+
         guiGraphics.blit(RenderType.GUI_TEXTURED, TEXTURE, x, y, 0, 0, this.imageWidth, this.imageHeight, 176, 150);
 
         // Only update broken lockpick sprite if a new cycle has started
-        if (this.menu.getShouldButtonLayerUpdate()) {
+        if (pulse != lastSeenPulse) {
+            lastSeenPulse = pulse;
             guiGraphics.blit(RenderType.GUI_TEXTURED, TEXTURE, x, y, 0, 0, this.imageWidth, this.imageHeight, 176, 150);
             updateBrokenLockpickTexture();
-            renderButtonTextures(guiGraphics, x, y, mouseX, mouseY);
-            this.menu.setShouldButtonLayerUpdate(false);
-            this.menu.updatechanges();
+            renderLockpickProgress(guiGraphics, x, y);
         }
+
 
         if (this.menu.isActive()) {
             renderLockpickProgress(guiGraphics, x, y);
-            this.menu.updatechanges();
-        }
-
-        if (this.menu.isActive()) {
             renderButtonTextures(guiGraphics, x, y, mouseX, mouseY);
         }
     }
@@ -139,7 +127,7 @@ public class LockScreen extends AbstractContainerScreen<LockMenu> {
                 int btnY = y + 31;
                 int btnW = 16, btnH = 16;
 
-                if (mouseX >= btnX && mouseY >= btnY && mouseX < btnX + btnW && mouseY < btnY + btnH) {
+                if (mouseX >= btnX && mouseY >= btnY && mouseX < btnX + btnW && mouseY < btnY + btnH && this.menu.isActive()) {
                     // Play instant client-only click sound for feedback
                     if (minecraft != null && minecraft.getSoundManager() != null) {
                         minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));

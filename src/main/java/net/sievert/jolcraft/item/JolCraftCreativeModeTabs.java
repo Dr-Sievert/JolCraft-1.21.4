@@ -25,6 +25,7 @@ public class JolCraftCreativeModeTabs {
                     .title(Component.translatable("itemGroup.jolcraft.jolcraft_items_tab"))
                     .icon(() -> new ItemStack(JolCraftItems.GOLD_COIN.get()))
                     .displayItems((pParameters, pOutput) -> {
+                        pOutput.accept(JolCraftItems.DEV_KEY);
                         pOutput.accept(JolCraftItems.DWARVEN_LEXICON);
                         pOutput.accept(JolCraftItems.GOLD_COIN);
                         pOutput.accept(JolCraftBlocks.HEARTH);

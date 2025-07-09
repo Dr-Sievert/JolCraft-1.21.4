@@ -37,6 +37,7 @@ public class StrongboxBlockEntity extends RandomizableContainerBlockEntity imple
     @Nullable
     public Player currentInteractingPlayer = null;  // Track the currently interacting player
     private NonNullList<ItemStack> items = NonNullList.withSize(18, ItemStack.EMPTY); // 2x9
+    private boolean allowLootUnpack = false;
 
 
     private final ContainerOpenersCounter openersCounter =
@@ -112,7 +113,9 @@ public class StrongboxBlockEntity extends RandomizableContainerBlockEntity imple
         if (this.isLocked()) {
             return;  // Do nothing if locked
         }
-        super.unpackLootTable(player);  // Unpack loot if not locked
+        if(allowLootUnpack){
+            super.unpackLootTable(player);  // Unpack loot if not locked
+        }
     }
 
     @Override
@@ -231,6 +234,7 @@ public class StrongboxBlockEntity extends RandomizableContainerBlockEntity imple
             return new LockMenu(id, inv, this);
         } else {
             // For unlocked, you might or might not want this restriction; usually not needed:
+            this.allowLootUnpack = true;
             currentInteractingPlayer = inv.player;
             return new StrongboxMenu(id, inv, this);
         }

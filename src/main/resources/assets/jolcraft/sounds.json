@@ -182,9 +182,6 @@
     "sounds": [
       {
         "name": "jolcraft:block/strongbox/strongbox_unlock1"
-      },
-      {
-        "name": "jolcraft:block/strongbox/strongbox_unlock2"
       }
     ],
     "subtitle": "sounds.jolcraft.strongbox_unlock"

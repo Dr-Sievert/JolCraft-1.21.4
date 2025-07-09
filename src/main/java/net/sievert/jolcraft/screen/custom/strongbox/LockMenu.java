@@ -36,8 +36,6 @@ public class LockMenu extends AbstractContainerMenu {
         this.blockEntity = (StrongboxBlockEntity) blockEntity;
         this.level = inv.player.level();
         this.addDataSlots(data);
-        updateLockpickButton();
-        updatechanges();
 
         // Add the lockpick slot
         this.addSlot(new LockpickSlot(this.blockEntity, 0, 16, 16, this.blockEntity));  // Lockpick slot
@@ -62,25 +60,28 @@ public class LockMenu extends AbstractContainerMenu {
     public void tick() {
 
         tickCounter++;
-        if (tickCounter >= tickRate) {
+
+        if (tickCounter >= tickRate && isActive()) {
             tickCounter = 0;
-            tickRate = 20 + new Random().nextInt(81); // New random between 20 and 100 ticks
             updateLockpickButton();
-            updatechanges();
         }
 
         if (getLockpickProgress() > 0) {
-            setLockpickProgress(clampLockpickProgress(getLockpickProgress() - 1));
-            updatechanges();
+            if(!level.isClientSide){
+                setLockpickProgress(clampLockpickProgress(getLockpickProgress() - 1));
+                updatechanges();
+            }
+
         }
     }
 
     public void updateLockpickButton() {
         if (!level.isClientSide) {
-            setShouldButtonLayerUpdate(true);
             setCorrectButtonId(new Random().nextInt(3));
+            setButtonLayerUpdatePulse((getButtonLayerUpdatePulse() % 3) + 1); // cycles 1-3
             updatechanges();
         }
+        tickRate = 60 + new Random().nextInt(41); // New random between 3-5 seconds
     }
 
     public void updatechanges(){
@@ -92,26 +93,26 @@ public class LockMenu extends AbstractContainerMenu {
         int correctButton = getCorrectButtonId();
         ItemStack lockpick = getLockpickSlotItem();
 
-        if(level.isClientSide){
-            return false;
-        }
-
         if (!lockpick.isEmpty()) {
             if (buttonId == correctButton) {
-                setLockpickProgress(clampLockpickProgress(getLockpickProgress() + 50));
+                if(!level.isClientSide){
+                    setLockpickProgress(clampLockpickProgress(getLockpickProgress() + 20));
+                    updatechanges();
+                }
                 level.playSound(null, blockEntity.getBlockPos(), JolCraftSounds.STRONGBOX_LOCKPICK.get(), SoundSource.BLOCKS, 1.2F, 1.0F);
                 // Unlock and close for this player if at or above max progress!
                 if (getLockpickProgress() >= MAX_PROGRESS) {
                     unlockStrongbox(player);
                 }
             } else {
-                lockpick.shrink(1);
-                setLockpickProgress(0);
+                if(!level.isClientSide){
+                    lockpick.shrink(1);
+                    setLockpickProgress(0);
+                    updatechanges();
+                }
                 level.playSound(null, blockEntity.getBlockPos(), JolCraftSounds.STRONGBOX_LOCKPICK_BREAK.get(), SoundSource.BLOCKS, 1.5F, 0.8F);
             }
-            tickRate = 20 + new Random().nextInt(81); // New random between 20 and 100 ticks
             updateLockpickButton();
-            updatechanges();
             return true;
         }
         return false;
@@ -123,7 +124,6 @@ public class LockMenu extends AbstractContainerMenu {
         }
         this.level.playSound(null, blockEntity.getBlockPos(), JolCraftSounds.STRONGBOX_UNLOCK.get(), SoundSource.BLOCKS, 1.5f, 1.0f);
         this.level.setBlock(blockEntity.getBlockPos(), blockEntity.getBlockState().setValue(StrongboxBlock.LOCKED, false), 3);
-        updatechanges();
         blockEntity.setChanged();
     }
 
@@ -156,8 +156,6 @@ public class LockMenu extends AbstractContainerMenu {
 
             // Trigger button randomization when the lockpick is placed in the slot (normal or shift-click)
             if (!stack.isEmpty()) {
-                updateLockpickButton();
-                updatechanges();
             }
 
             // If the lockpick is removed from the slot, reset button states
@@ -189,6 +187,7 @@ public class LockMenu extends AbstractContainerMenu {
                     setLockpickProgress(0);
                     updatechanges();
                 }
+
             }
         }
 
@@ -247,14 +246,14 @@ public class LockMenu extends AbstractContainerMenu {
 
     public final ContainerData data = new ContainerData() {
         private int lockpickProgress = 0;
-        private int correctButtonId = 1;
-        private int buttonLayerUpdate = 0; // 0 = false, 1 = true
+        private int correctButtonId = 0;
+        private int buttonLayerUpdatePulse = 0; // The "pulse" counter
 
         @Override
         public int get(int idx) {
             if (idx == 0) return lockpickProgress;
             if (idx == 1) return correctButtonId;
-            if (idx == 2) return buttonLayerUpdate;
+            if (idx == 2) return buttonLayerUpdatePulse;
             return 0;
         }
 
@@ -262,7 +261,7 @@ public class LockMenu extends AbstractContainerMenu {
         public void set(int idx, int value) {
             if (idx == 0) lockpickProgress = value;
             if (idx == 1) correctButtonId = value;
-            if (idx == 2) buttonLayerUpdate = value;
+            if (idx == 2) buttonLayerUpdatePulse = value;
         }
 
         @Override
@@ -284,13 +283,8 @@ public class LockMenu extends AbstractContainerMenu {
 
     public void setCorrectButtonId(int id) { data.set(1, id); }
 
-    public boolean getShouldButtonLayerUpdate() {
-        return data.get(2) != 0;
-    }
+    public int getButtonLayerUpdatePulse() { return data.get(2); }
 
-    public void setShouldButtonLayerUpdate(boolean value) {
-        data.set(2, value ? 1 : 0);
-    }
-
+    public void setButtonLayerUpdatePulse(int value) { data.set(2, value); }
 
 }

@@ -11,6 +11,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
@@ -20,7 +21,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -51,6 +51,7 @@ import net.sievert.jolcraft.block.entity.JolCraftBlockEntities;
 import net.sievert.jolcraft.block.entity.custom.StrongboxBlockEntity;
 import net.sievert.jolcraft.component.JolCraftDataComponents;
 import net.sievert.jolcraft.item.JolCraftItems;
+import net.sievert.jolcraft.sound.JolCraftSounds;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -282,25 +283,30 @@ public class StrongboxBlock extends BaseEntityBlock implements SimpleWaterlogged
 
     @Override
     protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        if (level.isClientSide()) return InteractionResult.CONSUME; // Only handle this on the server side
+        boolean isKey = stack.is(JolCraftItems.DEV_KEY);
 
-        // Check if the player is holding coal or charcoal first
-        boolean isCoal = stack.is(Items.COAL) || stack.is(Items.CHARCOAL);
+        // Only handle this on the server side
+        if (level.isClientSide()){
+            return InteractionResult.CONSUME;
+        }
 
         //FOR TESTING FOR NOW!
         // If the player is holding coal/charcoal and the Strongbox is not locked, lock the Strongbox and show a message
-        if (isCoal && !state.getValue(LOCKED)) {
+        if (isKey && !state.getValue(LOCKED)) {
             // Lock the Strongbox
             level.setBlock(pos, state.setValue(LOCKED, true), 3);
             // Display a message to the player
             player.displayClientMessage(
                     Component.translatable("tooltip.jolcraft.strongbox.set_locked").withStyle(ChatFormatting.GRAY), true
             );
+            //Play sound
+            level.playSound(null, pos, JolCraftSounds.STRONGBOX_UNLOCK.get(), SoundSource.BLOCKS, 1.2F, 0.8F);
+
             return InteractionResult.SUCCESS; // Consume the interaction to prevent further actions
         }
 
         // If the stack is empty (no item), just open the menu and unlock the Strongbox if it's locked
-        if (!isCoal) {
+        if (!isKey) {
             // Open the menu
             MenuProvider menuProvider = this.getMenuProvider(state, level, pos);
             BlockEntity be = level.getBlockEntity(pos);

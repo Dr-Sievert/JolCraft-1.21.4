@@ -1,14 +1,18 @@
 package net.sievert.jolcraft.event;
 
+import net.minecraft.client.Minecraft;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.api.distmarker.Dist;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.block.JolCraftBlocks;
 import net.sievert.jolcraft.block.custom.FermentingCauldronBlock;
 import net.sievert.jolcraft.block.custom.FermentingStage;
 import net.sievert.jolcraft.block.custom.HopsType;
+import net.sievert.jolcraft.screen.custom.strongbox.LockMenu;
+import net.sievert.jolcraft.screen.custom.strongbox.LockScreen;
 
 @EventBusSubscriber(modid = JolCraft.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class JolCraftClientEvents {

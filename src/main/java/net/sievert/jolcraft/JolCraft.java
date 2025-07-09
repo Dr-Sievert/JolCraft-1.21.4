@@ -1,12 +1,18 @@
 package net.sievert.jolcraft;
 
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
+import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import net.sievert.jolcraft.advancement.JolCraftCriteriaTriggers;
 import net.sievert.jolcraft.block.JolCraftBlocks;
 import net.sievert.jolcraft.block.entity.JolCraftBlockEntities;
@@ -24,9 +30,11 @@ import net.sievert.jolcraft.loot.JolCraftLootModifiers;
 import net.sievert.jolcraft.network.JolCraftNetworking;
 import net.sievert.jolcraft.potion.JolCraftPotions;
 import net.sievert.jolcraft.screen.JolCraftMenuTypes;
+import net.sievert.jolcraft.screen.custom.strongbox.LockMenu;
 import net.sievert.jolcraft.screen.custom.strongbox.LockScreen;
 import net.sievert.jolcraft.screen.custom.strongbox.StrongboxScreen;
 import net.sievert.jolcraft.sound.JolCraftSounds;
+import net.sievert.jolcraft.util.ServerTickHandler;
 import net.sievert.jolcraft.world.processor.JolCraftProcessors;
 import net.sievert.jolcraft.world.structure.JolCraftStructures;
 import org.slf4j.Logger;
@@ -79,11 +87,18 @@ public class JolCraft
         // Register server events
         NeoForge.EVENT_BUS.register(this);
 
+        //Client tick
+        NeoForge.EVENT_BUS.addListener(ClientTickEvent.Post.class, this::onClientTick);
+
+        ServerTickHandler.register();
+
         // Register items to creative tabs (if needed)
         modEventBus.addListener(this::addCreative);
 
         modEventBus.addListener(JolCraftNetworking::register);
         modEventBus.addListener(JolCraftCriteriaTriggers::register);
+
+
 
         // Register the config file
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
@@ -183,4 +198,22 @@ public class JolCraft
     public static ResourceLocation locate(String path) {
         return ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, path);
     }
+
+    @OnlyIn(Dist.CLIENT)
+    private void onClientTick(ClientTickEvent event) {
+        // This event fires once per client tick (both PRE and POST)
+        // We want to tick only at the end of the tick (POST)
+        if (event instanceof ClientTickEvent.Post) {
+            Minecraft mc = Minecraft.getInstance();
+            if (mc.player != null && mc.screen instanceof LockScreen lockScreen) {
+                LockMenu menu = lockScreen.getMenu();
+                if (menu != null) {
+                    menu.tick();
+                }
+            }
+        }
+    }
+
+
+
 }
