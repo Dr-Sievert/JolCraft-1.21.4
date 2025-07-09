@@ -2,7 +2,7 @@ package net.sievert.jolcraft.screen.custom.strongbox;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -10,9 +10,9 @@ import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.sievert.jolcraft.block.custom.StrongboxBlock;
 import net.sievert.jolcraft.block.entity.custom.StrongboxBlockEntity;
 import net.sievert.jolcraft.screen.JolCraftMenuTypes;
-import net.sievert.jolcraft.screen.custom.slot.ButtonSlot;
 import net.sievert.jolcraft.screen.custom.slot.LockpickSlot;
 import net.sievert.jolcraft.sound.JolCraftSounds;
 
@@ -23,6 +23,7 @@ public class LockMenu extends AbstractContainerMenu {
     public final StrongboxBlockEntity blockEntity;
     private final Level level;
     private final Random random = new Random();  // Random instance for sprite selection
+    final int MAX_PROGRESS = 200;
 
     // Used by NeoForge's auto-gui opening
     public LockMenu(int id, Inventory inv, FriendlyByteBuf extraData) {
@@ -34,14 +35,12 @@ public class LockMenu extends AbstractContainerMenu {
         super(JolCraftMenuTypes.LOCK_MENU.get(), id);
         this.blockEntity = (StrongboxBlockEntity) blockEntity;
         this.level = inv.player.level();
+        this.addDataSlots(data);
+        updateLockpickButton();
+        updatechanges();
 
-        // Add the lockpick slot (1 slot)
-        this.addSlot(new LockpickSlot(this.blockEntity, 0, 16, 16));  // Lockpick slot
-
-        // Add the button slots (for button clicks)
-        this.addSlot(new ButtonSlot(this, 1, 48, 31));  // First button
-        this.addSlot(new ButtonSlot(this, 2, 80, 31));  // Second button
-        this.addSlot(new ButtonSlot(this, 3, 112, 31));  // Third button
+        // Add the lockpick slot
+        this.addSlot(new LockpickSlot(this.blockEntity, 0, 16, 16, this.blockEntity));  // Lockpick slot
 
         // Add Player inventory slots
         for (int row = 0; row < 3; ++row) {
@@ -55,50 +54,78 @@ public class LockMenu extends AbstractContainerMenu {
             this.addSlot(new Slot(inv, col, 8 + col * 18, 126));
         }
 
-        this.addDataSlot(new DataSlot() {
-            @Override
-            public int get() {
-                // Safely cast the blockEntity to StrongboxBlockEntity
-                if (blockEntity instanceof StrongboxBlockEntity strongbox) {
-                    return strongbox.getContainerData().get(0);  // Access the lockpick progress
-                }
-                return 0;  // Fallback value if blockEntity is not StrongboxBlockEntity
-            }
+    }
 
-            @Override
-            public void set(int value) {
-                // Safely cast the blockEntity to StrongboxBlockEntity
-                if (blockEntity instanceof StrongboxBlockEntity strongbox) {
-                    strongbox.getContainerData().set(0, value);  // Set the lockpick progress
-                }
-            }
-        });
+    private int tickCounter = 0; // Counter to track ticks for updating the button
+    private int tickRate = 20 + new Random().nextInt(81); // 20 to 100 ticks (1s to 5s)
 
+    public void tick() {
+
+        tickCounter++;
+        if (tickCounter >= tickRate) {
+            tickCounter = 0;
+            tickRate = 20 + new Random().nextInt(81); // New random between 20 and 100 ticks
+            updateLockpickButton();
+            updatechanges();
+        }
+
+        if (getLockpickProgress() > 0) {
+            setLockpickProgress(clampLockpickProgress(getLockpickProgress() - 1));
+            updatechanges();
+        }
+    }
+
+    public void updateLockpickButton() {
+        if (!level.isClientSide) {
+            setShouldButtonLayerUpdate(true);
+            setCorrectButtonId(new Random().nextInt(3));
+            updatechanges();
+        }
+    }
+
+    public void updatechanges(){
+        this.broadcastChanges();   // Sync container data to client
     }
 
     @Override
-    public void clicked(int slotId, int button, ClickType clickType, Player player) {
-        Slot lockpickslot = this.slots.getFirst();
-        Slot clickedSlot = this.slots.get(slotId);
+    public boolean clickMenuButton(Player player, int buttonId) {
+        int correctButton = getCorrectButtonId();
+        ItemStack lockpick = getLockpickSlotItem();
 
-        // Only process button slots (1, 2, 3) and ensure we are not already processing
-        if (slotId >= 1 && slotId <= 3) {
-            if (clickedSlot instanceof ButtonSlot buttonSlot) {
-                int buttonIndex = buttonSlot.buttonIndex;
-                if (buttonIndex == 1 || buttonIndex == 2 || buttonIndex == 3) {
-                    blockEntity.lockpickProgress += 20;  // Increment by 10
-                    player.playSound(JolCraftSounds.STRONGBOX_LOCKPICK.get(), 1.0F, 1.0F);
-                    blockEntity.setChanged();
-                }
-            } else {
-
-            }
+        if(level.isClientSide){
+            return false;
         }
 
-        super.clicked(slotId, button, clickType, player);
-
+        if (!lockpick.isEmpty()) {
+            if (buttonId == correctButton) {
+                setLockpickProgress(clampLockpickProgress(getLockpickProgress() + 50));
+                level.playSound(null, blockEntity.getBlockPos(), JolCraftSounds.STRONGBOX_LOCKPICK.get(), SoundSource.BLOCKS, 1.2F, 1.0F);
+                // Unlock and close for this player if at or above max progress!
+                if (getLockpickProgress() >= MAX_PROGRESS) {
+                    unlockStrongbox(player);
+                }
+            } else {
+                lockpick.shrink(1);
+                setLockpickProgress(0);
+                level.playSound(null, blockEntity.getBlockPos(), JolCraftSounds.STRONGBOX_LOCKPICK_BREAK.get(), SoundSource.BLOCKS, 1.5F, 0.8F);
+            }
+            tickRate = 20 + new Random().nextInt(81); // New random between 20 and 100 ticks
+            updateLockpickButton();
+            updatechanges();
+            return true;
+        }
+        return false;
     }
 
+    public void unlockStrongbox(Player player) {
+        if (player != null) {
+            player.closeContainer();
+        }
+        this.level.playSound(null, blockEntity.getBlockPos(), JolCraftSounds.STRONGBOX_UNLOCK.get(), SoundSource.BLOCKS, 1.5f, 1.0f);
+        this.level.setBlock(blockEntity.getBlockPos(), blockEntity.getBlockState().setValue(StrongboxBlock.LOCKED, false), 3);
+        updatechanges();
+        blockEntity.setChanged();
+    }
 
 
     @Override
@@ -129,6 +156,8 @@ public class LockMenu extends AbstractContainerMenu {
 
             // Trigger button randomization when the lockpick is placed in the slot (normal or shift-click)
             if (!stack.isEmpty()) {
+                updateLockpickButton();
+                updatechanges();
             }
 
             // If the lockpick is removed from the slot, reset button states
@@ -141,8 +170,6 @@ public class LockMenu extends AbstractContainerMenu {
 
         return copy;
     }
-
-
 
     // Check if the menu is still valid (if the Strongbox is still there)
     @Override
@@ -158,7 +185,10 @@ public class LockMenu extends AbstractContainerMenu {
         if (blockEntity instanceof StrongboxBlockEntity strongbox) {
             if (strongbox.getCurrentInteractingPlayer() == player) {
                 strongbox.currentInteractingPlayer = null;  // Clear the reference to the interacting player in the BE
-                blockEntity.lockpickProgress = 0;
+                if(!level.isClientSide){
+                    setLockpickProgress(0);
+                    updatechanges();
+                }
             }
         }
 
@@ -173,7 +203,6 @@ public class LockMenu extends AbstractContainerMenu {
             }
         }
     }
-
 
     private static void dropOrPlaceInInventory(Player player, ItemStack stack) {
         boolean flag;
@@ -210,6 +239,57 @@ public class LockMenu extends AbstractContainerMenu {
 
     public StrongboxBlockEntity getBlockEntity() {
         return blockEntity;
+    }
+
+    private int clampLockpickProgress(int value) {
+        return Math.max(0, Math.min(value, MAX_PROGRESS));
+    }
+
+    public final ContainerData data = new ContainerData() {
+        private int lockpickProgress = 0;
+        private int correctButtonId = 1;
+        private int buttonLayerUpdate = 0; // 0 = false, 1 = true
+
+        @Override
+        public int get(int idx) {
+            if (idx == 0) return lockpickProgress;
+            if (idx == 1) return correctButtonId;
+            if (idx == 2) return buttonLayerUpdate;
+            return 0;
+        }
+
+        @Override
+        public void set(int idx, int value) {
+            if (idx == 0) lockpickProgress = value;
+            if (idx == 1) correctButtonId = value;
+            if (idx == 2) buttonLayerUpdate = value;
+        }
+
+        @Override
+        public int getCount() {
+            return 3;
+        }
+    };
+
+
+    public ContainerData getContainerData() {
+        return data; // Just return the field!
+    }
+
+    public int  getLockpickProgress() { return data.get(0); }
+
+    public void setLockpickProgress(int progress) { data.set(0, (int)progress); }
+
+    public int getCorrectButtonId() { return data.get(1); }
+
+    public void setCorrectButtonId(int id) { data.set(1, id); }
+
+    public boolean getShouldButtonLayerUpdate() {
+        return data.get(2) != 0;
+    }
+
+    public void setShouldButtonLayerUpdate(boolean value) {
+        data.set(2, value ? 1 : 0);
     }
 
 

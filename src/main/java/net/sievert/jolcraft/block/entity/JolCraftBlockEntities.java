@@ -50,11 +50,10 @@ public class JolCraftBlockEntities {
                     })
                     .put(STRONGBOX, (level, pos, state, blockEntity) -> {
                         // Ensure that the blockEntity is of the correct type (StrongboxBlockEntity)
-                        if (blockEntity instanceof StrongboxBlockEntity) {
-                            StrongboxBlockEntity strongbox = (StrongboxBlockEntity) blockEntity;
-                            if (level instanceof ServerLevel) {
+                        if (blockEntity instanceof StrongboxBlockEntity strongbox) {
+                            if (level instanceof Level) {
                                 // Call the serverTick method with correct arguments
-                                strongbox.serverTick((ServerLevel) level, pos, state, strongbox);
+                                strongbox.tick(level, pos, state, strongbox);
                             }
                         }
                     })

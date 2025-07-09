@@ -1,21 +1,19 @@
 package net.sievert.jolcraft.block.entity.custom;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.Mth;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -39,8 +37,7 @@ public class StrongboxBlockEntity extends RandomizableContainerBlockEntity imple
     @Nullable
     public Player currentInteractingPlayer = null;  // Track the currently interacting player
     private NonNullList<ItemStack> items = NonNullList.withSize(18, ItemStack.EMPTY); // 2x9
-    public static final float MAX_PROGRESS = 200;
-    public float lockpickProgress = 0;
+
 
     private final ContainerOpenersCounter openersCounter =
             new ContainerOpenersCounter() {
@@ -207,8 +204,6 @@ public class StrongboxBlockEntity extends RandomizableContainerBlockEntity imple
         if (!this.trySaveLootTable(tag)) {
             ContainerHelper.saveAllItems(tag, this.items, provider);
         }
-        // Save the lockpick progress
-        tag.putFloat("LockpickProgress", lockpickProgress);  // Save as float
     }
 
     @Override
@@ -218,23 +213,25 @@ public class StrongboxBlockEntity extends RandomizableContainerBlockEntity imple
         if (!this.tryLoadLootTable(tag)) {
             ContainerHelper.loadAllItems(tag, this.items, provider);
         }
-        // Load the lockpick progress
-        if (tag.contains("LockpickProgress")) {
-            lockpickProgress = tag.getFloat("LockpickProgress");  // Load as float
-        }
     }
 
     @Override
     protected AbstractContainerMenu createMenu(int id, Inventory inv) {
-        // Check if the Strongbox is locked
         if (this.isLocked()) {
-            // LockMenu should not handle loot table or slot contents
-            currentInteractingPlayer = inv.player;  // Set the player interacting with the Strongbox
-            // Debug: Print the player interacting with the Strongbox
-
+            // Only allow if nobody is using, or this *is* the same player
+            if (this.currentInteractingPlayer != null && this.currentInteractingPlayer != inv.player) {
+                // Send message (only for the second player, not the first)
+                inv.player.displayClientMessage(
+                        Component.translatable("tooltip.jolcraft.strongbox.busy").withStyle(ChatFormatting.GRAY), true
+                );
+                return null;
+            }
+            // Allow access for the first or same player
+            currentInteractingPlayer = inv.player;
             return new LockMenu(id, inv, this);
         } else {
-            // Return the regular StrongboxMenu if not locked
+            // For unlocked, you might or might not want this restriction; usually not needed:
+            currentInteractingPlayer = inv.player;
             return new StrongboxMenu(id, inv, this);
         }
     }
@@ -267,106 +264,17 @@ public class StrongboxBlockEntity extends RandomizableContainerBlockEntity imple
         return state.getValue(StrongboxBlock.LOCKED);
     }
 
-
-
-    public void unlockStrongbox() {
-        // Ensure the strongbox is unlocked if the level is valid and a player is interacting
-        if (this.level != null && getCurrentInteractingPlayer() != null) {
-            Player player = getCurrentInteractingPlayer();  // Get the current interacting player
-
-            // Ensure the player has a container open and it's a LockMenu
-            if (player.containerMenu instanceof LockMenu) {
-                player.closeContainer();  // Close the container for the player
-
-                // Optionally, play the unlock sound
-                this.level.playSound(null, this.getBlockPos(), JolCraftSounds.STRONGBOX_UNLOCK.get(), SoundSource.BLOCKS, 1.0f, 1.0f);
-
-                // Ensure the block is unlocked (if on the server side)
-                if (!this.level.isClientSide) {
-                    this.level.setBlock(this.getBlockPos(), this.getBlockState().setValue(StrongboxBlock.LOCKED, false), 3);
-                }
-
-                // Reset the interacting player after unlocking
-                currentInteractingPlayer = null;  // Clear the reference to the interacting player
-            }
-        }
-    }
-
-
-    public static void serverTick(ServerLevel level, BlockPos pos, BlockState state, StrongboxBlockEntity strongbox) {
-        boolean flag = strongbox.isLocked();  // Is the strongbox locked?
-        boolean stateChanged = false;
-
-        // If the strongbox is not locked or the progress is 0, return early
-        if (!flag || strongbox.lockpickProgress == 0) {
-            return;
-        }
-
-        // Ensure there's a player interacting with the strongbox
-        Player player = strongbox.getCurrentInteractingPlayer();
-        if (player != null && player.containerMenu instanceof LockMenu lockMenu) {
-            // Decrease progress if lockpick is not in the slot and progress is greater than 0
-            if (strongbox.lockpickProgress > 0) {
-                strongbox.lockpickProgress--;  // Decrease progress
-                stateChanged = true;
-            }
-
-            // If the progress reaches MAX_PROGRESS, unlock the strongbox
-            if (strongbox.lockpickProgress >= StrongboxBlockEntity.MAX_PROGRESS && flag) {
-                strongbox.unlockStrongbox();  // Unlock the strongbox
-
-                // Reset progress after unlocking
-                strongbox.lockpickProgress = 0;
-                stateChanged = true;
-
-                // Update the block state to unlocked (LOCKED = false)
-                state = state.setValue(StrongboxBlock.LOCKED, false);
-                level.setBlock(pos, state, 3);
-            }
-        }
-
-        // If any state changed, mark the block as changed to notify the world and client
-        if (stateChanged) {
-            strongbox.setChanged();
-        }
+    public static void tick(Level level, BlockPos pos, BlockState state, StrongboxBlockEntity strongbox) {
     }
 
     public Player getCurrentInteractingPlayer() {
         return currentInteractingPlayer;  // Return the player currently interacting with the strongbox
     }
 
-    public float getLockpickProgress() {
-        return this.lockpickProgress;  // Return the current lockpick progress
-    }
-
-    // ContainerData getter
-    public ContainerData getContainerData() {
-        return new ContainerData() {
-            @Override
-            public int get(int index) {
-                return index == 0 ? Mth.floor(lockpickProgress) : 0;
-            }
-
-            @Override
-            public void set(int index, int value) {
-                if (index == 0) {
-                    lockpickProgress = value;
-                }
-            }
-
-            @Override
-            public int getCount() {
-                return 1;  // We are syncing only lockpick progress here
-            }
-        };
-    }
-
     // Reset the currentInteractingPlayer after unlocking
     public void resetInteractingPlayer() {
         currentInteractingPlayer = null;
     }
-
-
 
 
 

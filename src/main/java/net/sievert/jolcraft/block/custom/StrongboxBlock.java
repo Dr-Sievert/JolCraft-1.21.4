@@ -303,14 +303,10 @@ public class StrongboxBlock extends BaseEntityBlock implements SimpleWaterlogged
         if (!isCoal) {
             // Open the menu
             MenuProvider menuProvider = this.getMenuProvider(state, level, pos);
+            BlockEntity be = level.getBlockEntity(pos);
             if (menuProvider != null) {
                 player.openMenu(menuProvider, pos); // Passes the position to the client automatically
             }
-
-            // Unlock the Strongbox if it is locked
-//            if (state.getValue(LOCKED)) {
-//                level.setBlock(pos, state.setValue(LOCKED, false), 3); // Set LOCKED to false (unlock it)
-//            }
 
             return InteractionResult.SUCCESS; // Return SUCCESS to indicate the interaction was handled
         }
@@ -340,12 +336,12 @@ public class StrongboxBlock extends BaseEntityBlock implements SimpleWaterlogged
             return createTickerHelper(type, JolCraftBlockEntities.STRONGBOX.get(), StrongboxBlockEntity::lidAnimateTick);
         } else {
             // Keep the recheckOpen logic for the server side, and also call the tick method to update progress
-            return createTickerHelper(type, JolCraftBlockEntities.STRONGBOX.get(), (serverLevel, pos, blockState, be) -> {
+            return createTickerHelper(type, JolCraftBlockEntities.STRONGBOX.get(), (tickLevel, pos, blockState, be) -> {
                 if (be instanceof StrongboxBlockEntity strongbox) {
-                    // Recheck if the strongbox is open
-                    strongbox.recheckOpen();
-                    // Call the tick method to update lockpick progress
-                    strongbox.serverTick((ServerLevel) level, pos, state, strongbox);  // Update the lockpick progress on the server side
+                    if (!tickLevel.isClientSide) {
+                        strongbox.recheckOpen();
+                        strongbox.tick(tickLevel, pos, blockState, strongbox);
+                    }
                 }
             });
         }

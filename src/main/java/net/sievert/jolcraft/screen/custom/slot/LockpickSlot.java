@@ -1,13 +1,16 @@
 package net.sievert.jolcraft.screen.custom.slot;
 
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
+import net.sievert.jolcraft.block.entity.custom.StrongboxBlockEntity;
 import net.sievert.jolcraft.item.JolCraftItems;
+import net.sievert.jolcraft.screen.custom.strongbox.LockMenu;
 
 public class LockpickSlot extends Slot {
 
-    public LockpickSlot(Container container, int index, int xPosition, int yPosition) {
+    public LockpickSlot(Container container, int index, int xPosition, int yPosition, StrongboxBlockEntity blockEntity) {
         super(container, index, xPosition, yPosition);
     }
 
@@ -24,4 +27,6 @@ public class LockpickSlot extends Slot {
     public int getMaxStackSize(ItemStack stack) {
         return 64;
     }
+
+
 }

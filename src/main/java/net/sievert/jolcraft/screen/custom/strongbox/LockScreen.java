@@ -3,8 +3,10 @@ package net.sievert.jolcraft.screen.custom.strongbox;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Inventory;
 import net.sievert.jolcraft.JolCraft;
 
@@ -12,20 +14,26 @@ import java.util.List;
 import java.util.Random;
 
 public class LockScreen extends AbstractContainerScreen<LockMenu> {
-
-    private final Random random = new Random();  // Random instance for sprite selection
+    private long lastTickTime = 0;
+    private final Random guiRandom = new Random();
 
     private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "textures/gui/container/strongbox_lock.png");
     private static final ResourceLocation PROGRESS_TEXTURE = ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "textures/gui/container/sprites/lockpick/lockpick_progress.png");
-
+    private static final ResourceLocation HIGHLIGHT =
+            ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "textures/gui/container/sprites/lockpick/button_highlighted.png");
     private static final ResourceLocation LOCKPICK_TEXTURE = ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "textures/item/lockpick.png");
     private static final ResourceLocation BROKEN_LOCKPICK_TEXTURE1 = ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "textures/gui/container/sprites/lockpick/lockpick_broken1.png");
     private static final ResourceLocation BROKEN_LOCKPICK_TEXTURE2 = ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "textures/gui/container/sprites/lockpick/lockpick_broken2.png");
     private static final ResourceLocation BROKEN_LOCKPICK_TEXTURE3 = ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "textures/gui/container/sprites/lockpick/lockpick_broken3.png");
 
+
+    // List of broken textures
     private static final List<ResourceLocation> BROKEN_BUTTON_TEXTURES = List.of(
             BROKEN_LOCKPICK_TEXTURE1, BROKEN_LOCKPICK_TEXTURE2, BROKEN_LOCKPICK_TEXTURE3
     );
+
+    private ResourceLocation lockpick_broken = BROKEN_LOCKPICK_TEXTURE1;  // Initial texture
+
 
     public LockScreen(LockMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
@@ -36,14 +44,38 @@ public class LockScreen extends AbstractContainerScreen<LockMenu> {
     }
 
     @Override
+    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
+        long currentTime = System.currentTimeMillis();
+        if (currentTime - lastTickTime > 50) { // ~1 game tick = 50ms
+            this.menu.tick();
+            lastTickTime = currentTime;
+        }
+        super.render(guiGraphics, mouseX, mouseY, partialTicks);
+    }
+
+    @Override
     protected void renderBg(GuiGraphics guiGraphics, float partialTicks, int mouseX, int mouseY) {
         // Set up the background texture
         int x = (this.width - this.imageWidth) / 2;
         int y = (this.height - this.imageHeight) / 2;
         guiGraphics.blit(RenderType.GUI_TEXTURED, TEXTURE, x, y, 0, 0, this.imageWidth, this.imageHeight, 176, 150);
-        renderLockpickProgress(guiGraphics, x, y);
-        if(this.menu.isActive()){
-            renderButtonTextures(guiGraphics, x, y);  // Now it's rendered on top of the background
+
+        // Only update broken lockpick sprite if a new cycle has started
+        if (this.menu.getShouldButtonLayerUpdate()) {
+            guiGraphics.blit(RenderType.GUI_TEXTURED, TEXTURE, x, y, 0, 0, this.imageWidth, this.imageHeight, 176, 150);
+            updateBrokenLockpickTexture();
+            renderButtonTextures(guiGraphics, x, y, mouseX, mouseY);
+            this.menu.setShouldButtonLayerUpdate(false);
+            this.menu.updatechanges();
+        }
+
+        if (this.menu.isActive()) {
+            renderLockpickProgress(guiGraphics, x, y);
+            this.menu.updatechanges();
+        }
+
+        if (this.menu.isActive()) {
+            renderButtonTextures(guiGraphics, x, y, mouseX, mouseY);
         }
     }
 
@@ -56,8 +88,7 @@ public class LockScreen extends AbstractContainerScreen<LockMenu> {
 
     private void renderLockpickProgress(GuiGraphics guiGraphics, int x, int y) {
 
-        // Get the lockpick progress from the BlockEntity (menu's block entity)
-        float progress = this.menu.getBlockEntity().getLockpickProgress();
+        float progress = this.menu.getLockpickProgress();
 
         // Define the size of the progress bar
         int progressWidth = 108;  // Width of the progress bar
@@ -72,11 +103,57 @@ public class LockScreen extends AbstractContainerScreen<LockMenu> {
         guiGraphics.blit(RenderType.GUI_TEXTURED, PROGRESS_TEXTURE, progressX, progressY, 0, 0, progressBarWidth, progressHeight, progressWidth, progressHeight);
     }
 
-     private void renderButtonTextures(GuiGraphics guiGraphics, int x, int y) {
-        guiGraphics.blit(RenderType.GUI_TEXTURED, LOCKPICK_TEXTURE, x + 48, y + 31, 0, 0, 16, 16, 16, 16);
-        guiGraphics.blit(RenderType.GUI_TEXTURED, LOCKPICK_TEXTURE, x + 80, y + 31, 0, 0, 16, 16, 16, 16);
-        guiGraphics.blit(RenderType.GUI_TEXTURED, LOCKPICK_TEXTURE, x + 112, y + 31, 0, 0, 16, 16, 16, 16);
-     }
+    // Only update texture once per cycle
+    private void updateBrokenLockpickTexture() {
+        int idx = guiRandom.nextInt(BROKEN_BUTTON_TEXTURES.size());
+        this.lockpick_broken = BROKEN_BUTTON_TEXTURES.get(idx);
+    }
+
+
+    private void renderButtonTextures(GuiGraphics guiGraphics, int x, int y, int mouseX, int mouseY) {
+        int correctButtonId = this.menu.getCorrectButtonId(); // 0–2
+        int[] buttonXs = { x + 48, x + 80, x + 112 };
+        int buttonY = y + 31;
+
+        for (int idx = 0; idx < 3; idx++) {
+            int bx = buttonXs[idx], by = buttonY, bw = 16, bh = 16, hw = 17, hh = 17;
+
+            boolean hovered = mouseX >= bx && mouseY >= by && mouseX < bx + bw && mouseY < by + bh;
+            if (hovered) {
+                // Center the 17x17 highlight on the 16x16 button
+                guiGraphics.blit(RenderType.GUI_TEXTURED, HIGHLIGHT, bx, by, 0, 0, hw, hh, hw, hh);
+            }
+            ResourceLocation texture = (idx == correctButtonId) ? LOCKPICK_TEXTURE : lockpick_broken;
+            guiGraphics.blit(RenderType.GUI_TEXTURED, texture, bx, by, 0, 0, bw, bh, bw, bh);
+        }
+    }
+
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        int x = (this.width - this.imageWidth) / 2;
+        int y = (this.height - this.imageHeight) / 2;
+
+        if (button == 0) {
+            for (int idx = 0; idx < 3; idx++) {
+                int btnX = x + 48 + idx * 32;
+                int btnY = y + 31;
+                int btnW = 16, btnH = 16;
+
+                if (mouseX >= btnX && mouseY >= btnY && mouseX < btnX + btnW && mouseY < btnY + btnH) {
+                    // Play instant client-only click sound for feedback
+                    if (minecraft != null && minecraft.getSoundManager() != null) {
+                        minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+                    }
+                    // Notify the server (let server do real action/check)
+                    this.minecraft.gameMode.handleInventoryButtonClick(this.menu.containerId, idx);
+                    return true;
+                }
+            }
+        }
+        return super.mouseClicked(mouseX, mouseY, button);
+    }
+
+
 
 
 
