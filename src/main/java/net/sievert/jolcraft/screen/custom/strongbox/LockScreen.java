@@ -18,21 +18,51 @@ public class LockScreen extends AbstractContainerScreen<LockMenu> {
     private int lastSeenPulse = 0;
 
     private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "textures/gui/container/strongbox_lock.png");
-    private static final ResourceLocation PROGRESS_TEXTURE = ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "textures/gui/container/sprites/lockpick/lockpick_progress.png");
+    private static final ResourceLocation PROGRESS_TEXTURE1 = ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "textures/gui/container/sprites/lockpick/lockpick_progress1.png");
+    private static final ResourceLocation PROGRESS_TEXTURE2 = ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "textures/gui/container/sprites/lockpick/lockpick_progress2.png");
+    private static final ResourceLocation PROGRESS_TEXTURE3 = ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "textures/gui/container/sprites/lockpick/lockpick_progress3.png");
+    private static final ResourceLocation PROGRESS_TEXTURE4 = ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "textures/gui/container/sprites/lockpick/lockpick_progress4.png");
+    private static final ResourceLocation PROGRESS_TEXTURE5 = ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "textures/gui/container/sprites/lockpick/lockpick_progress5.png");
+    private static final ResourceLocation PROGRESS_TEXTURE6 = ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "textures/gui/container/sprites/lockpick/lockpick_progress6.png");
+    private static final ResourceLocation PROGRESS_TEXTURE7 = ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "textures/gui/container/sprites/lockpick/lockpick_progress7.png");
+    private static final ResourceLocation PROGRESS_TEXTURE8 = ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "textures/gui/container/sprites/lockpick/lockpick_progress8.png");
+    private static final ResourceLocation PROGRESS_TEXTURE9 = ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "textures/gui/container/sprites/lockpick/lockpick_progress9.png");
+    private static final ResourceLocation PROGRESS_TEXTURE10 = ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "textures/gui/container/sprites/lockpick/lockpick_progress10.png");
+    private static final ResourceLocation PROGRESS_TEXTURE11 = ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "textures/gui/container/sprites/lockpick/lockpick_progress11.png");
+    private static final ResourceLocation PROGRESS_TEXTURE12 = ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "textures/gui/container/sprites/lockpick/lockpick_progress12.png");
+    private static final ResourceLocation PROGRESS_TEXTURE13 = ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "textures/gui/container/sprites/lockpick/lockpick_progress13.png");
     private static final ResourceLocation HIGHLIGHT =
             ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "textures/gui/container/sprites/lockpick/button_highlighted.png");
     private static final ResourceLocation LOCKPICK_TEXTURE = ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "textures/item/lockpick.png");
     private static final ResourceLocation BROKEN_LOCKPICK_TEXTURE1 = ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "textures/gui/container/sprites/lockpick/lockpick_broken1.png");
     private static final ResourceLocation BROKEN_LOCKPICK_TEXTURE2 = ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "textures/gui/container/sprites/lockpick/lockpick_broken2.png");
     private static final ResourceLocation BROKEN_LOCKPICK_TEXTURE3 = ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "textures/gui/container/sprites/lockpick/lockpick_broken3.png");
+    private static final ResourceLocation BROKEN_LOCKPICK_TEXTURE4 = ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "textures/gui/container/sprites/lockpick/lockpick_broken4.png");
 
+
+    private static final ResourceLocation[] PROGRESS_TEXTURES = {
+            PROGRESS_TEXTURE1,
+            PROGRESS_TEXTURE2,
+            PROGRESS_TEXTURE3,
+            PROGRESS_TEXTURE4,
+            PROGRESS_TEXTURE5,
+            PROGRESS_TEXTURE6,
+            PROGRESS_TEXTURE7,
+            PROGRESS_TEXTURE8,
+            PROGRESS_TEXTURE9,
+            PROGRESS_TEXTURE10,
+            PROGRESS_TEXTURE11,
+            PROGRESS_TEXTURE12,
+            PROGRESS_TEXTURE13
+    };
 
     // List of broken textures
     private static final List<ResourceLocation> BROKEN_BUTTON_TEXTURES = List.of(
-            BROKEN_LOCKPICK_TEXTURE1, BROKEN_LOCKPICK_TEXTURE2, BROKEN_LOCKPICK_TEXTURE3
+            BROKEN_LOCKPICK_TEXTURE1, BROKEN_LOCKPICK_TEXTURE2, BROKEN_LOCKPICK_TEXTURE3, BROKEN_LOCKPICK_TEXTURE4
     );
 
-    private ResourceLocation lockpick_broken = BROKEN_LOCKPICK_TEXTURE1;  // Initial texture
+    private ResourceLocation lockpick_broken1 = BROKEN_LOCKPICK_TEXTURE1;  // Initial texture
+    private ResourceLocation lockpick_broken2 = BROKEN_LOCKPICK_TEXTURE1;  // Initial texture
 
 
     public LockScreen(LockMenu menu, Inventory playerInventory, Component title) {
@@ -56,7 +86,7 @@ public class LockScreen extends AbstractContainerScreen<LockMenu> {
         if (pulse != lastSeenPulse) {
             lastSeenPulse = pulse;
             guiGraphics.blit(RenderType.GUI_TEXTURED, TEXTURE, x, y, 0, 0, this.imageWidth, this.imageHeight, 176, 150);
-            updateBrokenLockpickTexture();
+            updateBrokenLockpickTextures();
             renderLockpickProgress(guiGraphics, x, y);
         }
 
@@ -75,26 +105,28 @@ public class LockScreen extends AbstractContainerScreen<LockMenu> {
     }
 
     private void renderLockpickProgress(GuiGraphics guiGraphics, int x, int y) {
+        float progress = this.menu.getLockpickProgress(); // 0–130
+        if (progress <= 0f) return;  // Do not render if empty
 
-        float progress = this.menu.getLockpickProgress();
+        int step = Math.max(1, Math.min(13, (int)Math.ceil(progress / 10f))); // 1–13
+        ResourceLocation texture = PROGRESS_TEXTURES[step - 1];
 
-        // Define the size of the progress bar
-        int progressWidth = 108;  // Width of the progress bar
-        int progressHeight = 16;  // Height of the progress bar
-        int progressX = x + 34;   // X position for the progress bar
-        int progressY = y + 16;   // Y position for the progress bar (adjust as needed)
+        int progressWidth = 108;
+        int progressHeight = 15;
+        int progressX = x + 34;
+        int progressY = y + 16;
 
-        // Calculate the width of the progress bar based on progress (scale the width based on progress)
-        int progressBarWidth = (int) (progress * progressWidth / 200);  // Scaling progress from 0 to 200 max value
-
-        // Draw the progress using your custom texture
-        guiGraphics.blit(RenderType.GUI_TEXTURED, PROGRESS_TEXTURE, progressX, progressY, 0, 0, progressBarWidth, progressHeight, progressWidth, progressHeight);
+        guiGraphics.blit(RenderType.GUI_TEXTURED, texture, progressX, progressY, 0, 0, progressWidth, progressHeight, progressWidth, progressHeight);
     }
 
+
+
     // Only update texture once per cycle
-    private void updateBrokenLockpickTexture() {
-        int idx = guiRandom.nextInt(BROKEN_BUTTON_TEXTURES.size());
-        this.lockpick_broken = BROKEN_BUTTON_TEXTURES.get(idx);
+    private void updateBrokenLockpickTextures() {
+        int id1 = guiRandom.nextInt(BROKEN_BUTTON_TEXTURES.size());
+        int id2 = guiRandom.nextInt(BROKEN_BUTTON_TEXTURES.size());
+        this.lockpick_broken1 = BROKEN_BUTTON_TEXTURES.get(id1);
+        this.lockpick_broken2 = BROKEN_BUTTON_TEXTURES.get(id2);
     }
 
 
@@ -103,18 +135,27 @@ public class LockScreen extends AbstractContainerScreen<LockMenu> {
         int[] buttonXs = { x + 48, x + 80, x + 112 };
         int buttonY = y + 31;
 
+        // Figure out which wrong button gets which texture
+        ResourceLocation[] wrongs = {lockpick_broken1, lockpick_broken2};
+        int wrongIdx = 0;
+
         for (int idx = 0; idx < 3; idx++) {
             int bx = buttonXs[idx], by = buttonY, bw = 16, bh = 16, hw = 17, hh = 17;
-
             boolean hovered = mouseX >= bx && mouseY >= by && mouseX < bx + bw && mouseY < by + bh;
             if (hovered) {
-                // Center the 17x17 highlight on the 16x16 button
                 guiGraphics.blit(RenderType.GUI_TEXTURED, HIGHLIGHT, bx, by, 0, 0, hw, hh, hw, hh);
             }
-            ResourceLocation texture = (idx == correctButtonId) ? LOCKPICK_TEXTURE : lockpick_broken;
+
+            ResourceLocation texture;
+            if (idx == correctButtonId) {
+                texture = LOCKPICK_TEXTURE;
+            } else {
+                texture = wrongs[wrongIdx++];
+            }
             guiGraphics.blit(RenderType.GUI_TEXTURED, texture, bx, by, 0, 0, bw, bh, bw, bh);
         }
     }
+
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {

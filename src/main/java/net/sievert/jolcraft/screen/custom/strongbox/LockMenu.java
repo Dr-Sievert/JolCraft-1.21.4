@@ -23,7 +23,7 @@ public class LockMenu extends AbstractContainerMenu {
     public final StrongboxBlockEntity blockEntity;
     private final Level level;
     private final Random random = new Random();  // Random instance for sprite selection
-    final int MAX_PROGRESS = 200;
+    final int MAX_PROGRESS = 130;
 
     // Used by NeoForge's auto-gui opening
     public LockMenu(int id, Inventory inv, FriendlyByteBuf extraData) {
@@ -81,7 +81,7 @@ public class LockMenu extends AbstractContainerMenu {
             setButtonLayerUpdatePulse((getButtonLayerUpdatePulse() % 3) + 1); // cycles 1-3
             updatechanges();
         }
-        tickRate = 60 + new Random().nextInt(41); // New random between 3-5 seconds
+        tickCounter = 0;
     }
 
     public void updatechanges(){
@@ -96,7 +96,7 @@ public class LockMenu extends AbstractContainerMenu {
         if (!lockpick.isEmpty()) {
             if (buttonId == correctButton) {
                 if(!level.isClientSide){
-                    setLockpickProgress(clampLockpickProgress(getLockpickProgress() + 20));
+                    setLockpickProgress(clampLockpickProgress(getLockpickProgress() + 10 + random.nextInt(21)));
                     updatechanges();
                 }
                 level.playSound(null, blockEntity.getBlockPos(), JolCraftSounds.STRONGBOX_LOCKPICK.get(), SoundSource.BLOCKS, 1.2F, 1.0F);
