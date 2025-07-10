@@ -18,6 +18,10 @@ public class LockScreen extends AbstractContainerScreen<LockMenu> {
     private int lastSeenPulse = 0;
 
     private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "textures/gui/container/strongbox_lock.png");
+
+    private static final ResourceLocation HIGHLIGHT =
+            ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "textures/gui/container/sprites/lockpick/button_highlighted.png");
+
     private static final ResourceLocation PROGRESS_TEXTURE1 = ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "textures/gui/container/sprites/lockpick/lockpick_progress1.png");
     private static final ResourceLocation PROGRESS_TEXTURE2 = ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "textures/gui/container/sprites/lockpick/lockpick_progress2.png");
     private static final ResourceLocation PROGRESS_TEXTURE3 = ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "textures/gui/container/sprites/lockpick/lockpick_progress3.png");
@@ -31,14 +35,15 @@ public class LockScreen extends AbstractContainerScreen<LockMenu> {
     private static final ResourceLocation PROGRESS_TEXTURE11 = ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "textures/gui/container/sprites/lockpick/lockpick_progress11.png");
     private static final ResourceLocation PROGRESS_TEXTURE12 = ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "textures/gui/container/sprites/lockpick/lockpick_progress12.png");
     private static final ResourceLocation PROGRESS_TEXTURE13 = ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "textures/gui/container/sprites/lockpick/lockpick_progress13.png");
-    private static final ResourceLocation HIGHLIGHT =
-            ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "textures/gui/container/sprites/lockpick/button_highlighted.png");
+
     private static final ResourceLocation LOCKPICK_TEXTURE = ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "textures/item/lockpick.png");
+
     private static final ResourceLocation BROKEN_LOCKPICK_TEXTURE1 = ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "textures/gui/container/sprites/lockpick/lockpick_broken1.png");
     private static final ResourceLocation BROKEN_LOCKPICK_TEXTURE2 = ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "textures/gui/container/sprites/lockpick/lockpick_broken2.png");
     private static final ResourceLocation BROKEN_LOCKPICK_TEXTURE3 = ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "textures/gui/container/sprites/lockpick/lockpick_broken3.png");
     private static final ResourceLocation BROKEN_LOCKPICK_TEXTURE4 = ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "textures/gui/container/sprites/lockpick/lockpick_broken4.png");
 
+    private static final ResourceLocation UNLOCK_TEXTURE = ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "textures/gui/container/sprites/lockpick/unlock.png");
 
     private static final ResourceLocation[] PROGRESS_TEXTURES = {
             PROGRESS_TEXTURE1,
@@ -131,30 +136,44 @@ public class LockScreen extends AbstractContainerScreen<LockMenu> {
 
 
     private void renderButtonTextures(GuiGraphics guiGraphics, int x, int y, int mouseX, int mouseY) {
-        int correctButtonId = this.menu.getCorrectButtonId(); // 0–2
+        int correctButtonId = this.menu.getCorrectButtonId(); // 0–3
+        int unlockSlot = this.menu.getUnlockSlotId();         // -1 if not active, else 0–2
         int[] buttonXs = { x + 48, x + 80, x + 112 };
         int buttonY = y + 31;
 
-        // Figure out which wrong button gets which texture
         ResourceLocation[] wrongs = {lockpick_broken1, lockpick_broken2};
         int wrongIdx = 0;
 
-        for (int idx = 0; idx < 3; idx++) {
-            int bx = buttonXs[idx], by = buttonY, bw = 16, bh = 16, hw = 17, hh = 17;
-            boolean hovered = mouseX >= bx && mouseY >= by && mouseX < bx + bw && mouseY < by + bh;
-            if (hovered) {
-                guiGraphics.blit(RenderType.GUI_TEXTURED, HIGHLIGHT, bx, by, 0, 0, hw, hh, hw, hh);
+        if (correctButtonId == 3 && unlockSlot >= 0 && unlockSlot < 3) {
+            // Special unlock icon mode: show unlock icon at the right slot
+            for (int idx = 0; idx < 3; idx++) {
+                int bx = buttonXs[idx], by = buttonY, bw = 16, bh = 16, hw = 17, hh = 17;
+                boolean hovered = mouseX >= bx && mouseY >= by && mouseX < bx + bw && mouseY < by + bh;
+                if (hovered) {
+                    guiGraphics.blit(RenderType.GUI_TEXTURED, HIGHLIGHT, bx, by, 0, 0, hw, hh, hw, hh);
+                }
+                ResourceLocation texture = (idx == unlockSlot)
+                        ? UNLOCK_TEXTURE
+                        : wrongs[wrongIdx++];
+                guiGraphics.blit(RenderType.GUI_TEXTURED, texture, bx, by, 0, 0, bw, bh, bw, bh);
             }
-
-            ResourceLocation texture;
-            if (idx == correctButtonId) {
-                texture = LOCKPICK_TEXTURE;
-            } else {
-                texture = wrongs[wrongIdx++];
+        } else {
+            // Normal lockpick logic
+            for (int idx = 0; idx < 3; idx++) {
+                int bx = buttonXs[idx], by = buttonY, bw = 16, bh = 16, hw = 17, hh = 17;
+                boolean hovered = mouseX >= bx && mouseY >= by && mouseX < bx + bw && mouseY < by + bh;
+                if (hovered) {
+                    guiGraphics.blit(RenderType.GUI_TEXTURED, HIGHLIGHT, bx, by, 0, 0, hw, hh, hw, hh);
+                }
+                ResourceLocation texture = (idx == correctButtonId)
+                        ? LOCKPICK_TEXTURE
+                        : wrongs[wrongIdx++];
+                guiGraphics.blit(RenderType.GUI_TEXTURED, texture, bx, by, 0, 0, bw, bh, bw, bh);
             }
-            guiGraphics.blit(RenderType.GUI_TEXTURED, texture, bx, by, 0, 0, bw, bh, bw, bh);
         }
     }
+
+
 
 
     @Override

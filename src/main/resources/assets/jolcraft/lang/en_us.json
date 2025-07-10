@@ -45,6 +45,7 @@
 
   "effect.jolcraft.homestead": "Homestead",
   "effect.jolcraft.ancient_memory": "Ancient Memory",
+  "effect.jolcraft.lockpicking": "Lockpicking",
 
   "item.minecraft.potion.effect.ancient_memory": "Ancient Memory Potion",
   "item.minecraft.potion.effect.long_ancient_memory": "Ancient Memory Potion",
@@ -52,6 +53,17 @@
   "item.minecraft.splash_potion.effect.long_ancient_memory": "Ancient Memory Splash Potion",
   "item.minecraft.lingering_potion.effect.ancient_memory": "Ancient Memory Lingering Potion",
   "item.minecraft.lingering_potion.effect.long_ancient_memory": "Ancient Memory Lingering Potion",
+
+  "item.minecraft.potion.effect.lockpicking": "Lockpicking Potion",
+  "item.minecraft.potion.effect.long_lockpicking": "Lockpicking Potion",
+  "item.minecraft.potion.effect.strong_lockpicking": "Lockpicking Potion",
+  "item.minecraft.splash_potion.effect.lockpicking": "Lockpicking Splash Potion",
+  "item.minecraft.splash_potion.effect.long_lockpicking": "Lockpicking Splash Potion",
+  "item.minecraft.splash_potion.effect.strong_lockpicking": "Lockpicking Splash Potion",
+  "item.minecraft.lingering_potion.effect.lockpicking": "Lockpicking Lingering Potion",
+  "item.minecraft.lingering_potion.effect.long_lockpicking": "Lockpicking Lingering Potion",
+  "item.minecraft.lingering_potion.effect.strong_lockpicking": "Lockpicking Lingering Potion",
+
 
   "item.jolcraft.verdant_dust": "Verdant Dust",
   "block.jolcraft.verdant_soil": "Verdant Soil",

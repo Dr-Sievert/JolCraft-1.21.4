@@ -57,7 +57,7 @@ public class JolCraftCreativeModeTabs {
 
                         pOutput.accept(JolCraftItems.INVERIX);
                         pOutput.accept(JolCraftItems.DEEPMARROW_DUST);
-                        pOutput.accept(PotionContents.createItemStack(Items.POTION, JolCraftPotions.ANCIENT_MEMORY));
+                        //pOutput.accept(PotionContents.createItemStack(Items.POTION, JolCraftPotions.ANCIENT_MEMORY)); add potion
                         pOutput.accept(JolCraftItems.VERDANT_DUST);
 
                         pOutput.accept(JolCraftBlocks.DUSKCAP);

@@ -18,6 +18,9 @@ public class JolCraftEffects {
     public static final Holder<MobEffect> ANCIENT_MEMORY = MOB_EFFECTS.register("ancient_memory",
             () -> new AncientMemoryEffect(MobEffectCategory.BENEFICIAL, 0x8bb386));
 
+    public static final Holder<MobEffect> LOCKPICKING = MOB_EFFECTS.register("lockpicking",
+            () -> new LockpickingEffect(MobEffectCategory.BENEFICIAL, 0x6b6b6b));
+
     public static void register(IEventBus eventBus) {
         MOB_EFFECTS.register(eventBus);
     }

@@ -19,6 +19,15 @@ public class JolCraftPotions {
     public static final Holder<Potion> LONG_ANCIENT_MEMORY = POTIONS.register("long_ancient_memory",
             () -> new Potion("long_ancient_memory", new MobEffectInstance(JolCraftEffects.ANCIENT_MEMORY, 2400, 0)));
 
+    public static final Holder<Potion> LOCKPICKING = POTIONS.register("lockpicking",
+            () -> new Potion("lockpicking", new MobEffectInstance(JolCraftEffects.LOCKPICKING, 300, 0)));
+
+    public static final Holder<Potion> LONG_LOCKPICKING = POTIONS.register("long_lockpicking",
+            () -> new Potion("long_lockpicking", new MobEffectInstance(JolCraftEffects.LOCKPICKING, 600, 0)));
+
+    public static final Holder<Potion> STRONG_LOCKPICKING = POTIONS.register("strong_lockpicking",
+            () -> new Potion("strong_lockpicking", new MobEffectInstance(JolCraftEffects.LOCKPICKING, 300, 1)));
+
     public static void register(IEventBus eventBus) {
         POTIONS.register(eventBus);
     }

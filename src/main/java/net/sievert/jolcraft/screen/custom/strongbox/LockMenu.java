@@ -12,6 +12,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.sievert.jolcraft.block.custom.StrongboxBlock;
 import net.sievert.jolcraft.block.entity.custom.StrongboxBlockEntity;
+import net.sievert.jolcraft.effect.JolCraftEffects;
 import net.sievert.jolcraft.screen.JolCraftMenuTypes;
 import net.sievert.jolcraft.screen.custom.slot.LockpickSlot;
 import net.sievert.jolcraft.sound.JolCraftSounds;
@@ -24,6 +25,7 @@ public class LockMenu extends AbstractContainerMenu {
     private final Level level;
     private final Random random = new Random();  // Random instance for sprite selection
     final int MAX_PROGRESS = 130;
+    private int decayCounter = 0;
 
     // Used by NeoForge's auto-gui opening
     public LockMenu(int id, Inventory inv, FriendlyByteBuf extraData) {
@@ -58,6 +60,23 @@ public class LockMenu extends AbstractContainerMenu {
     private int tickRate = 20 + new Random().nextInt(81); // 20 to 100 ticks (1s to 5s)
 
     public void tick() {
+        Player player = blockEntity.currentInteractingPlayer;
+
+        if (!level.isClientSide) {
+            var effect = player.getEffect(JolCraftEffects.LOCKPICKING);
+            if (effect != null) {
+                // Player has the effect, so use the boosted values
+                int decayTicks = 2 + effect.getAmplifier();
+                int progressBoost = 10 + (effect.getAmplifier() * 10);
+                setDecayTicks(decayTicks);
+                setProgressBoost(progressBoost);
+            } else {
+                // No effect: use defaults
+                setDecayTicks(1);       // Decay every tick
+                setProgressBoost(0);    // No bonus
+            }
+            broadcastChanges();
+        }
 
         tickCounter++;
 
@@ -66,23 +85,37 @@ public class LockMenu extends AbstractContainerMenu {
             updateLockpickButton();
         }
 
-        if (getLockpickProgress() > 0) {
-            if(!level.isClientSide){
-                setLockpickProgress(clampLockpickProgress(getLockpickProgress() - 1));
-                updatechanges();
+        if (!level.isClientSide) {
+            if (getLockpickProgress() > 0) {
+                decayCounter++;
+                int interval = getDecayTicks(); // <-- This gets your container data's decayTicks, synced from your effect logic
+                if (decayCounter >= interval) {
+                    decayCounter = 0;
+                    setLockpickProgress(clampLockpickProgress(getLockpickProgress() - 1));
+                    updatechanges();
+                }
+            } else {
+                decayCounter = 0; // Reset if bar is empty
             }
-
         }
     }
 
     public void updateLockpickButton() {
         if (!level.isClientSide) {
-            setCorrectButtonId(new Random().nextInt(3));
+            int decay = Math.max(1, getDecayTicks());
+            if (random.nextInt(101/decay) == 0) {
+                setCorrectButtonId(3);                    // Enter unlock mode
+                setUnlockSlotId(random.nextInt(3));       // Pick which button is unlock (0, 1, or 2)
+            } else {
+                setCorrectButtonId(random.nextInt(3));    // Pick normal correct button
+                setUnlockSlotId(-1);                      // No unlock button this round
+            }
             setButtonLayerUpdatePulse((getButtonLayerUpdatePulse() % 3) + 1); // cycles 1-3
             updatechanges();
         }
         tickCounter = 0;
     }
+
 
     public void updatechanges(){
         this.broadcastChanges();   // Sync container data to client
@@ -91,12 +124,25 @@ public class LockMenu extends AbstractContainerMenu {
     @Override
     public boolean clickMenuButton(Player player, int buttonId) {
         int correctButton = getCorrectButtonId();
+        int unlockSlot = getUnlockSlotId();
         ItemStack lockpick = getLockpickSlotItem();
 
         if (!lockpick.isEmpty()) {
+            // --- Unlock mode ---
+            if (correctButton == 3 && buttonId == unlockSlot) {
+                if (!level.isClientSide) {
+                    unlockStrongbox(player);
+                }
+                level.playSound(null, blockEntity.getBlockPos(), JolCraftSounds.STRONGBOX_UNLOCK.get(), SoundSource.BLOCKS, 1.5F, 1.2F);
+                updateLockpickButton();
+                return true;
+            }
+            // --- Normal mode ---
             if (buttonId == correctButton) {
-                if(!level.isClientSide){
-                    setLockpickProgress(clampLockpickProgress(getLockpickProgress() + 10 + random.nextInt(21)));
+                if (!level.isClientSide) {
+                    setLockpickProgress(
+                            clampLockpickProgress(getLockpickProgress() + 10 + random.nextInt(11) + getProgressBoost())
+                    );
                     updatechanges();
                 }
                 level.playSound(null, blockEntity.getBlockPos(), JolCraftSounds.STRONGBOX_LOCKPICK.get(), SoundSource.BLOCKS, 1.2F, 1.0F);
@@ -105,7 +151,7 @@ public class LockMenu extends AbstractContainerMenu {
                     unlockStrongbox(player);
                 }
             } else {
-                if(!level.isClientSide){
+                if (!level.isClientSide) {
                     lockpick.shrink(1);
                     setLockpickProgress(0);
                     updatechanges();
@@ -117,6 +163,7 @@ public class LockMenu extends AbstractContainerMenu {
         }
         return false;
     }
+
 
     public void unlockStrongbox(Player player) {
         if (player != null) {
@@ -248,25 +295,38 @@ public class LockMenu extends AbstractContainerMenu {
         private int lockpickProgress = 0;
         private int correctButtonId = 0;
         private int buttonLayerUpdatePulse = 0; // The "pulse" counter
+        private int decayTicks = 1;             // How many ticks between decay
+        private int progressBoost = 0;          // Bonus progress per click
+        private int unlockSlotId = -1;          // Which button is the "unlock" slot, -1 if not active
 
         @Override
         public int get(int idx) {
-            if (idx == 0) return lockpickProgress;
-            if (idx == 1) return correctButtonId;
-            if (idx == 2) return buttonLayerUpdatePulse;
-            return 0;
+            return switch (idx) {
+                case 0 -> lockpickProgress;
+                case 1 -> correctButtonId;
+                case 2 -> buttonLayerUpdatePulse;
+                case 3 -> decayTicks;
+                case 4 -> progressBoost;
+                case 5 -> unlockSlotId;
+                default -> 0;
+            };
         }
 
         @Override
         public void set(int idx, int value) {
-            if (idx == 0) lockpickProgress = value;
-            if (idx == 1) correctButtonId = value;
-            if (idx == 2) buttonLayerUpdatePulse = value;
+            switch (idx) {
+                case 0 -> lockpickProgress = value;
+                case 1 -> correctButtonId = value;
+                case 2 -> buttonLayerUpdatePulse = value;
+                case 3 -> decayTicks = value;
+                case 4 -> progressBoost = value;
+                case 5 -> unlockSlotId = value;
+            }
         }
 
         @Override
         public int getCount() {
-            return 3;
+            return 6;
         }
     };
 
@@ -276,15 +336,20 @@ public class LockMenu extends AbstractContainerMenu {
     }
 
     public int  getLockpickProgress() { return data.get(0); }
-
     public void setLockpickProgress(int progress) { data.set(0, (int)progress); }
 
     public int getCorrectButtonId() { return data.get(1); }
-
     public void setCorrectButtonId(int id) { data.set(1, id); }
 
     public int getButtonLayerUpdatePulse() { return data.get(2); }
-
     public void setButtonLayerUpdatePulse(int value) { data.set(2, value); }
 
+    public int getDecayTicks() { return data.get(3); }
+    public void setDecayTicks(int value) { data.set(3, value); }
+
+    public int getProgressBoost() { return data.get(4); }
+    public void setProgressBoost(int value) { data.set(4, value); }
+
+    public int getUnlockSlotId() { return data.get(5); }
+    public void setUnlockSlotId(int slot) { data.set(5, slot); }
 }
