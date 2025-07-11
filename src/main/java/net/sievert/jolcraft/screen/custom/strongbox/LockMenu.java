@@ -152,7 +152,9 @@ public class LockMenu extends AbstractContainerMenu {
                 }
             } else {
                 if (!level.isClientSide) {
-                    lockpick.shrink(1);
+                    if(!player.isCreative()){
+                        lockpick.shrink(1);
+                    }
                     setLockpickProgress(0);
                     updatechanges();
                 }

@@ -96,6 +96,7 @@ public class DwarfHistorianEntity extends AbstractDwarfEntity {
                     1,
                     new VillagerTrades.ItemListing[]{
                             new JolCraftDwarfTrades.GoldForItems(JolCraftItems.DWARVEN_TOME_COMMON.get(), 1, 10, 5, 3),
+                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.ANCIENT_DWARVEN_TOME_COMMON.get(), 1, 10, 5, 6),
                             new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.PARCHMENT.get(), 1, 3, 6, 1)
 
                     },
@@ -104,6 +105,7 @@ public class DwarfHistorianEntity extends AbstractDwarfEntity {
                     2,
                     new VillagerTrades.ItemListing[]{
                             new JolCraftDwarfTrades.GoldForItems(JolCraftItems.DWARVEN_TOME_UNCOMMON.get(), 1, 10, 35, 5),
+                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.ANCIENT_DWARVEN_TOME_UNCOMMON.get(), 1, 10, 35, 10),
                             new JolCraftDwarfTrades.GoldForItems(Items.FILLED_MAP, 1, 3, 6, 2)
 
                     },
@@ -112,6 +114,7 @@ public class DwarfHistorianEntity extends AbstractDwarfEntity {
                     3,
                     new VillagerTrades.ItemListing[]{
                             new JolCraftDwarfTrades.GoldForItems(JolCraftItems.DWARVEN_TOME_RARE.get(), 1, 10, 75, 10),
+                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.ANCIENT_DWARVEN_TOME_RARE.get(), 1, 10, 75, 20),
                             new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.QUILL_EMPTY.get(), 2, 1, 6, 8)
                     },
 
@@ -119,6 +122,7 @@ public class DwarfHistorianEntity extends AbstractDwarfEntity {
                     4,
                     new VillagerTrades.ItemListing[]{
                             new JolCraftDwarfTrades.GoldForItems(JolCraftItems.DWARVEN_TOME_EPIC.get(), 1, 10, 125, 25),
+                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.ANCIENT_DWARVEN_TOME_EPIC.get(), 1, 10, 125, 50),
                             new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.CONTRACT_BLANK.get(), 2, 1, 5, 15)
                     },
 

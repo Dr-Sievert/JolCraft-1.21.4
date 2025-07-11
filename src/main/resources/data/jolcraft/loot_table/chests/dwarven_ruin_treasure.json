@@ -51,8 +51,8 @@
       "rolls": 2,
       "entries": [
         {
-          "type": "minecraft:loot_table",
-          "value": "jolcraft:chests/dwarven_tome",
+          "type": "minecraft:item",
+          "name": "jolcraft:unidentified_ancient_dwarven_tome",
           "weight": 1
         },
         {

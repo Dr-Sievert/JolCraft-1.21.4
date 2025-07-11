@@ -379,7 +379,7 @@ public class JolCraftItems {
     public static final DeferredItem<Item> ANCIENT_DWARVEN_TOME = ITEMS.registerSimpleItem("ancient_dwarven_tome");
 
     public static final DeferredItem<Item> ANCIENT_UNIDENTIFIED_DWARVEN_TOME =
-            ITEMS.registerItem("ancient_unidentified_dwarven_tome", properties -> new AncientUnidentifiedTomeItem(properties) {
+            ITEMS.registerItem("unidentified_ancient_dwarven_tome", properties -> new AncientUnidentifiedTomeItem(properties) {
             }, new Item.Properties().stacksTo(16).rarity(Rarity.COMMON));
 
     public static final DeferredItem<Item> ANCIENT_DWARVEN_TOME_COMMON =

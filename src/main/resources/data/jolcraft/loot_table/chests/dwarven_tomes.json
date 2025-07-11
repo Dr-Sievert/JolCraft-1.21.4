@@ -7,11 +7,11 @@
         {
           "type": "minecraft:item",
           "name": "jolcraft:unidentified_dwarven_tome",
-          "weight": 3
+          "weight": 9
         },
         {
           "type": "minecraft:item",
-          "name": "jolcraft:ancient_unidentified_dwarven_tome",
+          "name": "jolcraft:unidentified_ancient_dwarven_tome",
           "weight": 1
         }
       ]

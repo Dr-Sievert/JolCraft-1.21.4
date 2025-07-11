@@ -12,7 +12,7 @@
         {
           "type": "minecraft:loot_table",
           "value": "jolcraft:chests/scrap",
-          "weight": 3
+          "weight": 6
         }
       ],
       "rolls": 1.0
