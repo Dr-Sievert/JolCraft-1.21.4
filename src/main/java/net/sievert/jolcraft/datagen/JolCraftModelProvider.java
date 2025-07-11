@@ -94,6 +94,7 @@ public class JolCraftModelProvider extends ModelProvider {
         //Alchemy
         itemModels.generateFlatItem(JolCraftItems.INVERIX.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(JolCraftItems.DEEPMARROW_DUST.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.EARTHBLOOD_DUST.get(), ModelTemplates.FLAT_ITEM);
 
         //Animal-related
         itemModels.generateFlatItem(JolCraftItems.MUFFHORN_MILK_BUCKET.get(), ModelTemplates.FLAT_ITEM);

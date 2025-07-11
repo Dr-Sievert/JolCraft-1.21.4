@@ -43,10 +43,12 @@
 
   "item.jolcraft.inverix": "Inverix",
   "item.jolcraft.deepmarrow_dust": "Powdered Deepmarrow",
+  "item.jolcraft.earthblood_dust": "Earthblood Dust",
 
   "effect.jolcraft.homestead": "Homestead",
   "effect.jolcraft.ancient_memory": "Ancient Memory",
   "effect.jolcraft.lockpicking": "Lockpicking",
+  "effect.jolcraft.dwarven_haste": "Dwarven Haste",
 
   "item.minecraft.potion.effect.ancient_memory": "Ancient Memory Potion",
   "item.minecraft.potion.effect.long_ancient_memory": "Ancient Memory Potion",
@@ -64,6 +66,16 @@
   "item.minecraft.lingering_potion.effect.lockpicking": "Lockpicking Lingering Potion",
   "item.minecraft.lingering_potion.effect.long_lockpicking": "Lockpicking Lingering Potion",
   "item.minecraft.lingering_potion.effect.strong_lockpicking": "Lockpicking Lingering Potion",
+
+  "item.minecraft.potion.effect.dwarven_haste": "Mining Potion",
+  "item.minecraft.potion.effect.long_dwarven_haste": "Mining Potion",
+  "item.minecraft.potion.effect.strong_dwarven_haste": "Mining Potion",
+  "item.minecraft.splash_potion.effect.dwarven_haste": "Mining Splash Potion",
+  "item.minecraft.splash_potion.effect.long_dwarven_haste": "Mining Splash Potion",
+  "item.minecraft.splash_potion.effect.strong_dwarven_haste": "Mining Splash Potion",
+  "item.minecraft.lingering_potion.effect.dwarven_haste": "Mining Lingering Potion",
+  "item.minecraft.lingering_potion.effect.long_dwarven_haste": "Mining Lingering Potion",
+  "item.minecraft.lingering_potion.effect.strong_dwarven_haste": "Mining Lingering Potion",
 
 
   "item.jolcraft.verdant_dust": "Verdant Dust",

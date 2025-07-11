@@ -28,6 +28,15 @@ public class JolCraftPotions {
     public static final Holder<Potion> STRONG_LOCKPICKING = POTIONS.register("strong_lockpicking",
             () -> new Potion("strong_lockpicking", new MobEffectInstance(JolCraftEffects.LOCKPICKING, 300, 1)));
 
+    public static final Holder<Potion> DWARVEN_HASTE = POTIONS.register("dwarven_haste",
+            () -> new Potion("dwarven_haste", new MobEffectInstance(JolCraftEffects.DWARVEN_HASTE, 3000, 0)));
+
+    public static final Holder<Potion> LONG_DWARVEN_HASTE = POTIONS.register("long_dwarven_haste",
+            () -> new Potion("long_dwarven_haste", new MobEffectInstance(JolCraftEffects.DWARVEN_HASTE, 6000, 0)));
+
+    public static final Holder<Potion> STRONG_DWARVEN_HASTE = POTIONS.register("strong_dwarven_haste",
+            () -> new Potion("strong_dwarven_haste", new MobEffectInstance(JolCraftEffects.DWARVEN_HASTE, 3000, 1)));
+
     public static void register(IEventBus eventBus) {
         POTIONS.register(eventBus);
     }

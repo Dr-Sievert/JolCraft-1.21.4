@@ -21,6 +21,9 @@ public class JolCraftEffects {
     public static final Holder<MobEffect> LOCKPICKING = MOB_EFFECTS.register("lockpicking",
             () -> new LockpickingEffect(MobEffectCategory.BENEFICIAL, 0x6b6b6b));
 
+    public static final Holder<MobEffect> DWARVEN_HASTE = MOB_EFFECTS.register("dwarven_haste",
+            () -> new DwarvenHasteEffect(MobEffectCategory.BENEFICIAL, 0x2bc7ac));
+
     public static void register(IEventBus eventBus) {
         MOB_EFFECTS.register(eventBus);
     }

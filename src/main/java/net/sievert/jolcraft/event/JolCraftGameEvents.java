@@ -10,6 +10,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.npc.VillagerProfession;
@@ -55,6 +56,7 @@ import net.sievert.jolcraft.util.attachment.DwarvenLanguageHelper;
 import net.sievert.jolcraft.util.attachment.DwarvenReputationHelper;
 import net.sievert.jolcraft.util.random.SalvageLootHelper;
 import net.sievert.jolcraft.block.JolCraftBlocks;
+import net.sievert.jolcraft.effect.JolCraftEffects;
 
 import java.util.List;
 import java.util.Set;
@@ -88,7 +90,6 @@ public class JolCraftGameEvents {
     public static void onBrewingRecipeRegister(RegisterBrewingRecipesEvent event) {
         PotionBrewing.Builder builder = event.getBuilder();
 
-        //Custom
         builder.addMix(Potions.WATER, JolCraftItems.DEEPMARROW_DUST.get(), JolCraftPotions.ANCIENT_MEMORY);
         builder.addMix(JolCraftPotions.ANCIENT_MEMORY, Items.REDSTONE, JolCraftPotions.LONG_ANCIENT_MEMORY);
 
@@ -96,7 +97,10 @@ public class JolCraftGameEvents {
         builder.addMix(JolCraftPotions.LOCKPICKING, Items.REDSTONE, JolCraftPotions.LONG_LOCKPICKING);
         builder.addMix(JolCraftPotions.LOCKPICKING, Items.GLOWSTONE_DUST, JolCraftPotions.STRONG_LOCKPICKING);
 
-        //Inverix recipes
+        builder.addMix(Potions.AWKWARD, JolCraftItems.EARTHBLOOD_DUST.asItem(), JolCraftPotions.DWARVEN_HASTE);
+        builder.addMix(JolCraftPotions.DWARVEN_HASTE, Items.REDSTONE, JolCraftPotions.LONG_DWARVEN_HASTE);
+        builder.addMix(JolCraftPotions.DWARVEN_HASTE, Items.GLOWSTONE_DUST, JolCraftPotions.STRONG_DWARVEN_HASTE);
+
 
     }
 
@@ -243,6 +247,22 @@ public class JolCraftGameEvents {
         if (!(event.getEntity() instanceof ServerPlayer player)) return;
 
         JolCraftCriteriaTriggers.HAS_ADVANCEMENT.trigger(player, event.getAdvancement().id());
+    }
+
+    @SubscribeEvent
+    public static void onBreakSpeed(PlayerEvent.BreakSpeed event) {
+        Player player = event.getEntity();
+
+        // Check for your custom effect (replace 'DWARVEN_HASTE' with your actual effect)
+        if (player.hasEffect(JolCraftEffects.DWARVEN_HASTE)) {
+            MobEffectInstance effect = player.getEffect(JolCraftEffects.DWARVEN_HASTE);
+            int amplifier = effect.getAmplifier();
+
+            // +20% per level, like vanilla Haste
+            float originalSpeed = event.getOriginalSpeed();
+            float newSpeed = originalSpeed * (1.0F + 0.2F * (amplifier + 1));
+            event.setNewSpeed(newSpeed);
+        }
     }
 
 

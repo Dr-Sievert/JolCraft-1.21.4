@@ -52,7 +52,6 @@ public class JolCraftItems {
             Item::new, new Item.Properties());
 
 
-
     //Materials, Armors, Trims, Tools and Weapons
     public static final DeferredItem<Item> DEEPSLATE_PLATE = ITEMS.registerItem("deepslate_plate",
             Item::new, new Item.Properties());
@@ -99,6 +98,9 @@ public class JolCraftItems {
             Item::new, new Item.Properties());
 
     public static final DeferredItem<Item> DEEPMARROW_DUST = ITEMS.registerItem("deepmarrow_dust",
+            Item::new, new Item.Properties());
+
+    public static final DeferredItem<Item> EARTHBLOOD_DUST = ITEMS.registerItem("earthblood_dust",
             Item::new, new Item.Properties());
 
     public static final DeferredItem<Item> VERDANT_DUST = ITEMS.registerItem("verdant_dust",
