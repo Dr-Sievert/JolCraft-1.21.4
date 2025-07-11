@@ -19,7 +19,7 @@ public class MuffhornRenderer extends AgeableMobRenderer<MuffhornEntity, Muffhor
                 context,
                 new MuffhornModel(context.bakeLayer(MuffhornModel.LAYER_LOCATION)),         // adult model
                 new MuffhornModel(context.bakeLayer(MuffhornModel.BABY_LAYER_LOCATION)),    // baby model
-                0.6f // scale factor (adjust as needed)
+                0.7f // scale factor (adjust as needed)
         );
         this.addLayer(new MuffhornFurLayer(this, context.getModelSet()));
     }

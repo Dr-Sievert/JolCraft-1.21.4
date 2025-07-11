@@ -5,39 +5,23 @@
       "rolls": 10,
       "entries": [
         {
-          "type": "minecraft:item",
-          "name": "minecraft:paper",
-          "weight": 1,
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": 13
-            }
-          ]
+          "type": "minecraft:loot_table",
+          "value": "jolcraft:chests/scrap",
+          "weight": 1
         },
         {
           "type": "minecraft:loot_table",
-          "value": "jolcraft:chests/scrap",
-          "weight": 2
-        },
-        {
-          "type": "minecraft:item",
-          "name": "jolcraft:quill_empty",
+          "value": "jolcraft:chests/gems",
           "weight": 2
         },
         {
           "type": "minecraft:empty",
-          "weight": 4
-        },
-        {
-          "type": "minecraft:item",
-          "name": "minecraft:lantern",
           "weight": 1
         },
         {
           "type": "minecraft:item",
           "name": "jolcraft:gold_coin",
-          "weight": 10,
+          "weight": 2,
           "functions": [
             {
               "function": "minecraft:set_count",
@@ -48,12 +32,12 @@
       ]
     },
     {
-      "rolls": 2,
+      "rolls": 3,
       "entries": [
         {
           "type": "minecraft:item",
           "name": "jolcraft:unidentified_ancient_dwarven_tome",
-          "weight": 1
+          "weight": 2
         },
         {
           "type": "minecraft:empty",

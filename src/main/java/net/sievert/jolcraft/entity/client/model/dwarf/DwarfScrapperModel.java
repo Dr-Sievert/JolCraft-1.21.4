@@ -83,13 +83,15 @@ public class DwarfScrapperModel extends DwarfModel{
         this.leftLeg.getChild("left_footwear").visible = true;
     }
 
-
     @Override
     public void translateToHand(HumanoidArm side, PoseStack poseStack) {
-        this.root.translateAndRotate(poseStack);
-        this.getArm(side).translateAndRotate(poseStack);
-        poseStack.translate(0.05F, -0.15F, 0.05F);
-
+        if (side == HumanoidArm.LEFT) {
+            this.root.translateAndRotate(poseStack);
+            this.getArm(side).translateAndRotate(poseStack);
+            poseStack.translate(0.05F, -0.15F, 0.05F); // your custom left-hand offset
+        } else {
+            super.translateToHand(side, poseStack); // use default right-hand behavior
+        }
     }
 
 

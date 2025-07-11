@@ -3,9 +3,9 @@
 
   "biomes": "#jolcraft:has_structure/dwarven_trail_ruin",
 
-  "start_pool": "jolcraft:dwarven_trail_ruin/dwarven_trail_ruin_base_pool",
+  "start_pool": "jolcraft:dwarven_trail_ruin/base_pool",
 
-  "size": 1,
+  "size": 3,
 
   "max_distance_from_center": 80,
 
