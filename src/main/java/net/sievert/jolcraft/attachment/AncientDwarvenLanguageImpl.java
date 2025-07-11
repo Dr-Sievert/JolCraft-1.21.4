@@ -3,7 +3,7 @@ package net.sievert.jolcraft.attachment;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 
-public class DwarvenLanguageImpl implements DwarvenLanguage {
+public class AncientDwarvenLanguageImpl implements AncientDwarvenLanguage {
     private boolean knowsLanguage = false;
 
     @Override
@@ -28,3 +28,4 @@ public class DwarvenLanguageImpl implements DwarvenLanguage {
         this.knowsLanguage = tag.getBoolean("KnowsLanguage");
     }
 }
+

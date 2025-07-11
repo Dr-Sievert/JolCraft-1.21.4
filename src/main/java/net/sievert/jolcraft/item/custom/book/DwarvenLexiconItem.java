@@ -1,4 +1,4 @@
-package net.sievert.jolcraft.item.custom;
+package net.sievert.jolcraft.item.custom.book;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -15,10 +15,9 @@ import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.sievert.jolcraft.advancement.JolCraftCriteriaTriggers;
-import net.sievert.jolcraft.attachment.JolCraftAttachments;
-import net.sievert.jolcraft.client.data.MyClientLanguageData;
 import net.sievert.jolcraft.network.JolCraftNetworking;
 import net.sievert.jolcraft.network.packet.ClientboundSyncLanguagePacket;
+import net.sievert.jolcraft.util.attachment.DwarvenLanguageHelper;
 
 import java.util.List;
 
@@ -31,18 +30,19 @@ public class DwarvenLexiconItem extends Item {
     @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         if (!level.isClientSide && player instanceof ServerPlayer serverPlayer) {
-            var lang = serverPlayer.getData(JolCraftAttachments.DWARVEN_LANGUAGE.get());
-            if (!lang.knowsLanguage()) {
-                lang.setKnowsLanguage(true);
+            // Strict: do NOT grant for creative, only for real unlock
+            if (!DwarvenLanguageHelper.knowsDwarvishServerBypassCreative(serverPlayer)) {
+                DwarvenLanguageHelper.setKnowsDwarvishServer(serverPlayer, true);
 
                 // ✅ SEND PACKET TO CLIENT
                 JolCraftNetworking.sendToClient(serverPlayer, new ClientboundSyncLanguagePacket(true));
 
                 JolCraftCriteriaTriggers.HAS_DWARVEN_LANGUAGE.trigger(serverPlayer);
                 level.playSound(null, player.blockPosition(), SoundEvents.BOOK_PAGE_TURN, SoundSource.PLAYERS, 2.0f, 0.7f);
-                serverPlayer.displayClientMessage(Component.literal("You have learned to understand the dwarven language"), true);
+                serverPlayer.displayClientMessage(Component.translatable("tooltip.jolcraft.dwarven_lexicon.use").withStyle(ChatFormatting.GREEN), true);
             } else {
-                serverPlayer.displayClientMessage(Component.literal("You already understand the dwarven language"), true);
+                serverPlayer.displayClientMessage(Component.translatable("tooltip.jolcraft.dwarven_lexicon.knows").withStyle(ChatFormatting.GRAY), true);
+                level.playSound(null, player.blockPosition(), SoundEvents.BOOK_PUT, SoundSource.PLAYERS, 1.2f, 0.8f);
             }
         }
         return InteractionResult.SUCCESS;
@@ -51,7 +51,9 @@ public class DwarvenLexiconItem extends Item {
     @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-        boolean knows = MyClientLanguageData.knowsLanguage();
+        // For UI, showing "unlocked" for creative mode is usually fine,
+        // but if you want to only show true unlock, use bypass creative here too:
+        boolean knows = DwarvenLanguageHelper.knowsDwarvishClient();
         if (knows) {
             tooltip.add(Component.translatable("tooltip.jolcraft.dwarven_lexicon.unlocked").withStyle(ChatFormatting.GRAY));
         } else {
@@ -60,9 +62,4 @@ public class DwarvenLexiconItem extends Item {
 
         super.appendHoverText(stack, context, tooltip, flag);
     }
-
-
-
-
 }
-

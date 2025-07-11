@@ -7,7 +7,7 @@ import net.minecraft.advancements.critereon.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.sievert.jolcraft.JolCraft;
-import net.sievert.jolcraft.attachment.JolCraftAttachments;
+import net.sievert.jolcraft.util.attachment.DwarvenLanguageHelper;
 
 import java.util.Optional;
 
@@ -21,11 +21,8 @@ public class HasDwarvenLanguageTrigger extends SimpleCriterionTrigger<HasDwarven
     }
 
     public void trigger(ServerPlayer player) {
-        var lang = player.getData(JolCraftAttachments.DWARVEN_LANGUAGE.get());
-        System.out.println("[ADVANCEMENT] Checking for language: " + lang.knowsLanguage());
-        if (lang.knowsLanguage()) {
+        if (DwarvenLanguageHelper.knowsDwarvishServer(player)) {
             this.trigger(player, instance -> true);
-
         }
     }
 

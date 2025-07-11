@@ -5,6 +5,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -30,7 +31,6 @@ import net.minecraft.world.phys.Vec3;
 import net.sievert.jolcraft.advancement.JolCraftCriteriaTriggers;
 import net.sievert.jolcraft.attachment.DwarvenReputationImpl;
 import net.sievert.jolcraft.attachment.JolCraftAttachments;
-import net.sievert.jolcraft.client.data.MyClientReputationData;
 import net.sievert.jolcraft.component.JolCraftDataComponents;
 import net.sievert.jolcraft.util.JolCraftTags;
 import net.sievert.jolcraft.entity.ai.goal.*;
@@ -39,7 +39,7 @@ import net.sievert.jolcraft.network.JolCraftNetworking;
 import net.sievert.jolcraft.network.packet.ClientboundSyncEndorsementsPacket;
 import net.sievert.jolcraft.network.packet.ClientboundSyncReputationPacket;
 import net.sievert.jolcraft.sound.JolCraftSounds;
-import net.sievert.jolcraft.util.random.DwarvenReputationLevels;
+import net.sievert.jolcraft.util.attachment.DwarvenReputationHelper;
 import net.sievert.jolcraft.villager.JolCraftDwarfTrades;
 
 public class DwarfGuildmasterEntity extends AbstractDwarfEntity {
@@ -110,88 +110,90 @@ public class DwarfGuildmasterEntity extends AbstractDwarfEntity {
         ItemStack itemstack = player.getItemInHand(hand);
         boolean client = this.level().isClientSide;
 
-        // 🧠 Language check - ensures only players who know the Dwarvish language can interact
+        // 🧠 Language check
         InteractionResult langCheck = this.languageCheck(player);
         if (langCheck != InteractionResult.SUCCESS) {
             return langCheck;
         }
 
-        // Sync Guildmaster level with player reputation tier
-        DwarvenReputationImpl reptier = player.getData(JolCraftAttachments.DWARVEN_REP.get());
-        if (reptier != null) {
-            int playerTier = reptier.getTier(); // 0=Stranger, 1=Known Face, ... 4=Blood-Kin
-            int targetLevel = Math.min(playerTier + 1, 5); // VillagerData levels: 1..5
-            int guildmasterLevel = this.getVillagerData().getLevel();
-            while (guildmasterLevel < targetLevel && guildmasterLevel < 5) {
-                this.increaseMerchantCareer();
-                guildmasterLevel++;
-            }
+        // Sync Guildmaster level with player tier (for AI or display, use standard rep)
+        int tier = DwarvenReputationHelper.getTierServer(player);
+        int desiredLevel = Math.min(tier + 1, 5);
+        int currentLevel = this.getVillagerData().getLevel();
+
+        if (currentLevel < desiredLevel) {
+            this.setVillagerData(this.getVillagerData().setLevel(desiredLevel));
+            this.getOffers().clear();
+            this.lastUnlockedLevel = 0;
+            this.updateTrades();
         }
 
-        // Only handle reputation tablets; let all other logic fall through
+        // Only proceed if holding a reputation tablet
         if (!itemstack.is(JolCraftTags.Items.REPUTATION_TABLETS)) {
             return super.mobInteract(player, hand);
         }
 
-        // Fetch current tier and endorsement count on both sides
+        // --- For display/UI only: current tier & endorsement count (CAN show creative-granted values) ---
         int currentTier = client
-                ? MyClientReputationData.getTier()
-                : (player.getData(JolCraftAttachments.DWARVEN_REP.get()) != null
-                ? player.getData(JolCraftAttachments.DWARVEN_REP.get()).getTier()
-                : 0);
+                ? DwarvenReputationHelper.getClientTier()
+                : DwarvenReputationHelper.getTierServer(player);
 
         int endorsementCount = client
-                ? MyClientReputationData.endorsementCount()
-                : (player.getData(JolCraftAttachments.DWARVEN_REP.get()) != null
-                ? player.getData(JolCraftAttachments.DWARVEN_REP.get()).getEndorsementCount()
-                : 0);
+                ? DwarvenReputationHelper.getClientEndorsementCount()
+                : DwarvenReputationHelper.getEndorsementCountServer(player);
 
-        // Check for max tier already reached
-        if (currentTier >= DwarvenReputationLevels.getMaxTier()) {
+        int maxTier = DwarvenReputationImpl.getThresholdCount();
+
+        // --- For actual logic: STRICT checks (bypass creative) ---
+        int strictTier = client
+                ? DwarvenReputationHelper.getClientTier()
+                : DwarvenReputationHelper.getTierServerBypassCreative(player);
+
+        int strictEndorsementCount = client
+                ? DwarvenReputationHelper.getClientEndorsementCount()
+                : DwarvenReputationHelper.getEndorsementCountServerBypassCreative(player);
+
+        // Check if max tier already reached (using strict check)
+        if (strictTier >= maxTier) {
             if (client) {
-                player.displayClientMessage(
-                        Component.translatable("tooltip.jolcraft.reputation.max_tier").withStyle(ChatFormatting.GRAY), true
-                );
+                player.displayClientMessage(Component.translatable("tooltip.jolcraft.reputation.max_tier")
+                        .withStyle(ChatFormatting.GRAY), true);
             }
-            this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
+            this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1f, 1f);
             return client ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
         }
 
-        // Check if can advance (using util method)
-        if (!DwarvenReputationLevels.canAdvance(currentTier, endorsementCount)) {
-            int needed = DwarvenReputationLevels.getThresholdForTier(currentTier);
-            if (client) {
-                player.displayClientMessage(
-                        Component.translatable("tooltip.jolcraft.reputation.not_enough_endorsements", needed, endorsementCount)
-                                .withStyle(ChatFormatting.GRAY), true);
+        // Check if the player can advance to the next tier (using strict check)
+        if (!DwarvenReputationImpl.canAdvance(strictTier, strictEndorsementCount)) {
+            if (!client) {
+                int needed = DwarvenReputationImpl.getThresholdForTier(strictTier);
+                player.displayClientMessage(Component.translatable(
+                        "tooltip.jolcraft.reputation.not_enough_endorsements", needed, strictEndorsementCount
+                ).withStyle(ChatFormatting.GRAY), true);
             }
-            this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
+            this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1f, 1f);
             return client ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
         }
 
-        // Block if busy (performing another action)
         if (this.isPerformingAction()) {
             if (client) {
-                player.displayClientMessage(
-                        Component.translatable("tooltip.jolcraft.dwarf.busy").withStyle(ChatFormatting.GRAY), true);
+                player.displayClientMessage(Component.translatable("tooltip.jolcraft.dwarf.busy")
+                        .withStyle(ChatFormatting.GRAY), true);
             }
-            this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
+            this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1f, 1f);
             return client ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
         }
 
-
-        // Paid check (all else valid, just not paid)
         if (!this.isPaid()) {
             if (!client) {
-                player.displayClientMessage(
-                        Component.translatable("tooltip.jolcraft.dwarf.not_paid").withStyle(ChatFormatting.GRAY), true);
+                player.displayClientMessage(Component.translatable("tooltip.jolcraft.dwarf.not_paid")
+                        .withStyle(ChatFormatting.GRAY), true);
             }
-            this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
+            this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1f, 1f);
             return client ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
         }
 
-        // Only accept the correct tablet for the next tier
-        Item correctTablet = switch (currentTier) {
+        Item correctTablet = switch (strictTier) {
             case 0 -> JolCraftItems.REPUTATION_TABLET_0.get();
             case 1 -> JolCraftItems.REPUTATION_TABLET_1.get();
             case 2 -> JolCraftItems.REPUTATION_TABLET_2.get();
@@ -201,70 +203,60 @@ public class DwarfGuildmasterEntity extends AbstractDwarfEntity {
 
         if (correctTablet == null || !itemstack.is(correctTablet)) {
             if (client) {
-                player.displayClientMessage(
-                        Component.translatable("tooltip.jolcraft.reputation.wrong_tablet").withStyle(ChatFormatting.GRAY), true);
+                player.displayClientMessage(Component.translatable("tooltip.jolcraft.reputation.wrong_tablet")
+                        .withStyle(ChatFormatting.GRAY), true);
             }
-            this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
+            this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1f, 1f);
             return client ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
         }
 
-        // At this point: eligible to level up!
-        // Show the signing/endorsement animation, throw tablet back, update, play sound
-
-        // Remove tablet from player and animate
+        // ✅ Valid advancement – process endorsement animation
         ItemStack tabletUsed = itemstack.copy();
         this.previousMainHandItem = this.getMainHandItem().copy();
         this.setItemSlot(EquipmentSlot.MAINHAND, tabletUsed.copy());
         this.usePlayerItem(player, hand, itemstack);
-        this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_YES.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
+        this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_YES.get(), SoundSource.NEUTRAL, 1f, 1f);
 
-        this.usedItem = tabletUsed; // <-- this is crucial for the lambda!
+        this.usedItem = tabletUsed;
         beginAction(player, 40, AbstractDwarfEntity.ACTION_REPUTATION_ENDORSEMENT, tabletUsed, previousMainHandItem, () -> {
             this.setInspecting(false);
             this.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
 
-            if (!this.level().isClientSide && this.currentActionPlayer != null) {
-                // On server: bump the tier, update data, sync packets, throw new tablet
-                DwarvenReputationImpl rep = this.currentActionPlayer.getData(JolCraftAttachments.DWARVEN_REP.get());
-                if (rep != null && rep.getTier() == currentTier) {
-                    rep.setTier(currentTier + 1);
-                    if (player instanceof ServerPlayer serverPlayer) {
-                        JolCraftCriteriaTriggers.REPUTATION_TIER.trigger(serverPlayer);
-                    }
+            if (!this.level().isClientSide && this.currentActionPlayer instanceof ServerPlayer serverPlayer) {
+                DwarvenReputationImpl repFinal = serverPlayer.getData(JolCraftAttachments.DWARVEN_REP.get());
+                if (repFinal != null && repFinal.getTier() == strictTier) {
+                    repFinal.setTier(strictTier + 1);
+                    JolCraftCriteriaTriggers.REPUTATION_TIER.trigger(serverPlayer);
 
-                    // 🎯 Level up Guildmaster
-                    int newPlayerTier = rep.getTier();
-                    int guildmasterLevel = this.getVillagerData().getLevel();
-                    if (guildmasterLevel <= newPlayerTier && guildmasterLevel < 5) {
+                    int newTier = repFinal.getTier();
+                    if (this.getVillagerData().getLevel() <= newTier && newTier <= 5) {
                         this.increaseMerchantCareer();
                     }
 
-                    // Sync new tier and endorsements to client
-                    if (this.currentActionPlayer instanceof ServerPlayer serverPlayer) {
-                        JolCraftNetworking.sendToClient(serverPlayer, new ClientboundSyncReputationPacket(rep.getTier()));
-                        JolCraftNetworking.sendToClient(serverPlayer, new ClientboundSyncEndorsementsPacket(rep.getEndorsements()));
-                        serverPlayer.displayClientMessage(Component.translatable("tooltip.jolcraft.reputation.level_up").withStyle(ChatFormatting.GOLD), true);
-                    }
+                    JolCraftNetworking.sendToClient(serverPlayer,
+                            new ClientboundSyncReputationPacket(newTier));
+                    JolCraftNetworking.sendToClient(serverPlayer,
+                            new ClientboundSyncEndorsementsPacket(repFinal.getEndorsements()));
+                    serverPlayer.displayClientMessage(Component.translatable("tooltip.jolcraft.reputation.level_up")
+                            .withStyle(ChatFormatting.GOLD), true);
 
-                    // Create updated tablet item
-                    // Select new tablet for the next tier
-                    ItemStack updatedTablet = switch (rep.getTier()) {
+                    ItemStack nextTablet = switch (newTier) {
                         case 1 -> new ItemStack(JolCraftItems.REPUTATION_TABLET_1.get());
                         case 2 -> new ItemStack(JolCraftItems.REPUTATION_TABLET_2.get());
                         case 3 -> new ItemStack(JolCraftItems.REPUTATION_TABLET_3.get());
                         case 4 -> new ItemStack(JolCraftItems.REPUTATION_TABLET_4.get());
                         default -> ItemStack.EMPTY;
                     };
-                    updatedTablet.set(JolCraftDataComponents.REP_ENDORSEMENTS.get(), rep.getEndorsementCount());
-                    updatedTablet.set(JolCraftDataComponents.REP_TIER.get(), rep.getTier());
-                    updatedTablet.set(JolCraftDataComponents.REP_OWNER.get(), this.currentActionPlayer.getName().getString());
 
-                    // Throw the new tablet to the player
+                    nextTablet.set(JolCraftDataComponents.REP_ENDORSEMENTS.get(), repFinal.getEndorsementCount());
+                    nextTablet.set(JolCraftDataComponents.REP_TIER.get(), repFinal.getTier());
+                    nextTablet.set(JolCraftDataComponents.REP_OWNER.get(), this.currentActionPlayer.getName().getString());
+
                     Vec3 start = this.position().add(0.0, this.getEyeHeight(), 0.0);
                     Vec3 target = this.currentActionPlayer.position().add(0.0, this.currentActionPlayer.getBbHeight() * 0.5, 0.0);
                     Vec3 velocity = target.subtract(start).normalize().scale(0.4);
 
-                    ItemEntity thrown = new ItemEntity(this.level(), start.x, start.y, start.z, updatedTablet);
+                    ItemEntity thrown = new ItemEntity(this.level(), start.x, start.y, start.z, nextTablet);
                     thrown.setDeltaMovement(velocity);
                     thrown.setPickUpDelay(10);
                     this.level().addFreshEntity(thrown);
@@ -278,6 +270,7 @@ public class DwarfGuildmasterEntity extends AbstractDwarfEntity {
 
         return client ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
     }
+
 
     @Override
     public void tick() {
@@ -344,14 +337,32 @@ public class DwarfGuildmasterEntity extends AbstractDwarfEntity {
         return new Int2ObjectOpenHashMap<>(pMap);
     }
 
+    private int lastUnlockedLevel = 0;
+
     @Override
     protected void updateTrades() {
-        int level = this.getVillagerData().getLevel();
-        VillagerTrades.ItemListing[] listings = TRADES.get(level);
-        if (listings != null) {
-            this.addOffersFromItemListings(this.getOffers(), listings, 3); // 2 = max trades for that level
+        int currentLevel = this.getVillagerData().getLevel();
+        for (int lvl = lastUnlockedLevel + 1; lvl <= currentLevel; lvl++) {
+            VillagerTrades.ItemListing[] listings = TRADES.get(lvl);
+            if (listings != null) {
+                this.addOffersFromItemListings(this.getOffers(), listings, 3);
+            }
         }
+        lastUnlockedLevel = Math.max(lastUnlockedLevel, currentLevel);
     }
+
+    @Override
+    public void addAdditionalSaveData(CompoundTag tag) {
+        super.addAdditionalSaveData(tag);
+        tag.putInt("LastUnlockedLevel", lastUnlockedLevel);
+    }
+
+    @Override
+    public void readAdditionalSaveData(CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+        this.lastUnlockedLevel = tag.getInt("LastUnlockedLevel");
+    }
+
 
 
 }

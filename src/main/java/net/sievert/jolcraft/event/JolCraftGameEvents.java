@@ -3,6 +3,7 @@ package net.sievert.jolcraft.event;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -20,7 +21,6 @@ import net.minecraft.world.item.alchemy.PotionBrewing;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.item.trading.MerchantOffer;
-import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LayeredCauldronBlock;
@@ -40,36 +40,64 @@ import net.sievert.jolcraft.advancement.JolCraftCriteriaTriggers;
 import net.sievert.jolcraft.attachment.Hearth;
 import net.sievert.jolcraft.block.custom.FermentingCauldronBlock;
 import net.sievert.jolcraft.block.custom.FermentingStage;
-import net.sievert.jolcraft.attachment.DwarvenLanguageImpl;
-import net.sievert.jolcraft.attachment.JolCraftAttachments;
+import net.sievert.jolcraft.network.JolCraftNetworking;
+import net.sievert.jolcraft.network.packet.ClientboundSyncAncientLanguagePacket;
+import net.sievert.jolcraft.network.packet.ClientboundSyncEndorsementsPacket;
+import net.sievert.jolcraft.network.packet.ClientboundSyncLanguagePacket;
+import net.sievert.jolcraft.network.packet.ClientboundSyncReputationPacket;
 import net.sievert.jolcraft.potion.JolCraftPotions;
 import net.sievert.jolcraft.util.JolCraftTags;
 import net.sievert.jolcraft.entity.custom.dwarf.DwarfGuardEntity;
 import net.sievert.jolcraft.item.JolCraftItems;
 import net.sievert.jolcraft.item.custom.SpannerItem;
-import net.sievert.jolcraft.network.packet.ClientboundSyncEndorsementsPacket;
-import net.sievert.jolcraft.network.packet.ClientboundSyncReputationPacket;
+import net.sievert.jolcraft.util.attachment.AncientDwarvenLanguageHelper;
+import net.sievert.jolcraft.util.attachment.DwarvenLanguageHelper;
+import net.sievert.jolcraft.util.attachment.DwarvenReputationHelper;
 import net.sievert.jolcraft.util.random.SalvageLootHelper;
-import net.sievert.jolcraft.network.JolCraftNetworking;
-import net.sievert.jolcraft.network.packet.ClientboundSyncLanguagePacket;
 import net.sievert.jolcraft.block.JolCraftBlocks;
 
 import java.util.List;
+import java.util.Set;
 
 @EventBusSubscriber(modid = JolCraft.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public class JolCraftGameEvents {
+
+    @SubscribeEvent
+    public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
+        if (!(event.getEntity() instanceof ServerPlayer serverPlayer)) return;
+
+        // Sync normal Dwarvish language
+        boolean knowsLang = DwarvenLanguageHelper.knowsDwarvishServerBypassCreative(serverPlayer);
+        JolCraftNetworking.sendToClient(serverPlayer, new ClientboundSyncLanguagePacket(knowsLang));
+
+        // Sync Ancient Dwarvish language
+        boolean knowsAncient = AncientDwarvenLanguageHelper.knowsAncientDwarvishServerBypassCreative(serverPlayer);
+        JolCraftNetworking.sendToClient(serverPlayer, new ClientboundSyncAncientLanguagePacket(knowsAncient));
+
+        // Sync reputation tier
+        int tier = DwarvenReputationHelper.getTierServerBypassCreative(serverPlayer);
+        JolCraftNetworking.sendToClient(serverPlayer, new ClientboundSyncReputationPacket(tier));
+
+        // Sync endorsements
+        Set<ResourceLocation> endorsements = DwarvenReputationHelper.getAllEndorsementsServerBypassCreative(serverPlayer);
+        JolCraftNetworking.sendToClient(serverPlayer, new ClientboundSyncEndorsementsPacket(endorsements));
+    }
 
 
     @SubscribeEvent
     public static void onBrewingRecipeRegister(RegisterBrewingRecipesEvent event) {
         PotionBrewing.Builder builder = event.getBuilder();
 
+        //Custom
         builder.addMix(Potions.WATER, JolCraftItems.DEEPMARROW_DUST.get(), JolCraftPotions.ANCIENT_MEMORY);
         builder.addMix(JolCraftPotions.ANCIENT_MEMORY, Items.REDSTONE, JolCraftPotions.LONG_ANCIENT_MEMORY);
 
         builder.addMix(Potions.AWKWARD, JolCraftBlocks.DUSKCAP.asItem(), JolCraftPotions.LOCKPICKING);
         builder.addMix(JolCraftPotions.LOCKPICKING, Items.REDSTONE, JolCraftPotions.LONG_LOCKPICKING);
         builder.addMix(JolCraftPotions.LOCKPICKING, Items.GLOWSTONE_DUST, JolCraftPotions.STRONG_LOCKPICKING);
+
+        //Inverix recipes
+
     }
 
     @SubscribeEvent
@@ -208,81 +236,6 @@ public class JolCraftGameEvents {
 
         event.setCancellationResult(InteractionResult.SUCCESS);
         event.setCanceled(true);
-    }
-    @SubscribeEvent
-    public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
-        Player player = event.getEntity();
-
-        // --- Language ---
-        var langCap = player.getData(JolCraftAttachments.DWARVEN_LANGUAGE);
-        if (langCap != null) {
-            if (player.isCreative() && !langCap.knowsLanguage()) {
-                if (langCap instanceof DwarvenLanguageImpl impl) {
-                    impl.grantTemporaryCreativeLanguage();
-                }
-            }
-            // ✅ Sync to client
-            if (player instanceof ServerPlayer serverPlayer) {
-                JolCraftNetworking.sendToClient(serverPlayer, new ClientboundSyncLanguagePacket(langCap.knowsLanguage()));
-            }
-        }
-
-        // --- Reputation ---
-        var repCap = player.getData(JolCraftAttachments.DWARVEN_REP);
-        if (repCap != null) {
-            if (player.isCreative() && !repCap.wasGrantedByCreative()) {
-                repCap.grantTemporaryCreativeReputation();
-            }
-            // ✅ Sync to client (add this packet!)
-            if (player instanceof ServerPlayer serverPlayer) {
-                // If you don't have a packet, just leave this out for now
-                JolCraftNetworking.sendToClient(serverPlayer,
-                        new ClientboundSyncReputationPacket(repCap.getTier())
-                );
-            }
-        }
-    }
-
-    @SubscribeEvent
-    public static void onGameModeChange(PlayerEvent.PlayerChangeGameModeEvent event) {
-        Player player = event.getEntity();
-
-        // --- Language ---
-        var langCap = player.getData(JolCraftAttachments.DWARVEN_LANGUAGE);
-        if (langCap instanceof DwarvenLanguageImpl impl) {
-            if (event.getNewGameMode() == GameType.CREATIVE && event.getCurrentGameMode() != GameType.CREATIVE) {
-                if (!impl.knowsLanguage()) {
-                    impl.grantTemporaryCreativeLanguage();
-                }
-            } else if (event.getCurrentGameMode() == GameType.CREATIVE && event.getNewGameMode() != GameType.CREATIVE) {
-                impl.revokeCreativeLanguage();
-            }
-            // ✅ Sync to client
-            if (player instanceof ServerPlayer serverPlayer) {
-                JolCraftNetworking.sendToClient(serverPlayer, new ClientboundSyncLanguagePacket(impl.knowsLanguage()));
-            }
-        }
-
-        // --- Reputation ---
-        var repCap = player.getData(JolCraftAttachments.DWARVEN_REP);
-        if (repCap != null) {
-            if (event.getNewGameMode() == GameType.CREATIVE && event.getCurrentGameMode() != GameType.CREATIVE) {
-                if (!repCap.wasGrantedByCreative()) {
-                    repCap.grantTemporaryCreativeReputation();
-                }
-            } else if (event.getCurrentGameMode() == GameType.CREATIVE && event.getNewGameMode() != GameType.CREATIVE) {
-                repCap.revokeCreativeReputation();
-            }
-            // ✅ Sync to client (tier AND endorsements)
-            if (player instanceof ServerPlayer serverPlayer) {
-                JolCraftNetworking.sendToClient(serverPlayer,
-                        new ClientboundSyncReputationPacket(repCap.getTier())
-                );
-                JolCraftNetworking.sendToClient(serverPlayer,
-                        new ClientboundSyncEndorsementsPacket(repCap.getEndorsements())
-                );
-            }
-        }
     }
 
     @SubscribeEvent

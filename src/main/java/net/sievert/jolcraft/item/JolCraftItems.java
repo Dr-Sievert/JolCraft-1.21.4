@@ -14,6 +14,12 @@ import net.sievert.jolcraft.block.JolCraftBlocks;
 import net.sievert.jolcraft.entity.JolCraftEntities;
 import net.minecraft.network.chat.Component;
 import net.sievert.jolcraft.item.custom.*;
+import net.sievert.jolcraft.item.custom.armor.DeepslateArmorItem;
+import net.sievert.jolcraft.item.custom.bounty.BountyCrateItem;
+import net.sievert.jolcraft.item.custom.bounty.BountyItem;
+import net.sievert.jolcraft.item.custom.bounty.ContractItem;
+import net.sievert.jolcraft.item.custom.food.DwarvenBrewItem;
+import net.sievert.jolcraft.item.custom.book.*;
 
 import java.util.List;
 
@@ -30,7 +36,11 @@ public class JolCraftItems {
 
     public static final DeferredItem<Item> DWARVEN_LEXICON =
             ITEMS.registerItem("dwarven_lexicon", DwarvenLexiconItem::new,
-                    new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
+                    new Item.Properties().stacksTo(1).rarity(Rarity.RARE));
+
+    public static final DeferredItem<Item> ANCIENT_DWARVEN_LEXICON =
+            ITEMS.registerItem("ancient_dwarven_lexicon", AncientDwarvenLexiconItem::new,
+                    new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
 
     public static final DeferredItem<BlockItem> STRONGBOX_ITEM = JolCraftItems.ITEMS.registerItem("strongbox",
             props -> new StrongboxItem(JolCraftBlocks.STRONGBOX.get(), props
@@ -346,6 +356,10 @@ public class JolCraftItems {
     // Tomes
     public static final DeferredItem<Item> DWARVEN_TOME = ITEMS.registerSimpleItem("dwarven_tome");
 
+    public static final DeferredItem<Item> UNIDENTIFIED_DWARVEN_TOME =
+            ITEMS.registerItem("unidentified_dwarven_tome", properties -> new UnidentifiedDwarvenTomeItem(properties) {
+            }, new Item.Properties().stacksTo(16).rarity(Rarity.COMMON));
+
     public static final DeferredItem<Item> DWARVEN_TOME_COMMON =
             ITEMS.registerItem("dwarven_tome_common", properties -> new DwarvenTomeItem(properties) {
             }, new Item.Properties().stacksTo(1).rarity(Rarity.COMMON));
@@ -360,6 +374,28 @@ public class JolCraftItems {
 
     public static final DeferredItem<Item> DWARVEN_TOME_EPIC =
             ITEMS.registerItem("dwarven_tome_epic", properties -> new DwarvenTomeItem(properties) {
+            }, new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
+
+    public static final DeferredItem<Item> ANCIENT_DWARVEN_TOME = ITEMS.registerSimpleItem("ancient_dwarven_tome");
+
+    public static final DeferredItem<Item> ANCIENT_UNIDENTIFIED_DWARVEN_TOME =
+            ITEMS.registerItem("ancient_unidentified_dwarven_tome", properties -> new AncientUnidentifiedTomeItem(properties) {
+            }, new Item.Properties().stacksTo(16).rarity(Rarity.COMMON));
+
+    public static final DeferredItem<Item> ANCIENT_DWARVEN_TOME_COMMON =
+            ITEMS.registerItem("ancient_dwarven_tome_common", properties -> new AncientDwarvenTomeItem(properties) {
+            }, new Item.Properties().stacksTo(1).rarity(Rarity.COMMON));
+
+    public static final DeferredItem<Item> ANCIENT_DWARVEN_TOME_UNCOMMON =
+            ITEMS.registerItem("ancient_dwarven_tome_uncommon", properties -> new AncientDwarvenTomeItem(properties) {
+            }, new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
+
+    public static final DeferredItem<Item> ANCIENT_DWARVEN_TOME_RARE =
+            ITEMS.registerItem("ancient_dwarven_tome_rare", properties -> new AncientDwarvenTomeItem(properties) {
+            }, new Item.Properties().stacksTo(1).rarity(Rarity.RARE));
+
+    public static final DeferredItem<Item> ANCIENT_DWARVEN_TOME_EPIC =
+            ITEMS.registerItem("ancient_dwarven_tome_epic", properties -> new AncientDwarvenTomeItem(properties) {
             }, new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
 
 

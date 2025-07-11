@@ -57,6 +57,7 @@ public class JolCraftModelProvider extends ModelProvider {
         itemModels.generateFlatItem(JolCraftItems.DEV_KEY.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(JolCraftItems.GOLD_COIN.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(JolCraftItems.DWARVEN_LEXICON.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.ANCIENT_DWARVEN_LEXICON.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(JolCraftItems.PARCHMENT.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(JolCraftItems.DEEPSLATE_PLATE.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(JolCraftItems.LOCKPICK.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
@@ -181,11 +182,17 @@ public class JolCraftModelProvider extends ModelProvider {
 
         //Tomes
         itemModels.generateFlatItem(JolCraftItems.DWARVEN_TOME.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.UNIDENTIFIED_DWARVEN_TOME.get(), JolCraftItems.DWARVEN_TOME.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(JolCraftItems.DWARVEN_TOME_COMMON.get(), JolCraftItems.DWARVEN_TOME.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(JolCraftItems.DWARVEN_TOME_UNCOMMON.get(), JolCraftItems.DWARVEN_TOME.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(JolCraftItems.DWARVEN_TOME_RARE.get(), JolCraftItems.DWARVEN_TOME.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(JolCraftItems.DWARVEN_TOME_EPIC.get(), JolCraftItems.DWARVEN_TOME.get(), ModelTemplates.FLAT_ITEM);
-
+        itemModels.generateFlatItem(JolCraftItems.ANCIENT_DWARVEN_TOME.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.ANCIENT_UNIDENTIFIED_DWARVEN_TOME.get(), JolCraftItems.ANCIENT_DWARVEN_TOME.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.ANCIENT_DWARVEN_TOME_COMMON.get(), JolCraftItems.ANCIENT_DWARVEN_TOME.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.ANCIENT_DWARVEN_TOME_UNCOMMON.get(), JolCraftItems.ANCIENT_DWARVEN_TOME.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.ANCIENT_DWARVEN_TOME_RARE.get(), JolCraftItems.ANCIENT_DWARVEN_TOME.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.ANCIENT_DWARVEN_TOME_EPIC.get(), JolCraftItems.ANCIENT_DWARVEN_TOME.get(), ModelTemplates.FLAT_ITEM);
 
         //Tools and weapons
         itemModels.generateFlatItem(JolCraftItems.COPPER_SPANNER.get(), ModelTemplates.FLAT_HANDHELD_ITEM);

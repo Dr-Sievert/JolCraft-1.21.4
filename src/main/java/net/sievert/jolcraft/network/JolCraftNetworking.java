@@ -11,9 +11,11 @@ import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.sievert.jolcraft.JolCraft;
-import net.sievert.jolcraft.client.data.MyClientLanguageData;
-import net.sievert.jolcraft.client.data.MyClientReputationData;
+import net.sievert.jolcraft.network.client.data.MyClientAncientLanguageData;
+import net.sievert.jolcraft.network.client.data.MyClientLanguageData;
+import net.sievert.jolcraft.network.client.data.MyClientReputationData;
 import net.sievert.jolcraft.network.packet.ClientboundSyncLanguagePacket;
+import net.sievert.jolcraft.network.packet.ClientboundSyncAncientLanguagePacket;
 import net.sievert.jolcraft.network.packet.ClientboundSyncReputationPacket;
 import net.sievert.jolcraft.network.packet.ClientboundDwarfEndorseAnimationPacket;
 import net.sievert.jolcraft.network.packet.ClientboundSyncEndorsementsPacket;
@@ -29,6 +31,11 @@ public class JolCraftNetworking {
                         ClientboundSyncLanguagePacket.TYPE,
                         ClientboundSyncLanguagePacket.CODEC,
                         JolCraftNetworking::handleSyncLanguage
+                )
+                .playToClient(
+                        ClientboundSyncAncientLanguagePacket.TYPE,
+                        ClientboundSyncAncientLanguagePacket.CODEC,
+                        JolCraftNetworking::handleSyncAncientLanguage
                 )
                 .playToClient(
                         ClientboundSyncReputationPacket.TYPE,
@@ -51,6 +58,13 @@ public class JolCraftNetworking {
     private static void handleSyncLanguage(ClientboundSyncLanguagePacket packet, IPayloadContext context) {
         context.enqueueWork(() -> {
             MyClientLanguageData.setKnows(packet.knowsLanguage());
+        });
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    private static void handleSyncAncientLanguage(ClientboundSyncAncientLanguagePacket packet, IPayloadContext context) {
+        context.enqueueWork(() -> {
+            MyClientAncientLanguageData.setKnows(packet.knowsLanguage());
         });
     }
 
@@ -89,5 +103,4 @@ public class JolCraftNetworking {
             }
         }
     }
-
 }

@@ -20,6 +20,13 @@ public class JolCraftAttachments {
                             .build()
             );
 
+    public static final Supplier<AttachmentType<AncientDwarvenLanguageImpl>> ANCIENT_DWARVEN_LANGUAGE =
+            ATTACHMENT_TYPES.register("ancient_dwarven_language", () ->
+                    AttachmentType.serializable(AncientDwarvenLanguageImpl::new)
+                            .copyOnDeath()
+                            .build()
+            );
+
     public static final Supplier<AttachmentType<DwarvenReputationImpl>> DWARVEN_REP =
             ATTACHMENT_TYPES.register("dwarven_reputation", () ->
                     AttachmentType.serializable(DwarvenReputationImpl::new)

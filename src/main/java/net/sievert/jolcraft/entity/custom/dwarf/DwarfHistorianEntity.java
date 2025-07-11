@@ -95,7 +95,7 @@ public class DwarfHistorianEntity extends AbstractDwarfEntity {
                     //Novice
                     1,
                     new VillagerTrades.ItemListing[]{
-                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.DWARVEN_TOME_COMMON.get(), 1, 5, 5, 3),
+                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.DWARVEN_TOME_COMMON.get(), 1, 10, 5, 3),
                             new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.PARCHMENT.get(), 1, 3, 6, 1)
 
                     },
@@ -103,7 +103,7 @@ public class DwarfHistorianEntity extends AbstractDwarfEntity {
                     //Apprentice
                     2,
                     new VillagerTrades.ItemListing[]{
-                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.DWARVEN_TOME_UNCOMMON.get(), 1, 5, 35, 5),
+                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.DWARVEN_TOME_UNCOMMON.get(), 1, 10, 35, 5),
                             new JolCraftDwarfTrades.GoldForItems(Items.FILLED_MAP, 1, 3, 6, 2)
 
                     },
@@ -111,14 +111,14 @@ public class DwarfHistorianEntity extends AbstractDwarfEntity {
                     //Journeyman
                     3,
                     new VillagerTrades.ItemListing[]{
-                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.DWARVEN_TOME_RARE.get(), 1, 1, 75, 10),
+                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.DWARVEN_TOME_RARE.get(), 1, 10, 75, 10),
                             new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.QUILL_EMPTY.get(), 2, 1, 6, 8)
                     },
 
                     //Expert
                     4,
                     new VillagerTrades.ItemListing[]{
-                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.DWARVEN_TOME_EPIC.get(), 1, 1, 125, 25),
+                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.DWARVEN_TOME_EPIC.get(), 1, 10, 125, 25),
                             new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.CONTRACT_BLANK.get(), 2, 1, 5, 15)
                     },
 
@@ -127,7 +127,7 @@ public class DwarfHistorianEntity extends AbstractDwarfEntity {
                     new VillagerTrades.ItemListing[]{
                             new JolCraftDwarfTrades.GoldForItems(JolCraftItems.DEEPMARROW.get(), 1, 3, 0, 32),
                             new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.DEEPMARROW, 1, 5, JolCraftItems.DEEPMARROW_DUST.get(), 3, 3, 0, 0.05F),
-                            new JolCraftDwarfTrades.ItemsAndGoldToItems(Items.CHISELED_DEEPSLATE, 1, 15, JolCraftItems.REPUTATION_TABLET_0.get(), 1, 1, 0, 0.05F)
+                            new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.DEEPSLATE_PLATE.get(), 1, 15, JolCraftItems.REPUTATION_TABLET_0.get(), 1, 1, 0, 0.05F)
                     }
             )
     );

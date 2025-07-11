@@ -59,11 +59,4 @@ public class JolCraftModEvents {
         event.put(JolCraftEntities.MUFFHORN.get(), MuffhornEntity.createAttributes().build());
     }
 
-    /*
-    //Spawning
-    @SubscribeEvent
-    public static void registerSpawnPlacements(RegisterSpawnPlacementsEvent event) {
-
-    } */
-
 }

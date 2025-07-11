@@ -5,27 +5,16 @@
       "rolls": 1,
       "entries": [
         {
-          "type": "minecraft:loot_table",
-          "value": "jolcraft:chests/dwarven_tome_common",
-          "weight": 4
-        },
-        {
-          "type": "minecraft:loot_table",
-          "value": "jolcraft:chests/dwarven_tome_uncommon",
+          "type": "minecraft:item",
+          "name": "jolcraft:unidentified_dwarven_tome",
           "weight": 3
         },
         {
-          "type": "minecraft:loot_table",
-          "value": "jolcraft:chests/dwarven_tome_rare",
-          "weight": 2
-        },
-        {
-          "type": "minecraft:loot_table",
-          "value": "jolcraft:chests/dwarven_tome_epic",
+          "type": "minecraft:item",
+          "name": "jolcraft:ancient_unidentified_dwarven_tome",
           "weight": 1
         }
       ]
     }
-  ],
-  "functions": []
+  ]
 }

@@ -1,4 +1,4 @@
-package net.sievert.jolcraft.client.data;
+package net.sievert.jolcraft.network.client.data;
 
 public class MyClientLanguageData {
     private static boolean knowsLanguage = false;

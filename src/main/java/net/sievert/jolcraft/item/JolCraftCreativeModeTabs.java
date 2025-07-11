@@ -27,6 +27,7 @@ public class JolCraftCreativeModeTabs {
                     .displayItems((pParameters, pOutput) -> {
                         pOutput.accept(JolCraftItems.DEV_KEY);
                         pOutput.accept(JolCraftItems.DWARVEN_LEXICON);
+                        pOutput.accept(JolCraftItems.ANCIENT_DWARVEN_LEXICON);
                         pOutput.accept(JolCraftItems.GOLD_COIN);
                         pOutput.accept(JolCraftBlocks.HEARTH);
                         pOutput.accept(JolCraftItems.STRONGBOX_ITEM);
@@ -127,10 +128,9 @@ public class JolCraftCreativeModeTabs {
                         pOutput.accept(JolCraftItems.VERDANITE);
                         pOutput.accept(JolCraftItems.WOECRYSTAL);
 
-                        pOutput.accept(JolCraftItems.DWARVEN_TOME_COMMON);
-                        pOutput.accept(JolCraftItems.DWARVEN_TOME_UNCOMMON);
-                        pOutput.accept(JolCraftItems.DWARVEN_TOME_RARE);
-                        pOutput.accept(JolCraftItems.DWARVEN_TOME_EPIC);
+                        pOutput.accept(JolCraftItems.UNIDENTIFIED_DWARVEN_TOME);
+                        pOutput.accept(JolCraftItems.ANCIENT_UNIDENTIFIED_DWARVEN_TOME);
+
 
                         pOutput.accept(JolCraftItems.COPPER_SPANNER);
                         pOutput.accept(JolCraftItems.IRON_SPANNER);

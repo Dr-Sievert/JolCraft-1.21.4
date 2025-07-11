@@ -43,8 +43,6 @@ import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.advancement.JolCraftCriteriaTriggers;
 import net.sievert.jolcraft.attachment.DwarvenReputationImpl;
 import net.sievert.jolcraft.attachment.JolCraftAttachments;
-import net.sievert.jolcraft.client.data.MyClientLanguageData;
-import net.sievert.jolcraft.client.data.MyClientReputationData;
 import net.sievert.jolcraft.component.JolCraftDataComponents;
 import net.sievert.jolcraft.util.JolCraftTags;
 import net.sievert.jolcraft.entity.JolCraftEntities;
@@ -59,6 +57,9 @@ import net.sievert.jolcraft.network.packet.ClientboundSyncEndorsementsPacket;
 import net.sievert.jolcraft.network.packet.ClientboundSyncReputationPacket;
 import net.sievert.jolcraft.sound.JolCraftSounds;
 import net.sievert.jolcraft.network.JolCraftNetworking;
+import net.sievert.jolcraft.util.attachment.DwarvenReputationHelper;
+import net.sievert.jolcraft.util.attachment.DwarvenLanguageHelper;
+
 import org.slf4j.Logger;
 
 import javax.annotation.Nullable;
@@ -344,9 +345,8 @@ public class AbstractDwarfEntity extends AbstractVillager {
     public InteractionResult languageCheck(Player player) {
         boolean client = this.level().isClientSide;
         boolean knowsLanguage = client
-                ? MyClientLanguageData.knowsLanguage()
-                : (player.getData(JolCraftAttachments.DWARVEN_LANGUAGE) != null &&
-                player.getData(JolCraftAttachments.DWARVEN_LANGUAGE).knowsLanguage());
+                ? DwarvenLanguageHelper.knowsDwarvishClient()
+                : DwarvenLanguageHelper.knowsDwarvishServer(player);
 
         if (!knowsLanguage) {
             this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, this.getVoicePitch());
@@ -361,19 +361,16 @@ public class AbstractDwarfEntity extends AbstractVillager {
             return InteractionResult.FAIL;
         }
 
-        // Success: do nothing special, let interaction continue
         return InteractionResult.SUCCESS;
     }
 
     public InteractionResult reputationCheck(Player player, int requiredTier) {
         boolean client = this.level().isClientSide;
-        int playerTier = client
-                ? MyClientReputationData.getTier()
-                : (player.getData(JolCraftAttachments.DWARVEN_REP.get()) != null
-                ? player.getData(JolCraftAttachments.DWARVEN_REP.get()).getTier()
-                : 0);
+        boolean hasTier = client
+                ? DwarvenReputationHelper.hasClientTier(requiredTier)
+                : DwarvenReputationHelper.hasTierServer(player, requiredTier);
 
-        if (playerTier < requiredTier) {
+        if (!hasTier) {
             this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, this.getVoicePitch());
 
             if (client) {
@@ -382,12 +379,13 @@ public class AbstractDwarfEntity extends AbstractVillager {
                 );
                 return InteractionResult.CONSUME;
             }
+
             return InteractionResult.FAIL;
         }
 
-        // Success: allowed to interact
         return InteractionResult.SUCCESS;
     }
+
 
 
     @Override
@@ -577,16 +575,14 @@ public class AbstractDwarfEntity extends AbstractVillager {
 
         // 🗿 Tablet endorsement (works both sides for animation)
         if (itemstack.is(JolCraftTags.Items.REPUTATION_TABLETS) && !this.isBaby()) {
-            DwarvenReputationImpl rep = player.getData(JolCraftAttachments.DWARVEN_REP.get());
             ResourceLocation profId = this.getProfessionId();
             boolean client = this.level().isClientSide;
             boolean hasEndorsement = client
-                    ? MyClientReputationData.hasEndorsement(profId)
-                    : rep != null && rep.hasEndorsement(profId); // <-- add null check just in case
+                    ? DwarvenReputationHelper.hasClientEndorsementBypassCreative(profId)
+                    : DwarvenReputationHelper.hasEndorsementServerBypassCreative(player, profId);
 
-            //Send to subclass if special case
+            // Send to subclass if special case
             if (this instanceof DwarfGuildmasterEntity) {
-                // Block here; subclass will handle in its own mobInteract.
                 return InteractionResult.CONSUME;
             }
 
@@ -602,33 +598,35 @@ public class AbstractDwarfEntity extends AbstractVillager {
 
             // 2️⃣a. This dwarf can NEVER endorse (Guildmaster, PlainDwarf, etc.)
             if (this.neverEndorse(player)) {
-                if (!this.level().isClientSide) {
-                    player.displayClientMessage(Component.translatable("tooltip.jolcraft.reputation.never_endorse").withStyle(ChatFormatting.GRAY), true);
+                if (!client) {
+                    player.displayClientMessage(
+                            Component.translatable("tooltip.jolcraft.reputation.never_endorse").withStyle(ChatFormatting.GRAY), true);
                 }
                 this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, this.getVoicePitch());
-                return this.level().isClientSide ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
+                return client ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
             }
 
-            // 2️⃣b. Can endorse in principle, but player doesn't meet conditions (wrong tier, profession, etc.)
+            // 2️⃣b. Can endorse in principle, but player doesn't meet conditions
             if (!this.canEndorse(player)) {
-                if (!this.level().isClientSide) {
-                    player.displayClientMessage(Component.translatable("tooltip.jolcraft.reputation.cannot_endorse").withStyle(ChatFormatting.GRAY), true);
+                if (!client) {
+                    player.displayClientMessage(
+                            Component.translatable("tooltip.jolcraft.reputation.cannot_endorse").withStyle(ChatFormatting.GRAY), true);
                 }
                 this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, this.getVoicePitch());
-                return this.level().isClientSide ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
+                return client ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
             }
 
-
-            // 3️⃣ Paid check (all else valid, just not paid)
+            // 3️⃣ Paid check
             if (!this.isPaid()) {
-                if (!this.level().isClientSide) {
-                    player.displayClientMessage(Component.translatable("tooltip.jolcraft.dwarf.not_paid").withStyle(ChatFormatting.GRAY), true);
+                if (!client) {
+                    player.displayClientMessage(
+                            Component.translatable("tooltip.jolcraft.dwarf.not_paid").withStyle(ChatFormatting.GRAY), true);
                 }
                 this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, this.getVoicePitch());
-                return this.level().isClientSide ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
+                return client ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
             }
 
-            // ✅ Only here do we proceed with animation, hand changes, beginAction, etc:
+            // ✅ Proceed with animation and endorsement
             ItemStack prevMainHand = this.getMainHandItem().copy();
             ItemStack tabletUsed = itemstack.copy();
             this.setItemSlot(EquipmentSlot.MAINHAND, tabletUsed.copy());
@@ -640,12 +638,14 @@ public class AbstractDwarfEntity extends AbstractVillager {
                 this.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
 
                 if (!this.level().isClientSide && this.currentActionPlayer != null) {
-                    DwarvenReputationImpl repFinish = this.currentActionPlayer.getData(JolCraftAttachments.DWARVEN_REP.get());
                     ResourceLocation profIdFinish = this.getProfessionId();
+                    DwarvenReputationImpl repFinish = this.currentActionPlayer.getData(JolCraftAttachments.DWARVEN_REP.get());
+
                     boolean added = false;
                     if (repFinish != null && !repFinish.hasEndorsement(profIdFinish)) {
                         repFinish.addEndorsement(profIdFinish);
                         added = true;
+
                         if (this.currentActionPlayer instanceof ServerPlayer serverPlayer) {
                             JolCraftCriteriaTriggers.ENDORSEMENT_GAIN.trigger(serverPlayer, profIdFinish);
                         }
@@ -659,7 +659,7 @@ public class AbstractDwarfEntity extends AbstractVillager {
                     }
 
                     if (added) {
-                        // Throw the updated tablet
+                        // Throw updated tablet
                         ItemStack updatedTablet = this.usedItem.copy();
                         updatedTablet.set(JolCraftDataComponents.REP_ENDORSEMENTS.get(), repFinish.getEndorsementCount());
                         updatedTablet.set(JolCraftDataComponents.REP_TIER.get(), repFinish.getTier());
@@ -675,20 +675,22 @@ public class AbstractDwarfEntity extends AbstractVillager {
                         this.level().addFreshEntity(thrown);
                         this.level().playSound(null, this.blockPosition(), SoundEvents.SNOWBALL_THROW, SoundSource.PLAYERS, 0.5F, 0.8F);
                     }
+
                     this.setItemSlot(EquipmentSlot.MAINHAND, this.previousMainHandItem);
                     this.previousMainHandItem = ItemStack.EMPTY;
                 }
             });
 
-            if (!this.level().isClientSide) {
+            if (!client) {
                 JolCraftNetworking.sendToNearbyClients(
                         this.level(), this.blockPosition(), 32,
                         new ClientboundDwarfEndorseAnimationPacket(this.getId())
                 );
             }
 
-            return this.level().isClientSide ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
+            return client ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
         }
+
 
         // 💼 Trade (only if hand empty and a baby)
         if (canTrade()
@@ -1413,7 +1415,6 @@ public class AbstractDwarfEntity extends AbstractVillager {
             );
         }
     }
-
 
     protected void increaseMerchantCareer() {
         int current = this.getVillagerData().getLevel();

@@ -9,8 +9,6 @@ public class LockpickingEffect extends MobEffect {
         super(category, color);
     }
 
-
-
 }
 
 

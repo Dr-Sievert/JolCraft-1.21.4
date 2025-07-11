@@ -1,4 +1,4 @@
-package net.sievert.jolcraft.item.custom;
+package net.sievert.jolcraft.item.custom.bounty;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -7,8 +7,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.sievert.jolcraft.util.attachment.DwarvenLanguageHelper;
 import net.sievert.jolcraft.util.bounty.BountyHelper;
-import net.sievert.jolcraft.client.data.MyClientLanguageData;
 
 import java.util.List;
 
@@ -20,7 +20,8 @@ public class BountyItem extends Item {
     @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-        boolean knowsLanguage = MyClientLanguageData.knowsLanguage();
+        boolean knowsLanguage = DwarvenLanguageHelper.knowsDwarvishClient(); // ✅ use helper
+
         if (knowsLanguage) {
             int tier = BountyHelper.getBountyTier(stack);
             if (tier <= 0) {
@@ -39,6 +40,8 @@ public class BountyItem extends Item {
         } else {
             tooltip.add(Component.translatable("tooltip.jolcraft.bounty.locked").withStyle(ChatFormatting.GRAY));
         }
+
         super.appendHoverText(stack, context, tooltip, flag);
     }
+
 }

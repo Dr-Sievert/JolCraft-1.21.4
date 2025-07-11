@@ -1,4 +1,4 @@
-package net.sievert.jolcraft.item.custom;
+package net.sievert.jolcraft.item.custom.bounty;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
@@ -21,7 +21,7 @@ import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.common.extensions.IItemExtension;
-import net.sievert.jolcraft.client.data.MyClientLanguageData;
+import net.sievert.jolcraft.network.client.data.MyClientLanguageData;
 import net.sievert.jolcraft.component.JolCraftDataComponents;
 import net.sievert.jolcraft.util.bounty.BountyData;
 

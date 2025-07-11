@@ -1,4 +1,4 @@
-package net.sievert.jolcraft.item.custom;
+package net.sievert.jolcraft.item.custom.food;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;

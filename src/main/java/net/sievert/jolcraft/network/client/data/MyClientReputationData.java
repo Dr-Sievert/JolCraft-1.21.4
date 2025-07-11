@@ -1,4 +1,4 @@
-package net.sievert.jolcraft.client.data;
+package net.sievert.jolcraft.network.client.data;
 
 import net.minecraft.resources.ResourceLocation;
 
@@ -13,7 +13,6 @@ public class MyClientReputationData {
 
     public static void setTier(int newTier) {
         tier = newTier;
-        System.out.println("[CLIENT] Synced reputation tier: " + newTier);
     }
 
     public static int getTier() {
@@ -22,7 +21,6 @@ public class MyClientReputationData {
 
     public static void setEndorsementAnimation(int entityId, boolean running) {
         endorsementAnimationStates.put(entityId, running);
-        System.out.println("[CLIENT] Endorsement animation for entity " + entityId + " set to: " + running);
     }
 
     public static boolean isEndorsementAnimationActive(int entityId) {
@@ -31,7 +29,6 @@ public class MyClientReputationData {
 
     public static void setEndorsements(Set<ResourceLocation> endorsements) {
         CLIENT_ENDORSEMENTS = Collections.unmodifiableSet(new HashSet<>(endorsements));
-        System.out.println("[CLIENT] Updated endorsement set: " + CLIENT_ENDORSEMENTS);
     }
 
     public static boolean hasEndorsement(ResourceLocation profId) {
@@ -49,6 +46,5 @@ public class MyClientReputationData {
     public static void clear() {
         endorsementAnimationStates.clear();
         CLIENT_ENDORSEMENTS = Collections.emptySet();
-        System.out.println("[CLIENT] Cleared all client reputation animation state.");
     }
 }

@@ -14,13 +14,12 @@ import net.minecraft.world.level.Level;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.sievert.jolcraft.attachment.DwarvenLanguage;
-import net.sievert.jolcraft.attachment.DwarvenReputationImpl;
-import net.sievert.jolcraft.attachment.JolCraftAttachments;
 import net.sievert.jolcraft.component.JolCraftDataComponents;
 import net.sievert.jolcraft.network.JolCraftNetworking;
 import net.sievert.jolcraft.network.packet.ClientboundSyncEndorsementsPacket;
 import net.sievert.jolcraft.network.packet.ClientboundSyncReputationPacket;
+import net.sievert.jolcraft.util.attachment.DwarvenLanguageHelper;
+import net.sievert.jolcraft.util.attachment.DwarvenReputationHelper;
 
 import java.util.List;
 
@@ -34,19 +33,15 @@ public class ReputationTabletItem extends Item {
     @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         if (!level.isClientSide && player instanceof ServerPlayer serverPlayer) {
-            DwarvenLanguage lang = serverPlayer.getData(JolCraftAttachments.DWARVEN_LANGUAGE);
-            boolean knowsLanguage = lang != null && lang.knowsLanguage();
-
-            if (!knowsLanguage) {
+            if (!DwarvenLanguageHelper.knowsDwarvishServer(serverPlayer)) {
                 serverPlayer.displayClientMessage(
                         Component.translatable("tooltip.jolcraft.tablet.locked").withStyle(ChatFormatting.GRAY), true
                 );
                 return InteractionResult.SUCCESS;
             }
 
-            DwarvenReputationImpl rep = serverPlayer.getData(JolCraftAttachments.DWARVEN_REP.get());
-            int currentTier = rep.getTier();
-            int endorsements = rep.getEndorsementCount();
+            int currentTier = DwarvenReputationHelper.getTierServer(serverPlayer);
+            int endorsements = DwarvenReputationHelper.getEndorsementCountServer(serverPlayer);
 
             if (currentTier >= ENDORSEMENT_THRESHOLDS.length) {
                 serverPlayer.displayClientMessage(
@@ -55,37 +50,32 @@ public class ReputationTabletItem extends Item {
             } else {
                 int needed = ENDORSEMENT_THRESHOLDS[currentTier];
                 serverPlayer.displayClientMessage(
-                        Component.literal("Endorsements for reputation advancement: " + endorsements + "/" + needed).withStyle(ChatFormatting.GRAY), true
+                        Component.literal("Endorsements for reputation advancement: " + endorsements + "/" + needed)
+                                .withStyle(ChatFormatting.GRAY), true
                 );
             }
+
             level.playSound(null, player.blockPosition(), SoundEvents.CHISELED_BOOKSHELF_INSERT, SoundSource.PLAYERS, 1.0f, 0.5f);
         }
         return InteractionResult.SUCCESS;
     }
 
-
-
     @Override
     public void onCraftedBy(ItemStack stack, Level level, Player player) {
         if (!level.isClientSide && player instanceof ServerPlayer serverPlayer) {
-            // Get current reputation data
-            DwarvenReputationImpl rep = serverPlayer.getData(JolCraftAttachments.DWARVEN_REP.get());
-            int tier = rep != null ? rep.getTier() : 0;
-            int endorsements = rep != null ? rep.getEndorsementCount() : 0;
+            int tier = DwarvenReputationHelper.getTierServer(serverPlayer);
+            int endorsements = DwarvenReputationHelper.getEndorsementCountServer(serverPlayer);
 
             stack.set(JolCraftDataComponents.REP_OWNER.get(), serverPlayer.getName().getString());
             stack.set(JolCraftDataComponents.REP_TIER.get(), tier);
             stack.set(JolCraftDataComponents.REP_ENDORSEMENTS.get(), endorsements);
 
-            // Optionally: sync endorsements list to client if needed for tooltips
-            if (rep != null) {
-                JolCraftNetworking.sendToClient(serverPlayer,
-                        new ClientboundSyncEndorsementsPacket(rep.getEndorsements())
-                );
-                JolCraftNetworking.sendToClient(serverPlayer,
-                        new ClientboundSyncReputationPacket(rep.getTier())
-                );
-            }
+            JolCraftNetworking.sendToClient(serverPlayer,
+                    new ClientboundSyncEndorsementsPacket(DwarvenReputationHelper.getAllEndorsementsServer(serverPlayer))
+            );
+            JolCraftNetworking.sendToClient(serverPlayer,
+                    new ClientboundSyncReputationPacket(tier)
+            );
         }
         super.onCraftedBy(stack, level, player);
     }
@@ -93,9 +83,7 @@ public class ReputationTabletItem extends Item {
     @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-        boolean knows = net.sievert.jolcraft.client.data.MyClientLanguageData.knowsLanguage();
-
-        if (knows) {
+        if (DwarvenLanguageHelper.knowsDwarvishClient()) {
             String ownerName = stack.getOrDefault(JolCraftDataComponents.REP_OWNER.get(), "Unknown");
             int tier = stack.getOrDefault(JolCraftDataComponents.REP_TIER.get(), 0);
             int endorsements = stack.getOrDefault(JolCraftDataComponents.REP_ENDORSEMENTS.get(), 0);
@@ -113,6 +101,4 @@ public class ReputationTabletItem extends Item {
         }
         super.appendHoverText(stack, context, tooltip, flag);
     }
-
-
 }

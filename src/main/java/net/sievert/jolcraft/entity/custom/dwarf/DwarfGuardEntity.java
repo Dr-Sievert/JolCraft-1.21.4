@@ -118,7 +118,20 @@ public class DwarfGuardEntity extends AbstractDwarfEntity {
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
-        boolean client = level().isClientSide;
+        boolean client = this.level().isClientSide;
+
+        // 🧠 Language check
+        InteractionResult langCheck = this.languageCheck(player);
+        if (langCheck != InteractionResult.SUCCESS) {
+            return langCheck;
+        }
+
+        // Reputation check
+        InteractionResult repCheck = this.reputationCheck(player, 1);
+        if (repCheck != InteractionResult.SUCCESS) {
+            return repCheck;
+        }
+
         // 1. Only custom-guard logic: armor hand-in
         EquipmentSlot slot = getSlotForArmor(stack);
         if (!isPerformingAction() && slot != null && this.getItemBySlot(slot).isEmpty()) {
