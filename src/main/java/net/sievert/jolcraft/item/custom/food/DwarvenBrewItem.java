@@ -12,7 +12,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.sievert.jolcraft.block.custom.HopsType;
+import net.sievert.jolcraft.block.custom.crop.HopsType;
 import net.sievert.jolcraft.component.JolCraftDataComponents;
 
 import java.util.ArrayList;

@@ -5,6 +5,13 @@
       {
         "model": {
           "type": "minecraft:model",
+          "model": "minecraft:item/chainmail_helmet_quartz_trim"
+        },
+        "when": "minecraft:quartz"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
           "model": "minecraft:item/chainmail_helmet_iron_trim"
         },
         "when": "minecraft:iron"
@@ -64,13 +71,6 @@
           "model": "minecraft:item/chainmail_helmet_emerald_trim"
         },
         "when": "minecraft:emerald"
-      },
-      {
-        "model": {
-          "type": "minecraft:model",
-          "model": "minecraft:item/chainmail_helmet_quartz_trim"
-        },
-        "when": "minecraft:quartz"
       },
       {
         "model": {

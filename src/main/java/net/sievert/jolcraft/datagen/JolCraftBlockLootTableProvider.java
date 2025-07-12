@@ -7,7 +7,6 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
@@ -27,6 +26,7 @@ import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.sievert.jolcraft.block.JolCraftBlocks;
 import net.sievert.jolcraft.block.custom.*;
+import net.sievert.jolcraft.block.custom.crop.*;
 import net.sievert.jolcraft.item.JolCraftItems;
 
 import java.util.Set;
@@ -39,24 +39,27 @@ public class JolCraftBlockLootTableProvider extends BlockLootSubProvider {
     @Override
     protected void generate() {
 
+        add(JolCraftBlocks.DEEPSLATE_MITHRIL_ORE.get(),
+                block -> createOreDrop(JolCraftBlocks.DEEPSLATE_MITHRIL_ORE.get(), JolCraftItems.IMPURE_MITHRIL.get()));
+
         dropOther(JolCraftBlocks.STRONGBOX.get(), JolCraftItems.STRONGBOX_ITEM.get());
-        this.add(JolCraftBlocks.STRONGBOX_DUMMY.get(), LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(0))));
+        add(JolCraftBlocks.STRONGBOX_DUMMY.get(), LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(0))));
 
 
-        this.add(JolCraftBlocks.HEARTH.get(), block ->
-                this.createSinglePropConditionTable(block, HearthBlock.HALF, DoubleBlockHalf.LOWER)
+        add(JolCraftBlocks.HEARTH.get(), block ->
+                createSinglePropConditionTable(block, HearthBlock.HALF, DoubleBlockHalf.LOWER)
         );
 
         dropSelf(JolCraftBlocks.VERDANT_SOIL.get());
         dropOther(JolCraftBlocks.VERDANT_FARMLAND.get(), JolCraftBlocks.VERDANT_SOIL.get());
 
         dropSelf(JolCraftBlocks.DUSKCAP.get());
-        this.dropPottedContents(JolCraftBlocks.POTTED_DUSKCAP.get());
+        dropPottedContents(JolCraftBlocks.POTTED_DUSKCAP.get());
 
         dropSelf(JolCraftBlocks.FESTERLING.get());
-        this.dropPottedContents(JolCraftBlocks.POTTED_FESTERLING.get());
+        dropPottedContents(JolCraftBlocks.POTTED_FESTERLING.get());
 
-        this.add(JolCraftBlocks.FESTERLING_CROP.get(),
+        add(JolCraftBlocks.FESTERLING_CROP.get(),
                 LootTable.lootTable()
                         // Drop at age 0: Rotten Flesh
                         .withPool(LootPool.lootPool()
@@ -80,7 +83,7 @@ public class JolCraftBlockLootTableProvider extends BlockLootSubProvider {
 
         dropSelf(JolCraftBlocks.MUFFHORN_FUR_BLOCK.get());
 
-        this.add(JolCraftBlocks.BARLEY_CROP.get(),
+        add(JolCraftBlocks.BARLEY_CROP.get(),
                 createCropDrops(
                         JolCraftBlocks.BARLEY_CROP.get(),
                         JolCraftItems.BARLEY.get(),
@@ -90,7 +93,7 @@ public class JolCraftBlockLootTableProvider extends BlockLootSubProvider {
                 )
         );
 
-        this.add(JolCraftBlocks.DEEPSLATE_BULBS_CROP.get(),
+        add(JolCraftBlocks.DEEPSLATE_BULBS_CROP.get(),
                 createSelfDropStoneCropDrops(
                         JolCraftBlocks.DEEPSLATE_BULBS_CROP.get(),
                         JolCraftItems.DEEPSLATE_BULBS.get(),
@@ -101,7 +104,7 @@ public class JolCraftBlockLootTableProvider extends BlockLootSubProvider {
 
 
 
-        this.add(JolCraftBlocks.FERMENTING_CAULDRON.get(),
+        add(JolCraftBlocks.FERMENTING_CAULDRON.get(),
                 LootTable.lootTable()
                         .withPool(
                                 LootPool.lootPool()
@@ -223,14 +226,14 @@ public class JolCraftBlockLootTableProvider extends BlockLootSubProvider {
                         )
                 );
 
-        this.add(bottom, bottomLoot);
-        this.add(top, topLoot);
+        add(bottom, bottomLoot);
+        add(top, topLoot);
     }
 
 
 
     protected LootTable.Builder createSelfDropStoneCropDrops(Block cropBlock, Item item, IntegerProperty ageProperty, int maxAge) {
-        HolderLookup.RegistryLookup<Enchantment> registrylookup = this.registries.lookupOrThrow(Registries.ENCHANTMENT);
+        HolderLookup.RegistryLookup<Enchantment> registrylookup = registries.lookupOrThrow(Registries.ENCHANTMENT);
 
         LootItemCondition.Builder mature = LootItemBlockStatePropertyCondition
                 .hasBlockStateProperties(cropBlock)
@@ -249,9 +252,9 @@ public class JolCraftBlockLootTableProvider extends BlockLootSubProvider {
 
 
     protected LootTable.Builder createMultipleOreDrops(Block pBlock, Item item, float minDrops, float maxDrops) {
-        HolderLookup.RegistryLookup<Enchantment> registrylookup = this.registries.lookupOrThrow(Registries.ENCHANTMENT);
-        return this.createSilkTouchDispatchTable(pBlock,
-                this.applyExplosionDecay(pBlock, LootItem.lootTableItem(item)
+        HolderLookup.RegistryLookup<Enchantment> registrylookup = registries.lookupOrThrow(Registries.ENCHANTMENT);
+        return createSilkTouchDispatchTable(pBlock,
+                applyExplosionDecay(pBlock, LootItem.lootTableItem(item)
                         .apply(SetItemCountFunction.setCount(UniformGenerator.between(minDrops, maxDrops)))
                         .apply(ApplyBonusCount.addOreBonusCount(registrylookup.getOrThrow(Enchantments.FORTUNE)))));
     }

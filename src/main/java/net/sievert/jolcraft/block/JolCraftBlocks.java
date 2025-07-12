@@ -2,6 +2,8 @@ package net.sievert.jolcraft.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.cauldron.CauldronInteraction;
+import net.minecraft.util.valueproviders.ConstantInt;
+import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.biome.Biome;
@@ -16,6 +18,7 @@ import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.block.custom.*;
+import net.sievert.jolcraft.block.custom.crop.*;
 import net.sievert.jolcraft.item.JolCraftItems;
 
 import java.util.function.Function;
@@ -24,6 +27,19 @@ import java.util.function.ToIntFunction;
 public class JolCraftBlocks {
     public static final DeferredRegister.Blocks BLOCKS =
             DeferredRegister.createBlocks(JolCraft.MOD_ID);
+
+    public static final DeferredBlock<Block> DEEPSLATE_MITHRIL_ORE = registerBlock("deepslate_mithril_ore",
+            (properties) -> new RotatedPillarExperienceBlock(UniformInt.of(5, 10), properties
+                    .mapColor(MapColor.DEEPSLATE)
+                    .strength(6.0F, 8.0F)
+                    .sound(SoundType.DEEPSLATE)
+                    .instrument(NoteBlockInstrument.BASEDRUM)
+                    .requiresCorrectToolForDrops()
+                    .lightLevel((state) -> 4)
+            ),
+            BlockBehaviour.Properties.of(), true
+    );
+
 
     // Only register the block, NOT the item
     public static final DeferredBlock<Block> STRONGBOX = registerBlock(
@@ -93,7 +109,6 @@ public class JolCraftBlocks {
                             .randomTicks()
                             .instabreak()
                             .sound(SoundType.GRASS)
-                            .lightLevel(state -> 4)
                             .pushReaction(PushReaction.DESTROY)
             ),
             BlockBehaviour.Properties.of(), true

@@ -11,12 +11,16 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Blocks;
 import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.block.JolCraftBlocks;
 import net.sievert.jolcraft.util.JolCraftTags;
 import net.sievert.jolcraft.item.JolCraftItems;
+import net.minecraft.world.item.crafting.BlastingRecipe;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public class JolCraftRecipeProvider extends RecipeProvider {
@@ -43,6 +47,35 @@ public class JolCraftRecipeProvider extends RecipeProvider {
 
     @Override
     protected void buildRecipes() {
+
+        // Example call in your DataGen recipe provider
+
+        oreBlasting(
+                List.of(JolCraftItems.IMPURE_MITHRIL.get()),  // ingredients (impure mithril)
+                RecipeCategory.MISC,                           // recipe category, or use proper category
+                JolCraftItems.PURE_MITHRIL.get(),              // result (pure mithril)
+                0.7F,                                          // experience reward (set as appropriate)
+                200,                                           // cooking time in ticks (5s, can adjust)
+                "mithril_purification"                         // group name (optional, for grouping in recipe book)
+        );
+
+        oreBlasting(
+                List.of(JolCraftBlocks.DEEPSLATE_MITHRIL_ORE.get()),  // ingredients (impure mithril)
+                RecipeCategory.MISC,                           // recipe category, or use proper category
+                JolCraftItems.PURE_MITHRIL.get(),              // result (pure mithril)
+                0.7F,                                          // experience reward (set as appropriate)
+                400,                                           // cooking time in ticks (5s, can adjust)
+                "mithril_purification"                         // group name (optional, for grouping in recipe book)
+        );
+
+        oreSmelting(
+                List.of(JolCraftItems.PURE_MITHRIL.get()),  // ingredients (impure mithril)
+                RecipeCategory.MISC,                           // recipe category, or use proper category
+                JolCraftItems.MITHRIL_INGOT.get(),              // result (pure mithril)
+                0.7F,                                          // experience reward (set as appropriate)
+                200,                                           // cooking time in ticks (5s, can adjust)
+                "mithril_ingot"                         // group name (optional, for grouping in recipe book)
+        );
 
         shaped(RecipeCategory.MISC, JolCraftBlocks.MUFFHORN_FUR_BLOCK.get())
                 .pattern("BB")
@@ -282,6 +315,5 @@ public class JolCraftRecipeProvider extends RecipeProvider {
 
 
     }
-
 
 }

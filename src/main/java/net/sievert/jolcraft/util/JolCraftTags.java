@@ -18,6 +18,7 @@ public class JolCraftTags {
     public final class Items {
 
         //Core
+
         public static final TagKey<Item> SPAWN_EGGS = createTag("spawn_eggs");
 
         public static final TagKey<Item> INK_AND_QUILLS = createTag("ink_and_quills");
@@ -47,6 +48,8 @@ public class JolCraftTags {
     }
 
     public final class Blocks {
+
+        public static final TagKey<Block> NEEDS_NETHERITE_TOOL = createTag("needs_netherite_tool");
 
         public static final TagKey<Block> DEEPSLATE_BULBS_PLANTABLE = createTag("deepslate_bulbs_plantable");
 

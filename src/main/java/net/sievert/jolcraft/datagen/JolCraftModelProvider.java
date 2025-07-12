@@ -23,16 +23,15 @@ import net.minecraft.world.item.equipment.EquipmentAssets;
 import net.minecraft.world.item.equipment.trim.TrimMaterial;
 import net.minecraft.world.item.equipment.trim.TrimMaterials;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.block.JolCraftBlocks;
-import net.sievert.jolcraft.block.custom.BarleyCropBlock;
-import net.sievert.jolcraft.block.custom.FesterlingCropBlock;
-import net.sievert.jolcraft.block.custom.HopsCropBottomBlock;
-import net.sievert.jolcraft.block.custom.HopsCropTopBlock;
+import net.sievert.jolcraft.block.custom.crop.BarleyCropBlock;
+import net.sievert.jolcraft.block.custom.crop.FesterlingCropBlock;
+import net.sievert.jolcraft.block.custom.crop.HopsCropBottomBlock;
+import net.sievert.jolcraft.block.custom.crop.HopsCropTopBlock;
 import net.sievert.jolcraft.item.JolCraftEquipmentAssets;
 import net.sievert.jolcraft.item.JolCraftItems;
 import net.sievert.jolcraft.item.JolCraftTrimMaterials;
@@ -64,6 +63,14 @@ public class JolCraftModelProvider extends ModelProvider {
 
         createHearth(JolCraftBlocks.HEARTH.get(), blockModels);
 
+        blockModels.createRotatedPillarWithHorizontalVariant(
+                JolCraftBlocks.DEEPSLATE_MITHRIL_ORE.get(),
+                TexturedModel.COLUMN,
+                TexturedModel.COLUMN_HORIZONTAL
+        );
+        itemModels.generateFlatItem(JolCraftItems.IMPURE_MITHRIL.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.PURE_MITHRIL.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.MITHRIL_INGOT.get(), ModelTemplates.FLAT_ITEM);
 
 
         //Weapons and Tools

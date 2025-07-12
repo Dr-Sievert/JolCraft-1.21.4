@@ -10,6 +10,12 @@
   "item.jolcraft.lockpick": "Lockpick",
 
 
+  "block.jolcraft.deepslate_mithril_ore": "Deepslate Mithril Ore",
+  "item.jolcraft.impure_mithril": "Impure Mithril",
+  "item.jolcraft.pure_mithril": "Pure Mithril",
+  "item.jolcraft.mithril_ingot": "Mithril Ingot",
+
+
   "item.jolcraft.deepslate_plate": "Deepslate Plate",
   "item.jolcraft.deepslate_sword": "Deepslate Sword",
   "item.jolcraft.deepslate_pickaxe": "Deepslate Pickaxe",

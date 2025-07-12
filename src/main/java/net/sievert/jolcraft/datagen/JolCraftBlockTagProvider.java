@@ -20,10 +20,18 @@ public class JolCraftBlockTagProvider extends BlockTagsProvider {
     protected void addTags(HolderLookup.Provider provider) {
 
         tag(BlockTags.MINEABLE_WITH_PICKAXE)
+                .add(JolCraftBlocks.DEEPSLATE_MITHRIL_ORE.get())
                 .add(JolCraftBlocks.STRONGBOX.get())
                 .add(JolCraftBlocks.DEEPSLATE_BULBS_CROP.get())
                 .add(JolCraftBlocks.HEARTH.get())
                 .add(JolCraftBlocks.FERMENTING_CAULDRON.get());
+
+        tag(JolCraftTags.Blocks.NEEDS_NETHERITE_TOOL)
+                .add(JolCraftBlocks.DEEPSLATE_MITHRIL_ORE.get());
+
+        tag(BlockTags.INCORRECT_FOR_DIAMOND_TOOL)
+                .addTags(JolCraftTags.Blocks.NEEDS_NETHERITE_TOOL);
+
 
         tag(BlockTags.MINEABLE_WITH_HOE)
                 .add(JolCraftBlocks.BARLEY_BLOCK.get());
@@ -31,7 +39,6 @@ public class JolCraftBlockTagProvider extends BlockTagsProvider {
 
         tag(BlockTags.MUSHROOM_GROW_BLOCK)
                 .add(JolCraftBlocks.VERDANT_SOIL.get());
-
 
         tag(JolCraftTags.Blocks.DEEPSLATE_BULBS_PLANTABLE)
                 .add(JolCraftBlocks.VERDANT_SOIL.get())

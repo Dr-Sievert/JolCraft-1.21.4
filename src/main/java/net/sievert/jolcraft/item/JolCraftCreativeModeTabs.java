@@ -33,6 +33,11 @@ public class JolCraftCreativeModeTabs {
                         pOutput.accept(JolCraftItems.STRONGBOX_ITEM);
                         pOutput.accept(JolCraftItems.LOCKPICK);
 
+                        pOutput.accept(JolCraftBlocks.DEEPSLATE_MITHRIL_ORE);
+                        pOutput.accept(JolCraftItems.IMPURE_MITHRIL);
+                        pOutput.accept(JolCraftItems.PURE_MITHRIL);
+                        pOutput.accept(JolCraftItems.MITHRIL_INGOT);
+
                         pOutput.accept(JolCraftItems.MUFFHORN_MILK_BUCKET);
                         pOutput.accept(JolCraftItems.MUFFHORN_FUR);
                         pOutput.accept(JolCraftBlocks.MUFFHORN_FUR_BLOCK);
