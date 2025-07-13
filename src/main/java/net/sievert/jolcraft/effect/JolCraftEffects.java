@@ -24,6 +24,9 @@ public class JolCraftEffects {
     public static final Holder<MobEffect> DWARVEN_HASTE = MOB_EFFECTS.register("dwarven_haste",
             () -> new DwarvenHasteEffect(MobEffectCategory.BENEFICIAL, 0x2bc7ac));
 
+    public static final Holder<MobEffect> DELIRIUM_CURSE = MOB_EFFECTS.register("delirium_curse",
+            () -> new DeliriumCurseEffect(MobEffectCategory.HARMFUL, 0x7510a3));
+
     public static void register(IEventBus eventBus) {
         MOB_EFFECTS.register(eventBus);
     }

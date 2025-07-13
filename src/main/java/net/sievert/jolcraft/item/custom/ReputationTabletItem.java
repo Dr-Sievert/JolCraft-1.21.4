@@ -16,8 +16,8 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.sievert.jolcraft.component.JolCraftDataComponents;
 import net.sievert.jolcraft.network.JolCraftNetworking;
-import net.sievert.jolcraft.network.packet.ClientboundSyncEndorsementsPacket;
-import net.sievert.jolcraft.network.packet.ClientboundSyncReputationPacket;
+import net.sievert.jolcraft.network.packet.ClientboundEndorsementsPacket;
+import net.sievert.jolcraft.network.packet.ClientboundReputationPacket;
 import net.sievert.jolcraft.util.attachment.DwarvenLanguageHelper;
 import net.sievert.jolcraft.util.attachment.DwarvenReputationHelper;
 
@@ -71,10 +71,10 @@ public class ReputationTabletItem extends Item {
             stack.set(JolCraftDataComponents.REP_ENDORSEMENTS.get(), endorsements);
 
             JolCraftNetworking.sendToClient(serverPlayer,
-                    new ClientboundSyncEndorsementsPacket(DwarvenReputationHelper.getAllEndorsementsServer(serverPlayer))
+                    new ClientboundEndorsementsPacket(DwarvenReputationHelper.getAllEndorsementsServer(serverPlayer))
             );
             JolCraftNetworking.sendToClient(serverPlayer,
-                    new ClientboundSyncReputationPacket(tier)
+                    new ClientboundReputationPacket(tier)
             );
         }
         super.onCraftedBy(stack, level, player);

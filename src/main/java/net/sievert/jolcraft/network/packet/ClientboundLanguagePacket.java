@@ -7,15 +7,15 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.sievert.jolcraft.JolCraft;
 
-public record ClientboundSyncLanguagePacket(boolean knowsLanguage) implements CustomPacketPayload {
-    public static final Type<ClientboundSyncLanguagePacket> TYPE =
+public record ClientboundLanguagePacket(boolean knowsLanguage) implements CustomPacketPayload {
+    public static final Type<ClientboundLanguagePacket> TYPE =
             new Type<>(ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "sync_language"));
 
-    public static final StreamCodec<RegistryFriendlyByteBuf, ClientboundSyncLanguagePacket> CODEC =
-            CustomPacketPayload.codec(ClientboundSyncLanguagePacket::write, ClientboundSyncLanguagePacket::read);
+    public static final StreamCodec<RegistryFriendlyByteBuf, ClientboundLanguagePacket> CODEC =
+            CustomPacketPayload.codec(ClientboundLanguagePacket::write, ClientboundLanguagePacket::read);
 
-    public static ClientboundSyncLanguagePacket read(FriendlyByteBuf buf) {
-        return new ClientboundSyncLanguagePacket(buf.readBoolean());
+    public static ClientboundLanguagePacket read(FriendlyByteBuf buf) {
+        return new ClientboundLanguagePacket(buf.readBoolean());
     }
 
     public void write(FriendlyByteBuf buf) {

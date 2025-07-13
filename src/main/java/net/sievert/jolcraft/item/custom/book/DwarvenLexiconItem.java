@@ -16,7 +16,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.sievert.jolcraft.advancement.JolCraftCriteriaTriggers;
 import net.sievert.jolcraft.network.JolCraftNetworking;
-import net.sievert.jolcraft.network.packet.ClientboundSyncLanguagePacket;
+import net.sievert.jolcraft.network.packet.ClientboundLanguagePacket;
 import net.sievert.jolcraft.util.attachment.DwarvenLanguageHelper;
 
 import java.util.List;
@@ -35,7 +35,7 @@ public class DwarvenLexiconItem extends Item {
                 DwarvenLanguageHelper.setKnowsDwarvishServer(serverPlayer, true);
 
                 // ✅ SEND PACKET TO CLIENT
-                JolCraftNetworking.sendToClient(serverPlayer, new ClientboundSyncLanguagePacket(true));
+                JolCraftNetworking.sendToClient(serverPlayer, new ClientboundLanguagePacket(true));
 
                 JolCraftCriteriaTriggers.HAS_DWARVEN_LANGUAGE.trigger(serverPlayer);
                 level.playSound(null, player.blockPosition(), SoundEvents.BOOK_PAGE_TURN, SoundSource.PLAYERS, 2.0f, 0.7f);

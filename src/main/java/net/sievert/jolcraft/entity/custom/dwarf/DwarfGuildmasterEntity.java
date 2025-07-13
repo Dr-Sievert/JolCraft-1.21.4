@@ -36,8 +36,8 @@ import net.sievert.jolcraft.util.JolCraftTags;
 import net.sievert.jolcraft.entity.ai.goal.*;
 import net.sievert.jolcraft.item.JolCraftItems;
 import net.sievert.jolcraft.network.JolCraftNetworking;
-import net.sievert.jolcraft.network.packet.ClientboundSyncEndorsementsPacket;
-import net.sievert.jolcraft.network.packet.ClientboundSyncReputationPacket;
+import net.sievert.jolcraft.network.packet.ClientboundEndorsementsPacket;
+import net.sievert.jolcraft.network.packet.ClientboundReputationPacket;
 import net.sievert.jolcraft.sound.JolCraftSounds;
 import net.sievert.jolcraft.util.attachment.DwarvenReputationHelper;
 import net.sievert.jolcraft.villager.JolCraftDwarfTrades;
@@ -234,9 +234,9 @@ public class DwarfGuildmasterEntity extends AbstractDwarfEntity {
                     }
 
                     JolCraftNetworking.sendToClient(serverPlayer,
-                            new ClientboundSyncReputationPacket(newTier));
+                            new ClientboundReputationPacket(newTier));
                     JolCraftNetworking.sendToClient(serverPlayer,
-                            new ClientboundSyncEndorsementsPacket(repFinal.getEndorsements()));
+                            new ClientboundEndorsementsPacket(repFinal.getEndorsements()));
                     serverPlayer.displayClientMessage(Component.translatable("tooltip.jolcraft.reputation.level_up")
                             .withStyle(ChatFormatting.GOLD), true);
 

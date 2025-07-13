@@ -42,10 +42,10 @@ import net.sievert.jolcraft.attachment.Hearth;
 import net.sievert.jolcraft.block.custom.FermentingCauldronBlock;
 import net.sievert.jolcraft.block.custom.FermentingStage;
 import net.sievert.jolcraft.network.JolCraftNetworking;
-import net.sievert.jolcraft.network.packet.ClientboundSyncAncientLanguagePacket;
-import net.sievert.jolcraft.network.packet.ClientboundSyncEndorsementsPacket;
-import net.sievert.jolcraft.network.packet.ClientboundSyncLanguagePacket;
-import net.sievert.jolcraft.network.packet.ClientboundSyncReputationPacket;
+import net.sievert.jolcraft.network.packet.ClientboundAncientLanguagePacket;
+import net.sievert.jolcraft.network.packet.ClientboundEndorsementsPacket;
+import net.sievert.jolcraft.network.packet.ClientboundLanguagePacket;
+import net.sievert.jolcraft.network.packet.ClientboundReputationPacket;
 import net.sievert.jolcraft.potion.JolCraftPotions;
 import net.sievert.jolcraft.util.JolCraftTags;
 import net.sievert.jolcraft.entity.custom.dwarf.DwarfGuardEntity;
@@ -70,19 +70,19 @@ public class JolCraftGameEvents {
 
         // Sync normal Dwarvish language
         boolean knowsLang = DwarvenLanguageHelper.knowsDwarvishServerBypassCreative(serverPlayer);
-        JolCraftNetworking.sendToClient(serverPlayer, new ClientboundSyncLanguagePacket(knowsLang));
+        JolCraftNetworking.sendToClient(serverPlayer, new ClientboundLanguagePacket(knowsLang));
 
         // Sync Ancient Dwarvish language
         boolean knowsAncient = AncientDwarvenLanguageHelper.knowsAncientDwarvishServerBypassCreative(serverPlayer);
-        JolCraftNetworking.sendToClient(serverPlayer, new ClientboundSyncAncientLanguagePacket(knowsAncient));
+        JolCraftNetworking.sendToClient(serverPlayer, new ClientboundAncientLanguagePacket(knowsAncient));
 
         // Sync reputation tier
         int tier = DwarvenReputationHelper.getTierServerBypassCreative(serverPlayer);
-        JolCraftNetworking.sendToClient(serverPlayer, new ClientboundSyncReputationPacket(tier));
+        JolCraftNetworking.sendToClient(serverPlayer, new ClientboundReputationPacket(tier));
 
         // Sync endorsements
         Set<ResourceLocation> endorsements = DwarvenReputationHelper.getAllEndorsementsServerBypassCreative(serverPlayer);
-        JolCraftNetworking.sendToClient(serverPlayer, new ClientboundSyncEndorsementsPacket(endorsements));
+        JolCraftNetworking.sendToClient(serverPlayer, new ClientboundEndorsementsPacket(endorsements));
     }
 
 

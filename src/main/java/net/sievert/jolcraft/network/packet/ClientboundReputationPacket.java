@@ -7,15 +7,15 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.sievert.jolcraft.JolCraft;
 
-public record ClientboundSyncReputationPacket(int tier) implements CustomPacketPayload {
-    public static final Type<ClientboundSyncReputationPacket> TYPE =
+public record ClientboundReputationPacket(int tier) implements CustomPacketPayload {
+    public static final Type<ClientboundReputationPacket> TYPE =
             new Type<>(ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "sync_reputation"));
 
-    public static final StreamCodec<RegistryFriendlyByteBuf, ClientboundSyncReputationPacket> CODEC =
-            CustomPacketPayload.codec(ClientboundSyncReputationPacket::write, ClientboundSyncReputationPacket::read);
+    public static final StreamCodec<RegistryFriendlyByteBuf, ClientboundReputationPacket> CODEC =
+            CustomPacketPayload.codec(ClientboundReputationPacket::write, ClientboundReputationPacket::read);
 
-    public static ClientboundSyncReputationPacket read(FriendlyByteBuf buf) {
-        return new ClientboundSyncReputationPacket(buf.readInt());
+    public static ClientboundReputationPacket read(FriendlyByteBuf buf) {
+        return new ClientboundReputationPacket(buf.readInt());
     }
 
     public void write(FriendlyByteBuf buf) {

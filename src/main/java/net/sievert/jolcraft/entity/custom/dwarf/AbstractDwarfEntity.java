@@ -53,8 +53,8 @@ import net.sievert.jolcraft.entity.custom.dwarf.variation.DwarfEyeColor;
 import net.sievert.jolcraft.entity.custom.dwarf.variation.DwarfVariant;
 import net.sievert.jolcraft.item.JolCraftItems;
 import net.sievert.jolcraft.network.packet.ClientboundDwarfEndorseAnimationPacket;
-import net.sievert.jolcraft.network.packet.ClientboundSyncEndorsementsPacket;
-import net.sievert.jolcraft.network.packet.ClientboundSyncReputationPacket;
+import net.sievert.jolcraft.network.packet.ClientboundEndorsementsPacket;
+import net.sievert.jolcraft.network.packet.ClientboundReputationPacket;
 import net.sievert.jolcraft.sound.JolCraftSounds;
 import net.sievert.jolcraft.network.JolCraftNetworking;
 import net.sievert.jolcraft.util.attachment.DwarvenReputationHelper;
@@ -653,9 +653,9 @@ public class AbstractDwarfEntity extends AbstractVillager {
 
                     if (this.currentActionPlayer instanceof ServerPlayer serverPlayer) {
                         JolCraftNetworking.sendToClient(serverPlayer,
-                                new ClientboundSyncReputationPacket(repFinish.getTier()));
+                                new ClientboundReputationPacket(repFinish.getTier()));
                         JolCraftNetworking.sendToClient(serverPlayer,
-                                new ClientboundSyncEndorsementsPacket(repFinish.getEndorsements()));
+                                new ClientboundEndorsementsPacket(repFinish.getEndorsements()));
                     }
 
                     if (added) {

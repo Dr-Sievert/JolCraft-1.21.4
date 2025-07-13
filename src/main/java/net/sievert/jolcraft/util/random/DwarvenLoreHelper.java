@@ -61,6 +61,8 @@ public class DwarvenLoreHelper {
             Map.entry("stormcarved_ledge", entry("stormcarved_ledge", "Chronicle of the Stormcarved Ledge, Year 1502", LoreRarity.EPIC)),
             Map.entry("ancient_tomb_keys", entry("ancient_tomb_keys", "Keys of the Ancient Tombs, Volume X", LoreRarity.EPIC)),
             Map.entry("starfall_ledger", entry("starfall_ledger", "Ledger of the Starfall Years, Volume XVII", LoreRarity.EPIC))
+            //LEGENDARY
+
     );
 
     private static final Map<String, DwarvenLoreEntry> ANCIENT_ENTRIES = Map.ofEntries(
@@ -112,6 +114,7 @@ public class DwarvenLoreHelper {
             Map.entry("deep_curse_tablet", entry("deep_curse_tablet", "Tablet of the Deep Curse, Age of Shadows", LoreRarity.EPIC)),
             Map.entry("sunken_forge_rites", entry("sunken_forge_rites", "Rites of the Sunken Forge, Lost Age", LoreRarity.EPIC)),
             Map.entry("cavern_light_chronicle", entry("cavern_light_chronicle", "Chronicle of Cavern Light, Dawn Cycle", LoreRarity.EPIC))
+            //LEGENDARY
     );
 
     private static DwarvenLoreEntry entry(String key, String text, LoreRarity rarity) {

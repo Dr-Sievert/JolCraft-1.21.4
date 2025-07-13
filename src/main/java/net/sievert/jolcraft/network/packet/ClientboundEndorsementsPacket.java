@@ -13,21 +13,21 @@ import java.util.Set;
 /**
  * Sent from server to client to sync the player's full set of profession endorsements.
  */
-public record ClientboundSyncEndorsementsPacket(Set<ResourceLocation> endorsements) implements CustomPacketPayload {
+public record ClientboundEndorsementsPacket(Set<ResourceLocation> endorsements) implements CustomPacketPayload {
 
-    public static final Type<ClientboundSyncEndorsementsPacket> TYPE =
+    public static final Type<ClientboundEndorsementsPacket> TYPE =
             new Type<>(ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "endorsement_sync"));
 
-    public static final StreamCodec<RegistryFriendlyByteBuf, ClientboundSyncEndorsementsPacket> CODEC =
-            CustomPacketPayload.codec(ClientboundSyncEndorsementsPacket::write, ClientboundSyncEndorsementsPacket::read);
+    public static final StreamCodec<RegistryFriendlyByteBuf, ClientboundEndorsementsPacket> CODEC =
+            CustomPacketPayload.codec(ClientboundEndorsementsPacket::write, ClientboundEndorsementsPacket::read);
 
-    public static ClientboundSyncEndorsementsPacket read(FriendlyByteBuf buf) {
+    public static ClientboundEndorsementsPacket read(FriendlyByteBuf buf) {
         int size = buf.readVarInt();
         Set<ResourceLocation> endorsements = new HashSet<>();
         for (int i = 0; i < size; i++) {
             endorsements.add(buf.readResourceLocation());
         }
-        return new ClientboundSyncEndorsementsPacket(endorsements);
+        return new ClientboundEndorsementsPacket(endorsements);
     }
 
     public void write(FriendlyByteBuf buf) {

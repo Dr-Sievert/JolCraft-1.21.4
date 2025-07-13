@@ -25,7 +25,11 @@ public class JolCraftCreativeModeTabs {
                     .title(Component.translatable("itemGroup.jolcraft.jolcraft_items_tab"))
                     .icon(() -> new ItemStack(JolCraftItems.GOLD_COIN.get()))
                     .displayItems((pParameters, pOutput) -> {
+                        //Testing
+                        //pOutput.accept(PotionContents.createItemStack(Items.POTION, JolCraftPotions.CURSE));
                         pOutput.accept(JolCraftItems.DEV_KEY);
+
+                        //Real
                         pOutput.accept(JolCraftItems.DWARVEN_LEXICON);
                         pOutput.accept(JolCraftItems.ANCIENT_DWARVEN_LEXICON);
                         pOutput.accept(JolCraftItems.GOLD_COIN);
@@ -65,7 +69,6 @@ public class JolCraftCreativeModeTabs {
                         pOutput.accept(JolCraftItems.DEEPMARROW_DUST);
                         pOutput.accept(JolCraftItems.EARTHBLOOD_DUST);
                         pOutput.accept(JolCraftItems.VERDANT_DUST);
-                        //pOutput.accept(PotionContents.createItemStack(Items.POTION, JolCraftPotions.ANCIENT_MEMORY)); add potion
 
                         pOutput.accept(JolCraftBlocks.DUSKCAP);
                         pOutput.accept(JolCraftBlocks.FESTERLING);

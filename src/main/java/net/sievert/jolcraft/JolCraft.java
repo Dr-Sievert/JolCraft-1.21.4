@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
@@ -28,6 +29,7 @@ import net.sievert.jolcraft.item.JolCraftEquipmentAssets;
 import net.sievert.jolcraft.item.JolCraftItems;
 import net.sievert.jolcraft.loot.JolCraftLootModifiers;
 import net.sievert.jolcraft.network.JolCraftNetworking;
+import net.sievert.jolcraft.network.client.data.MyClientDeliriumData;
 import net.sievert.jolcraft.potion.JolCraftPotions;
 import net.sievert.jolcraft.screen.JolCraftMenuTypes;
 import net.sievert.jolcraft.screen.custom.strongbox.LockMenu;
@@ -193,6 +195,7 @@ public class JolCraft
             ItemBlockRenderTypes.setRenderLayer(JolCraftBlocks.FESTERLING.get(), RenderType.cutout());
             ItemBlockRenderTypes.setRenderLayer(JolCraftBlocks.POTTED_FESTERLING.get(), RenderType.cutout());
         }
+
     }
 
     public static ResourceLocation locate(String path) {
@@ -201,16 +204,30 @@ public class JolCraft
 
     @OnlyIn(Dist.CLIENT)
     private void onClientTick(ClientTickEvent event) {
-        // This event fires once per client tick (both PRE and POST)
-        // We want to tick only at the end of the tick (POST)
+        // Only handle at the end of each tick
         if (event instanceof ClientTickEvent.Post) {
             Minecraft mc = Minecraft.getInstance();
+
+            // Existing lock screen logic
             if (mc.player != null && mc.screen instanceof LockScreen lockScreen) {
                 LockMenu menu = lockScreen.getMenu();
                 if (menu != null) {
                     menu.tick();
                 }
             }
+
+            // Delirium "rising edge" logic
+            // Track previous muffleTicks value
+            int prevMuffleTicks = MyClientDeliriumData.getAndStorePreviousTicks(); // You need to implement this or use a static field here
+            int currentMuffleTicks = MyClientDeliriumData.getMuffleTicks();
+
+            if (prevMuffleTicks == 0 && currentMuffleTicks > 0) {
+                // Burst just started: play hallucination sound
+                if (mc.player != null) {
+                    mc.player.playSound(SoundEvents.AMBIENT_CAVE.value(), 0.7F + mc.level.random.nextFloat() * 0.4F, 0.8F + mc.level.random.nextFloat() * 0.4F);
+                }
+            }
+            MyClientDeliriumData.tick();
         }
     }
 

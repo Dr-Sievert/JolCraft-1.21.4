@@ -1,4 +1,4 @@
-// 1.21.4	2025-07-13T00:39:39.6974079	Registries
+// 1.21.4	2025-07-13T02:58:20.4736739	Registries
 1e1291b38e6a76f6ad7e0860bb14ca2007409b58 data/jolcraft/neoforge/biome_modifier/add_duskcap_patch.json
 7a961420ea11694e005e58c1c040b518f2a509b5 data/jolcraft/neoforge/biome_modifier/add_large_mithril_ore.json
 2594cbd648b8e19060e4c4a44133dc1510682dce data/jolcraft/neoforge/biome_modifier/add_medium_mithril_ore.json
@@ -24,7 +24,7 @@ a72ec20a180efd9eb881eca3f49b66963953526b data/jolcraft/trim_material/grimstone.j
 0f00d3cade215a666711696a720eff3b1b08fcc0 data/jolcraft/worldgen/configured_feature/large_mithril_ore.json
 ceba8a03ae640b5ffcb875719345230c13f532d6 data/jolcraft/worldgen/configured_feature/medium_mithril_ore.json
 35d216bd6e728919f5115e2fd2eb410950a68a03 data/jolcraft/worldgen/configured_feature/small_mithril_ore.json
-d78edd4e54e6b8e6c042b56e727427ff11752bd1 data/jolcraft/worldgen/placed_feature/duskcap_patch_placed.json
+b3a2d78d7f6ce1ef93caa63f31fd0b2cbfe7fdd6 data/jolcraft/worldgen/placed_feature/duskcap_patch_placed.json
 7e639ca7a432e390022a037aed7f48a9211ce5fb data/jolcraft/worldgen/placed_feature/large_mithril_ore_placed.json
 244dbf5310a9fe0504a665d2c38b79bc0fdf836b data/jolcraft/worldgen/placed_feature/medium_mithril_ore_placed.json
 48fb290d40f23d56a728b1e3fcd427eada90eacb data/jolcraft/worldgen/placed_feature/small_mithril_ore_placed.json

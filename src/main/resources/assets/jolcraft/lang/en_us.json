@@ -56,6 +56,8 @@
   "effect.jolcraft.lockpicking": "Lockpicking",
   "effect.jolcraft.dwarven_haste": "Dwarven Haste",
 
+  "effect.jolcraft.delirium_curse": "Delirium Curse",
+
   "item.minecraft.potion.effect.ancient_memory": "Ancient Memory Potion",
   "item.minecraft.potion.effect.long_ancient_memory": "Ancient Memory Potion",
   "item.minecraft.splash_potion.effect.ancient_memory": "Ancient Memory Splash Potion",
@@ -205,6 +207,7 @@
   "item.jolcraft.dwarven_tome_uncommon": "Dwarven Tome",
   "item.jolcraft.dwarven_tome_rare": "Dwarven Tome",
   "item.jolcraft.dwarven_tome_epic": "Dwarven Tome",
+  "item.jolcraft.dwarven_tome_legendary": "Dwarven Tome",
 
   "item.jolcraft.ancient_dwarven_tome": "Ancient Dwarven Tome",
   "item.jolcraft.unidentified_ancient_dwarven_tome": "Ancient Unidentified Dwarven Tome",
@@ -212,6 +215,7 @@
   "item.jolcraft.ancient_dwarven_tome_uncommon": "Ancient Dwarven Tome",
   "item.jolcraft.ancient_dwarven_tome_rare": "Ancient Dwarven Tome",
   "item.jolcraft.ancient_dwarven_tome_epic": "Ancient Dwarven Tome",
+  "item.jolcraft.ancient_dwarven_tome_legendary": "Ancient Dwarven Tome",
 
   "item.jolcraft.copper_spanner": "Copper Spanner",
   "item.jolcraft.iron_spanner": "Iron Spanner",

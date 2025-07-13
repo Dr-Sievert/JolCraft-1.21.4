@@ -21,7 +21,7 @@
       }
     },
     {
-      "weight": 3,
+      "weight": 2,
       "element": {
         "location": "jolcraft:dwarven_trail_ruin/end_1",
         "processors": "jolcraft:dwarven_trail_ruin/dwarven_trail_ruin",
@@ -39,7 +39,7 @@
       }
     },
     {
-      "weight": 5,
+      "weight": 3,
       "element": {
         "element_type": "minecraft:empty_pool_element"
       }

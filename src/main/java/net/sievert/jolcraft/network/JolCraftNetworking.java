@@ -12,13 +12,10 @@ import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.network.client.data.MyClientAncientLanguageData;
+import net.sievert.jolcraft.network.client.data.MyClientDeliriumData;
 import net.sievert.jolcraft.network.client.data.MyClientLanguageData;
 import net.sievert.jolcraft.network.client.data.MyClientReputationData;
-import net.sievert.jolcraft.network.packet.ClientboundSyncLanguagePacket;
-import net.sievert.jolcraft.network.packet.ClientboundSyncAncientLanguagePacket;
-import net.sievert.jolcraft.network.packet.ClientboundSyncReputationPacket;
-import net.sievert.jolcraft.network.packet.ClientboundDwarfEndorseAnimationPacket;
-import net.sievert.jolcraft.network.packet.ClientboundSyncEndorsementsPacket;
+import net.sievert.jolcraft.network.packet.*;
 
 import java.util.Set;
 
@@ -28,18 +25,23 @@ public class JolCraftNetworking {
         event.registrar(JolCraft.MOD_ID)
                 .versioned("1.0")
                 .playToClient(
-                        ClientboundSyncLanguagePacket.TYPE,
-                        ClientboundSyncLanguagePacket.CODEC,
+                        ClientboundDeliriumPacket.TYPE,
+                        ClientboundDeliriumPacket.CODEC,
+                        JolCraftNetworking::handleDelirium
+                )
+                .playToClient(
+                        ClientboundLanguagePacket.TYPE,
+                        ClientboundLanguagePacket.CODEC,
                         JolCraftNetworking::handleSyncLanguage
                 )
                 .playToClient(
-                        ClientboundSyncAncientLanguagePacket.TYPE,
-                        ClientboundSyncAncientLanguagePacket.CODEC,
+                        ClientboundAncientLanguagePacket.TYPE,
+                        ClientboundAncientLanguagePacket.CODEC,
                         JolCraftNetworking::handleSyncAncientLanguage
                 )
                 .playToClient(
-                        ClientboundSyncReputationPacket.TYPE,
-                        ClientboundSyncReputationPacket.CODEC,
+                        ClientboundReputationPacket.TYPE,
+                        ClientboundReputationPacket.CODEC,
                         JolCraftNetworking::handleSyncReputation
                 )
                 .playToClient(
@@ -48,28 +50,37 @@ public class JolCraftNetworking {
                         JolCraftNetworking::handleDwarfEndorseAnimation
                 )
                 .playToClient(
-                        ClientboundSyncEndorsementsPacket.TYPE,
-                        ClientboundSyncEndorsementsPacket.CODEC,
+                        ClientboundEndorsementsPacket.TYPE,
+                        ClientboundEndorsementsPacket.CODEC,
                         JolCraftNetworking::handleSyncEndorsements
                 );
+
     }
 
     @OnlyIn(Dist.CLIENT)
-    private static void handleSyncLanguage(ClientboundSyncLanguagePacket packet, IPayloadContext context) {
+    private static void handleDelirium(ClientboundDeliriumPacket packet, IPayloadContext context) {
+        context.enqueueWork(() -> {
+            MyClientDeliriumData.setMuffleTicks(packet.durationTicks());
+        });
+    }
+
+
+    @OnlyIn(Dist.CLIENT)
+    private static void handleSyncLanguage(ClientboundLanguagePacket packet, IPayloadContext context) {
         context.enqueueWork(() -> {
             MyClientLanguageData.setKnows(packet.knowsLanguage());
         });
     }
 
     @OnlyIn(Dist.CLIENT)
-    private static void handleSyncAncientLanguage(ClientboundSyncAncientLanguagePacket packet, IPayloadContext context) {
+    private static void handleSyncAncientLanguage(ClientboundAncientLanguagePacket packet, IPayloadContext context) {
         context.enqueueWork(() -> {
             MyClientAncientLanguageData.setKnows(packet.knowsLanguage());
         });
     }
 
     @OnlyIn(Dist.CLIENT)
-    private static void handleSyncReputation(ClientboundSyncReputationPacket packet, IPayloadContext context) {
+    private static void handleSyncReputation(ClientboundReputationPacket packet, IPayloadContext context) {
         context.enqueueWork(() -> {
             MyClientReputationData.setTier(packet.tier());
         });
@@ -83,7 +94,7 @@ public class JolCraftNetworking {
     }
 
     @OnlyIn(Dist.CLIENT)
-    private static void handleSyncEndorsements(ClientboundSyncEndorsementsPacket packet, IPayloadContext context) {
+    private static void handleSyncEndorsements(ClientboundEndorsementsPacket packet, IPayloadContext context) {
         context.enqueueWork(() -> {
             Set<ResourceLocation> set = packet.endorsements();
             MyClientReputationData.setEndorsements(set);
