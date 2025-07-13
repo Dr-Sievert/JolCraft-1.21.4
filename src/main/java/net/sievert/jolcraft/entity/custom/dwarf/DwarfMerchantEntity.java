@@ -41,8 +41,7 @@ import net.sievert.jolcraft.item.JolCraftItems;
 import net.sievert.jolcraft.sound.JolCraftSounds;
 import net.sievert.jolcraft.util.bounty.BountyGenerator;
 import net.sievert.jolcraft.util.bounty.BountyReward;
-import net.sievert.jolcraft.util.random.RandomAdapter;
-import net.sievert.jolcraft.util.random.JolCraftDwarfTrades;
+import net.sievert.jolcraft.util.dwarf.JolCraftDwarfTrades;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -210,7 +209,7 @@ public class DwarfMerchantEntity extends AbstractDwarfEntity {
                         int merchantTier = this.getVillagerData().getLevel();
 
                         crate.set(JolCraftDataComponents.BOUNTY_DATA.get(),
-                                BountyGenerator.generate(new RandomAdapter(this.getRandom()), merchantTier));
+                                BountyGenerator.generate(this.getRandom(), merchantTier));
 
                         ItemEntity thrown = new ItemEntity(this.level(), start.x, start.y, start.z, crate);
                         thrown.setDeltaMovement(velocity);

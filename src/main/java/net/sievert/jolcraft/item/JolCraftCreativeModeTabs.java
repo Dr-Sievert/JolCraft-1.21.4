@@ -5,14 +5,10 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.alchemy.PotionContents;
-import net.minecraft.world.item.alchemy.Potions;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.block.JolCraftBlocks;
-import net.sievert.jolcraft.potion.JolCraftPotions;
 
 import java.util.function.Supplier;
 
@@ -38,9 +34,12 @@ public class JolCraftCreativeModeTabs {
                         pOutput.accept(JolCraftItems.LOCKPICK);
 
                         pOutput.accept(JolCraftBlocks.DEEPSLATE_MITHRIL_ORE);
+                        pOutput.accept(JolCraftBlocks.PURE_MITHRIL_BLOCK);
+                        pOutput.accept(JolCraftBlocks.MITHRIL_BLOCK);
                         pOutput.accept(JolCraftItems.IMPURE_MITHRIL);
                         pOutput.accept(JolCraftItems.PURE_MITHRIL);
                         pOutput.accept(JolCraftItems.MITHRIL_INGOT);
+                        pOutput.accept(JolCraftItems.MITHRIL_NUGGET);
 
                         pOutput.accept(JolCraftItems.MUFFHORN_MILK_BUCKET);
                         pOutput.accept(JolCraftItems.MUFFHORN_FUR);

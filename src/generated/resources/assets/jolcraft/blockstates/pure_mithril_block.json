@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "jolcraft:block/pure_mithril_block"
+    }
+  }
+}

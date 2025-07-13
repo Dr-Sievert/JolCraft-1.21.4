@@ -1,4 +1,4 @@
-package net.sievert.jolcraft.world.processor;
+package net.sievert.jolcraft.worldgen.processor;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;

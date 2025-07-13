@@ -28,17 +28,42 @@ public class JolCraftBlocks {
     public static final DeferredRegister.Blocks BLOCKS =
             DeferredRegister.createBlocks(JolCraft.MOD_ID);
 
-    public static final DeferredBlock<Block> DEEPSLATE_MITHRIL_ORE = registerBlock("deepslate_mithril_ore",
+    public static final DeferredBlock<Block> DEEPSLATE_MITHRIL_ORE = registerFireResistantBlock("deepslate_mithril_ore",
             (properties) -> new RotatedPillarExperienceBlock(UniformInt.of(5, 10), properties
                     .mapColor(MapColor.DEEPSLATE)
-                    .strength(6.0F, 8.0F)
+                    .strength(30.0F, 1200.0F)
                     .sound(SoundType.DEEPSLATE)
                     .instrument(NoteBlockInstrument.BASEDRUM)
                     .requiresCorrectToolForDrops()
                     .lightLevel((state) -> 4)
             ),
-            BlockBehaviour.Properties.of(), true
+            BlockBehaviour.Properties.of()
     );
+
+    public static final DeferredBlock<Block> PURE_MITHRIL_BLOCK = registerFireResistantBlock("pure_mithril_block",
+            (properties) -> new Block(properties
+                    .mapColor(MapColor.DIAMOND)
+                    .strength(40.0F, 1200.0F)
+                    .sound(SoundType.NETHERITE_BLOCK)
+                    .instrument(NoteBlockInstrument.BASEDRUM)
+                    .requiresCorrectToolForDrops()
+                    .lightLevel((state) -> 4)
+            ),
+            BlockBehaviour.Properties.of()
+    );
+
+    public static final DeferredBlock<Block> MITHRIL_BLOCK = registerFireResistantBlock("mithril_block",
+            (properties) -> new Block(properties
+                    .mapColor(MapColor.DIAMOND)
+                    .strength(50.0F, 1200.0F)
+                    .sound(SoundType.NETHERITE_BLOCK)
+                    .instrument(NoteBlockInstrument.BASEDRUM)
+                    .requiresCorrectToolForDrops()
+                    .lightLevel((state) -> 4)
+            ),
+            BlockBehaviour.Properties.of()
+    );
+
 
 
     // Only register the block, NOT the item
@@ -340,6 +365,22 @@ public class JolCraftBlocks {
     // Registers a BlockItem for an existing block
     private static <B extends Block> void registerBlockItem(String name, DeferredBlock<B> block) {
         JolCraftItems.ITEMS.registerItem(name, props -> new BlockItem(block.get(), props.useBlockDescriptionPrefix()));
+    }
+
+    private static <B extends Block> DeferredBlock<B> registerFireResistantBlock(
+            String name,
+            Function<BlockBehaviour.Properties, ? extends B> builder,
+            BlockBehaviour.Properties properties
+    ) {
+        DeferredBlock<B> block = BLOCKS.registerBlock(name, builder);
+        registerFireResistantBlockItem(name, block);
+        return block;
+    }
+
+    private static <B extends Block> void registerFireResistantBlockItem(String name, DeferredBlock<B> block) {
+        JolCraftItems.ITEMS.registerItem(name, props ->
+                new BlockItem(block.get(), props.fireResistant().useBlockDescriptionPrefix())
+        );
     }
 
     private static BlockBehaviour.Properties flowerPotProperties() {

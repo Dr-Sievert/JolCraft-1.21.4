@@ -23,7 +23,7 @@ import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.component.JolCraftDataComponents;
 import net.sievert.jolcraft.entity.ai.goal.*;
 import net.sievert.jolcraft.item.JolCraftItems;
-import net.sievert.jolcraft.util.random.JolCraftDwarfTrades;
+import net.sievert.jolcraft.util.dwarf.JolCraftDwarfTrades;
 
 public class DwarfHistorianEntity extends AbstractDwarfEntity {
 
@@ -98,15 +98,7 @@ public class DwarfHistorianEntity extends AbstractDwarfEntity {
                             new JolCraftDwarfTrades.GoldForItems(JolCraftItems.DWARVEN_TOME_RARE.get(), 1, 10, 75, 10),
                             new JolCraftDwarfTrades.GoldForItems(JolCraftItems.DWARVEN_TOME_EPIC.get(), 1, 10, 125, 22),
                             new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.PARCHMENT.get(), 1, 3, 6, 1),
-                            new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.QUILL_EMPTY.get(), 2, 1, 6, 1),
-
-                            new JolCraftDwarfTrades.ItemsAndGoldToItemsWithData(
-                                    JolCraftItems.LEGENDARY_PAGE.get(), 20,
-                                    30,
-                                    JolCraftItems.ANCIENT_DWARVEN_TOME_LEGENDARY.get(), 1,
-                                    1, 1, 0F,
-                                    (stack) -> stack.set(JolCraftDataComponents.LORE_LINE_ID, "forgotten_brew_formulas")
-                            )
+                            new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.QUILL_EMPTY.get(), 2, 1, 6, 1)
                     },
 
                     //Apprentice
@@ -150,6 +142,30 @@ public class DwarfHistorianEntity extends AbstractDwarfEntity {
                                     JolCraftItems.ANCIENT_DWARVEN_TOME_LEGENDARY.get(), 1,
                                     1, 1, 0F,
                                     (stack) -> stack.set(JolCraftDataComponents.LORE_LINE_ID, "mithril_forge_technique")
+                            ),
+
+                            new JolCraftDwarfTrades.ItemsAndGoldToItemsWithData(
+                                    JolCraftItems.LEGENDARY_PAGE.get(), 20,
+                                    30,
+                                    JolCraftItems.ANCIENT_DWARVEN_TOME_LEGENDARY.get(), 1,
+                                    1, 1, 0F,
+                                    (stack) -> stack.set(JolCraftDataComponents.LORE_LINE_ID, "forgotten_brew_formulas")
+                            ),
+
+                            new JolCraftDwarfTrades.ItemsAndGoldToItemsWithData(
+                                    JolCraftItems.LEGENDARY_PAGE.get(), 20,
+                                    30,
+                                    JolCraftItems.ANCIENT_DWARVEN_TOME_LEGENDARY.get(), 1,
+                                    1, 1, 0F,
+                                    (stack) -> stack.set(JolCraftDataComponents.LORE_LINE_ID, "ancient_gemcraft")
+                            ),
+
+                            new JolCraftDwarfTrades.ItemsAndGoldToItemsWithData(
+                                    JolCraftItems.LEGENDARY_PAGE.get(), 20,
+                                    30,
+                                    JolCraftItems.ANCIENT_DWARVEN_TOME_LEGENDARY.get(), 1,
+                                    1, 1, 0F,
+                                    (stack) -> stack.set(JolCraftDataComponents.LORE_LINE_ID, "coin_press_manual")
                             )
 
                     }
@@ -181,8 +197,8 @@ public class DwarfHistorianEntity extends AbstractDwarfEntity {
     //Sound
     @Override
     public float getVoicePitch() {
-        return 1.1F; // lower pitch for historian
-    }
+        return 1.1F;
+    } // higher pitch for historian
 
 
 }

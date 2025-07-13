@@ -1,4 +1,4 @@
-package net.sievert.jolcraft.potion;
+package net.sievert.jolcraft.item.potion;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;

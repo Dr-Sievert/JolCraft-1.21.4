@@ -21,7 +21,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.entity.ai.goal.*;
 import net.sievert.jolcraft.item.JolCraftItems;
-import net.sievert.jolcraft.util.random.JolCraftDwarfTrades;
+import net.sievert.jolcraft.util.dwarf.JolCraftDwarfTrades;
 
 public class DwarfKeeperEntity extends AbstractDwarfEntity {
 

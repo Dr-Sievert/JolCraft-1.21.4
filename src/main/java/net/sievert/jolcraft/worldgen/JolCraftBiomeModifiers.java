@@ -1,4 +1,4 @@
-package net.sievert.jolcraft.world;
+package net.sievert.jolcraft.worldgen;
 
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;

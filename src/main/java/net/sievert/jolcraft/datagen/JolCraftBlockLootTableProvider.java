@@ -41,6 +41,8 @@ public class JolCraftBlockLootTableProvider extends BlockLootSubProvider {
 
         add(JolCraftBlocks.DEEPSLATE_MITHRIL_ORE.get(),
                 block -> createOreDrop(JolCraftBlocks.DEEPSLATE_MITHRIL_ORE.get(), JolCraftItems.IMPURE_MITHRIL.get()));
+        dropSelf(JolCraftBlocks.PURE_MITHRIL_BLOCK.get());
+        dropSelf(JolCraftBlocks.MITHRIL_BLOCK.get());
 
         dropOther(JolCraftBlocks.STRONGBOX.get(), JolCraftItems.STRONGBOX_ITEM.get());
         add(JolCraftBlocks.STRONGBOX_DUMMY.get(), LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(0))));

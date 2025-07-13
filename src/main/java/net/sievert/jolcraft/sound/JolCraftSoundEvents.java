@@ -1,4 +1,4 @@
-package net.sievert.jolcraft.event;
+package net.sievert.jolcraft.sound;
 
 import net.minecraft.sounds.SoundEvents;
 import net.neoforged.api.distmarker.Dist;

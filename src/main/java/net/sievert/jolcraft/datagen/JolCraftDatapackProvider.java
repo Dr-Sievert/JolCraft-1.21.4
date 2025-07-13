@@ -9,9 +9,9 @@ import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.item.JolCraftTrimMaterials;
 import net.sievert.jolcraft.item.JolCraftTrimPatterns;
-import net.sievert.jolcraft.world.JolCraftBiomeModifiers;
-import net.sievert.jolcraft.world.JolCraftConfiguredFeatures;
-import net.sievert.jolcraft.world.JolCraftPlacedFeatures;
+import net.sievert.jolcraft.worldgen.JolCraftBiomeModifiers;
+import net.sievert.jolcraft.worldgen.JolCraftConfiguredFeatures;
+import net.sievert.jolcraft.worldgen.JolCraftPlacedFeatures;
 
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;

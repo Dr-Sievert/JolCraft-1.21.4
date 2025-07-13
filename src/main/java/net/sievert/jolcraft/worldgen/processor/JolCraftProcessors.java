@@ -1,4 +1,4 @@
-package net.sievert.jolcraft.world.processor;
+package net.sievert.jolcraft.worldgen.processor;
 
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;

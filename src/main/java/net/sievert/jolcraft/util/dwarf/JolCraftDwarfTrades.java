@@ -1,4 +1,4 @@
-package net.sievert.jolcraft.util.random;
+package net.sievert.jolcraft.util.dwarf;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;

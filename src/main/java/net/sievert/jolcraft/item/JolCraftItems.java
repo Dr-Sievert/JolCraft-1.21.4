@@ -54,13 +54,16 @@ public class JolCraftItems {
 
     //Materials, Armors, Trims, Tools and Weapons
     public static final DeferredItem<Item> IMPURE_MITHRIL = ITEMS.registerItem("impure_mithril",
-            Item::new, new Item.Properties());
+            Item::new, new Item.Properties().fireResistant());
 
     public static final DeferredItem<Item> PURE_MITHRIL = ITEMS.registerItem("pure_mithril",
-            Item::new, new Item.Properties());
+            Item::new, new Item.Properties().fireResistant());
 
     public static final DeferredItem<Item> MITHRIL_INGOT = ITEMS.registerItem("mithril_ingot",
-            Item::new, new Item.Properties());
+            Item::new, new Item.Properties().fireResistant());
+
+    public static final DeferredItem<Item> MITHRIL_NUGGET = ITEMS.registerItem("mithril_nugget",
+            Item::new, new Item.Properties().fireResistant());
 
 
     public static final DeferredItem<Item> DEEPSLATE_PLATE = ITEMS.registerItem("deepslate_plate",

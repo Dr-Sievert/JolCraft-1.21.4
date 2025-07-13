@@ -21,13 +21,17 @@ public class JolCraftBlockTagProvider extends BlockTagsProvider {
 
         tag(BlockTags.MINEABLE_WITH_PICKAXE)
                 .add(JolCraftBlocks.DEEPSLATE_MITHRIL_ORE.get())
+                .add(JolCraftBlocks.PURE_MITHRIL_BLOCK.get())
+                .add(JolCraftBlocks.MITHRIL_BLOCK.get())
                 .add(JolCraftBlocks.STRONGBOX.get())
                 .add(JolCraftBlocks.DEEPSLATE_BULBS_CROP.get())
                 .add(JolCraftBlocks.HEARTH.get())
                 .add(JolCraftBlocks.FERMENTING_CAULDRON.get());
 
         tag(JolCraftTags.Blocks.NEEDS_NETHERITE_TOOL)
-                .add(JolCraftBlocks.DEEPSLATE_MITHRIL_ORE.get());
+                .add(JolCraftBlocks.DEEPSLATE_MITHRIL_ORE.get())
+                .add(JolCraftBlocks.PURE_MITHRIL_BLOCK.get())
+                .add(JolCraftBlocks.MITHRIL_BLOCK.get());
 
         tag(BlockTags.INCORRECT_FOR_DIAMOND_TOOL)
                 .addTags(JolCraftTags.Blocks.NEEDS_NETHERITE_TOOL);

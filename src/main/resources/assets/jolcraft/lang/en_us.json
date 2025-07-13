@@ -11,9 +11,12 @@
 
 
   "block.jolcraft.deepslate_mithril_ore": "Deepslate Mithril Ore",
+  "block.jolcraft.pure_mithril_block": "Pure Mithril Block",
+  "block.jolcraft.mithril_block": "Mithril Block",
   "item.jolcraft.impure_mithril": "Impure Mithril",
   "item.jolcraft.pure_mithril": "Pure Mithril",
   "item.jolcraft.mithril_ingot": "Mithril Ingot",
+  "item.jolcraft.mithril_nugget": "Mithril Nugget",
 
 
   "item.jolcraft.deepslate_plate": "Deepslate Plate",

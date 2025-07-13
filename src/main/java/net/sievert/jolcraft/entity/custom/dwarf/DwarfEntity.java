@@ -18,7 +18,7 @@ import net.minecraft.world.level.saveddata.maps.MapDecorationTypes;
 import net.sievert.jolcraft.entity.ai.goal.*;
 import net.sievert.jolcraft.item.JolCraftItems;
 import net.sievert.jolcraft.util.JolCraftTags;
-import net.sievert.jolcraft.util.random.JolCraftDwarfTrades;
+import net.sievert.jolcraft.util.dwarf.JolCraftDwarfTrades;
 
 public class DwarfEntity extends AbstractDwarfEntity {
 

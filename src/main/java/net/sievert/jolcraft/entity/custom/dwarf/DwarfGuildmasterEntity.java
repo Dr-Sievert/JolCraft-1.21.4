@@ -40,7 +40,7 @@ import net.sievert.jolcraft.network.packet.ClientboundEndorsementsPacket;
 import net.sievert.jolcraft.network.packet.ClientboundReputationPacket;
 import net.sievert.jolcraft.sound.JolCraftSounds;
 import net.sievert.jolcraft.util.attachment.DwarvenReputationHelper;
-import net.sievert.jolcraft.util.random.JolCraftDwarfTrades;
+import net.sievert.jolcraft.util.dwarf.JolCraftDwarfTrades;
 
 public class DwarfGuildmasterEntity extends AbstractDwarfEntity {
 

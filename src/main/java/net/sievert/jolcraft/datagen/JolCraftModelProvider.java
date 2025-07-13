@@ -65,15 +65,18 @@ public class JolCraftModelProvider extends ModelProvider {
 
         createHearth(JolCraftBlocks.HEARTH.get(), blockModels);
 
+        //Mithril
         blockModels.createRotatedPillarWithHorizontalVariant(
                 JolCraftBlocks.DEEPSLATE_MITHRIL_ORE.get(),
                 TexturedModel.COLUMN,
                 TexturedModel.COLUMN_HORIZONTAL
         );
+        blockModels.createTrivialCube(JolCraftBlocks.PURE_MITHRIL_BLOCK.get());
+        blockModels.createTrivialCube(JolCraftBlocks.MITHRIL_BLOCK.get());
         itemModels.generateFlatItem(JolCraftItems.IMPURE_MITHRIL.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(JolCraftItems.PURE_MITHRIL.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(JolCraftItems.MITHRIL_INGOT.get(), ModelTemplates.FLAT_ITEM);
-
+        itemModels.generateFlatItem(JolCraftItems.MITHRIL_NUGGET.get(), ModelTemplates.FLAT_ITEM);
 
         //Weapons and Tools
         itemModels.generateFlatItem(JolCraftItems.DEEPSLATE_SWORD.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
@@ -420,13 +423,6 @@ public class JolCraftModelProvider extends ModelProvider {
                 )
         );
     }
-
-
-
-
-
-
-
 
     private void generateTrimmableItemWithCustomList(
             ItemModelGenerators itemModels,

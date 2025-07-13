@@ -2,6 +2,7 @@ package net.sievert.jolcraft.util.bounty;
 
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Items;
 import net.sievert.jolcraft.item.JolCraftItems;
 
@@ -79,7 +80,8 @@ public class BountyGenerator {
             BuiltInRegistries.ITEM.getKey(JolCraftItems.WOECRYSTAL.get())
     );
 
-    public static BountyData generate(Random random, int tier) {
+    public static BountyData generate(RandomSource random, int tier)
+    {
         return switch (tier) {
             case 1 -> generateTier1(random);
             case 2 -> generateTier2(random);
@@ -90,13 +92,13 @@ public class BountyGenerator {
         };
     }
 
-    private static BountyData generateTier1(Random random) {
+    private static BountyData generateTier1(RandomSource random) {
         ResourceLocation targetItem = TIER_1_ITEMS.get(random.nextInt(TIER_1_ITEMS.size()));
         int requiredCount = 5 + random.nextInt(8); // 5–12
         return new BountyData(targetItem, requiredCount, 1);
     }
 
-    private static BountyData generateTier2(Random random) {
+    private static BountyData generateTier2(RandomSource random) {
         ResourceLocation targetItem = TIER_2_ITEMS.get(random.nextInt(TIER_2_ITEMS.size()));
         int requiredCount = switch (targetItem.toString()) {
             case "minecraft:gunpowder", "minecraft:spider_eye", "minecraft:glow_ink_sac" -> 3 + random.nextInt(4); // 3–6
@@ -106,7 +108,7 @@ public class BountyGenerator {
         return new BountyData(targetItem, requiredCount, 2);
     }
 
-    private static BountyData generateTier3(Random random) {
+    private static BountyData generateTier3(RandomSource random) {
         ResourceLocation targetItem = TIER_3_ITEMS.get(random.nextInt(TIER_3_ITEMS.size()));
         int requiredCount = switch (targetItem.toString()) {
             case "minecraft:emerald" -> 2 + random.nextInt(4); // 2–5
@@ -116,7 +118,7 @@ public class BountyGenerator {
         return new BountyData(targetItem, requiredCount, 3);
     }
 
-    private static BountyData generateTier4(Random random) {
+    private static BountyData generateTier4(RandomSource random) {
         ResourceLocation targetItem = TIER_4_ITEMS.get(random.nextInt(TIER_4_ITEMS.size()));
         int requiredCount = switch (targetItem.toString()) {
             case "minecraft:golden_apple", "minecraft:book", "minecraft:paper", "minecraft:ink_sac", "minecraft:feather" -> 1 + random.nextInt(2); // 1–2
@@ -126,7 +128,7 @@ public class BountyGenerator {
         return new BountyData(targetItem, requiredCount, 4);
     }
 
-    private static BountyData generateTier5(Random random) {
+    private static BountyData generateTier5(RandomSource random) {
         // 50% chance for a JolCraft gem, else from normal master pool
         boolean giveGem = !CUSTOM_GEMS.isEmpty() && random.nextBoolean();
         if (giveGem) {

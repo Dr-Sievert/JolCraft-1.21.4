@@ -3,7 +3,7 @@
   "category": "misc",
   "cookingtime": 200,
   "experience": 0.7,
-  "group": "mithril_ingot",
+  "group": "mithril_ingot_from_pure",
   "ingredient": "jolcraft:pure_mithril",
   "result": {
     "count": 1,

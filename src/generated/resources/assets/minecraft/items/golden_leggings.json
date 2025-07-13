@@ -5,23 +5,9 @@
       {
         "model": {
           "type": "minecraft:model",
-          "model": "minecraft:item/golden_leggings_quartz_trim"
+          "model": "minecraft:item/golden_leggings_diamond_trim"
         },
-        "when": "minecraft:quartz"
-      },
-      {
-        "model": {
-          "type": "minecraft:model",
-          "model": "minecraft:item/golden_leggings_iron_trim"
-        },
-        "when": "minecraft:iron"
-      },
-      {
-        "model": {
-          "type": "minecraft:model",
-          "model": "minecraft:item/golden_leggings_lapis_trim"
-        },
-        "when": "minecraft:lapis"
+        "when": "minecraft:diamond"
       },
       {
         "model": {
@@ -33,30 +19,30 @@
       {
         "model": {
           "type": "minecraft:model",
-          "model": "minecraft:item/golden_leggings_diamond_trim"
+          "model": "minecraft:item/golden_leggings_lapis_trim"
         },
-        "when": "minecraft:diamond"
+        "when": "minecraft:lapis"
       },
       {
         "model": {
           "type": "minecraft:model",
-          "model": "minecraft:item/golden_leggings_redstone_trim"
+          "model": "minecraft:item/golden_leggings_iron_trim"
         },
-        "when": "minecraft:redstone"
+        "when": "minecraft:iron"
       },
       {
         "model": {
           "type": "minecraft:model",
-          "model": "minecraft:item/golden_leggings_copper_trim"
+          "model": "minecraft:item/golden_leggings_quartz_trim"
         },
-        "when": "minecraft:copper"
+        "when": "minecraft:quartz"
       },
       {
         "model": {
           "type": "minecraft:model",
-          "model": "minecraft:item/golden_leggings_gold_trim"
+          "model": "minecraft:item/golden_leggings_emerald_trim"
         },
-        "when": "minecraft:gold"
+        "when": "minecraft:emerald"
       },
       {
         "model": {
@@ -68,9 +54,23 @@
       {
         "model": {
           "type": "minecraft:model",
-          "model": "minecraft:item/golden_leggings_emerald_trim"
+          "model": "minecraft:item/golden_leggings_gold_trim"
         },
-        "when": "minecraft:emerald"
+        "when": "minecraft:gold"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:item/golden_leggings_copper_trim"
+        },
+        "when": "minecraft:copper"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:item/golden_leggings_redstone_trim"
+        },
+        "when": "minecraft:redstone"
       },
       {
         "model": {
