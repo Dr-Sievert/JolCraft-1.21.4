@@ -176,7 +176,6 @@ public class JolCraftItemTagProvider extends ItemTagsProvider {
                 .add(JolCraftItems.WOECRYSTAL.get());
 
         tag(JolCraftTags.Items.LEGENDARY_ITEMS)
-                .add(JolCraftItems.DEEPSLATE_SWORD.get())
                 .add(JolCraftItems.LEGENDARY_PAGE.get())
                 .add(JolCraftItems.LEGENDARY_ANCIENT_UNIDENTIFIED_DWARVEN_TOME.get())
                 .add(JolCraftItems.ANCIENT_DWARVEN_TOME_LEGENDARY.get());

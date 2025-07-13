@@ -11,10 +11,6 @@ public class LegendaryItem extends Item {
         super(properties);
     }
 
-    public static Component forceGold(Component input) {
-        return input.copy().withStyle(style -> style.withColor(ChatFormatting.GOLD));
-    }
-
     @Override
     public Component getName(ItemStack stack) {
         // If the item has a custom name, use it, but always force gold color

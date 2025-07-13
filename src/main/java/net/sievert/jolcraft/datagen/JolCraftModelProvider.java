@@ -1,6 +1,8 @@
 package net.sievert.jolcraft.datagen;
 
 import com.google.gson.JsonObject;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.client.color.item.Dye;
@@ -9,15 +11,20 @@ import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.client.data.models.ModelProvider;
 import net.minecraft.client.data.models.blockstates.*;
 import net.minecraft.client.data.models.model.*;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.item.ItemModel;
 import net.minecraft.client.renderer.item.SelectItemModel;
+import net.minecraft.client.renderer.item.properties.select.SelectItemModelProperty;
 import net.minecraft.client.renderer.item.properties.select.TrimMaterialProperty;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemDisplayContext;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.equipment.EquipmentAsset;
 import net.minecraft.world.item.equipment.EquipmentAssets;
 import net.minecraft.world.item.equipment.trim.TrimMaterial;
@@ -26,18 +33,24 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.neoforged.neoforge.client.model.data.ModelProperty;
 import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.block.JolCraftBlocks;
 import net.sievert.jolcraft.block.custom.crop.BarleyCropBlock;
 import net.sievert.jolcraft.block.custom.crop.FesterlingCropBlock;
 import net.sievert.jolcraft.block.custom.crop.HopsCropBottomBlock;
 import net.sievert.jolcraft.block.custom.crop.HopsCropTopBlock;
+import net.sievert.jolcraft.component.JolCraftDataComponents;
 import net.sievert.jolcraft.item.JolCraftEquipmentAssets;
 import net.sievert.jolcraft.item.JolCraftItems;
 import net.sievert.jolcraft.item.JolCraftTrimMaterials;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.sievert.jolcraft.util.random.DwarvenLoreHelper;
+import net.sievert.jolcraft.util.random.LoreLineIdProperty;
 
+import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 public class JolCraftModelProvider extends ModelProvider {
@@ -203,7 +216,8 @@ public class JolCraftModelProvider extends ModelProvider {
         itemModels.generateFlatItem(JolCraftItems.ANCIENT_DWARVEN_TOME_EPIC.get(), JolCraftItems.ANCIENT_DWARVEN_TOME.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(JolCraftItems.LEGENDARY_PAGE.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(JolCraftItems.LEGENDARY_ANCIENT_UNIDENTIFIED_DWARVEN_TOME.get(), JolCraftItems.ANCIENT_DWARVEN_TOME.get(), ModelTemplates.FLAT_ITEM);
-        itemModels.generateFlatItem(JolCraftItems.ANCIENT_DWARVEN_TOME_LEGENDARY.get(), JolCraftItems.ANCIENT_DWARVEN_TOME.get(), ModelTemplates.FLAT_ITEM);
+        //itemModels.generateFlatItem(JolCraftItems.ANCIENT_DWARVEN_TOME_LEGENDARY.get(), JolCraftItems.ANCIENT_DWARVEN_TOME.get(), ModelTemplates.FLAT_ITEM);
+        generateLegendaryTomeModels(itemModels);
 
         //Tools and weapons
         itemModels.generateFlatItem(JolCraftItems.COPPER_SPANNER.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
@@ -383,6 +397,47 @@ public class JolCraftModelProvider extends ModelProvider {
     );
 
     //Custom Helpers!!
+    public void generateLegendaryTomeModels(ItemModelGenerators itemModels) {
+        Item tomeItem = JolCraftItems.ANCIENT_DWARVEN_TOME_LEGENDARY.get();
+        ResourceLocation baseModelLoc = ModelLocationUtils.getModelLocation(tomeItem);
+        ResourceLocation fallbackTexture = TextureMapping.getItemTexture(tomeItem);
+
+        // Fallback model (default texture)
+        ModelTemplates.FLAT_ITEM.create(baseModelLoc, TextureMapping.layer0(fallbackTexture), itemModels.modelOutput);
+        ItemModel.Unbaked fallbackModel = ItemModelUtils.plainModel(baseModelLoc);
+
+        // Build override cases
+        Set<String> legendaryLoreKeys = DwarvenLoreHelper.getLegendaryKeys();
+        List<SelectItemModel.SwitchCase<String>> switchCases = new ArrayList<>();
+
+        for (String loreKey : legendaryLoreKeys) {
+            // Use the improved, unambiguous naming
+            String modelName = "item/ancient_dwarven_tome_legendary_" + loreKey;
+            ResourceLocation modelLoc = ResourceLocation.fromNamespaceAndPath("jolcraft", modelName);
+
+            // Variant model uses layer0 = itself
+            ModelTemplates.FLAT_ITEM.create(modelLoc, TextureMapping.layer0(modelLoc), itemModels.modelOutput);
+            ItemModel.Unbaked model = ItemModelUtils.plainModel(modelLoc);
+
+            switchCases.add(ItemModelUtils.when(loreKey, model));
+        }
+
+        // Register the select item model
+        itemModels.itemModelOutput.accept(
+                tomeItem,
+                new SelectItemModel.Unbaked(
+                        new SelectItemModel.UnbakedSwitch<>(LoreLineIdProperty.INSTANCE, switchCases),
+                        Optional.of(fallbackModel)
+                )
+        );
+    }
+
+
+
+
+
+
+
 
     private void generateTrimmableItemWithCustomList(
             ItemModelGenerators itemModels,

@@ -5,6 +5,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.util.RandomSource;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class DwarvenLoreHelper {
 
@@ -115,7 +116,39 @@ public class DwarvenLoreHelper {
             Map.entry("sunken_forge_rites", entry("sunken_forge_rites", "Rites of the Sunken Forge, Lost Age", LoreRarity.EPIC)),
             Map.entry("cavern_light_chronicle", entry("cavern_light_chronicle", "Chronicle of Cavern Light, Dawn Cycle", LoreRarity.EPIC)),
             //LEGENDARY
-            Map.entry("balrog_chain_ritual", entry("balrog_chain_ritual", "The Ritual of Chains that Bound the Balrog, Forgotten Age", LoreRarity.LEGENDARY))
+            Map.entry(
+                    "mithril_forge_technique",
+                    entry(
+                            "mithril_forge_technique",
+                            "Mithril Forging Technique, Forge of the First Flame",
+                            LoreRarity.LEGENDARY
+                    )
+            ),
+            Map.entry(
+                    "ancient_gemcraft",
+                    entry(
+                            "ancient_gemcraft",
+                            "The Art of Gemcutting, Archives of Karaz-Un",
+                            LoreRarity.LEGENDARY
+                    )
+            ),
+            Map.entry(
+                    "forgotten_brew_formulas",
+                    entry(
+                            "forgotten_brew_formulas",
+                            "Formulas of Dwarven Brews, Vaults of Stonehearth",
+                            LoreRarity.LEGENDARY
+                    )
+            ),
+            Map.entry(
+                    "coin_press_manual",
+                    entry(
+                            "coin_press_manual",
+                            "Coin Press Manual, Bank of Barak-Zul",
+                            LoreRarity.LEGENDARY
+                    )
+            )
+
 
     );
 
@@ -143,6 +176,14 @@ public class DwarvenLoreHelper {
     public static String getRandomLegendaryKey(RandomSource rng) {
         return getRandomKeyByRarity(LoreRarity.LEGENDARY, rng, true);
     }
+
+    public static Set<String> getLegendaryKeys() {
+        return ANCIENT_ENTRIES.entrySet().stream()
+                .filter(e -> e.getValue().rarity() == LoreRarity.LEGENDARY)
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toSet());
+    }
+
 
     public static String getRandomKeyByRarity(LoreRarity rarity, RandomSource rng, boolean ancient) {
         Map<String, DwarvenLoreEntry> pool = ancient ? ANCIENT_ENTRIES : MODERN_ENTRIES;

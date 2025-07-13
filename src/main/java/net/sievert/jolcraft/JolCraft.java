@@ -39,6 +39,7 @@ import net.sievert.jolcraft.screen.custom.strongbox.LockScreen;
 import net.sievert.jolcraft.screen.custom.strongbox.StrongboxScreen;
 import net.sievert.jolcraft.sound.JolCraftSounds;
 import net.sievert.jolcraft.util.ServerTickHandler;
+import net.sievert.jolcraft.util.random.LoreLineIdProperty;
 import net.sievert.jolcraft.world.processor.JolCraftProcessors;
 import net.sievert.jolcraft.world.structure.JolCraftStructures;
 import org.slf4j.Logger;
@@ -196,6 +197,7 @@ public class JolCraft
             ItemBlockRenderTypes.setRenderLayer(JolCraftBlocks.FESTERLING_CROP.get(), RenderType.cutout());
             ItemBlockRenderTypes.setRenderLayer(JolCraftBlocks.FESTERLING.get(), RenderType.cutout());
             ItemBlockRenderTypes.setRenderLayer(JolCraftBlocks.POTTED_FESTERLING.get(), RenderType.cutout());
+
         }
 
     }

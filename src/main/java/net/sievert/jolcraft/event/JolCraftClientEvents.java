@@ -1,10 +1,12 @@
 package net.sievert.jolcraft.event;
 
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
+import net.neoforged.neoforge.client.event.RegisterSelectItemModelPropertyEvent;
 import net.neoforged.neoforge.event.PlayLevelSoundEvent;
 import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.block.JolCraftBlocks;
@@ -12,9 +14,18 @@ import net.sievert.jolcraft.block.custom.FermentingCauldronBlock;
 import net.sievert.jolcraft.block.custom.FermentingStage;
 import net.sievert.jolcraft.block.custom.crop.HopsType;
 import net.sievert.jolcraft.network.client.data.MyClientDeliriumData;
+import net.sievert.jolcraft.util.random.LoreLineIdProperty;
 
 @EventBusSubscriber(modid = JolCraft.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class JolCraftClientEvents {
+
+    @SubscribeEvent
+    public static void onRegisterSelectItemModelProperty(RegisterSelectItemModelPropertyEvent event) {
+        event.register(
+                ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "lore_line_id"),
+                LoreLineIdProperty.TYPE
+        );
+    }
 
     private static final int YEAST_FERMENTING_START = 0xFF8EE8AA; // Light green
     private static final int YEAST_FERMENTING_END = 0xFF40B14A; // Dark green
