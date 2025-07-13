@@ -6,7 +6,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.sievert.jolcraft.component.JolCraftDataComponents;
 import net.sievert.jolcraft.util.attachment.DwarvenLanguageHelper;
-import net.sievert.jolcraft.util.random.DwarvenLoreHelper;
+import net.sievert.jolcraft.util.lore.DwarvenLoreHelper;
 
 import java.util.List;
 

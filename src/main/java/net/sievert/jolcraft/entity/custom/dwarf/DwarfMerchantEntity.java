@@ -42,7 +42,7 @@ import net.sievert.jolcraft.sound.JolCraftSounds;
 import net.sievert.jolcraft.util.bounty.BountyGenerator;
 import net.sievert.jolcraft.util.bounty.BountyReward;
 import net.sievert.jolcraft.util.random.RandomAdapter;
-import net.sievert.jolcraft.villager.JolCraftDwarfTrades;
+import net.sievert.jolcraft.util.random.JolCraftDwarfTrades;
 
 import java.util.ArrayList;
 import java.util.Collections;

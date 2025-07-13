@@ -1,4 +1,4 @@
-package net.sievert.jolcraft.util.random;
+package net.sievert.jolcraft.util.lore;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;

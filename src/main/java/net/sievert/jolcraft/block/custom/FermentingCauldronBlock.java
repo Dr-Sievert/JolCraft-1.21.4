@@ -31,6 +31,7 @@ import net.sievert.jolcraft.block.entity.JolCraftBlockEntities;
 import net.sievert.jolcraft.component.JolCraftDataComponents;
 import net.sievert.jolcraft.util.JolCraftTags;
 import net.sievert.jolcraft.item.JolCraftItems;
+import net.sievert.jolcraft.util.attachment.TomeUnlockHelper;
 import org.jetbrains.annotations.Nullable;
 
 public class FermentingCauldronBlock extends LayeredCauldronBlock implements EntityBlock {
@@ -115,15 +116,12 @@ public class FermentingCauldronBlock extends LayeredCauldronBlock implements Ent
 
         // Add hops (in MALTED or HOPS phase)
         if (state.getValue(STAGE) == FermentingStage.HOPS || state.getValue(STAGE) == FermentingStage.MALTED) {
-            if (stack.is(JolCraftTags.Items.HOPS)) {  // Ensure hops are added
+            if (stack.is(JolCraftTags.Items.HOPS)) {
                 String path = BuiltInRegistries.ITEM.getKey(stack.getItem()).getPath().toLowerCase();
-
                 BlockState newState = state;
                 FermentingCauldronBlockEntity blockEntity = (FermentingCauldronBlockEntity) level.getBlockEntity(pos);
 
-                // Check if hops have already been added by inspecting the addedHops set
                 HopsType hopToAdd = null;
-
                 if (path.contains("asgarnian")) {
                     hopToAdd = HopsType.ASGARNIAN;
                 } else if (path.contains("yanillian")) {
@@ -135,6 +133,26 @@ public class FermentingCauldronBlock extends LayeredCauldronBlock implements Ent
                 }
 
                 if (hopToAdd != null) {
+                    // 1. Dupe check always first: dupe always trumps unlock
+                    if (blockEntity.getAddedHops().contains(hopToAdd)) {
+                        player.displayClientMessage(
+                                Component.translatable("tooltip.jolcraft.brewing.hops").withStyle(ChatFormatting.GRAY),
+                                true
+                        );
+                        return InteractionResult.PASS;
+                    }
+
+                    // 2. Check unlock for adding multiple different hops
+                    if (blockEntity.getAddedHops().size() >= 1 &&
+                            !TomeUnlockHelper.hasUnlockServer(player, TomeUnlockHelper.BREW_MULTIPLE_HOPS)) {
+                        player.displayClientMessage(
+                                Component.translatable("tooltip.jolcraft.brewing.locked_hops").withStyle(ChatFormatting.RED),
+                                true
+                        );
+                        return InteractionResult.PASS;
+                    }
+
+                    // 3. Try to add the hop
                     if (blockEntity.addHop(hopToAdd)) {
                         newState = newState.setValue(HOPS_TYPE, hopToAdd);
                         newState = newState.setValue(STAGE, FermentingStage.HOPS);
@@ -146,16 +164,12 @@ public class FermentingCauldronBlock extends LayeredCauldronBlock implements Ent
                         level.playSound(null, pos, SoundEvents.PLAYER_SPLASH, SoundSource.BLOCKS, 0.4F, 1.6F);
 
                         return InteractionResult.SUCCESS;
-                    } else {
-                        // Provide feedback to the player if hops have already been added
-                        player.displayClientMessage(
-                                Component.translatable("tooltip.jolcraft.brewing.hops").withStyle(ChatFormatting.GRAY), true
-                        );
-                        return InteractionResult.PASS;
                     }
                 }
             }
         }
+
+
 
         // Add yeast to start fermentation
         if (stack.is(JolCraftItems.YEAST.get()) && (state.getValue(STAGE) == FermentingStage.HOPS)) {

@@ -13,7 +13,7 @@ import net.sievert.jolcraft.component.JolCraftDataComponents;
 import net.sievert.jolcraft.item.JolCraftItems;
 import net.sievert.jolcraft.item.custom.UnidentifiedItem;
 import net.sievert.jolcraft.util.attachment.DwarvenLanguageHelper;
-import net.sievert.jolcraft.util.random.DwarvenLoreHelper;
+import net.sievert.jolcraft.util.lore.DwarvenLoreHelper;
 
 public class UnidentifiedDwarvenTomeItem extends UnidentifiedItem {
     public UnidentifiedDwarvenTomeItem(Properties properties) {

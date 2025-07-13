@@ -14,9 +14,10 @@ import net.minecraft.world.level.Level;
 import net.sievert.jolcraft.item.custom.AncientItemBase;
 import net.sievert.jolcraft.network.JolCraftNetworking;
 import net.sievert.jolcraft.network.packet.ClientboundAncientLanguagePacket;
+import net.sievert.jolcraft.sound.JolCraftSounds;
 import net.sievert.jolcraft.util.attachment.AncientDwarvenLanguageHelper;
 import net.sievert.jolcraft.util.attachment.DwarvenLanguageHelper;
-import net.sievert.jolcraft.util.random.AncientEffectHelper;
+import net.sievert.jolcraft.util.attachment.AncientEffectHelper;
 
 import java.util.List;
 
@@ -37,6 +38,7 @@ public class AncientDwarvenLexiconItem extends AncientItemBase {
                 AncientDwarvenLanguageHelper.setKnowsAncientDwarvishServer(serverPlayer, true);
                 JolCraftNetworking.sendToClient(serverPlayer, new ClientboundAncientLanguagePacket(true));
                 level.playSound(null, player.blockPosition(), SoundEvents.BOOK_PAGE_TURN, SoundSource.PLAYERS, 2.0f, 0.7f);
+                level.playSound(null, player.blockPosition(), JolCraftSounds.LEVEL_UP.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
                 serverPlayer.displayClientMessage(Component.translatable("tooltip.jolcraft.ancient_dwarven_lexicon.use")
                         .withStyle(ChatFormatting.GREEN), true);
             } else {

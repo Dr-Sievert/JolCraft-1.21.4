@@ -262,6 +262,9 @@
   "tooltip.jolcraft.dwarven_tome.unlocked": "A dwarven tome.",
   "tooltip.jolcraft.ancient_dwarven_tome.unlocked": "An ancient dwarven tome.",
 
+  "tooltip.jolcraft.tome_unlock.empty": "This tome lacks knowledge that you find useful.",
+  "tooltip.jolcraft.tome_unlock.brew": "You can now brew using multiple hops!",
+
   "tooltip.jolcraft.tablet.locked": "The stone is marked with unfamiliar symbols.",
 
   "tooltip.jolcraft.strongbox.not_empty": "This strongbox has items inside.",
@@ -310,6 +313,7 @@
   "tooltip.jolcraft.reputation.level_up": "You have advanced in dwarven reputation!",
 
   "tooltip.jolcraft.brewing.hops": "You already added this hops type to the brew.",
+  "tooltip.jolcraft.brewing.locked_hops": "Adding more hops without proper knowledge would ruin the brew.",
   "tooltip.jolcraft.brew.no_hops_added": "No hops added.",
   "tooltip.jolcraft.brew.hops_added": "Hops:",
   "tooltip.jolcraft.hops.asgarnian": "Asgarnian",

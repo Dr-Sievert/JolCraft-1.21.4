@@ -40,7 +40,7 @@ import net.sievert.jolcraft.network.packet.ClientboundEndorsementsPacket;
 import net.sievert.jolcraft.network.packet.ClientboundReputationPacket;
 import net.sievert.jolcraft.sound.JolCraftSounds;
 import net.sievert.jolcraft.util.attachment.DwarvenReputationHelper;
-import net.sievert.jolcraft.villager.JolCraftDwarfTrades;
+import net.sievert.jolcraft.util.random.JolCraftDwarfTrades;
 
 public class DwarfGuildmasterEntity extends AbstractDwarfEntity {
 
@@ -292,6 +292,8 @@ public class DwarfGuildmasterEntity extends AbstractDwarfEntity {
                     //Novice
                     1,
                     new VillagerTrades.ItemListing[]{
+                            new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.DEEPSLATE_PLATE.get(), 1, 15, JolCraftItems.REPUTATION_TABLET_0.get(), 1, 1, 0, 0.05F),
+                            new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.CONTRACT_BLANK.get(), 2, 1, 5, 0),
                             new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.CONTRACT_SIGNED.get(), 1, 30, JolCraftItems.CONTRACT_MERCHANT.get(), 1, 1, 0, 0.05F),
                             new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.CONTRACT_SIGNED.get(), 1, 30, JolCraftItems.CONTRACT_HISTORIAN.get(), 1, 1, 0, 0.05F),
                             new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.CONTRACT_SIGNED.get(), 1, 30, JolCraftItems.CONTRACT_SCRAPPER.get(), 1, 1, 0, 0.05F)
@@ -345,7 +347,7 @@ public class DwarfGuildmasterEntity extends AbstractDwarfEntity {
         for (int lvl = lastUnlockedLevel + 1; lvl <= currentLevel; lvl++) {
             VillagerTrades.ItemListing[] listings = TRADES.get(lvl);
             if (listings != null) {
-                this.addOffersFromItemListings(this.getOffers(), listings, 3);
+                this.addOffersFromItemListings(this.getOffers(), listings, 5);
             }
         }
         lastUnlockedLevel = Math.max(lastUnlockedLevel, currentLevel);

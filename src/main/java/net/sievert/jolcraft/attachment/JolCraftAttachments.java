@@ -34,6 +34,13 @@ public class JolCraftAttachments {
                             .build()
             );
 
+    public static final Supplier<AttachmentType<TomeUnlockImpl>> TOME_UNLOCK =
+            ATTACHMENT_TYPES.register("tome_unlock", () ->
+                    AttachmentType.serializable(TomeUnlockImpl::new)
+                            .copyOnDeath()
+                            .build()
+            );
+
     public static final Supplier<AttachmentType<HearthImpl>> HEARTH =
             ATTACHMENT_TYPES.register("hearth", () ->
                     AttachmentType.serializable(HearthImpl::new)

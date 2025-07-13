@@ -1,4 +1,4 @@
-package net.sievert.jolcraft.util.random;
+package net.sievert.jolcraft.util.attachment;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;

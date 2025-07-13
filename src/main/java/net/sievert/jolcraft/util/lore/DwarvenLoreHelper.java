@@ -1,4 +1,4 @@
-package net.sievert.jolcraft.util.random;
+package net.sievert.jolcraft.util.lore;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;

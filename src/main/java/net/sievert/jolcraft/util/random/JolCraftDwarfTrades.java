@@ -1,4 +1,4 @@
-package net.sievert.jolcraft.villager;
+package net.sievert.jolcraft.util.random;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -29,6 +29,7 @@ import net.sievert.jolcraft.util.bounty.BountyHelper;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 import static com.mojang.text2speech.Narrator.LOGGER;
 
@@ -182,6 +183,112 @@ public class JolCraftDwarfTrades extends VillagerTrades {
         }
 
     }
+
+    public static class ItemsWithDataForGold implements VillagerTrades.ItemListing {
+        private final Item item;
+        private final int count;
+        private final int goldCost;
+        private final int maxUses;
+        private final int villagerXp;
+        private final float priceMultiplier;
+        private final Consumer<ItemStack> stackModifier;
+
+        public ItemsWithDataForGold(
+                Item item,
+                int count,
+                int goldCost,
+                int maxUses,
+                int villagerXp,
+                Consumer<ItemStack> stackModifier
+        ) {
+            this(item, count, goldCost, maxUses, villagerXp, 0.05F, stackModifier);
+        }
+
+        public ItemsWithDataForGold(
+                Item item,
+                int count,
+                int goldCost,
+                int maxUses,
+                int villagerXp,
+                float priceMultiplier,
+                Consumer<ItemStack> stackModifier
+        ) {
+            this.item = item;
+            this.count = count;
+            this.goldCost = goldCost;
+            this.maxUses = maxUses;
+            this.villagerXp = villagerXp;
+            this.priceMultiplier = priceMultiplier;
+            this.stackModifier = stackModifier;
+        }
+
+        @Override
+        public MerchantOffer getOffer(Entity trader, RandomSource random) {
+            ItemStack stack = new ItemStack(item, count);
+            if (stackModifier != null) {
+                stackModifier.accept(stack);
+            }
+
+            return new MerchantOffer(
+                    new ItemCost(JolCraftItems.GOLD_COIN.get(), goldCost),
+                    stack,
+                    maxUses,
+                    villagerXp,
+                    priceMultiplier
+            );
+        }
+    }
+
+    public static class ItemsAndGoldToItemsWithData implements VillagerTrades.ItemListing {
+        private final ItemCost fromItem;
+        private final int goldCost;
+        private final Item toItem;
+        private final int toCount;
+        private final int maxUses;
+        private final int villagerXp;
+        private final float priceMultiplier;
+        private final Consumer<ItemStack> stackModifier;
+
+        public ItemsAndGoldToItemsWithData(
+                ItemLike fromItem,
+                int fromItemAmount,
+                int goldCost,
+                Item toItem,
+                int toCount,
+                int maxUses,
+                int villagerXp,
+                float priceMultiplier,
+                Consumer<ItemStack> stackModifier
+        ) {
+            this.fromItem = new ItemCost(fromItem, fromItemAmount);
+            this.goldCost = goldCost;
+            this.toItem = toItem.asItem();
+            this.toCount = toCount;
+            this.maxUses = maxUses;
+            this.villagerXp = villagerXp;
+            this.priceMultiplier = priceMultiplier;
+            this.stackModifier = stackModifier != null ? stackModifier : (s) -> {};
+        }
+
+        @Nullable
+        @Override
+        public MerchantOffer getOffer(Entity entity, RandomSource random) {
+            ItemStack output = new ItemStack(this.toItem, this.toCount);
+            this.stackModifier.accept(output);
+
+            return new MerchantOffer(
+                    new ItemCost(JolCraftItems.GOLD_COIN.get(), goldCost),
+                    Optional.of(fromItem),
+                    output,
+                    0,
+                    maxUses,
+                    villagerXp,
+                    priceMultiplier
+            );
+        }
+    }
+
+
 
     //Exchanging
     public static class ItemForItem implements VillagerTrades.ItemListing {

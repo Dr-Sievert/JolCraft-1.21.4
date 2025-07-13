@@ -14,8 +14,8 @@ import net.sievert.jolcraft.component.JolCraftDataComponents;
 import net.sievert.jolcraft.item.JolCraftItems;
 import net.sievert.jolcraft.item.custom.AncientUnidentifiedItem;
 import net.sievert.jolcraft.util.attachment.DwarvenLanguageHelper;
-import net.sievert.jolcraft.util.random.AncientEffectHelper;
-import net.sievert.jolcraft.util.random.DwarvenLoreHelper;
+import net.sievert.jolcraft.util.attachment.AncientEffectHelper;
+import net.sievert.jolcraft.util.lore.DwarvenLoreHelper;
 
 import java.util.List;
 
@@ -88,7 +88,7 @@ public class AncientUnidentifiedTomeItem extends AncientUnidentifiedItem {
 
     @Override
     protected Component getFailMessageMissingEffect(ServerPlayer player) {
-        return Component.translatable("tooltip.jolcraft.dwarven_tome.partial_understanding").withStyle(ChatFormatting.RED);
+        return Component.translatable("tooltip.jolcraft.ancient_dwarven_tome.partial_understanding").withStyle(ChatFormatting.RED);
     }
 
     @Override

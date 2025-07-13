@@ -43,7 +43,7 @@ import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.entity.ai.goal.*;
 import net.sievert.jolcraft.item.JolCraftItems;
 import net.sievert.jolcraft.sound.JolCraftSounds;
-import net.sievert.jolcraft.villager.JolCraftDwarfTrades;
+import net.sievert.jolcraft.util.random.JolCraftDwarfTrades;
 
 import javax.annotation.Nullable;
 

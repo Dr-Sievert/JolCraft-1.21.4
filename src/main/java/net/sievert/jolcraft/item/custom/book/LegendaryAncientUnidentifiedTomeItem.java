@@ -8,7 +8,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.sievert.jolcraft.component.JolCraftDataComponents;
 import net.sievert.jolcraft.item.JolCraftItems;
-import net.sievert.jolcraft.util.random.DwarvenLoreHelper;
+import net.sievert.jolcraft.util.lore.DwarvenLoreHelper;
 
 public class LegendaryAncientUnidentifiedTomeItem extends AncientUnidentifiedTomeItem{
     public LegendaryAncientUnidentifiedTomeItem(Properties properties) {

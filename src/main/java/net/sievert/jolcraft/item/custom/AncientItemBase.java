@@ -7,7 +7,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.sievert.jolcraft.util.attachment.DwarvenLanguageHelper;
-import net.sievert.jolcraft.util.random.AncientEffectHelper;
+import net.sievert.jolcraft.util.attachment.AncientEffectHelper;
 
 import java.util.List;
 
@@ -15,6 +15,7 @@ public abstract class AncientItemBase extends Item {
     public AncientItemBase(Properties properties) {
         super(properties);
     }
+
     @Override
     public final void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         if (context.level() != null && context.level().isClientSide()) {
