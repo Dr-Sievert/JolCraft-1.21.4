@@ -33,6 +33,8 @@ public class JolCraftTags {
 
         public static final TagKey<Item> REPAIRS_DEEPSLATE = createTag("repairs_deepslate");
 
+        public static final TagKey<Item> LEGENDARY_ITEMS = createTag("legendary_items");
+
         //Scrap
         public static final TagKey<Item> GLOBAL_SCRAP = createTag("global_scrap");
         public static final TagKey<Item> GENERAL_SCRAP = createTag("general_scrap");

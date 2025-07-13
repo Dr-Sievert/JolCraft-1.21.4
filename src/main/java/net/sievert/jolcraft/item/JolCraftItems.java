@@ -388,10 +388,6 @@ public class JolCraftItems {
             ITEMS.registerItem("dwarven_tome_epic", properties -> new DwarvenTomeItem(properties) {
             }, new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
 
-    public static final DeferredItem<Item> DWARVEN_TOME_LEGENDARY =
-            ITEMS.registerItem("dwarven_tome_legendary", properties -> new LegendaryDwarvenTomeItem(properties) {
-            }, new Item.Properties().stacksTo(1));
-
     public static final DeferredItem<Item> ANCIENT_DWARVEN_TOME = ITEMS.registerSimpleItem("ancient_dwarven_tome");
 
     public static final DeferredItem<Item> ANCIENT_UNIDENTIFIED_DWARVEN_TOME =
@@ -413,6 +409,13 @@ public class JolCraftItems {
     public static final DeferredItem<Item> ANCIENT_DWARVEN_TOME_EPIC =
             ITEMS.registerItem("ancient_dwarven_tome_epic", properties -> new AncientDwarvenTomeItem(properties) {
             }, new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
+
+    public static final DeferredItem<Item> LEGENDARY_PAGE = ITEMS.registerItem("legendary_page",
+            LegendaryItem::new, new Item.Properties());
+
+    public static final DeferredItem<Item> LEGENDARY_ANCIENT_UNIDENTIFIED_DWARVEN_TOME =
+            ITEMS.registerItem("legendary_unidentified_ancient_dwarven_tome", properties -> new LegendaryAncientUnidentifiedTomeItem(properties) {
+            }, new Item.Properties().stacksTo(16));
 
     public static final DeferredItem<Item> ANCIENT_DWARVEN_TOME_LEGENDARY =
             ITEMS.registerItem("ancient_dwarven_tome_legendary", properties -> new LegendaryAncientDwarvenTomeItem(properties) {

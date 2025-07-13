@@ -1,8 +1,11 @@
 package net.sievert.jolcraft.event;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -29,6 +32,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.AnvilUpdateEvent;
 import net.neoforged.neoforge.event.brewing.RegisterBrewingRecipesEvent;
 import net.neoforged.neoforge.event.entity.EntityInvulnerabilityCheckEvent;
 import net.neoforged.neoforge.event.entity.player.AdvancementEvent;
@@ -41,6 +45,7 @@ import net.sievert.jolcraft.advancement.JolCraftCriteriaTriggers;
 import net.sievert.jolcraft.attachment.Hearth;
 import net.sievert.jolcraft.block.custom.FermentingCauldronBlock;
 import net.sievert.jolcraft.block.custom.FermentingStage;
+import net.sievert.jolcraft.item.custom.LegendaryItem;
 import net.sievert.jolcraft.network.JolCraftNetworking;
 import net.sievert.jolcraft.network.packet.ClientboundAncientLanguagePacket;
 import net.sievert.jolcraft.network.packet.ClientboundEndorsementsPacket;
@@ -54,6 +59,7 @@ import net.sievert.jolcraft.item.custom.SpannerItem;
 import net.sievert.jolcraft.util.attachment.AncientDwarvenLanguageHelper;
 import net.sievert.jolcraft.util.attachment.DwarvenLanguageHelper;
 import net.sievert.jolcraft.util.attachment.DwarvenReputationHelper;
+import net.sievert.jolcraft.util.random.JolCraftAnvilHelper;
 import net.sievert.jolcraft.util.random.SalvageLootHelper;
 import net.sievert.jolcraft.block.JolCraftBlocks;
 import net.sievert.jolcraft.effect.JolCraftEffects;
@@ -264,6 +270,43 @@ public class JolCraftGameEvents {
             event.setNewSpeed(newSpeed);
         }
     }
+
+    @SubscribeEvent
+    public static void onAnvilUpdate(AnvilUpdateEvent event) {
+        ItemStack left = event.getLeft();
+        ItemStack right = event.getRight();
+        String rename = event.getName();
+
+        if (!left.isEmpty() && left.is(JolCraftTags.Items.LEGENDARY_ITEMS)) {
+            var vanilla = JolCraftAnvilHelper.vanillaResult(left, right, rename, event.getPlayer());
+            ItemStack result = vanilla.result();
+
+            if (!result.isEmpty()) {
+                // Determine the name to show: use rename, else use default name (but filter it, for safety)
+                String baseName;
+                if (rename != null && !rename.isEmpty()) {
+                    baseName = net.minecraft.util.StringUtil.filterText(rename);
+                } else {
+                    baseName = left.getHoverName().getString();
+                }
+
+                // Remove any prior names to avoid conflicts
+                result.remove(net.minecraft.core.component.DataComponents.CUSTOM_NAME);
+                result.remove(net.minecraft.core.component.DataComponents.ITEM_NAME);
+
+                // Always set gold name, even if unchanged!
+                result.set(net.minecraft.core.component.DataComponents.ITEM_NAME,
+                        net.minecraft.network.chat.Component.literal(baseName).withStyle(net.minecraft.ChatFormatting.GOLD));
+            }
+
+            event.setOutput(result);
+            event.setCost(vanilla.cost());
+            event.setMaterialCost(vanilla.materialCost());
+        }
+    }
+
+
+
 
 
 

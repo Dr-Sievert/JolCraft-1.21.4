@@ -1,14 +1,18 @@
-package net.sievert.jolcraft.item.custom.book;
+package net.sievert.jolcraft.item.custom;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
-
-public class LegendaryAncientDwarvenTomeItem extends AncientDwarvenTomeItem {
-    public LegendaryAncientDwarvenTomeItem(Properties properties) {
+public class LegendaryItem extends Item {
+    public LegendaryItem(Properties properties) {
         super(properties);
+    }
+
+    public static Component forceGold(Component input) {
+        return input.copy().withStyle(style -> style.withColor(ChatFormatting.GOLD));
     }
 
     @Override
@@ -24,8 +28,4 @@ public class LegendaryAncientDwarvenTomeItem extends AncientDwarvenTomeItem {
     }
 
 
-
-
-
 }
-

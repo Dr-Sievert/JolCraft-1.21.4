@@ -28,7 +28,7 @@ public class UnidentifiedDwarvenTomeItem extends UnidentifiedItem {
     @Override
     protected ItemStack getRandomIdentifiedItem(ServerPlayer player, ItemStack original) {
         RandomSource rng = player.getRandom();
-        String loreKey = DwarvenLoreHelper.getRandomKeyWeighted(rng, false); // false = modern pool
+        String loreKey = DwarvenLoreHelper.getRandomKeyWeighted(rng, false); // modern pool
         if (loreKey.isEmpty()) return ItemStack.EMPTY;
 
         DwarvenLoreHelper.LoreRarity rarity = DwarvenLoreHelper.getRarity(loreKey, false);
@@ -37,11 +37,13 @@ public class UnidentifiedDwarvenTomeItem extends UnidentifiedItem {
             case UNCOMMON -> new ItemStack(JolCraftItems.DWARVEN_TOME_UNCOMMON.get());
             case RARE -> new ItemStack(JolCraftItems.DWARVEN_TOME_RARE.get());
             case EPIC -> new ItemStack(JolCraftItems.DWARVEN_TOME_EPIC.get());
+            case LEGENDARY -> ItemStack.EMPTY; // Safe fallback if ever added by accident
         };
 
         tome.set(JolCraftDataComponents.LORE_LINE_ID.get(), loreKey);
         return tome;
     }
+
 
     @Override
     protected Component getUnidentifiedTooltip(Player player, ItemStack stack) {

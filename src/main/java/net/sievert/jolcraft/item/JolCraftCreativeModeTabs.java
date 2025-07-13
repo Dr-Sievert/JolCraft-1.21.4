@@ -139,7 +139,9 @@ public class JolCraftCreativeModeTabs {
 
                         pOutput.accept(JolCraftItems.UNIDENTIFIED_DWARVEN_TOME);
                         pOutput.accept(JolCraftItems.ANCIENT_UNIDENTIFIED_DWARVEN_TOME);
-
+                        pOutput.accept(JolCraftItems.LEGENDARY_PAGE);
+                        pOutput.accept(JolCraftItems.LEGENDARY_ANCIENT_UNIDENTIFIED_DWARVEN_TOME);
+                        pOutput.accept(JolCraftItems.ANCIENT_DWARVEN_TOME_LEGENDARY);
 
                         pOutput.accept(JolCraftItems.COPPER_SPANNER);
                         pOutput.accept(JolCraftItems.IRON_SPANNER);

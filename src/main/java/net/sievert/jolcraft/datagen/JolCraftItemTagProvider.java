@@ -151,13 +151,13 @@ public class JolCraftItemTagProvider extends ItemTagsProvider {
         tag(JolCraftTags.Items.REPAIRS_DEEPSLATE)
                 .add(JolCraftItems.DEEPSLATE_PLATE.get());
 
-        this.tag(ItemTags.TRIMMABLE_ARMOR)
+        tag(ItemTags.TRIMMABLE_ARMOR)
                 .add(JolCraftItems.DEEPSLATE_HELMET.get())
                 .add(JolCraftItems.DEEPSLATE_CHESTPLATE.get())
                 .add(JolCraftItems.DEEPSLATE_LEGGINGS.get())
                 .add(JolCraftItems.DEEPSLATE_BOOTS.get());
 
-        this.tag(ItemTags.TRIM_MATERIALS)
+        tag(ItemTags.TRIM_MATERIALS)
                 .add(JolCraftItems.DEEPSLATE_PLATE.get())
                 .add(JolCraftItems.AEGISCORE.get())
                 .add(JolCraftItems.ASHFANG.get())
@@ -174,6 +174,12 @@ public class JolCraftItemTagProvider extends ItemTagsProvider {
                 .add(JolCraftItems.SUNGLEAM.get())
                 .add(JolCraftItems.VERDANITE.get())
                 .add(JolCraftItems.WOECRYSTAL.get());
+
+        tag(JolCraftTags.Items.LEGENDARY_ITEMS)
+                .add(JolCraftItems.DEEPSLATE_SWORD.get())
+                .add(JolCraftItems.LEGENDARY_PAGE.get())
+                .add(JolCraftItems.LEGENDARY_ANCIENT_UNIDENTIFIED_DWARVEN_TOME.get())
+                .add(JolCraftItems.ANCIENT_DWARVEN_TOME_LEGENDARY.get());
 
     }
 

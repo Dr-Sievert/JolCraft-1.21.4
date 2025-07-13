@@ -207,7 +207,6 @@
   "item.jolcraft.dwarven_tome_uncommon": "Dwarven Tome",
   "item.jolcraft.dwarven_tome_rare": "Dwarven Tome",
   "item.jolcraft.dwarven_tome_epic": "Dwarven Tome",
-  "item.jolcraft.dwarven_tome_legendary": "Dwarven Tome",
 
   "item.jolcraft.ancient_dwarven_tome": "Ancient Dwarven Tome",
   "item.jolcraft.unidentified_ancient_dwarven_tome": "Ancient Unidentified Dwarven Tome",
@@ -215,6 +214,9 @@
   "item.jolcraft.ancient_dwarven_tome_uncommon": "Ancient Dwarven Tome",
   "item.jolcraft.ancient_dwarven_tome_rare": "Ancient Dwarven Tome",
   "item.jolcraft.ancient_dwarven_tome_epic": "Ancient Dwarven Tome",
+
+  "item.jolcraft.legendary_page": "Legendary Page",
+  "item.jolcraft.legendary_unidentified_ancient_dwarven_tome": "Ancient Unidentified Dwarven Tome",
   "item.jolcraft.ancient_dwarven_tome_legendary": "Ancient Dwarven Tome",
 
   "item.jolcraft.copper_spanner": "Copper Spanner",

@@ -8,7 +8,7 @@ import java.util.*;
 
 public class DwarvenLoreHelper {
 
-    public enum LoreRarity { COMMON, UNCOMMON, RARE, EPIC }
+    public enum LoreRarity { COMMON, UNCOMMON, RARE, EPIC, LEGENDARY }
 
     public record DwarvenLoreEntry(String key, Component text, LoreRarity rarity) {}
 
@@ -113,8 +113,10 @@ public class DwarvenLoreHelper {
             Map.entry("oracle_inscriptions", entry("oracle_inscriptions", "Oracle Inscriptions of the Crystal Vault, Volume VII", LoreRarity.EPIC)),
             Map.entry("deep_curse_tablet", entry("deep_curse_tablet", "Tablet of the Deep Curse, Age of Shadows", LoreRarity.EPIC)),
             Map.entry("sunken_forge_rites", entry("sunken_forge_rites", "Rites of the Sunken Forge, Lost Age", LoreRarity.EPIC)),
-            Map.entry("cavern_light_chronicle", entry("cavern_light_chronicle", "Chronicle of Cavern Light, Dawn Cycle", LoreRarity.EPIC))
+            Map.entry("cavern_light_chronicle", entry("cavern_light_chronicle", "Chronicle of Cavern Light, Dawn Cycle", LoreRarity.EPIC)),
             //LEGENDARY
+            Map.entry("balrog_chain_ritual", entry("balrog_chain_ritual", "The Ritual of Chains that Bound the Balrog, Forgotten Age", LoreRarity.LEGENDARY))
+
     );
 
     private static DwarvenLoreEntry entry(String key, String text, LoreRarity rarity) {
@@ -136,6 +138,10 @@ public class DwarvenLoreHelper {
         }
         if (weightedPool.isEmpty()) return "";
         return weightedPool.get(rng.nextInt(weightedPool.size()));
+    }
+
+    public static String getRandomLegendaryKey(RandomSource rng) {
+        return getRandomKeyByRarity(LoreRarity.LEGENDARY, rng, true);
     }
 
     public static String getRandomKeyByRarity(LoreRarity rarity, RandomSource rng, boolean ancient) {
