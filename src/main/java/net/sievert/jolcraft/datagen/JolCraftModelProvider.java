@@ -32,9 +32,9 @@ import net.sievert.jolcraft.block.custom.crop.BarleyCropBlock;
 import net.sievert.jolcraft.block.custom.crop.FesterlingCropBlock;
 import net.sievert.jolcraft.block.custom.crop.HopsCropBottomBlock;
 import net.sievert.jolcraft.block.custom.crop.HopsCropTopBlock;
-import net.sievert.jolcraft.item.JolCraftEquipmentAssets;
+import net.sievert.jolcraft.item.armor.JolCraftEquipmentAssets;
 import net.sievert.jolcraft.item.JolCraftItems;
-import net.sievert.jolcraft.item.JolCraftTrimMaterials;
+import net.sievert.jolcraft.item.trim.JolCraftTrimMaterials;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.sievert.jolcraft.util.lore.DwarvenLoreHelper;
 import net.sievert.jolcraft.util.lore.LoreLineIdProperty;
@@ -90,7 +90,8 @@ public class JolCraftModelProvider extends ModelProvider {
         for (Map.Entry<String, ResourceKey<TrimMaterial>> entry : VANILLA_TRIMS.entrySet()) {
             allTrimMaterials.add(new ItemModelGenerators.TrimMaterialData(entry.getKey(), entry.getValue(), Map.of()));
         }
-        allTrimMaterials.addAll(JOLCRAFT_TRIMS); // <--- just this line for ALL your custom trims
+
+        allTrimMaterials.addAll(JOLCRAFT_TRIMS);
 
         generateTrimmableArmorSetWithCustom(itemModels, "deepslate", JolCraftEquipmentAssets.DEEPSLATE_KEY, false);
 
@@ -367,6 +368,11 @@ public class JolCraftModelProvider extends ModelProvider {
                     "deepslate",
                     JolCraftTrimMaterials.DEEPSLATE,
                     Map.of(JolCraftEquipmentAssets.DEEPSLATE_KEY, "deepslate_darker")
+            ),
+            new ItemModelGenerators.TrimMaterialData(
+                    "mithril",
+                    JolCraftTrimMaterials.MITHRIL,
+                    Map.of(JolCraftEquipmentAssets.MITHRIL_KEY, "mithril_darker")
             ),
             // Gems (no override, use Map.of())
             new ItemModelGenerators.TrimMaterialData("aegiscore", JolCraftTrimMaterials.AEGISCORE, Map.of()),

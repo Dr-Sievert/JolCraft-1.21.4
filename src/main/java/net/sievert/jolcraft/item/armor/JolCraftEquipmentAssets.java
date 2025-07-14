@@ -1,4 +1,4 @@
-package net.sievert.jolcraft.item;
+package net.sievert.jolcraft.item.armor;
 
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
@@ -22,6 +22,12 @@ public class JolCraftEquipmentAssets {
 
     public static final ResourceKey<EquipmentAsset> DEEPSLATE_KEY =
             ResourceKey.create(EQUIPMENT_ASSET_REGISTRY, ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "deepslate"));
+
+    public static final DeferredHolder<EquipmentAsset, EquipmentAsset> MITHRIL =
+            EQUIPMENT_ASSETS.register("mithril", EquipmentAsset::new);
+
+    public static final ResourceKey<EquipmentAsset> MITHRIL_KEY =
+            ResourceKey.create(EQUIPMENT_ASSET_REGISTRY, ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "mithril"));
 
     public static void register(IEventBus eventBus) {
         EQUIPMENT_ASSETS.register(eventBus);

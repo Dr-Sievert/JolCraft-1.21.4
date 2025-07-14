@@ -13,7 +13,7 @@ import net.minecraft.world.item.equipment.ArmorMaterial;
 import net.minecraft.world.item.equipment.ArmorType;
 import net.minecraft.world.item.equipment.Equippable;
 import net.minecraft.world.level.Level;
-import net.sievert.jolcraft.item.JolCraftArmorMaterials;
+import net.sievert.jolcraft.item.armor.JolCraftArmorMaterials;
 
 import java.util.List;
 import java.util.Map;

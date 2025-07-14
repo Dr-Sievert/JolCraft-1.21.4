@@ -5,16 +5,9 @@
       {
         "model": {
           "type": "minecraft:model",
-          "model": "minecraft:item/leather_chestplate_diamond_trim"
+          "model": "minecraft:item/leather_chestplate_iron_trim"
         },
-        "when": "minecraft:diamond"
-      },
-      {
-        "model": {
-          "type": "minecraft:model",
-          "model": "minecraft:item/leather_chestplate_netherite_trim"
-        },
-        "when": "minecraft:netherite"
+        "when": "minecraft:iron"
       },
       {
         "model": {
@@ -26,37 +19,23 @@
       {
         "model": {
           "type": "minecraft:model",
-          "model": "minecraft:item/leather_chestplate_iron_trim"
+          "model": "minecraft:item/leather_chestplate_netherite_trim"
         },
-        "when": "minecraft:iron"
+        "when": "minecraft:netherite"
       },
       {
         "model": {
           "type": "minecraft:model",
-          "model": "minecraft:item/leather_chestplate_quartz_trim"
+          "model": "minecraft:item/leather_chestplate_diamond_trim"
         },
-        "when": "minecraft:quartz"
+        "when": "minecraft:diamond"
       },
       {
         "model": {
           "type": "minecraft:model",
-          "model": "minecraft:item/leather_chestplate_emerald_trim"
+          "model": "minecraft:item/leather_chestplate_redstone_trim"
         },
-        "when": "minecraft:emerald"
-      },
-      {
-        "model": {
-          "type": "minecraft:model",
-          "model": "minecraft:item/leather_chestplate_amethyst_trim"
-        },
-        "when": "minecraft:amethyst"
-      },
-      {
-        "model": {
-          "type": "minecraft:model",
-          "model": "minecraft:item/leather_chestplate_gold_trim"
-        },
-        "when": "minecraft:gold"
+        "when": "minecraft:redstone"
       },
       {
         "model": {
@@ -68,9 +47,30 @@
       {
         "model": {
           "type": "minecraft:model",
-          "model": "minecraft:item/leather_chestplate_redstone_trim"
+          "model": "minecraft:item/leather_chestplate_gold_trim"
         },
-        "when": "minecraft:redstone"
+        "when": "minecraft:gold"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:item/leather_chestplate_amethyst_trim"
+        },
+        "when": "minecraft:amethyst"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:item/leather_chestplate_emerald_trim"
+        },
+        "when": "minecraft:emerald"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:item/leather_chestplate_quartz_trim"
+        },
+        "when": "minecraft:quartz"
       },
       {
         "model": {
@@ -84,6 +84,19 @@
           ]
         },
         "when": "jolcraft:deepslate"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "jolcraft:item/leather_chestplate_mithril_trim",
+          "tints": [
+            {
+              "type": "minecraft:dye",
+              "default": -6265536
+            }
+          ]
+        },
+        "when": "jolcraft:mithril"
       },
       {
         "model": {

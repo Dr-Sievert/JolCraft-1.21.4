@@ -1,4 +1,4 @@
-package net.sievert.jolcraft.item;
+package net.sievert.jolcraft.item.food;
 
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;

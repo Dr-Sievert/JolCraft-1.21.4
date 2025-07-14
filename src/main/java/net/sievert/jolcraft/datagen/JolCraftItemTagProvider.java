@@ -159,6 +159,7 @@ public class JolCraftItemTagProvider extends ItemTagsProvider {
 
         tag(ItemTags.TRIM_MATERIALS)
                 .add(JolCraftItems.DEEPSLATE_PLATE.get())
+                .add(JolCraftItems.MITHRIL_INGOT.get())
                 .add(JolCraftItems.AEGISCORE.get())
                 .add(JolCraftItems.ASHFANG.get())
                 .add(JolCraftItems.DEEPMARROW.get())

@@ -1,4 +1,4 @@
-package net.sievert.jolcraft.item;
+package net.sievert.jolcraft.item.tool;
 
 
 import net.minecraft.tags.BlockTags;

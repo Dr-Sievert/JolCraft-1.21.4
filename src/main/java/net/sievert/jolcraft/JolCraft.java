@@ -22,7 +22,7 @@ import net.sievert.jolcraft.entity.client.render.animal.MuffhornRenderer;
 import net.sievert.jolcraft.entity.client.render.block.StrongboxRenderer;
 import net.sievert.jolcraft.entity.client.render.dwarf.*;
 import net.sievert.jolcraft.item.JolCraftCreativeModeTabs;
-import net.sievert.jolcraft.item.JolCraftEquipmentAssets;
+import net.sievert.jolcraft.item.armor.JolCraftEquipmentAssets;
 import net.sievert.jolcraft.item.JolCraftItems;
 import net.sievert.jolcraft.loot.JolCraftLootModifiers;
 import net.sievert.jolcraft.network.JolCraftNetworking;

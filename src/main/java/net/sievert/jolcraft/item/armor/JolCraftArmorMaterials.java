@@ -1,4 +1,4 @@
-package net.sievert.jolcraft.item;
+package net.sievert.jolcraft.item.armor;
 
 import net.minecraft.Util;
 import net.minecraft.resources.ResourceKey;

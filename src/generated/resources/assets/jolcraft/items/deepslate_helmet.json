@@ -89,6 +89,13 @@
       {
         "model": {
           "type": "minecraft:model",
+          "model": "jolcraft:item/deepslate_helmet_mithril_trim"
+        },
+        "when": "jolcraft:mithril"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
           "model": "jolcraft:item/deepslate_helmet_aegiscore_trim"
         },
         "when": "jolcraft:aegiscore"

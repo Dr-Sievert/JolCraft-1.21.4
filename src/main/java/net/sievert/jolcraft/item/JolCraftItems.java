@@ -13,6 +13,7 @@ import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.block.JolCraftBlocks;
 import net.sievert.jolcraft.entity.JolCraftEntities;
 import net.minecraft.network.chat.Component;
+import net.sievert.jolcraft.item.armor.JolCraftArmorMaterials;
 import net.sievert.jolcraft.item.custom.*;
 import net.sievert.jolcraft.item.custom.armor.DeepslateArmorItem;
 import net.sievert.jolcraft.item.custom.bounty.BountyCrateItem;
@@ -20,6 +21,8 @@ import net.sievert.jolcraft.item.custom.bounty.BountyItem;
 import net.sievert.jolcraft.item.custom.bounty.ContractItem;
 import net.sievert.jolcraft.item.custom.food.DwarvenBrewItem;
 import net.sievert.jolcraft.item.custom.book.*;
+import net.sievert.jolcraft.item.tool.JolCraftToolMaterials;
+import net.sievert.jolcraft.item.food.JolCraftFoodProperties;
 
 import java.util.List;
 

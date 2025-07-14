@@ -1,4 +1,4 @@
-package net.sievert.jolcraft.item;
+package net.sievert.jolcraft.item.trim;
 
 import net.minecraft.Util;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -10,6 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.equipment.trim.TrimPattern;
 import net.sievert.jolcraft.JolCraft;
+import net.sievert.jolcraft.item.JolCraftItems;
 
 public class JolCraftTrimPatterns {
     public static final ResourceKey<TrimPattern> FORGE = ResourceKey.create(Registries.TRIM_PATTERN,

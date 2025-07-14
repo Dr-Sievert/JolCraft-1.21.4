@@ -5,16 +5,9 @@
       {
         "model": {
           "type": "minecraft:model",
-          "model": "minecraft:item/iron_boots_diamond_trim"
+          "model": "minecraft:item/iron_boots_iron_trim"
         },
-        "when": "minecraft:diamond"
-      },
-      {
-        "model": {
-          "type": "minecraft:model",
-          "model": "minecraft:item/iron_boots_netherite_trim"
-        },
-        "when": "minecraft:netherite"
+        "when": "minecraft:iron"
       },
       {
         "model": {
@@ -26,44 +19,16 @@
       {
         "model": {
           "type": "minecraft:model",
-          "model": "minecraft:item/iron_boots_iron_trim"
+          "model": "minecraft:item/iron_boots_netherite_trim"
         },
-        "when": "minecraft:iron"
+        "when": "minecraft:netherite"
       },
       {
         "model": {
           "type": "minecraft:model",
-          "model": "minecraft:item/iron_boots_quartz_trim"
+          "model": "minecraft:item/iron_boots_diamond_trim"
         },
-        "when": "minecraft:quartz"
-      },
-      {
-        "model": {
-          "type": "minecraft:model",
-          "model": "minecraft:item/iron_boots_emerald_trim"
-        },
-        "when": "minecraft:emerald"
-      },
-      {
-        "model": {
-          "type": "minecraft:model",
-          "model": "minecraft:item/iron_boots_amethyst_trim"
-        },
-        "when": "minecraft:amethyst"
-      },
-      {
-        "model": {
-          "type": "minecraft:model",
-          "model": "minecraft:item/iron_boots_gold_trim"
-        },
-        "when": "minecraft:gold"
-      },
-      {
-        "model": {
-          "type": "minecraft:model",
-          "model": "minecraft:item/iron_boots_copper_trim"
-        },
-        "when": "minecraft:copper"
+        "when": "minecraft:diamond"
       },
       {
         "model": {
@@ -75,9 +40,51 @@
       {
         "model": {
           "type": "minecraft:model",
+          "model": "minecraft:item/iron_boots_copper_trim"
+        },
+        "when": "minecraft:copper"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:item/iron_boots_gold_trim"
+        },
+        "when": "minecraft:gold"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:item/iron_boots_amethyst_trim"
+        },
+        "when": "minecraft:amethyst"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:item/iron_boots_emerald_trim"
+        },
+        "when": "minecraft:emerald"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:item/iron_boots_quartz_trim"
+        },
+        "when": "minecraft:quartz"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
           "model": "jolcraft:item/iron_boots_deepslate_trim"
         },
         "when": "jolcraft:deepslate"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "jolcraft:item/iron_boots_mithril_trim"
+        },
+        "when": "jolcraft:mithril"
       },
       {
         "model": {

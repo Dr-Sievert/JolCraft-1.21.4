@@ -1,4 +1,4 @@
-package net.sievert.jolcraft.item;
+package net.sievert.jolcraft.item.trim;
 
 import net.minecraft.Util;
 import net.minecraft.core.registries.Registries;
@@ -12,6 +12,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.equipment.EquipmentAsset;
 import net.minecraft.world.item.equipment.trim.TrimMaterial;
 import net.sievert.jolcraft.JolCraft;
+import net.sievert.jolcraft.item.JolCraftItems;
+import net.sievert.jolcraft.item.armor.JolCraftEquipmentAssets;
 
 import java.util.Map;
 
@@ -21,6 +23,9 @@ public class JolCraftTrimMaterials {
     //Material-based
     public static final ResourceKey<TrimMaterial> DEEPSLATE =
             ResourceKey.create(Registries.TRIM_MATERIAL, ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "deepslate"));
+
+    public static final ResourceKey<TrimMaterial> MITHRIL =
+            ResourceKey.create(Registries.TRIM_MATERIAL, ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "mithril"));
 
     //Gems
     public static final ResourceKey<TrimMaterial> AEGISCORE =
@@ -62,6 +67,13 @@ public class JolCraftTrimMaterials {
                 JolCraftItems.DEEPSLATE_PLATE.get(),
                 Style.EMPTY.withColor(TextColor.parseColor("#595959").getOrThrow()),
                 Map.of(JolCraftEquipmentAssets.DEEPSLATE.getKey(), "deepslate_darker")
+        );
+        register(
+                context,
+                MITHRIL,
+                JolCraftItems.MITHRIL_INGOT.get(),
+                Style.EMPTY.withColor(TextColor.parseColor("#a6cfe5").getOrThrow()),
+                Map.of(JolCraftEquipmentAssets.MITHRIL.getKey(), "mithril_darker")
         );
         register(
                 context,
