@@ -3,6 +3,10 @@
     "jolcraft:deepslate_helmet",
     "jolcraft:deepslate_chestplate",
     "jolcraft:deepslate_leggings",
-    "jolcraft:deepslate_boots"
+    "jolcraft:deepslate_boots",
+    "jolcraft:mithril_helmet",
+    "jolcraft:mithril_chestplate",
+    "jolcraft:mithril_leggings",
+    "jolcraft:mithril_boots"
   ]
 }

@@ -148,14 +148,21 @@ public class JolCraftItemTagProvider extends ItemTagsProvider {
                 .add(JolCraftItems.KRANDONIAN_HOPS.get())
                 .add(JolCraftItems.YANILLIAN_HOPS.get());
 
-        tag(JolCraftTags.Items.REPAIRS_DEEPSLATE)
-                .add(JolCraftItems.DEEPSLATE_PLATE.get());
-
         tag(ItemTags.TRIMMABLE_ARMOR)
                 .add(JolCraftItems.DEEPSLATE_HELMET.get())
                 .add(JolCraftItems.DEEPSLATE_CHESTPLATE.get())
                 .add(JolCraftItems.DEEPSLATE_LEGGINGS.get())
-                .add(JolCraftItems.DEEPSLATE_BOOTS.get());
+                .add(JolCraftItems.DEEPSLATE_BOOTS.get())
+                .add(JolCraftItems.MITHRIL_HELMET.get())
+                .add(JolCraftItems.MITHRIL_CHESTPLATE.get())
+                .add(JolCraftItems.MITHRIL_LEGGINGS.get())
+                .add(JolCraftItems.MITHRIL_BOOTS.get());
+
+        tag(JolCraftTags.Items.REPAIRS_DEEPSLATE)
+                .add(JolCraftItems.DEEPSLATE_PLATE.get());
+
+        tag(JolCraftTags.Items.REPAIRS_MITHRIL)
+                .add(JolCraftItems.MITHRIL_INGOT.get());
 
         tag(ItemTags.TRIM_MATERIALS)
                 .add(JolCraftItems.DEEPSLATE_PLATE.get())

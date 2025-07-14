@@ -3,6 +3,7 @@ package net.sievert.jolcraft.item.armor;
 import net.minecraft.Util;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.equipment.ArmorMaterial;
 import net.minecraft.world.item.equipment.ArmorType;
 import net.minecraft.world.item.equipment.EquipmentAsset;
@@ -34,6 +35,27 @@ public class JolCraftArmorMaterials {
             JolCraftTags.Items.REPAIRS_DEEPSLATE,
             DEEPSLATE_KEY
     );
+
+    public static final ResourceKey<EquipmentAsset> MITHRIL_KEY =
+            ResourceKey.create(EquipmentAssets.ROOT_ID, ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "mithril"));
+
+    public static final ArmorMaterial MITHRIL_ARMOR_MATERIAL = new ArmorMaterial(
+            100,
+            Util.make(new EnumMap<>(ArmorType.class), attribute -> {
+                attribute.put(ArmorType.BOOTS, 3);
+                attribute.put(ArmorType.LEGGINGS, 6);
+                attribute.put(ArmorType.CHESTPLATE, 8);
+                attribute.put(ArmorType.HELMET, 3);
+                attribute.put(ArmorType.BODY, 11);
+            }),
+            20,
+            SoundEvents.ARMOR_EQUIP_NETHERITE,
+            5.0f,
+            0.0f,
+            JolCraftTags.Items.REPAIRS_MITHRIL,
+            MITHRIL_KEY
+    );
+
 
 
 

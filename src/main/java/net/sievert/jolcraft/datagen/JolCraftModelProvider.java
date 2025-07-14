@@ -95,6 +95,8 @@ public class JolCraftModelProvider extends ModelProvider {
 
         generateTrimmableArmorSetWithCustom(itemModels, "deepslate", JolCraftEquipmentAssets.DEEPSLATE_KEY, false);
 
+        generateTrimmableArmorSetWithCustom(itemModels, "mithril", JolCraftEquipmentAssets.MITHRIL_KEY, false);
+
         generateArmorWithTrim(itemModels, "leather", EquipmentAssets.LEATHER, true);
         generateArmorWithTrim(itemModels, "chainmail", EquipmentAssets.CHAINMAIL, false);
         generateArmorWithTrim(itemModels, "iron", EquipmentAssets.IRON, false);

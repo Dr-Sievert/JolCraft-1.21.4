@@ -40,6 +40,10 @@ public class JolCraftCreativeModeTabs {
                         pOutput.accept(JolCraftItems.PURE_MITHRIL);
                         pOutput.accept(JolCraftItems.MITHRIL_INGOT);
                         pOutput.accept(JolCraftItems.MITHRIL_NUGGET);
+                        pOutput.accept(JolCraftItems.MITHRIL_HELMET);
+                        pOutput.accept(JolCraftItems.MITHRIL_CHESTPLATE);
+                        pOutput.accept(JolCraftItems.MITHRIL_LEGGINGS);
+                        pOutput.accept(JolCraftItems.MITHRIL_BOOTS);
 
                         pOutput.accept(JolCraftItems.MUFFHORN_MILK_BUCKET);
                         pOutput.accept(JolCraftItems.MUFFHORN_FUR);

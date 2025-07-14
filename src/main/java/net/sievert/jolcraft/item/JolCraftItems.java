@@ -15,7 +15,8 @@ import net.sievert.jolcraft.entity.JolCraftEntities;
 import net.minecraft.network.chat.Component;
 import net.sievert.jolcraft.item.armor.JolCraftArmorMaterials;
 import net.sievert.jolcraft.item.custom.*;
-import net.sievert.jolcraft.item.custom.armor.DeepslateArmorItem;
+import net.sievert.jolcraft.item.custom.equipment.armor.DeepslateArmorItem;
+import net.sievert.jolcraft.item.custom.equipment.armor.MithrilArmorItem;
 import net.sievert.jolcraft.item.custom.bounty.BountyCrateItem;
 import net.sievert.jolcraft.item.custom.bounty.BountyItem;
 import net.sievert.jolcraft.item.custom.bounty.ContractItem;
@@ -67,6 +68,18 @@ public class JolCraftItems {
 
     public static final DeferredItem<Item> MITHRIL_NUGGET = ITEMS.registerItem("mithril_nugget",
             Item::new, new Item.Properties().fireResistant());
+
+    public static final DeferredItem<Item> MITHRIL_HELMET = ITEMS.registerItem("mithril_helmet",
+            props -> new MithrilArmorItem(JolCraftArmorMaterials.MITHRIL_ARMOR_MATERIAL, ArmorType.HELMET, props));
+
+    public static final DeferredItem<Item> MITHRIL_CHESTPLATE = ITEMS.registerItem("mithril_chestplate",
+            props -> new MithrilArmorItem(JolCraftArmorMaterials.MITHRIL_ARMOR_MATERIAL, ArmorType.CHESTPLATE, props));
+
+    public static final DeferredItem<Item> MITHRIL_LEGGINGS = ITEMS.registerItem("mithril_leggings",
+            props -> new MithrilArmorItem(JolCraftArmorMaterials.MITHRIL_ARMOR_MATERIAL, ArmorType.LEGGINGS, props));
+
+    public static final DeferredItem<Item> MITHRIL_BOOTS = ITEMS.registerItem("mithril_boots",
+            props -> new MithrilArmorItem(JolCraftArmorMaterials.MITHRIL_ARMOR_MATERIAL, ArmorType.BOOTS, props));
 
 
     public static final DeferredItem<Item> DEEPSLATE_PLATE = ITEMS.registerItem("deepslate_plate",

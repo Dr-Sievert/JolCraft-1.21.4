@@ -1,4 +1,4 @@
-package net.sievert.jolcraft.item.custom.armor;
+package net.sievert.jolcraft.item.custom.equipment.armor;
 
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.component.DataComponents;

@@ -212,6 +212,34 @@ public class JolCraftRecipeProvider extends RecipeProvider {
                 "mithril_ingot_from_pure"
         );
 
+        shaped(RecipeCategory.MISC, JolCraftItems.MITHRIL_HELMET.get())
+                .pattern("BBB")
+                .pattern("B B")
+                .define('B', JolCraftItems.MITHRIL_INGOT.get())
+                .unlockedBy("has_mithril_ingot", has(JolCraftItems.MITHRIL_INGOT.get())).save(output);
+
+        shaped(RecipeCategory.MISC, JolCraftItems.MITHRIL_CHESTPLATE.get())
+                .pattern("B B")
+                .pattern("BBB")
+                .pattern("BBB")
+                .define('B', JolCraftItems.MITHRIL_INGOT.get())
+                .unlockedBy("has_mithril_ingot", has(JolCraftItems.MITHRIL_INGOT.get())).save(output);
+
+        shaped(RecipeCategory.MISC, JolCraftItems.MITHRIL_LEGGINGS.get())
+                .pattern("BBB")
+                .pattern("B B")
+                .pattern("B B")
+                .define('B', JolCraftItems.MITHRIL_INGOT.get())
+                .unlockedBy("has_mithril_ingot", has(JolCraftItems.MITHRIL_INGOT.get())).save(output);
+
+        shaped(RecipeCategory.MISC, JolCraftItems.MITHRIL_BOOTS.get())
+                .pattern("B B")
+                .pattern("B B")
+                .define('B', JolCraftItems.MITHRIL_INGOT.get())
+                .unlockedBy("has_mithril_ingot", has(JolCraftItems.MITHRIL_INGOT.get())).save(output);
+
+
+
 
         shaped(RecipeCategory.MISC, JolCraftItems.DEEPSLATE_PLATE.get())
                 .pattern("BXB")

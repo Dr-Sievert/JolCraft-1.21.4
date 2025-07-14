@@ -1,0 +1,19 @@
+{
+  "layers": {
+    "horse_body": [
+      {
+        "texture": "jolcraft:mithril"
+      }
+    ],
+    "humanoid": [
+      {
+        "texture": "jolcraft:mithril"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "jolcraft:mithril"
+      }
+    ]
+  }
+}
