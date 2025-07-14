@@ -17,6 +17,7 @@
   "item.jolcraft.pure_mithril": "Pure Mithril",
   "item.jolcraft.mithril_ingot": "Mithril Ingot",
   "item.jolcraft.mithril_nugget": "Mithril Nugget",
+  "item.jolcraft.mithril_chainweave": "Mithril Chainweave",
 
   "item.jolcraft.mithril_helmet": "Mithril Helmet",
   "item.jolcraft.mithril_chestplate": "Mithril Chestplate",
@@ -37,7 +38,9 @@
 
   "item.jolcraft.forge_armor_trim_smithing_template": "Forge Armor Trim",
   "trim_pattern.jolcraft.forge": "Forge Armor Trim",
+
   "trim_material.jolcraft.deepslate": "Deepslate",
+  "trim_material.jolcraft.mithril": "Mithril",
 
   "trim_material.jolcraft.aegiscore": "Aegiscore",
   "trim_material.jolcraft.ashfang": "Ashfang",

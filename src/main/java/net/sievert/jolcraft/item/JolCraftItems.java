@@ -69,6 +69,9 @@ public class JolCraftItems {
     public static final DeferredItem<Item> MITHRIL_NUGGET = ITEMS.registerItem("mithril_nugget",
             Item::new, new Item.Properties().fireResistant());
 
+    public static final DeferredItem<Item> MITHRIL_CHAINWEAVE = ITEMS.registerItem("mithril_chainweave",
+            Item::new, new Item.Properties().fireResistant());
+
     public static final DeferredItem<Item> MITHRIL_HELMET = ITEMS.registerItem("mithril_helmet",
             props -> new MithrilArmorItem(JolCraftArmorMaterials.MITHRIL_ARMOR_MATERIAL, ArmorType.HELMET, props));
 

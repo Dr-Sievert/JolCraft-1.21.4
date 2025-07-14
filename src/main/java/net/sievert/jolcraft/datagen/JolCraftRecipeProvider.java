@@ -212,24 +212,39 @@ public class JolCraftRecipeProvider extends RecipeProvider {
                 "mithril_ingot_from_pure"
         );
 
+        shaped(RecipeCategory.MISC, JolCraftItems.MITHRIL_CHAINWEAVE.get())
+                .pattern("BB")
+                .pattern("BB")
+                .pattern("BB")
+                .define('B', JolCraftItems.MITHRIL_NUGGET.get())
+                .unlockedBy("has_mithril_ingot", has(JolCraftItems.MITHRIL_INGOT.get())).save(output);
+
+        shapeless(RecipeCategory.MISC, JolCraftItems.MITHRIL_NUGGET.get(), 6)
+                .requires(JolCraftItems.MITHRIL_CHAINWEAVE.get())
+                .unlockedBy("has_mithril_nugget", has(JolCraftItems.MITHRIL_NUGGET.get()))
+                .save(output, "mithril_nuggets_from_chainweave");
+
         shaped(RecipeCategory.MISC, JolCraftItems.MITHRIL_HELMET.get())
                 .pattern("BBB")
-                .pattern("B B")
+                .pattern("X X")
                 .define('B', JolCraftItems.MITHRIL_INGOT.get())
+                .define('X', JolCraftItems.MITHRIL_CHAINWEAVE.get())
                 .unlockedBy("has_mithril_ingot", has(JolCraftItems.MITHRIL_INGOT.get())).save(output);
 
         shaped(RecipeCategory.MISC, JolCraftItems.MITHRIL_CHESTPLATE.get())
                 .pattern("B B")
-                .pattern("BBB")
-                .pattern("BBB")
+                .pattern("XXX")
+                .pattern("XXX")
                 .define('B', JolCraftItems.MITHRIL_INGOT.get())
+                .define('X', JolCraftItems.MITHRIL_CHAINWEAVE.get())
                 .unlockedBy("has_mithril_ingot", has(JolCraftItems.MITHRIL_INGOT.get())).save(output);
 
         shaped(RecipeCategory.MISC, JolCraftItems.MITHRIL_LEGGINGS.get())
                 .pattern("BBB")
-                .pattern("B B")
-                .pattern("B B")
+                .pattern("X X")
+                .pattern("X X")
                 .define('B', JolCraftItems.MITHRIL_INGOT.get())
+                .define('X', JolCraftItems.MITHRIL_CHAINWEAVE.get())
                 .unlockedBy("has_mithril_ingot", has(JolCraftItems.MITHRIL_INGOT.get())).save(output);
 
         shaped(RecipeCategory.MISC, JolCraftItems.MITHRIL_BOOTS.get())

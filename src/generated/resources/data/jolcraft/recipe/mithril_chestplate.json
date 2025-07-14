@@ -2,12 +2,13 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "B": "jolcraft:mithril_ingot"
+    "B": "jolcraft:mithril_ingot",
+    "X": "jolcraft:mithril_chainweave"
   },
   "pattern": [
     "B B",
-    "BBB",
-    "BBB"
+    "XXX",
+    "XXX"
   ],
   "result": {
     "count": 1,
