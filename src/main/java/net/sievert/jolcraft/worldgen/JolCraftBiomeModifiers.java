@@ -1,22 +1,17 @@
 package net.sievert.jolcraft.worldgen;
 
-import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BiomeTags;
-import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.neoforged.neoforge.common.world.BiomeModifier;
 import net.neoforged.neoforge.common.world.BiomeModifiers;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import net.sievert.jolcraft.JolCraft;
-import net.sievert.jolcraft.util.JolCraftTags;
-
-import java.util.ArrayList;
-import java.util.List;
+import net.sievert.jolcraft.data.JolCraftTags;
 
 public class JolCraftBiomeModifiers {
 

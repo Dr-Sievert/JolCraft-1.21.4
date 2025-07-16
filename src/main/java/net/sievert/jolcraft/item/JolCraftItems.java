@@ -10,6 +10,7 @@ import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.block.JolCraftBlocks;
+import net.sievert.jolcraft.data.JolCraftDataComponents;
 import net.sievert.jolcraft.entity.JolCraftEntities;
 import net.sievert.jolcraft.item.armor.JolCraftArmorMaterials;
 import net.sievert.jolcraft.item.custom.*;
@@ -36,6 +37,13 @@ public class JolCraftItems {
 
     public static final DeferredItem<Item> GOLD_COIN = ITEMS.registerItem("gold_coin",
             Item::new, new Item.Properties().rarity(Rarity.UNCOMMON));
+
+    public static final DeferredItem<Item> COIN_POUCH = ITEMS.registerItem(
+            "coin_pouch",
+            CoinPouchItem::new,
+            new Item.Properties()
+                    .stacksTo(1)
+    );
 
     public static final DeferredItem<Item> DWARVEN_LEXICON =
             ITEMS.registerItem("dwarven_lexicon", DwarvenLexiconItem::new,

@@ -5,7 +5,7 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.BiomeTagsProvider;
 import net.minecraft.tags.BiomeTags;
 import net.sievert.jolcraft.JolCraft;
-import net.sievert.jolcraft.util.JolCraftTags;
+import net.sievert.jolcraft.data.JolCraftTags;
 
 import java.util.concurrent.CompletableFuture;
 

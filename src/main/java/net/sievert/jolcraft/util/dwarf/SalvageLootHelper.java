@@ -3,7 +3,7 @@ package net.sievert.jolcraft.util.dwarf;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.sievert.jolcraft.item.JolCraftItems;
-import net.sievert.jolcraft.util.JolCraftTags;
+import net.sievert.jolcraft.data.JolCraftTags;
 
 import java.util.ArrayList;
 import java.util.List;

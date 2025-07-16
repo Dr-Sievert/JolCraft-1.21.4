@@ -185,5 +185,39 @@
       }
     ],
     "subtitle": "sounds.jolcraft.strongbox_unlock"
+  },
+  "coin_stack": {
+    "sounds": [
+      {
+        "name": "jolcraft:item/coin/coin_stack1"
+      },
+      {
+        "name": "jolcraft:item/coin/coin_stack2"
+      },
+      {
+        "name": "jolcraft:item/coin/coin_stack3"
+      },
+      {
+        "name": "jolcraft:item/coin/coin_stack4"
+      }
+    ],
+    "subtitle": "sounds.jolcraft.coin_stack"
+  },
+  "coin_single": {
+    "sounds": [
+      {
+        "name": "jolcraft:item/coin/coin_single1"
+      },
+      {
+        "name": "jolcraft:item/coin/coin_single2"
+      },
+      {
+        "name": "jolcraft:item/coin/coin_single3"
+      },
+      {
+        "name": "jolcraft:item/coin/coin_single4"
+      }
+    ],
+    "subtitle": "sounds.jolcraft.coin_single"
   }
 }

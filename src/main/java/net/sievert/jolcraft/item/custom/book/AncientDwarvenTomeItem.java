@@ -4,8 +4,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.sievert.jolcraft.component.JolCraftDataComponents;
-import net.sievert.jolcraft.util.lore.DwarvenLoreHelper;
+import net.sievert.jolcraft.data.JolCraftDataComponents;
+import net.sievert.jolcraft.util.dwarf.DwarvenLoreHelper;
 import net.minecraft.ChatFormatting;
 import net.sievert.jolcraft.item.custom.AncientItemBase;
 

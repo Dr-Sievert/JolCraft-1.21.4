@@ -11,7 +11,8 @@ import net.sievert.jolcraft.block.JolCraftBlocks;
 import net.sievert.jolcraft.block.custom.FermentingCauldronBlock;
 import net.sievert.jolcraft.block.custom.FermentingStage;
 import net.sievert.jolcraft.block.custom.crop.HopsType;
-import net.sievert.jolcraft.util.lore.LoreLineIdProperty;
+import net.sievert.jolcraft.util.component.CoinPouchAmountProperty;
+import net.sievert.jolcraft.util.component.LoreLineIdProperty;
 
 @EventBusSubscriber(modid = JolCraft.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class JolCraftClientEvents {
@@ -21,6 +22,10 @@ public class JolCraftClientEvents {
         event.register(
                 ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "lore_line_id"),
                 LoreLineIdProperty.TYPE
+        );
+        event.register(
+                CoinPouchAmountProperty.KEY,
+                CoinPouchAmountProperty.TYPE
         );
     }
 

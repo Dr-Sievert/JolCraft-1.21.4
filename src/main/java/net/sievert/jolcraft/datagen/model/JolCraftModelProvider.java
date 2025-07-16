@@ -36,8 +36,9 @@ import net.sievert.jolcraft.item.armor.JolCraftEquipmentAssets;
 import net.sievert.jolcraft.item.JolCraftItems;
 import net.sievert.jolcraft.item.trim.JolCraftTrimMaterials;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.sievert.jolcraft.util.lore.DwarvenLoreHelper;
-import net.sievert.jolcraft.util.lore.LoreLineIdProperty;
+import net.sievert.jolcraft.util.component.CoinPouchAmountProperty;
+import net.sievert.jolcraft.util.dwarf.DwarvenLoreHelper;
+import net.sievert.jolcraft.util.component.LoreLineIdProperty;
 
 import java.util.*;
 import java.util.stream.Stream;
@@ -57,6 +58,7 @@ public class JolCraftModelProvider extends ModelProvider {
         //Core
         itemModels.generateFlatItem(JolCraftItems.DEV_KEY.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(JolCraftItems.GOLD_COIN.get(), ModelTemplates.FLAT_ITEM);
+        generateCoinPouchModel(itemModels);
         itemModels.generateFlatItem(JolCraftItems.DWARVEN_LEXICON.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(JolCraftItems.ANCIENT_DWARVEN_LEXICON.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(JolCraftItems.PARCHMENT.get(), ModelTemplates.FLAT_ITEM);
@@ -412,6 +414,37 @@ public class JolCraftModelProvider extends ModelProvider {
 
             // Add more trims as you implement them!
     );
+
+    private void generateCoinPouchModel(ItemModelGenerators itemModels) {
+        Item pouch = JolCraftItems.COIN_POUCH.get();
+        ResourceLocation baseModelLoc = ModelLocationUtils.getModelLocation(pouch);
+
+        // Register base models for each stage
+        ResourceLocation small = ResourceLocation.fromNamespaceAndPath("jolcraft", "item/coin_pouch_small");
+        ResourceLocation large = ResourceLocation.fromNamespaceAndPath("jolcraft", "item/coin_pouch_large");
+        ResourceLocation full  = ResourceLocation.fromNamespaceAndPath("jolcraft", "item/coin_pouch_full");
+
+        ModelTemplates.FLAT_ITEM.create(small, TextureMapping.layer0(small), itemModels.modelOutput);
+        ModelTemplates.FLAT_ITEM.create(large,  TextureMapping.layer0(large),  itemModels.modelOutput);
+        ModelTemplates.FLAT_ITEM.create(full,  TextureMapping.layer0(full),  itemModels.modelOutput);
+
+        // Set up model switch cases
+        List<SelectItemModel.SwitchCase<Integer>> cases = List.of(
+                ItemModelUtils.when(0,   ItemModelUtils.plainModel(small)),
+                ItemModelUtils.when(1,   ItemModelUtils.plainModel(large)),
+                ItemModelUtils.when(2,   ItemModelUtils.plainModel(full))
+        );
+
+        // Fallback is empty
+        itemModels.itemModelOutput.accept(
+                pouch,
+                new SelectItemModel.Unbaked(
+                        new SelectItemModel.UnbakedSwitch<>(CoinPouchAmountProperty.INSTANCE, cases),
+                        Optional.of(ItemModelUtils.plainModel(small))
+                )
+        );
+    }
+
 
     //Custom Helpers!!
     public void generateLegendaryTomeModels(ItemModelGenerators itemModels) {

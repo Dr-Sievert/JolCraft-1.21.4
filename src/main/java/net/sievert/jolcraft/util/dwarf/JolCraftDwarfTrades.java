@@ -25,7 +25,7 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.saveddata.maps.MapDecorationType;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
 import net.sievert.jolcraft.item.JolCraftItems;
-import net.sievert.jolcraft.util.bounty.BountyHelper;
+import net.sievert.jolcraft.util.dwarf.bounty.BountyHelper;
 
 import javax.annotation.Nullable;
 import java.util.Optional;

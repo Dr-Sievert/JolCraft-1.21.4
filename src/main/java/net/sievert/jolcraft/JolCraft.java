@@ -10,12 +10,15 @@ import net.minecraft.sounds.SoundEvents;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.sievert.jolcraft.advancement.JolCraftCriteriaTriggers;
 import net.sievert.jolcraft.block.JolCraftBlocks;
 import net.sievert.jolcraft.block.entity.JolCraftBlockEntities;
-import net.sievert.jolcraft.attachment.JolCraftAttachments;
-import net.sievert.jolcraft.component.JolCraftDataComponents;
+import net.sievert.jolcraft.client.CoinPouchTooltipRenderer;
+import net.sievert.jolcraft.data.JolCraftAttachments;
+import net.sievert.jolcraft.data.JolCraftDataComponents;
+import net.sievert.jolcraft.data.custom.item.CoinPouchTooltip;
 import net.sievert.jolcraft.effect.JolCraftEffects;
 import net.sievert.jolcraft.entity.JolCraftEntities;
 import net.sievert.jolcraft.entity.client.render.animal.MuffhornRenderer;
@@ -33,7 +36,7 @@ import net.sievert.jolcraft.screen.custom.strongbox.LockMenu;
 import net.sievert.jolcraft.screen.custom.strongbox.LockScreen;
 import net.sievert.jolcraft.screen.custom.strongbox.StrongboxScreen;
 import net.sievert.jolcraft.sound.JolCraftSounds;
-import net.sievert.jolcraft.util.ServerTickHandler;
+import net.sievert.jolcraft.util.random.ServerTickHandler;
 import net.sievert.jolcraft.worldgen.JolCraftBlockPredicateTypes;
 import net.sievert.jolcraft.worldgen.processor.JolCraftProcessors;
 import net.sievert.jolcraft.worldgen.structure.JolCraftStructures;
@@ -153,6 +156,14 @@ public class JolCraft
         public static void registerScreens(RegisterMenuScreensEvent event) {
             event.register(JolCraftMenuTypes.STRONGBOX_MENU.get(), StrongboxScreen::new);
             event.register(JolCraftMenuTypes.LOCK_MENU.get(), LockScreen::new);
+        }
+
+        @SubscribeEvent
+        public static void registerTooltipFactories(RegisterClientTooltipComponentFactoriesEvent event) {
+            event.register(
+                    CoinPouchTooltip.class,
+                    CoinPouchTooltipRenderer::new
+            );
         }
 
         @SubscribeEvent

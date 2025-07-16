@@ -29,7 +29,11 @@ public class JolCraftSounds {
     public static final Supplier<SoundEvent> STRONGBOX_LOCKPICK_BREAK = registerSoundEvent("strongbox_lockpick_break");
     public static final Supplier<SoundEvent> STRONGBOX_UNLOCK = registerSoundEvent("strongbox_unlock");
 
-    //Dwarf
+    //Items
+    public static final Supplier<SoundEvent> COIN_STACK = registerSoundEvent("coin_stack");
+    public static final Supplier<SoundEvent> COIN_SINGLE = registerSoundEvent("coin_single");
+
+    //Entity
     public static final Supplier<SoundEvent> DWARF_AMBIENT = registerSoundEvent("dwarf_ambient");
     public static final Supplier<SoundEvent> DWARF_HURT = registerSoundEvent("dwarf_hurt");
     public static final Supplier<SoundEvent> DWARF_DEATH = registerSoundEvent("dwarf_death");

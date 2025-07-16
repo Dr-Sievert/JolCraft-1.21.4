@@ -4,7 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.sievert.jolcraft.attachment.custom.lang.AncientDwarvenLanguage;
+import net.sievert.jolcraft.data.custom.lang.AncientDwarvenLanguage;
 import net.sievert.jolcraft.network.client.data.MyClientAncientLanguageData;
 
 public class AncientDwarvenLanguageHelper {

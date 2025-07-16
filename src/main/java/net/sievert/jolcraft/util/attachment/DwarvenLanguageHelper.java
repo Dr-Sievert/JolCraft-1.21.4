@@ -2,7 +2,7 @@ package net.sievert.jolcraft.util.attachment;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
-import net.sievert.jolcraft.attachment.custom.lang.DwarvenLanguage;
+import net.sievert.jolcraft.data.custom.lang.DwarvenLanguage;
 import net.sievert.jolcraft.network.client.data.MyClientLanguageData;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;

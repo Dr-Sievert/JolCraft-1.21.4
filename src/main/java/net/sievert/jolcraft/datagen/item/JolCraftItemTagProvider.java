@@ -7,7 +7,7 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.sievert.jolcraft.JolCraft;
-import net.sievert.jolcraft.util.JolCraftTags;
+import net.sievert.jolcraft.data.JolCraftTags;
 import net.sievert.jolcraft.item.JolCraftItems;
 
 import java.util.concurrent.CompletableFuture;
@@ -55,10 +55,6 @@ public class JolCraftItemTagProvider extends ItemTagsProvider {
                 .add(Items.FLINT_AND_STEEL)
                 .add(Items.SHIELD)
                 .add(Items.FILLED_MAP)
-                .add(Items.CHAINMAIL_HELMET)
-                .add(Items.CHAINMAIL_CHESTPLATE)
-                .add(Items.CHAINMAIL_LEGGINGS)
-                .add(Items.CHAINMAIL_BOOTS)
                 .add(JolCraftItems.EXPIRED_POTION.get());
 
         tag(JolCraftTags.Items.DEEPSLATE_SALVAGE)
@@ -73,6 +69,7 @@ public class JolCraftItemTagProvider extends ItemTagsProvider {
                 .add(Items.LEATHER_CHESTPLATE)
                 .add(Items.LEATHER_LEGGINGS)
                 .add(Items.LEATHER_BOOTS)
+                .add(Items.LEATHER_HORSE_ARMOR)
                 .add(JolCraftItems.OLD_FABRIC.get());
 
         tag(JolCraftTags.Items.REDSTONE_SALVAGE)
@@ -91,6 +88,10 @@ public class JolCraftItemTagProvider extends ItemTagsProvider {
                 .add(Items.IRON_CHESTPLATE)
                 .add(Items.IRON_LEGGINGS)
                 .add(Items.IRON_BOOTS)
+                .add(Items.CHAINMAIL_HELMET)
+                .add(Items.CHAINMAIL_CHESTPLATE)
+                .add(Items.CHAINMAIL_LEGGINGS)
+                .add(Items.CHAINMAIL_BOOTS)
                 .add(Items.IRON_HORSE_ARMOR)
                 .add(Items.SHEARS)
                 .add(JolCraftItems.BROKEN_PICKAXE.get())

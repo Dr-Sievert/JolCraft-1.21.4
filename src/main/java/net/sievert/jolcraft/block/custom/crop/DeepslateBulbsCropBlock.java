@@ -18,7 +18,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.common.util.TriState;
 import net.sievert.jolcraft.block.JolCraftBlocks;
 import net.sievert.jolcraft.item.JolCraftItems;
-import net.sievert.jolcraft.util.JolCraftTags;
+import net.sievert.jolcraft.data.JolCraftTags;
 
 public class DeepslateBulbsCropBlock extends CropBlock {
     public static final int MAX_AGE = 9;

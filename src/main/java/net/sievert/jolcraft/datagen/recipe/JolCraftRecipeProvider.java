@@ -14,7 +14,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Blocks;
 import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.block.JolCraftBlocks;
-import net.sievert.jolcraft.util.JolCraftTags;
+import net.sievert.jolcraft.data.JolCraftTags;
 import net.sievert.jolcraft.item.JolCraftItems;
 
 import java.util.List;
@@ -45,7 +45,13 @@ public class JolCraftRecipeProvider extends RecipeProvider {
     @Override
     protected void buildRecipes() {
 
-        // Example call in your DataGen recipe provider
+        shaped(RecipeCategory.MISC, JolCraftItems.COIN_POUCH.get())
+                .pattern("XBX")
+                .pattern("B B")
+                .pattern("BBB")
+                .define('B', Items.LEATHER)
+                .define('X', Items.STRING)
+                .unlockedBy("has_gold_coin", has(JolCraftItems.GOLD_COIN.get())).save(output);
 
         shaped(RecipeCategory.MISC, JolCraftBlocks.MUFFHORN_FUR_BLOCK.get())
                 .pattern("BB")

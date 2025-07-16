@@ -3,7 +3,7 @@ package net.sievert.jolcraft.item.tool;
 
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.ToolMaterial;
-import net.sievert.jolcraft.util.JolCraftTags;
+import net.sievert.jolcraft.data.JolCraftTags;
 
 public class JolCraftToolMaterials {
 

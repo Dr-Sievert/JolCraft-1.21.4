@@ -1,4 +1,5 @@
-// 1.21.4	2025-07-15T02:33:27.6862352	JolCraft Recipes
+// 1.21.4	2025-07-16T20:18:53.0455663	JolCraft Recipes
+04e9c8abc9aba046353f0d827e66df7ef0e8d971 data/jolcraft/advancement/recipes/misc/coin_pouch.json
 1df426c9e91766cc2bbbb8c25ed899f5c1980ed8 data/jolcraft/advancement/recipes/misc/contract_blank.json
 63834c714e4e2f7e8e9b71d845d808a0b5084060 data/jolcraft/advancement/recipes/misc/contract_guildmaster.json
 ada4a17760326ccc90beda85717afe773cd6dd4d data/jolcraft/advancement/recipes/misc/contract_written.json
@@ -30,6 +31,7 @@ b99ba9ea5f08b2061a1bc40ab7f9425d96c74912 data/jolcraft/advancement/recipes/misc/
 4956c68ef9258b5fb187576078f47d1df0ee820c data/jolcraft/advancement/recipes/misc/strongbox.json
 43806d02aa2f2db43e2823c123de74aa1c8d073e data/jolcraft/advancement/recipes/misc/verdant_dust.json
 7e31d8a55c1e5bd5c441bb19e3e3882f26518644 data/jolcraft/advancement/recipes/misc/verdant_soil.json
+3488df1a8395f42e6b65d07807e569b41ee7f57d data/jolcraft/recipe/coin_pouch.json
 767322b4f2c276b601c629aba9036561e609c594 data/jolcraft/recipe/contract_blank.json
 a24e95518f3bc666e6220f72e4102643b07b021b data/jolcraft/recipe/contract_guildmaster.json
 8d74eb5de1c608461375e0aa24d385430635d6b0 data/jolcraft/recipe/contract_written.json

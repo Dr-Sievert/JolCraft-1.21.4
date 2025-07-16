@@ -9,11 +9,11 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.sievert.jolcraft.component.JolCraftDataComponents;
+import net.sievert.jolcraft.data.JolCraftDataComponents;
 import net.sievert.jolcraft.item.JolCraftItems;
 import net.sievert.jolcraft.item.custom.UnidentifiedItem;
 import net.sievert.jolcraft.util.attachment.DwarvenLanguageHelper;
-import net.sievert.jolcraft.util.lore.DwarvenLoreHelper;
+import net.sievert.jolcraft.util.dwarf.DwarvenLoreHelper;
 
 public class UnidentifiedDwarvenTomeItem extends UnidentifiedItem {
     public UnidentifiedDwarvenTomeItem(Properties properties) {

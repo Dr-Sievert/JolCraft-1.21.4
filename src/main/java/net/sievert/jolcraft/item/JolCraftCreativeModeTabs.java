@@ -29,6 +29,7 @@ public class JolCraftCreativeModeTabs {
                         pOutput.accept(JolCraftItems.DWARVEN_LEXICON);
                         pOutput.accept(JolCraftItems.ANCIENT_DWARVEN_LEXICON);
                         pOutput.accept(JolCraftItems.GOLD_COIN);
+                        pOutput.accept(JolCraftItems.COIN_POUCH);
                         pOutput.accept(JolCraftBlocks.HEARTH);
                         pOutput.accept(JolCraftItems.STRONGBOX_ITEM);
                         pOutput.accept(JolCraftItems.LOCKPICK);
