@@ -101,15 +101,24 @@ public class DwarfScrapperEntity extends AbstractDwarfEntity {
 
     // Salvage pool (full pool for randomization)
     public static final VillagerTrades.ItemListing[] SALVAGE_POOL = new VillagerTrades.ItemListing[] {
-            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.DEEPSLATE_MUG.get(), 1, 5, 3, 1, 5),
-            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.EXPIRED_POTION.get(), 1, 5, 3, 1, 5),
-            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.OLD_FABRIC.get(), 1, 5, 3, 1, 5),
-            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.BROKEN_PICKAXE.get(), 1, 5, 3, 1, 5),
-            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.BROKEN_AMULET.get(), 1, 5, 3, 1, 5),
-            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.BROKEN_BELT.get(), 1, 5, 3, 1, 5),
-            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.BROKEN_COINS.get(), 1, 5, 3, 1, 5),
-            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.RUSTY_TONGS.get(), 1, 5, 3, 1, 5),
-            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.INGOT_MOULD.get(), 1, 5, 3, 1, 5)
+            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.EXPIRED_POTION.get(), 1, 5, 3, 1, 3),
+            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.OLD_FABRIC.get(), 1, 5, 3, 1, 3),
+            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.BROKEN_PICKAXE.get(), 1, 5, 3, 1, 4),
+            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.BROKEN_AMULET.get(), 1, 5, 3, 1, 4),
+            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.BROKEN_BELT.get(), 1, 5, 3, 1, 4),
+            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.BROKEN_COINS.get(), 1, 5, 3, 1, 4),
+            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.RUSTY_TONGS.get(), 1, 5, 3, 1, 4),
+            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.INGOT_MOULD.get(), 1, 5, 3, 1, 4),
+            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.DEEPSLATE_MUG.get(), 1, 5, 3, 3, 5),
+            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.BROKEN_TABLET.get(), 1, 5, 3, 3, 5),
+            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.BROKEN_DEEPSLATE_PICKAXE_HEAD.get(), 1, 5, 3, 3, 5),
+            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.BROKEN_DEEPSLATE_GEAR.get(), 1, 5, 3, 3, 5),
+            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.BROKEN_DEEPSLATE_PLATES.get(), 1, 5, 3, 3, 5),
+            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.BROKEN_DEEPSLATE_PICKAXE_HEAD.get(), 1, 5, 3, 1, 5),
+            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.MITHRIL_SALVAGE.get(), 1, 5, 3, 5, 10),
+            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.BROKEN_MITHRIL_PLATE.get(), 1, 5, 3, 5, 10),
+            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.BROKEN_MITHRIL_SWORD.get(), 1, 5, 3, 5, 10)
+
     };
 
     @Override

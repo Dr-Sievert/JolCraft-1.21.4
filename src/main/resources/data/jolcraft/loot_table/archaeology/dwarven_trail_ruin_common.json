@@ -11,7 +11,7 @@
         },
         {
           "type": "minecraft:loot_table",
-          "value": "jolcraft:chests/scrap",
+          "value": "jolcraft:chests/salvage",
           "weight": 6
         }
       ],

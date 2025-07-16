@@ -34,6 +34,7 @@ import net.sievert.jolcraft.screen.custom.strongbox.LockScreen;
 import net.sievert.jolcraft.screen.custom.strongbox.StrongboxScreen;
 import net.sievert.jolcraft.sound.JolCraftSounds;
 import net.sievert.jolcraft.util.ServerTickHandler;
+import net.sievert.jolcraft.worldgen.JolCraftBlockPredicateTypes;
 import net.sievert.jolcraft.worldgen.processor.JolCraftProcessors;
 import net.sievert.jolcraft.worldgen.structure.JolCraftStructures;
 import org.slf4j.Logger;
@@ -79,6 +80,7 @@ public class JolCraft
         JolCraftEffects.register(modEventBus);
         JolCraftPotions.register(modEventBus);
         JolCraftProcessors.register(modEventBus);
+        JolCraftBlockPredicateTypes.register(modEventBus);
         JolCraftAttachments.register(modEventBus);
         JolCraftEquipmentAssets.register(modEventBus);
         JolCraftStructures.DEFERRED_REGISTRY_STRUCTURE.register(modEventBus);

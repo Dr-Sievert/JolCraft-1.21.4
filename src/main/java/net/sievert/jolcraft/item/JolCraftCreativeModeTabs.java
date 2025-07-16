@@ -158,19 +158,24 @@ public class JolCraftCreativeModeTabs {
 
                         pOutput.accept(JolCraftItems.COPPER_SPANNER);
                         pOutput.accept(JolCraftItems.IRON_SPANNER);
-
                         pOutput.accept(JolCraftItems.SCRAP);
                         pOutput.accept(JolCraftItems.SCRAP_HEAP);
+                        pOutput.accept(JolCraftItems.EXPIRED_POTION);
+                        pOutput.accept(JolCraftItems.OLD_FABRIC);
                         pOutput.accept(JolCraftItems.BROKEN_PICKAXE);
                         pOutput.accept(JolCraftItems.BROKEN_AMULET);
+                        pOutput.accept(JolCraftItems.RUSTY_TONGS);
+                        pOutput.accept(JolCraftItems.INGOT_MOULD);
+                        pOutput.accept(JolCraftItems.DEEPSLATE_MUG);
+                        pOutput.accept(JolCraftItems.BROKEN_TABLET);
+                        pOutput.accept(JolCraftItems.BROKEN_DEEPSLATE_PLATES);
+                        pOutput.accept(JolCraftItems.BROKEN_DEEPSLATE_PICKAXE_HEAD);
+                        pOutput.accept(JolCraftItems.BROKEN_DEEPSLATE_GEAR);
                         pOutput.accept(JolCraftItems.BROKEN_BELT);
                         pOutput.accept(JolCraftItems.BROKEN_COINS);
-                        pOutput.accept(JolCraftItems.DEEPSLATE_MUG);
-                        pOutput.accept(JolCraftItems.EXPIRED_POTION);
-                        pOutput.accept(JolCraftItems.INGOT_MOULD);
                         pOutput.accept(JolCraftItems.MITHRIL_SALVAGE);
-                        pOutput.accept(JolCraftItems.OLD_FABRIC);
-                        pOutput.accept(JolCraftItems.RUSTY_TONGS);
+                        pOutput.accept(JolCraftItems.BROKEN_MITHRIL_PLATE);
+                        pOutput.accept(JolCraftItems.BROKEN_MITHRIL_SWORD);
 
                     }).build());
 

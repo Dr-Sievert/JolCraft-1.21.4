@@ -8,7 +8,6 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.structure.Structure;
-import net.minecraft.world.level.material.Fluid;
 import net.sievert.jolcraft.JolCraft;
 
 import static net.sievert.jolcraft.JolCraft.locate;
@@ -40,13 +39,14 @@ public class JolCraftTags {
         public static final TagKey<Item> LEGENDARY_ITEMS = createTag("legendary_items");
 
         //Scrap
-        public static final TagKey<Item> GLOBAL_SCRAP = createTag("global_scrap");
-        public static final TagKey<Item> GENERAL_SCRAP = createTag("general_scrap");
-        public static final TagKey<Item> TEXTILE_SCRAP = createTag("textile_scrap");
-        public static final TagKey<Item> REDSTONE_SCRAP = createTag("redstone_scrap");
-        public static final TagKey<Item> IRON_SCRAP = createTag("iron_scrap");
-        public static final TagKey<Item> GOLD_SCRAP = createTag("gold_scrap");
-        public static final TagKey<Item> MITHRIL_SCRAP = createTag("mithril_scrap");
+        public static final TagKey<Item> GLOBAL_SALVAGE = createTag("global_salvage");
+        public static final TagKey<Item> GENERAL_SALVAGE = createTag("general_salvage");
+        public static final TagKey<Item> DEEPSLATE_SALVAGE = createTag("general_salvage");
+        public static final TagKey<Item> TEXTILE_SALVAGE = createTag("textile_salvage");
+        public static final TagKey<Item> REDSTONE_SALVAGE = createTag("redstone_salvage");
+        public static final TagKey<Item> IRON_SALVAGE = createTag("iron_salvage");
+        public static final TagKey<Item> GOLD_SALVAGE = createTag("gold_salvage");
+        public static final TagKey<Item> MITHRIL_SALVAGE = createTag("mithril_salvage");
 
         private static TagKey<Item> createTag(String name) {
             return ItemTags.create(ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, name));
@@ -74,6 +74,14 @@ public class JolCraftTags {
 
         private static TagKey<Structure> create(String name) {
             return TagKey.create(Registries.STRUCTURE, locate(name));
+        }
+    }
+
+    public final class Biomes {
+        public static final TagKey<net.minecraft.world.level.biome.Biome> MOUNTAINS_AND_HILLS = create("mountains_and_hills");
+
+        private static TagKey<net.minecraft.world.level.biome.Biome> create(String name) {
+            return TagKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, name));
         }
     }
 

@@ -1,4 +1,4 @@
-package net.sievert.jolcraft.util.random;
+package net.sievert.jolcraft.util.dwarf;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -13,19 +13,19 @@ public class SalvageLootHelper {
 
     private static final Random RANDOM = new Random();
 
-    public static List<ItemStack> generateSalvageLoot(ItemStack scrapItem) {
+    public static List<ItemStack> generateSalvageLoot(ItemStack salvageItem) {
         List<ItemStack> loot = new ArrayList<>();
 
         // Always give base scrap
         loot.add(new ItemStack(JolCraftItems.SCRAP.get()));
 
-        // --- GENERAL SCRAP ---
-        if (scrapItem.is(JolCraftTags.Items.GENERAL_SCRAP)) {
+        // --- GENERAL SALVAGE ---
+        if (salvageItem.is(JolCraftTags.Items.GENERAL_SALVAGE)) {
            return loot;
         }
 
-        // --- TEXTILE SCRAP ---
-        if (scrapItem.is(JolCraftTags.Items.TEXTILE_SCRAP)) {
+        // --- TEXTILE SALVAGE ---
+        if (salvageItem.is(JolCraftTags.Items.TEXTILE_SALVAGE)) {
             loot.add(new ItemStack(JolCraftItems.SCRAP.get(), 1 + RANDOM.nextInt(2)));
             if (RANDOM.nextFloat() < 0.35f)
                 loot.add(new ItemStack(Items.STRING));
@@ -33,8 +33,8 @@ public class SalvageLootHelper {
                 loot.add(new ItemStack(Items.LEATHER));
         }
 
-        // --- REDSTONE SCRAP ---
-        if (scrapItem.is(JolCraftTags.Items.REDSTONE_SCRAP)) {
+        // --- REDSTONE SALVAGE ---
+        if (salvageItem.is(JolCraftTags.Items.REDSTONE_SALVAGE)) {
             loot.add(new ItemStack(JolCraftItems.SCRAP.get(), 1 + RANDOM.nextInt(3)));
             if (RANDOM.nextFloat() < 0.30f)
                 loot.add(new ItemStack(Items.REDSTONE));
@@ -42,8 +42,8 @@ public class SalvageLootHelper {
                 loot.add(new ItemStack(JolCraftItems.SCRAP_HEAP.get()));
         }
 
-        // --- IRON SCRAP ---
-        if (scrapItem.is(JolCraftTags.Items.IRON_SCRAP)) {
+        // --- IRON SALVAGE ---
+        if (salvageItem.is(JolCraftTags.Items.IRON_SALVAGE)) {
             loot.add(new ItemStack(JolCraftItems.SCRAP.get(), 1 + RANDOM.nextInt(4)));
             if (RANDOM.nextFloat() < 0.50f)
                 loot.add(new ItemStack(Items.IRON_NUGGET, 2 + RANDOM.nextInt(3)));
@@ -53,8 +53,16 @@ public class SalvageLootHelper {
                 loot.add(new ItemStack(JolCraftItems.SCRAP_HEAP.get()));
         }
 
-        // --- GOLD SCRAP ---
-        if (scrapItem.is(JolCraftTags.Items.GOLD_SCRAP)) {
+
+        // --- DEEPSLATE SALVAGE ---
+        if (salvageItem.is(JolCraftTags.Items.TEXTILE_SALVAGE)) {
+            loot.add(new ItemStack(JolCraftItems.SCRAP.get(), 1 + RANDOM.nextInt(4)));
+            if (RANDOM.nextFloat() < 0.15f)
+                loot.add(new ItemStack(JolCraftItems.DEEPSLATE_PLATE.get()));
+        }
+
+        // --- GOLD SALVAGE ---
+        if (salvageItem.is(JolCraftTags.Items.GOLD_SALVAGE)) {
             loot.add(new ItemStack(JolCraftItems.SCRAP.get(), 1 + RANDOM.nextInt(5)));
             if (RANDOM.nextFloat() < 0.50f)
                 loot.add(new ItemStack(Items.GOLD_NUGGET, 2 + RANDOM.nextInt(3)));
@@ -64,11 +72,13 @@ public class SalvageLootHelper {
                 loot.add(new ItemStack(JolCraftItems.SCRAP_HEAP.get()));
         }
 
-        // --- MITHRIL SCRAP ---
-        if (scrapItem.is(JolCraftTags.Items.MITHRIL_SCRAP)) {
+        // --- MITHRIL SALVAGE ---
+        if (salvageItem.is(JolCraftTags.Items.MITHRIL_SALVAGE)) {
             loot.add(new ItemStack(JolCraftItems.SCRAP.get(), 1 + RANDOM.nextInt(10)));
             if (RANDOM.nextFloat() < 0.3f)
                 loot.add(new ItemStack(JolCraftItems.SCRAP_HEAP.get()));
+            if (RANDOM.nextFloat() < 0.15f)
+                loot.add(new ItemStack(JolCraftItems.MITHRIL_NUGGET.get(), 1 + RANDOM.nextInt(4)));
         }
 
         return loot;

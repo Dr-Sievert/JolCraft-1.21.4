@@ -1,6 +1,5 @@
 package net.sievert.jolcraft.item;
 
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.Consumables;
@@ -12,20 +11,20 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.block.JolCraftBlocks;
 import net.sievert.jolcraft.entity.JolCraftEntities;
-import net.minecraft.network.chat.Component;
 import net.sievert.jolcraft.item.armor.JolCraftArmorMaterials;
 import net.sievert.jolcraft.item.custom.*;
+import net.sievert.jolcraft.item.custom.scrapper.*;
 import net.sievert.jolcraft.item.custom.merchant.*;
+import net.sievert.jolcraft.item.custom.book.*;
 import net.sievert.jolcraft.item.custom.equipment.armor.DeepslateArmorItem;
 import net.sievert.jolcraft.item.custom.equipment.armor.MithrilArmorItem;
 import net.sievert.jolcraft.item.custom.food.DwarvenBrewItem;
-import net.sievert.jolcraft.item.custom.book.*;
+import net.sievert.jolcraft.item.custom.scrapper.SpannerItem;
 import net.sievert.jolcraft.item.custom.tablet.LegendaryReputationTabletItem;
 import net.sievert.jolcraft.item.custom.tablet.ReputationTabletItem;
 import net.sievert.jolcraft.item.tool.JolCraftToolMaterials;
 import net.sievert.jolcraft.item.food.JolCraftFoodProperties;
 
-import java.util.List;
 
 public class JolCraftItems {
 
@@ -469,23 +468,16 @@ public class JolCraftItems {
 
     //Tools
     public static final DeferredItem<Item> COPPER_SPANNER =
-            ITEMS.registerItem("copper_spanner", properties -> new SpannerItem(properties) {
-                @Override
-                public void appendHoverText(ItemStack pStack, TooltipContext pContext, List<Component> pTooltipComponents, TooltipFlag pTooltipFlag) {
-                    pTooltipComponents.add(Component.translatable("tooltip.jolcraft.spanner").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
-                    super.appendHoverText(pStack, pContext, pTooltipComponents, pTooltipFlag);
-                }
-            }, new Item.Properties().durability(64).stacksTo(1).enchantable(10).repairable(Items.COPPER_INGOT));
+            ITEMS.registerItem("copper_spanner",
+                    SpannerItem::new,
+                    new Item.Properties().durability(16).stacksTo(1).enchantable(10).repairable(Items.COPPER_INGOT)
+            );
 
     public static final DeferredItem<Item> IRON_SPANNER =
-            ITEMS.registerItem("iron_spanner", properties -> new SpannerItem(properties) {
-                @Override
-                public void appendHoverText(ItemStack pStack, TooltipContext pContext, List<Component> pTooltipComponents, TooltipFlag pTooltipFlag) {
-                    pTooltipComponents.add(Component.translatable("tooltip.jolcraft.spanner").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
-                    super.appendHoverText(pStack, pContext, pTooltipComponents, pTooltipFlag);
-                }
-            }, new Item.Properties().durability(64).stacksTo(1).enchantable(10).repairable(Items.IRON_INGOT));
-
+            ITEMS.registerItem("iron_spanner",
+                    SpannerItem::new,
+                    new Item.Properties().durability(64).stacksTo(1).enchantable(10).repairable(Items.IRON_INGOT)
+            );
 
     //Scrap
     public static final DeferredItem<Item> SCRAP = ITEMS.registerSimpleItem("scrap");
@@ -493,94 +485,53 @@ public class JolCraftItems {
     public static final DeferredItem<Item> SCRAP_HEAP = ITEMS.registerSimpleItem("scrap_heap");
 
     public static final DeferredItem<Item> BROKEN_PICKAXE =
-            ITEMS.registerItem("broken_pickaxe", properties -> new Item(properties) {
-                @Override
-                public void appendHoverText(ItemStack pStack, TooltipContext pContext, List<Component> pTooltipComponents, TooltipFlag pTooltipFlag) {
-                    pTooltipComponents.add(Component.translatable("tooltip.jolcraft.salvage").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
-                    super.appendHoverText(pStack, pContext, pTooltipComponents, pTooltipFlag);
-                }
-            }, new Item.Properties().stacksTo(1));
+            ITEMS.registerItem("broken_pickaxe", SalvageItem::new, new Item.Properties().stacksTo(1));
 
     public static final DeferredItem<Item> BROKEN_AMULET =
-            ITEMS.registerItem("broken_amulet", properties -> new Item(properties) {
-                @Override
-                public void appendHoverText(ItemStack pStack, TooltipContext pContext, List<Component> pTooltipComponents, TooltipFlag pTooltipFlag) {
-                    pTooltipComponents.add(Component.translatable("tooltip.jolcraft.salvage").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
-                    super.appendHoverText(pStack, pContext, pTooltipComponents, pTooltipFlag);
-                }
-            }, new Item.Properties().stacksTo(1));
+            ITEMS.registerItem("broken_amulet", SalvageItem::new, new Item.Properties().stacksTo(1));
 
     public static final DeferredItem<Item> BROKEN_BELT =
-            ITEMS.registerItem("broken_belt", properties -> new Item(properties) {
-                @Override
-                public void appendHoverText(ItemStack pStack, TooltipContext pContext, List<Component> pTooltipComponents, TooltipFlag pTooltipFlag) {
-                    pTooltipComponents.add(Component.translatable("tooltip.jolcraft.salvage").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
-                    super.appendHoverText(pStack, pContext, pTooltipComponents, pTooltipFlag);
-                }
-            }, new Item.Properties().stacksTo(1));
+            ITEMS.registerItem("broken_belt", SalvageItem::new, new Item.Properties().stacksTo(1));
 
     public static final DeferredItem<Item> BROKEN_COINS =
-            ITEMS.registerItem("broken_coins", properties -> new Item(properties) {
-                @Override
-                public void appendHoverText(ItemStack pStack, TooltipContext pContext, List<Component> pTooltipComponents, TooltipFlag pTooltipFlag) {
-                    pTooltipComponents.add(Component.translatable("tooltip.jolcraft.salvage").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
-                    super.appendHoverText(pStack, pContext, pTooltipComponents, pTooltipFlag);
-                }
-            }, new Item.Properties());
+            ITEMS.registerItem("broken_coins", SalvageItem::new, new Item.Properties());
 
     public static final DeferredItem<Item> DEEPSLATE_MUG =
-            ITEMS.registerItem("deepslate_mug", properties -> new Item(properties) {
-                @Override
-                public void appendHoverText(ItemStack pStack, TooltipContext pContext, List<Component> pTooltipComponents, TooltipFlag pTooltipFlag) {
-                    pTooltipComponents.add(Component.translatable("tooltip.jolcraft.salvage").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
-                    super.appendHoverText(pStack, pContext, pTooltipComponents, pTooltipFlag);
-                }
-            }, new Item.Properties().stacksTo(16));
+            ITEMS.registerItem("deepslate_mug", SalvageItem::new, new Item.Properties().stacksTo(16));
 
     public static final DeferredItem<Item> EXPIRED_POTION =
-            ITEMS.registerItem("expired_potion", properties -> new Item(properties) {
-                @Override
-                public void appendHoverText(ItemStack pStack, TooltipContext pContext, List<Component> pTooltipComponents, TooltipFlag pTooltipFlag) {
-                    pTooltipComponents.add(Component.translatable("tooltip.jolcraft.salvage").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
-                    super.appendHoverText(pStack, pContext, pTooltipComponents, pTooltipFlag);
-                }
-            }, new Item.Properties().stacksTo(1));
+            ITEMS.registerItem("expired_potion", SalvageItem::new, new Item.Properties().stacksTo(16));
 
     public static final DeferredItem<Item> INGOT_MOULD =
-            ITEMS.registerItem("ingot_mould", properties -> new Item(properties) {
-                @Override
-                public void appendHoverText(ItemStack pStack, TooltipContext pContext, List<Component> pTooltipComponents, TooltipFlag pTooltipFlag) {
-                    pTooltipComponents.add(Component.translatable("tooltip.jolcraft.salvage").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
-                    super.appendHoverText(pStack, pContext, pTooltipComponents, pTooltipFlag);
-                }
-            }, new Item.Properties().stacksTo(1));
+            ITEMS.registerItem("ingot_mould", SalvageItem::new, new Item.Properties().stacksTo(16));
 
     public static final DeferredItem<Item> MITHRIL_SALVAGE =
-            ITEMS.registerItem("mithril_salvage", properties -> new Item(properties) {
-                @Override
-                public void appendHoverText(ItemStack pStack, TooltipContext pContext, List<Component> pTooltipComponents, TooltipFlag pTooltipFlag) {
-                    pTooltipComponents.add(Component.translatable("tooltip.jolcraft.salvage").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
-                    super.appendHoverText(pStack, pContext, pTooltipComponents, pTooltipFlag);
-                }
-            }, new Item.Properties());
+            ITEMS.registerItem("mithril_salvage", SalvageItem::new, new Item.Properties().rarity(Rarity.RARE));
 
     public static final DeferredItem<Item> OLD_FABRIC =
-            ITEMS.registerItem("old_fabric", properties -> new Item(properties) {
-                @Override
-                public void appendHoverText(ItemStack pStack, TooltipContext pContext, List<Component> pTooltipComponents, TooltipFlag pTooltipFlag) {
-                    pTooltipComponents.add(Component.translatable("tooltip.jolcraft.salvage").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
-                    super.appendHoverText(pStack, pContext, pTooltipComponents, pTooltipFlag);
-                }
-            }, new Item.Properties());
+            ITEMS.registerItem("old_fabric", SalvageItem::new, new Item.Properties());
 
     public static final DeferredItem<Item> RUSTY_TONGS =
-            ITEMS.registerItem("rusty_tongs", properties -> new Item(properties) {
-                @Override
-                public void appendHoverText(ItemStack pStack, TooltipContext pContext, List<Component> pTooltipComponents, TooltipFlag pTooltipFlag) {
-                    pTooltipComponents.add(Component.translatable("tooltip.jolcraft.salvage").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
-                    super.appendHoverText(pStack, pContext, pTooltipComponents, pTooltipFlag);
-                }
-            }, new Item.Properties().stacksTo(1));
+            ITEMS.registerItem("rusty_tongs", SalvageItem::new, new Item.Properties().stacksTo(1));
+
+    public static final DeferredItem<Item> BROKEN_MITHRIL_SWORD =
+            ITEMS.registerItem("broken_mithril_sword", SalvageItem::new, new Item.Properties().stacksTo(1).rarity(Rarity.RARE));
+
+    public static final DeferredItem<Item> BROKEN_TABLET =
+            ITEMS.registerItem("broken_tablet", SalvageItem::new, new Item.Properties().stacksTo(16));
+
+    public static final DeferredItem<Item> BROKEN_DEEPSLATE_PLATES =
+            ITEMS.registerItem("broken_deepslate_plates", SalvageItem::new, new Item.Properties());
+
+    public static final DeferredItem<Item> BROKEN_MITHRIL_PLATE =
+            ITEMS.registerItem("broken_mithril_plate", SalvageItem::new, new Item.Properties().rarity(Rarity.RARE));
+
+    public static final DeferredItem<Item> BROKEN_DEEPSLATE_GEAR =
+            ITEMS.registerItem("broken_deepslate_gear", SalvageItem::new, new Item.Properties());
+
+    public static final DeferredItem<Item> BROKEN_DEEPSLATE_PICKAXE_HEAD =
+            ITEMS.registerItem("broken_deepslate_pickaxe_head", SalvageItem::new, new Item.Properties());
+
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);

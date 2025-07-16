@@ -53,16 +53,15 @@ import net.sievert.jolcraft.network.packet.ClientboundLanguagePacket;
 import net.sievert.jolcraft.network.packet.ClientboundReputationPacket;
 import net.sievert.jolcraft.item.potion.JolCraftPotions;
 import net.sievert.jolcraft.sound.JolCraftSoundHelper;
-import net.sievert.jolcraft.sound.JolCraftSounds;
 import net.sievert.jolcraft.util.JolCraftTags;
 import net.sievert.jolcraft.entity.custom.dwarf.DwarfGuardEntity;
 import net.sievert.jolcraft.item.JolCraftItems;
-import net.sievert.jolcraft.item.custom.SpannerItem;
+import net.sievert.jolcraft.item.custom.scrapper.SpannerItem;
 import net.sievert.jolcraft.util.attachment.AncientDwarvenLanguageHelper;
 import net.sievert.jolcraft.util.attachment.DwarvenLanguageHelper;
 import net.sievert.jolcraft.util.attachment.DwarvenReputationHelper;
 import net.sievert.jolcraft.util.random.JolCraftAnvilHelper;
-import net.sievert.jolcraft.util.random.SalvageLootHelper;
+import net.sievert.jolcraft.util.dwarf.SalvageLootHelper;
 import net.sievert.jolcraft.block.JolCraftBlocks;
 import net.sievert.jolcraft.effect.JolCraftEffects;
 
@@ -131,6 +130,14 @@ public class JolCraftGameEvents {
 
         // Dwarf logic
         if (target instanceof AbstractDwarfEntity dwarf && !dwarf.isBaby()  && dwarf.canTrade()) {
+
+            // --- Language Check (block event if player can't interact) ---
+            InteractionResult langResult = dwarf.languageCheck(player);
+            if (langResult != InteractionResult.SUCCESS) {
+                event.setCancellationResult(langResult);
+                event.setCanceled(true);
+                return;
+            }
 
             // Restock Crate
             if (stack.is(JolCraftItems.RESTOCK_CRATE.get())) {
@@ -446,7 +453,7 @@ public class JolCraftGameEvents {
         ItemStack offhand = player.getOffhandItem();
 
         if (!(offhand.getItem() instanceof SpannerItem)) return;
-        if (!main.is(JolCraftTags.Items.GLOBAL_SCRAP)) return;
+        if (!main.is(JolCraftTags.Items.GLOBAL_SALVAGE)) return;
 
         if (!level.isClientSide) {
             List<ItemStack> loot = SalvageLootHelper.generateSalvageLoot(main);

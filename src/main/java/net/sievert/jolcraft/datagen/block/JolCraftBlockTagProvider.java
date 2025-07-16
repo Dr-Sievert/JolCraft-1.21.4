@@ -51,6 +51,7 @@ public class JolCraftBlockTagProvider extends BlockTagsProvider {
         tag(JolCraftTags.Blocks.DEEPSLATE_BULBS_PLANTABLE)
                 .add(JolCraftBlocks.VERDANT_SOIL.get())
                 .add(Blocks.DEEPSLATE)
+                .add(Blocks.TUFF)
                 .add(Blocks.POLISHED_DEEPSLATE);
 
         tag(JolCraftTags.Blocks.HOPS_BOTTOM)

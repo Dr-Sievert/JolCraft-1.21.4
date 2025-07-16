@@ -85,7 +85,7 @@ public class DeepslateBulbsCropBlock extends CropBlock {
         }
 
         // Hard Y-level gate: must be below surface
-        if (pos.getY() > 32) return false;
+        if (pos.getY() > 0) return false;
 
         TriState soilDecision = below.canSustainPlant(level, pos.below(), Direction.UP, state);
         if (!soilDecision.isDefault()) {
@@ -143,7 +143,6 @@ public class DeepslateBulbsCropBlock extends CropBlock {
         }
         return base;
     }
-
 
     // ---- Bonemeal Support ----
     @Override

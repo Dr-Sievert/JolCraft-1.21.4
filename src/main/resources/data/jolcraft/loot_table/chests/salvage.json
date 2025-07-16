@@ -59,6 +59,36 @@
           "type": "minecraft:item",
           "name": "jolcraft:rusty_tongs",
           "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jolcraft:broken_mithril_sword",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jolcraft:broken_tablet",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jolcraft:broken_deepslate_plates",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jolcraft:broken_mithril_plate",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jolcraft:broken_deepslate_gear",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jolcraft:broken_deepslate_pickaxe_head",
+          "weight": 1
         }
       ]
     }

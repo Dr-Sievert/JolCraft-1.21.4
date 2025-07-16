@@ -50,28 +50,38 @@ public class JolCraftItemTagProvider extends ItemTagsProvider {
                 .add(JolCraftItems.VERDANITE.get())
                 .add(JolCraftItems.WOECRYSTAL.get());
 
-        tag(JolCraftTags.Items.GENERAL_SCRAP)
+        tag(JolCraftTags.Items.GENERAL_SALVAGE)
                 .add(Items.TRIPWIRE_HOOK)
                 .add(Items.FLINT_AND_STEEL)
                 .add(Items.SHIELD)
                 .add(Items.FILLED_MAP)
-                .add(JolCraftItems.DEEPSLATE_MUG.get())
+                .add(Items.CHAINMAIL_HELMET)
+                .add(Items.CHAINMAIL_CHESTPLATE)
+                .add(Items.CHAINMAIL_LEGGINGS)
+                .add(Items.CHAINMAIL_BOOTS)
                 .add(JolCraftItems.EXPIRED_POTION.get());
 
-        tag(JolCraftTags.Items.TEXTILE_SCRAP)
+        tag(JolCraftTags.Items.DEEPSLATE_SALVAGE)
+                .add(JolCraftItems.BROKEN_DEEPSLATE_PLATES.get())
+                .add(JolCraftItems.BROKEN_DEEPSLATE_PICKAXE_HEAD.get())
+                .add(JolCraftItems.BROKEN_DEEPSLATE_GEAR.get())
+                .add(JolCraftItems.DEEPSLATE_MUG.get())
+                .add(JolCraftItems.BROKEN_TABLET.get());
+
+        tag(JolCraftTags.Items.TEXTILE_SALVAGE)
                 .add(Items.LEATHER_HELMET)
                 .add(Items.LEATHER_CHESTPLATE)
                 .add(Items.LEATHER_LEGGINGS)
                 .add(Items.LEATHER_BOOTS)
                 .add(JolCraftItems.OLD_FABRIC.get());
 
-        tag(JolCraftTags.Items.REDSTONE_SCRAP)
+        tag(JolCraftTags.Items.REDSTONE_SALVAGE)
                 .add(Items.COMPASS)
                 .add(Items.CLOCK)
                 .add(Items.REPEATER)
                 .add(Items.COMPARATOR);
 
-        tag(JolCraftTags.Items.IRON_SCRAP)
+        tag(JolCraftTags.Items.IRON_SALVAGE)
                 .add(Items.IRON_SWORD)
                 .add(Items.IRON_PICKAXE)
                 .add(Items.IRON_SHOVEL)
@@ -88,7 +98,7 @@ public class JolCraftItemTagProvider extends ItemTagsProvider {
                 .add(JolCraftItems.RUSTY_TONGS.get())
                 .add(JolCraftItems.INGOT_MOULD.get());
 
-        tag(JolCraftTags.Items.GOLD_SCRAP)
+        tag(JolCraftTags.Items.GOLD_SALVAGE)
                 .add(Items.GOLDEN_SWORD)
                 .add(Items.GOLDEN_PICKAXE)
                 .add(Items.GOLDEN_SHOVEL)
@@ -102,16 +112,18 @@ public class JolCraftItemTagProvider extends ItemTagsProvider {
                 .add(JolCraftItems.BROKEN_BELT.get())
                 .add(JolCraftItems.BROKEN_COINS.get());
 
-        tag(JolCraftTags.Items.MITHRIL_SCRAP)
+        tag(JolCraftTags.Items.MITHRIL_SALVAGE)
+                .add(JolCraftItems.BROKEN_MITHRIL_PLATE.get())
+                .add(JolCraftItems.BROKEN_MITHRIL_SWORD.get())
                 .add(JolCraftItems.MITHRIL_SALVAGE.get());
 
-        tag(JolCraftTags.Items.GLOBAL_SCRAP)
-                .addTag(JolCraftTags.Items.GENERAL_SCRAP)
-                .addTag(JolCraftTags.Items.TEXTILE_SCRAP)
-                .addTag(JolCraftTags.Items.REDSTONE_SCRAP)
-                .addTag(JolCraftTags.Items.IRON_SCRAP)
-                .addTag(JolCraftTags.Items.GOLD_SCRAP)
-                .addTag(JolCraftTags.Items.MITHRIL_SCRAP);
+        tag(JolCraftTags.Items.GLOBAL_SALVAGE)
+                .addTag(JolCraftTags.Items.GENERAL_SALVAGE)
+                .addTag(JolCraftTags.Items.TEXTILE_SALVAGE)
+                .addTag(JolCraftTags.Items.REDSTONE_SALVAGE)
+                .addTag(JolCraftTags.Items.IRON_SALVAGE)
+                .addTag(JolCraftTags.Items.GOLD_SALVAGE)
+                .addTag(JolCraftTags.Items.MITHRIL_SALVAGE);
 
         tag(JolCraftTags.Items.SIGNED_CONTRACTS)
                 .add(JolCraftItems.CONTRACT_GUILDMASTER.get())

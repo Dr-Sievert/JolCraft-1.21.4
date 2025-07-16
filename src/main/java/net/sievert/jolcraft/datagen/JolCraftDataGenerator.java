@@ -12,6 +12,7 @@ import net.neoforged.neoforge.common.data.BlockTagsProvider;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.datagen.advancement.JolCraftAdvancementProvider;
+import net.sievert.jolcraft.datagen.biome.JolCraftBiomeTagProvider;
 import net.sievert.jolcraft.datagen.block.JolCraftBlockLootTableProvider;
 import net.sievert.jolcraft.datagen.block.JolCraftBlockTagProvider;
 import net.sievert.jolcraft.datagen.loot.JolCraftEntityLootTableProvider;
@@ -63,6 +64,8 @@ public class JolCraftDataGenerator {
 
         generator.addProvider(true, new JolCraftItemTagProvider(packOutput, lookup, blockTagsProvider.contentsGetter()));
 
+        generator.addProvider(true, new JolCraftBiomeTagProvider(packOutput, lookup));
+
         generator.addProvider(true, new AdvancementProvider(
                 packOutput, lookup, List.of(new JolCraftAdvancementProvider())
         ));
@@ -106,6 +109,8 @@ public class JolCraftDataGenerator {
         generator.addProvider(true, new JolCraftGlobalLootModifierProvider(packOutput, lookup));
 
         generator.addProvider(true, new JolCraftItemTagProvider(packOutput, lookup, blockTagsProvider.contentsGetter()));
+
+        generator.addProvider(true, new JolCraftBiomeTagProvider(packOutput, lookup));
 
         generator.addProvider(true, new AdvancementProvider(
                 packOutput, lookup, List.of(new JolCraftAdvancementProvider())

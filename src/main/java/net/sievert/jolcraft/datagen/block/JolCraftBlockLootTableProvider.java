@@ -244,15 +244,30 @@ public class JolCraftBlockLootTableProvider extends BlockLootSubProvider {
                 .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(ageProperty, maxAge));
 
         return LootTable.lootTable()
+                // 1. Always drop 1 (unconditional, for any age)
+                .withPool(LootPool.lootPool()
+                        .setRolls(ConstantValue.exactly(1))
+                        .add(LootItem.lootTableItem(item))
+                )
+                // 2. If mature, fortune applies to the always-drop
                 .withPool(LootPool.lootPool()
                         .when(mature)
                         .setRolls(ConstantValue.exactly(1))
                         .add(LootItem.lootTableItem(item)
-                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 2.0F))) // base yield 1–2
-                                .apply(ApplyBonusCount.addOreBonusCount(registrylookup.getOrThrow(Enchantments.FORTUNE))) // Fortune boost
+                                .apply(ApplyBonusCount.addOreBonusCount(registrylookup.getOrThrow(Enchantments.FORTUNE)))
+                        )
+                )
+                // 3. If mature, 20% chance for 1 extra (fortune does not apply here)
+                .withPool(LootPool.lootPool()
+                        .when(mature)
+                        .setRolls(ConstantValue.exactly(1))
+                        .add(LootItem.lootTableItem(item)
+                                .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1)))
+                                .when(LootItemRandomChanceCondition.randomChance(0.20f))
                         )
                 );
     }
+
 
 
     protected LootTable.Builder createMultipleOreDrops(Block pBlock, Item item, float minDrops, float maxDrops) {
