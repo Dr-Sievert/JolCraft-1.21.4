@@ -9,6 +9,7 @@ import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.pathfinder.Path;
 import net.sievert.jolcraft.entity.custom.dwarf.AbstractDwarfEntity;
+import net.sievert.jolcraft.item.JolCraftItems;
 import net.sievert.jolcraft.sound.JolCraftSounds;
 
 public class DwarfAttackGoal extends MeleeAttackGoal {
@@ -169,9 +170,18 @@ public class DwarfAttackGoal extends MeleeAttackGoal {
         }
     }
 
+
+    @Override
     protected void resetAttackCooldown() {
-        this.ticksUntilNextAttack = this.adjustedTickDelay(20);
+        int cooldown = 20;
+        if (mob.getMainHandItem().is(JolCraftItems.DEEPSLATE_WARHAMMER.get())) {
+            cooldown = 40;
+        } else if (mob.getMainHandItem().is(JolCraftItems.DEEPSLATE_AXE.get())) {
+            cooldown = 22;
+        }
+        this.ticksUntilNextAttack = this.adjustedTickDelay(cooldown);
     }
+
 
     protected boolean isTimeToAttack() {
         return this.ticksUntilNextAttack <= 0;

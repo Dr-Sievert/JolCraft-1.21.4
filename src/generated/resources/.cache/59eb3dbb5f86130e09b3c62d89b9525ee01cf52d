@@ -1,10 +1,11 @@
-// 1.21.4	2025-07-14T00:35:07.1316536	Loot Tables
+// 1.21.4	2025-07-14T22:24:31.0088606	Loot Tables
 b7cebd8660eb88808c3319f226db36325ccb1526 data/jolcraft/loot_table/blocks/asgarnian_crop_bottom.json
 c40e9946b18dfd4b829ebda82e51bc3fc3d8145d data/jolcraft/loot_table/blocks/asgarnian_crop_top.json
 faaa7e28a7da3b3da8d8bdf71408d90bb22eef82 data/jolcraft/loot_table/blocks/barley_block.json
 ccc09f304296bb6d3f0ed9a317d6d492d9594386 data/jolcraft/loot_table/blocks/barley_crop.json
 3583c816c35c027b196ef66122fa75c62b621985 data/jolcraft/loot_table/blocks/deepslate_bulbs_crop.json
 007669eb8e434d2372f4ddcd02d27613a3f0a84a data/jolcraft/loot_table/blocks/deepslate_mithril_ore.json
+edfe1e7e042f75d141c11432f70912070d0387fd data/jolcraft/loot_table/blocks/deepslate_plate_block.json
 ba3a83ed32e2718da47d58013c4147e65eda1fc2 data/jolcraft/loot_table/blocks/duskcap.json
 0c7216d5d4235b6b013b2a91aa79d1cba18c4b47 data/jolcraft/loot_table/blocks/duskhold_crop_bottom.json
 b088b0c2ccff2bac886c82c4505381e9b44871b0 data/jolcraft/loot_table/blocks/duskhold_crop_top.json

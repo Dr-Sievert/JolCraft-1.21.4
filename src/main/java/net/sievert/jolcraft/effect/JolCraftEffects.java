@@ -7,6 +7,7 @@ import net.minecraft.world.effect.MobEffectCategory;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.sievert.jolcraft.JolCraft;
+import net.sievert.jolcraft.effect.custom.*;
 
 public class JolCraftEffects {
     public static final DeferredRegister<MobEffect> MOB_EFFECTS =

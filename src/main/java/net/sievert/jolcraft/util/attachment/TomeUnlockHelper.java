@@ -1,7 +1,7 @@
 package net.sievert.jolcraft.util.attachment;
 
 import net.minecraft.world.entity.player.Player;
-import net.sievert.jolcraft.attachment.TomeUnlock;
+import net.sievert.jolcraft.attachment.custom.unlock.TomeUnlock;
 
 import java.util.Set;
 

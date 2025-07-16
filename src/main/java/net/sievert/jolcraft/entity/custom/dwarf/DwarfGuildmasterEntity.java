@@ -8,6 +8,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -24,14 +25,16 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
 import net.sievert.jolcraft.advancement.JolCraftCriteriaTriggers;
-import net.sievert.jolcraft.attachment.DwarvenReputationImpl;
+import net.sievert.jolcraft.attachment.custom.rep.DwarvenReputationImpl;
 import net.sievert.jolcraft.attachment.JolCraftAttachments;
 import net.sievert.jolcraft.component.JolCraftDataComponents;
+import net.sievert.jolcraft.sound.JolCraftSoundHelper;
 import net.sievert.jolcraft.util.JolCraftTags;
 import net.sievert.jolcraft.entity.ai.goal.*;
 import net.sievert.jolcraft.item.JolCraftItems;
@@ -42,20 +45,41 @@ import net.sievert.jolcraft.sound.JolCraftSounds;
 import net.sievert.jolcraft.util.attachment.DwarvenReputationHelper;
 import net.sievert.jolcraft.util.dwarf.JolCraftDwarfTrades;
 
+import javax.annotation.Nullable;
+
 public class DwarfGuildmasterEntity extends AbstractDwarfEntity {
 
     public DwarfGuildmasterEntity(EntityType<? extends AbstractDwarfEntity> entityType, Level level) {
         super(entityType, level);
         this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(JolCraftItems.CONTRACT_SIGNED.get()));
+        this.instanceTrades = createRandomizedGuildmasterTrades();
+
     }
+
+    //Data
+
+    private int lastUnlockedLevel = 0;
+
+    @Override
+    public void addAdditionalSaveData(CompoundTag tag) {
+        super.addAdditionalSaveData(tag);
+        tag.putInt("LastUnlockedLevel", lastUnlockedLevel);
+    }
+
+    @Override
+    public void readAdditionalSaveData(CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+        this.lastUnlockedLevel = tag.getInt("LastUnlockedLevel");
+    }
+
 
     //Attributes
     public static AttributeSupplier.Builder createAttributes() {
         return DwarfEntity.createLivingAttributes()
-                .add(Attributes.MAX_HEALTH, 30d)
+                .add(Attributes.MAX_HEALTH, 30D)
                 .add(Attributes.MOVEMENT_SPEED, 0.2D)
                 .add(Attributes.FOLLOW_RANGE, 24D)
-                .add(Attributes.TEMPT_RANGE, 16d)
+                .add(Attributes.TEMPT_RANGE, 16D)
                 .add(Attributes.ATTACK_DAMAGE, 3.0D);
     }
 
@@ -64,6 +88,9 @@ public class DwarfGuildmasterEntity extends AbstractDwarfEntity {
     public boolean canTrade() {
         return true;
     }
+
+    @Override
+    public boolean canReroll() { return false; }
 
     @Override
     public ItemStack getSignedContractItem() {
@@ -159,7 +186,7 @@ public class DwarfGuildmasterEntity extends AbstractDwarfEntity {
                 player.displayClientMessage(Component.translatable("tooltip.jolcraft.reputation.max_tier")
                         .withStyle(ChatFormatting.GRAY), true);
             }
-            this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1f, 1f);
+            JolCraftSoundHelper.playDwarfNo(this);
             return client ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
         }
 
@@ -171,7 +198,7 @@ public class DwarfGuildmasterEntity extends AbstractDwarfEntity {
                         "tooltip.jolcraft.reputation.not_enough_endorsements", needed, strictEndorsementCount
                 ).withStyle(ChatFormatting.GRAY), true);
             }
-            this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1f, 1f);
+            JolCraftSoundHelper.playDwarfNo(this);
             return client ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
         }
 
@@ -180,7 +207,7 @@ public class DwarfGuildmasterEntity extends AbstractDwarfEntity {
                 player.displayClientMessage(Component.translatable("tooltip.jolcraft.dwarf.busy")
                         .withStyle(ChatFormatting.GRAY), true);
             }
-            this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1f, 1f);
+            JolCraftSoundHelper.playDwarfNo(this);
             return client ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
         }
 
@@ -189,7 +216,7 @@ public class DwarfGuildmasterEntity extends AbstractDwarfEntity {
                 player.displayClientMessage(Component.translatable("tooltip.jolcraft.dwarf.not_paid")
                         .withStyle(ChatFormatting.GRAY), true);
             }
-            this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1f, 1f);
+            JolCraftSoundHelper.playDwarfNo(this);
             return client ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
         }
 
@@ -206,7 +233,7 @@ public class DwarfGuildmasterEntity extends AbstractDwarfEntity {
                 player.displayClientMessage(Component.translatable("tooltip.jolcraft.reputation.wrong_tablet")
                         .withStyle(ChatFormatting.GRAY), true);
             }
-            this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1f, 1f);
+            JolCraftSoundHelper.playDwarfNo(this);
             return client ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
         }
 
@@ -215,7 +242,7 @@ public class DwarfGuildmasterEntity extends AbstractDwarfEntity {
         this.previousMainHandItem = this.getMainHandItem().copy();
         this.setItemSlot(EquipmentSlot.MAINHAND, tabletUsed.copy());
         this.usePlayerItem(player, hand, itemstack);
-        this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_YES.get(), SoundSource.NEUTRAL, 1f, 1f);
+        JolCraftSoundHelper.playDwarfYes(this);
 
         this.usedItem = tabletUsed;
         beginAction(player, 40, AbstractDwarfEntity.ACTION_REPUTATION_ENDORSEMENT, tabletUsed, previousMainHandItem, () -> {
@@ -283,86 +310,83 @@ public class DwarfGuildmasterEntity extends AbstractDwarfEntity {
         }
     }
 
-
-
     //Trades
-    public static final Int2ObjectMap<VillagerTrades.ItemListing[]> TRADES = toIntMap(
-            ImmutableMap.of(
+    public static Int2ObjectMap<VillagerTrades.ItemListing[]> createRandomizedGuildmasterTrades() {
+        return AbstractDwarfEntity.toIntMap(ImmutableMap.of(
 
-                    //Novice
-                    1,
-                    new VillagerTrades.ItemListing[]{
-                            new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.DEEPSLATE_PLATE.get(), 1, 15, JolCraftItems.REPUTATION_TABLET_0.get(), 1, 1, 0, 0.05F),
-                            new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.CONTRACT_BLANK.get(), 2, 1, 5, 0),
-                            new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.CONTRACT_SIGNED.get(), 1, 30, JolCraftItems.CONTRACT_MERCHANT.get(), 1, 1, 0, 0.05F),
-                            new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.CONTRACT_SIGNED.get(), 1, 30, JolCraftItems.CONTRACT_HISTORIAN.get(), 1, 1, 0, 0.05F),
-                            new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.CONTRACT_SIGNED.get(), 1, 30, JolCraftItems.CONTRACT_SCRAPPER.get(), 1, 1, 0, 0.05F)
+                        //Novice
+                        1,
+                        new VillagerTrades.ItemListing[]{
+                                new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.REPUTATION_TABLET_0.get(), 15, 1, 5, 1),
+                                new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.CONTRACT_SIGNED.get(), 1, 30, JolCraftItems.CONTRACT_MERCHANT.get(), 1, 1, 0, 0.05F),
+                                new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.CONTRACT_SIGNED.get(), 1, 30, JolCraftItems.CONTRACT_HISTORIAN.get(), 1, 1, 0, 0.05F),
+                                new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.CONTRACT_SIGNED.get(), 1, 30, JolCraftItems.CONTRACT_SCRAPPER.get(), 1, 1, 0, 0.05F)
 
-                    },
+                        },
 
-                    //Apprentice
-                    2,
-                    new VillagerTrades.ItemListing[]{
-                            new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.CONTRACT_SIGNED.get(), 1, 30, JolCraftItems.CONTRACT_BREWMASTER.get(), 1, 1, 0, 0.05F),
-                            new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.CONTRACT_SIGNED.get(), 1, 30, JolCraftItems.CONTRACT_GUARD.get(), 1, 1, 0, 0.05F),
-                            new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.CONTRACT_SIGNED.get(), 1, 30, JolCraftItems.CONTRACT_KEEPER.get(), 1, 1, 0, 0.05F)
-                    },
+                        //Apprentice
+                        2,
+                        new VillagerTrades.ItemListing[]{
+                                new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.CONTRACT_SIGNED.get(), 1, 30, JolCraftItems.CONTRACT_BREWMASTER.get(), 1, 1, 0, 0.05F),
+                                new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.CONTRACT_SIGNED.get(), 1, 30, JolCraftItems.CONTRACT_GUARD.get(), 1, 1, 0, 0.05F),
+                                new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.CONTRACT_SIGNED.get(), 1, 30, JolCraftItems.CONTRACT_KEEPER.get(), 1, 1, 0, 0.05F)
+                        },
 
-                    //Journeyman
-                    3,
-                    new VillagerTrades.ItemListing[]{
-                            new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.CONTRACT_SIGNED.get(), 1, 30, JolCraftItems.CONTRACT_ALCHEMIST.get(), 1, 1, 0, 0.05F),
-                            new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.CONTRACT_SIGNED.get(), 1, 30, JolCraftItems.CONTRACT_EXPLORER.get(), 1, 1, 0, 0.05F),
-                            new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.CONTRACT_SIGNED.get(), 1, 30, JolCraftItems.CONTRACT_MINER.get(), 1, 1, 0, 0.05F)
-                    },
+                        //Journeyman
+                        3,
+                        new VillagerTrades.ItemListing[]{
+                                new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.CONTRACT_SIGNED.get(), 1, 30, JolCraftItems.CONTRACT_ALCHEMIST.get(), 1, 1, 0, 0.05F),
+                                new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.CONTRACT_SIGNED.get(), 1, 30, JolCraftItems.CONTRACT_EXPLORER.get(), 1, 1, 0, 0.05F),
+                                new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.CONTRACT_SIGNED.get(), 1, 30, JolCraftItems.CONTRACT_MINER.get(), 1, 1, 0, 0.05F)
+                        },
 
-                    //Expert
-                    4,
-                    new VillagerTrades.ItemListing[]{
-                            new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.CONTRACT_SIGNED.get(), 1, 30, JolCraftItems.CONTRACT_ARCANIST.get(), 1, 1, 0, 0.05F),
-                            new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.CONTRACT_SIGNED.get(), 1, 30, JolCraftItems.CONTRACT_ARTISAN.get(), 1, 1, 0, 0.05F),
-                            new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.CONTRACT_SIGNED.get(), 1, 30, JolCraftItems.CONTRACT_PRIEST.get(), 1, 1, 0, 0.05F)
-                    },
+                        //Expert
+                        4,
+                        new VillagerTrades.ItemListing[]{
+                                new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.CONTRACT_SIGNED.get(), 1, 30, JolCraftItems.CONTRACT_ARCANIST.get(), 1, 1, 0, 0.05F),
+                                new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.CONTRACT_SIGNED.get(), 1, 30, JolCraftItems.CONTRACT_ARTISAN.get(), 1, 1, 0, 0.05F),
+                                new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.CONTRACT_SIGNED.get(), 1, 30, JolCraftItems.CONTRACT_PRIEST.get(), 1, 1, 0, 0.05F)
+                        },
 
-                    //Master
-                    5,
-                    new VillagerTrades.ItemListing[]{
-                            new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.CONTRACT_SIGNED.get(), 1, 30, JolCraftItems.CONTRACT_BLACKSMITH.get(), 1, 1, 0, 0.05F),
-                            new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.CONTRACT_SIGNED.get(), 1, 30, JolCraftItems.CONTRACT_CHAMPION.get(), 1, 1, 0, 0.05F),
-                            new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.CONTRACT_SIGNED.get(), 1, 30, JolCraftItems.CONTRACT_SMELTER.get(), 1, 1, 0, 0.05F)
-                    }
-            )
-    );
+                        //Master
+                        5,
+                        new VillagerTrades.ItemListing[]{
+                                new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.CONTRACT_SIGNED.get(), 1, 30, JolCraftItems.CONTRACT_BLACKSMITH.get(), 1, 1, 0, 0.05F),
+                                new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.CONTRACT_SIGNED.get(), 1, 30, JolCraftItems.CONTRACT_CHAMPION.get(), 1, 1, 0, 0.05F),
+                                new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.CONTRACT_SIGNED.get(), 1, 30, JolCraftItems.CONTRACT_SMELTER.get(), 1, 1, 0, 0.05F)
+                        }
+                )
+        );
 
-    private static Int2ObjectMap<VillagerTrades.ItemListing[]> toIntMap(ImmutableMap<Integer, VillagerTrades.ItemListing[]> pMap) {
-
-        return new Int2ObjectOpenHashMap<>(pMap);
     }
-
-    private int lastUnlockedLevel = 0;
 
     @Override
     protected void updateTrades() {
-        int currentLevel = this.getVillagerData().getLevel();
-        for (int lvl = lastUnlockedLevel + 1; lvl <= currentLevel; lvl++) {
-            VillagerTrades.ItemListing[] listings = TRADES.get(lvl);
+        int level = this.getVillagerData().getLevel();
+        if (instanceTrades != null) {
+            VillagerTrades.ItemListing[] listings = instanceTrades.get(level);
             if (listings != null) {
-                this.addOffersFromItemListings(this.getOffers(), listings, 5);
+                // Ensure exact order: add them in the original array order
+                for (VillagerTrades.ItemListing trade : listings) {
+                    MerchantOffer offer = trade.getOffer(this, this.random);
+                    if (offer != null) {
+                        this.getOffers().add(offer);
+                    }
+                }
             }
         }
-        lastUnlockedLevel = Math.max(lastUnlockedLevel, currentLevel);
     }
 
+    @Nullable
     @Override
-    public void addAdditionalSaveData(CompoundTag tag) {
-        super.addAdditionalSaveData(tag);
-        tag.putInt("LastUnlockedLevel", lastUnlockedLevel);
+    protected SoundEvent getRestockSound() {
+        return SoundEvents.VILLAGER_WORK_CARTOGRAPHER;
     }
 
+    @Nullable
     @Override
-    public void readAdditionalSaveData(CompoundTag tag) {
-        super.readAdditionalSaveData(tag);
-        this.lastUnlockedLevel = tag.getInt("LastUnlockedLevel");
+    protected SoundEvent getRerollSound() {
+        return SoundEvents.VILLAGER_WORK_CARTOGRAPHER;
     }
 
 

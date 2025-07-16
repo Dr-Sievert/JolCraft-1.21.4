@@ -15,13 +15,13 @@ import net.sievert.jolcraft.entity.JolCraftEntities;
 import net.minecraft.network.chat.Component;
 import net.sievert.jolcraft.item.armor.JolCraftArmorMaterials;
 import net.sievert.jolcraft.item.custom.*;
+import net.sievert.jolcraft.item.custom.merchant.*;
 import net.sievert.jolcraft.item.custom.equipment.armor.DeepslateArmorItem;
 import net.sievert.jolcraft.item.custom.equipment.armor.MithrilArmorItem;
-import net.sievert.jolcraft.item.custom.bounty.BountyCrateItem;
-import net.sievert.jolcraft.item.custom.bounty.BountyItem;
-import net.sievert.jolcraft.item.custom.bounty.ContractItem;
 import net.sievert.jolcraft.item.custom.food.DwarvenBrewItem;
 import net.sievert.jolcraft.item.custom.book.*;
+import net.sievert.jolcraft.item.custom.tablet.LegendaryReputationTabletItem;
+import net.sievert.jolcraft.item.custom.tablet.ReputationTabletItem;
 import net.sievert.jolcraft.item.tool.JolCraftToolMaterials;
 import net.sievert.jolcraft.item.food.JolCraftFoodProperties;
 
@@ -58,31 +58,49 @@ public class JolCraftItems {
 
     //Materials, Armors, Trims, Tools and Weapons
     public static final DeferredItem<Item> IMPURE_MITHRIL = ITEMS.registerItem("impure_mithril",
-            Item::new, new Item.Properties().fireResistant());
+            Item::new, new Item.Properties().fireResistant().rarity(Rarity.RARE));
 
     public static final DeferredItem<Item> PURE_MITHRIL = ITEMS.registerItem("pure_mithril",
-            Item::new, new Item.Properties().fireResistant());
+            Item::new, new Item.Properties().fireResistant().rarity(Rarity.RARE));
 
     public static final DeferredItem<Item> MITHRIL_INGOT = ITEMS.registerItem("mithril_ingot",
-            Item::new, new Item.Properties().fireResistant());
+            Item::new, new Item.Properties().fireResistant().rarity(Rarity.RARE));
 
     public static final DeferredItem<Item> MITHRIL_NUGGET = ITEMS.registerItem("mithril_nugget",
-            Item::new, new Item.Properties().fireResistant());
+            Item::new, new Item.Properties().fireResistant().rarity(Rarity.RARE));
 
     public static final DeferredItem<Item> MITHRIL_CHAINWEAVE = ITEMS.registerItem("mithril_chainweave",
-            Item::new, new Item.Properties().fireResistant());
+            Item::new, new Item.Properties().fireResistant().rarity(Rarity.RARE));
+
+    public static final DeferredItem<Item> MITHRIL_SWORD = ITEMS.registerItem("mithril_sword",
+            (properties) -> new SwordItem(JolCraftToolMaterials.MITHRIL, 3.0F, -2.4F, properties.fireResistant().rarity(Rarity.RARE)));
+
+    public static final DeferredItem<Item> MITHRIL_WARHAMMER = ITEMS.registerItem("mithril_warhammer",
+            (properties) -> new SwordItem(JolCraftToolMaterials.MITHRIL, 13.0F, -3.5F, properties.fireResistant().rarity(Rarity.RARE)));
+
+    public static final DeferredItem<Item> MITHRIL_PICKAXE = ITEMS.registerItem("mithril_pickaxe",
+            (properties) -> new PickaxeItem(JolCraftToolMaterials.MITHRIL, 1.0F, -2.8F, properties.fireResistant().rarity(Rarity.RARE)));
+
+    public static final DeferredItem<ShovelItem> MITHRIL_SHOVEL = ITEMS.registerItem("mithril_shovel",
+            (properties) -> new ShovelItem(JolCraftToolMaterials.MITHRIL, 1.5F, -3.0F, properties.fireResistant().rarity(Rarity.RARE)));
+
+    public static final DeferredItem<AxeItem> MITHRIL_AXE = ITEMS.registerItem("mithril_axe",
+            (properties) -> new AxeItem(JolCraftToolMaterials.MITHRIL, 5.0F, -3.0F, properties.fireResistant().rarity(Rarity.RARE)));
+
+    public static final DeferredItem<HoeItem> MITHRIL_HOE = ITEMS.registerItem("mithril_hoe",
+            (properties) -> new HoeItem(JolCraftToolMaterials.MITHRIL, -2.0F, -1.0F, properties.fireResistant().rarity(Rarity.RARE)));
 
     public static final DeferredItem<Item> MITHRIL_HELMET = ITEMS.registerItem("mithril_helmet",
-            props -> new MithrilArmorItem(JolCraftArmorMaterials.MITHRIL_ARMOR_MATERIAL, ArmorType.HELMET, props));
+            props -> new MithrilArmorItem(JolCraftArmorMaterials.MITHRIL_ARMOR_MATERIAL, ArmorType.HELMET, props.fireResistant().rarity(Rarity.RARE)));
 
     public static final DeferredItem<Item> MITHRIL_CHESTPLATE = ITEMS.registerItem("mithril_chestplate",
-            props -> new MithrilArmorItem(JolCraftArmorMaterials.MITHRIL_ARMOR_MATERIAL, ArmorType.CHESTPLATE, props));
+            props -> new MithrilArmorItem(JolCraftArmorMaterials.MITHRIL_ARMOR_MATERIAL, ArmorType.CHESTPLATE, props.fireResistant().rarity(Rarity.RARE)));
 
     public static final DeferredItem<Item> MITHRIL_LEGGINGS = ITEMS.registerItem("mithril_leggings",
-            props -> new MithrilArmorItem(JolCraftArmorMaterials.MITHRIL_ARMOR_MATERIAL, ArmorType.LEGGINGS, props));
+            props -> new MithrilArmorItem(JolCraftArmorMaterials.MITHRIL_ARMOR_MATERIAL, ArmorType.LEGGINGS, props.fireResistant().rarity(Rarity.RARE)));
 
     public static final DeferredItem<Item> MITHRIL_BOOTS = ITEMS.registerItem("mithril_boots",
-            props -> new MithrilArmorItem(JolCraftArmorMaterials.MITHRIL_ARMOR_MATERIAL, ArmorType.BOOTS, props));
+            props -> new MithrilArmorItem(JolCraftArmorMaterials.MITHRIL_ARMOR_MATERIAL, ArmorType.BOOTS, props.fireResistant().rarity(Rarity.RARE)));
 
 
     public static final DeferredItem<Item> DEEPSLATE_PLATE = ITEMS.registerItem("deepslate_plate",
@@ -94,17 +112,20 @@ public class JolCraftItems {
     public static final DeferredItem<Item> DEEPSLATE_SWORD = ITEMS.registerItem("deepslate_sword",
             (properties) -> new SwordItem(JolCraftToolMaterials.DEEPSLATE, 3.0F, -2.4F, properties));
 
+    public static final DeferredItem<Item> DEEPSLATE_WARHAMMER = ITEMS.registerItem("deepslate_warhammer",
+            (properties) -> new SwordItem(JolCraftToolMaterials.DEEPSLATE, 13.0F, -3.5F, properties));
+
     public static final DeferredItem<Item> DEEPSLATE_PICKAXE = ITEMS.registerItem("deepslate_pickaxe",
-            (properties) -> new PickaxeItem(ToolMaterial.IRON, 1.0F, -2.8F, properties));
+            (properties) -> new PickaxeItem(JolCraftToolMaterials.DEEPSLATE, 1.0F, -2.8F, properties));
 
     public static final DeferredItem<ShovelItem> DEEPSLATE_SHOVEL = ITEMS.registerItem("deepslate_shovel",
-            (properties) -> new ShovelItem(ToolMaterial.IRON, 1.5F, -3.0F, properties));
+            (properties) -> new ShovelItem(JolCraftToolMaterials.DEEPSLATE, 1.5F, -3.0F, properties));
 
     public static final DeferredItem<AxeItem> DEEPSLATE_AXE = ITEMS.registerItem("deepslate_axe",
-            (properties) -> new AxeItem(ToolMaterial.IRON, 6.0F, -3.1F, properties));
+            (properties) -> new AxeItem(JolCraftToolMaterials.DEEPSLATE, 6.0F, -3.1F, properties));
 
     public static final DeferredItem<HoeItem> DEEPSLATE_HOE = ITEMS.registerItem("deepslate_hoe",
-            (properties) -> new HoeItem(ToolMaterial.IRON, -2.0F, -1.0F, properties));
+            (properties) -> new HoeItem(JolCraftToolMaterials.DEEPSLATE, -2.0F, -1.0F, properties));
 
     public static final DeferredItem<Item> DEEPSLATE_HELMET = ITEMS.registerItem("deepslate_helmet",
             props -> new DeepslateArmorItem(JolCraftArmorMaterials.DEEPSLATE_ARMOR_MATERIAL, ArmorType.HELMET, props));
@@ -148,10 +169,12 @@ public class JolCraftItems {
             BountyCrateItem::new, new Item.Properties().stacksTo(1));
 
     public static final DeferredItem<Item> RESTOCK_CRATE = ITEMS.registerItem("restock_crate",
-            RestockCrateItem::new, new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
+            RestockCrateItem::new, new Item.Properties().stacksTo(16).rarity(Rarity.UNCOMMON));
+
+    public static final DeferredItem<Item> REROLL_CRATE = ITEMS.registerItem("reroll_crate",
+            RerollCrateItem::new, new Item.Properties().stacksTo(16).rarity(Rarity.UNCOMMON));
 
     //Contracts and Associated Items
-
     public static final DeferredItem<Item> CONTRACT_BLANK = ITEMS.registerItem("contract_blank",
             Item::new, new Item.Properties());
 
@@ -373,19 +396,19 @@ public class JolCraftItems {
 
     public static final DeferredItem<Item> REPUTATION_TABLET_1 =
             ITEMS.registerItem("reputation_tablet_1", ReputationTabletItem::new,
-                    new Item.Properties().stacksTo(1).rarity(Rarity.COMMON));
+                    new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
 
     public static final DeferredItem<Item> REPUTATION_TABLET_2 =
             ITEMS.registerItem("reputation_tablet_2", ReputationTabletItem::new,
-                    new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
+                    new Item.Properties().stacksTo(1).rarity(Rarity.RARE));
 
     public static final DeferredItem<Item> REPUTATION_TABLET_3 =
             ITEMS.registerItem("reputation_tablet_3", ReputationTabletItem::new,
-                    new Item.Properties().stacksTo(1).rarity(Rarity.RARE));
+                    new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
 
     public static final DeferredItem<Item> REPUTATION_TABLET_4 =
-            ITEMS.registerItem("reputation_tablet_4", ReputationTabletItem::new,
-                    new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
+            ITEMS.registerItem("reputation_tablet_4", LegendaryReputationTabletItem::new,
+                    new Item.Properties().stacksTo(1));
 
     // Tomes
     public static final DeferredItem<Item> DWARVEN_TOME = ITEMS.registerSimpleItem("dwarven_tome");

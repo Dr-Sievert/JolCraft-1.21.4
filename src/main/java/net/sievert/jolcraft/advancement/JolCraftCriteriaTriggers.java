@@ -2,6 +2,7 @@ package net.sievert.jolcraft.advancement;
 
 import net.minecraft.core.registries.Registries;
 import net.neoforged.neoforge.registries.RegisterEvent;
+import net.sievert.jolcraft.advancement.custom.*;
 
 public class JolCraftCriteriaTriggers {
 

@@ -11,6 +11,14 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.sievert.jolcraft.JolCraft;
+import net.sievert.jolcraft.datagen.advancement.JolCraftAdvancementProvider;
+import net.sievert.jolcraft.datagen.block.JolCraftBlockLootTableProvider;
+import net.sievert.jolcraft.datagen.block.JolCraftBlockTagProvider;
+import net.sievert.jolcraft.datagen.loot.JolCraftEntityLootTableProvider;
+import net.sievert.jolcraft.datagen.item.JolCraftItemTagProvider;
+import net.sievert.jolcraft.datagen.loot.JolCraftGlobalLootModifierProvider;
+import net.sievert.jolcraft.datagen.model.JolCraftModelProvider;
+import net.sievert.jolcraft.datagen.recipe.JolCraftRecipeProvider;
 
 import java.util.Collections;
 import java.util.List;

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "jolcraft:block/deepslate_plate_block"
+  }
+}

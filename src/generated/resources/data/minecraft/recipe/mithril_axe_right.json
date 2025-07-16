@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": "jolcraft:mithril_ingot",
+    "X": "jolcraft:deepslate_plate"
+  },
+  "pattern": [
+    "BB",
+    "XB",
+    "X "
+  ],
+  "result": {
+    "count": 1,
+    "id": "jolcraft:mithril_axe"
+  }
+}

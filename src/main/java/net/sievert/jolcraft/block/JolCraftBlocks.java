@@ -2,9 +2,9 @@ package net.sievert.jolcraft.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.cauldron.CauldronInteraction;
-import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.*;
@@ -28,7 +28,7 @@ public class JolCraftBlocks {
     public static final DeferredRegister.Blocks BLOCKS =
             DeferredRegister.createBlocks(JolCraft.MOD_ID);
 
-    public static final DeferredBlock<Block> DEEPSLATE_MITHRIL_ORE = registerFireResistantBlock("deepslate_mithril_ore",
+    public static final DeferredBlock<Block> DEEPSLATE_MITHRIL_ORE = registerMithrilBlock("deepslate_mithril_ore",
             (properties) -> new RotatedPillarExperienceBlock(UniformInt.of(5, 10), properties
                     .mapColor(MapColor.DEEPSLATE)
                     .strength(30.0F, 1200.0F)
@@ -40,11 +40,10 @@ public class JolCraftBlocks {
             BlockBehaviour.Properties.of()
     );
 
-    public static final DeferredBlock<Block> PURE_MITHRIL_BLOCK = registerFireResistantBlock("pure_mithril_block",
+    public static final DeferredBlock<Block> PURE_MITHRIL_BLOCK = registerMithrilBlock("pure_mithril_block",
             (properties) -> new Block(properties
                     .mapColor(MapColor.DIAMOND)
                     .strength(40.0F, 1200.0F)
-                    .sound(SoundType.NETHERITE_BLOCK)
                     .instrument(NoteBlockInstrument.BASEDRUM)
                     .requiresCorrectToolForDrops()
                     .lightLevel((state) -> 4)
@@ -52,7 +51,7 @@ public class JolCraftBlocks {
             BlockBehaviour.Properties.of()
     );
 
-    public static final DeferredBlock<Block> MITHRIL_BLOCK = registerFireResistantBlock("mithril_block",
+    public static final DeferredBlock<Block> MITHRIL_BLOCK = registerMithrilBlock("mithril_block",
             (properties) -> new Block(properties
                     .mapColor(MapColor.DIAMOND)
                     .strength(50.0F, 1200.0F)
@@ -64,7 +63,16 @@ public class JolCraftBlocks {
             BlockBehaviour.Properties.of()
     );
 
-
+    public static final DeferredBlock<Block> DEEPSLATE_PLATE_BLOCK = registerBlock("deepslate_plate_block",
+            (properties) -> new Block(properties
+                    .mapColor(MapColor.DEEPSLATE)
+                    .sound(SoundType.DEEPSLATE)
+                    .strength(6, 6)
+                    .instrument(NoteBlockInstrument.BASEDRUM)
+                    .requiresCorrectToolForDrops()
+            ),
+            BlockBehaviour.Properties.of(), true
+    );
 
     // Only register the block, NOT the item
     public static final DeferredBlock<Block> STRONGBOX = registerBlock(
@@ -72,7 +80,7 @@ public class JolCraftBlocks {
             (properties) -> new StrongboxBlock(properties
                     .mapColor(MapColor.DEEPSLATE)
                     .strength(5.0F, 8.0F)
-                    .instrument(NoteBlockInstrument.BASS)
+                    .instrument(NoteBlockInstrument.BASEDRUM)
                     .requiresCorrectToolForDrops()
                     .sound(SoundType.DEEPSLATE_TILES)
                     .noOcclusion()
@@ -367,19 +375,19 @@ public class JolCraftBlocks {
         JolCraftItems.ITEMS.registerItem(name, props -> new BlockItem(block.get(), props.useBlockDescriptionPrefix()));
     }
 
-    private static <B extends Block> DeferredBlock<B> registerFireResistantBlock(
+    private static <B extends Block> DeferredBlock<B> registerMithrilBlock(
             String name,
             Function<BlockBehaviour.Properties, ? extends B> builder,
             BlockBehaviour.Properties properties
     ) {
         DeferredBlock<B> block = BLOCKS.registerBlock(name, builder);
-        registerFireResistantBlockItem(name, block);
+        registerMithrilBlockItem(name, block);
         return block;
     }
 
-    private static <B extends Block> void registerFireResistantBlockItem(String name, DeferredBlock<B> block) {
+    private static <B extends Block> void registerMithrilBlockItem(String name, DeferredBlock<B> block) {
         JolCraftItems.ITEMS.registerItem(name, props ->
-                new BlockItem(block.get(), props.fireResistant().useBlockDescriptionPrefix())
+                new BlockItem(block.get(), props.fireResistant().rarity(Rarity.RARE).useBlockDescriptionPrefix())
         );
     }
 

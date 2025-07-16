@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": "jolcraft:deepslate_plate",
+    "X": "minecraft:stick"
+  },
+  "pattern": [
+    "BB",
+    "BB",
+    "X "
+  ],
+  "result": {
+    "count": 1,
+    "id": "jolcraft:deepslate_warhammer"
+  }
+}

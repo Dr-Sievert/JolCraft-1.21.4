@@ -4,6 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
+import net.sievert.jolcraft.attachment.custom.lang.AncientDwarvenLanguage;
 import net.sievert.jolcraft.effect.JolCraftEffects;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -30,12 +31,12 @@ public class AncientEffectHelper {
     public static boolean hasAncientMemoryServer(Player player) {
         return player != null && (player.hasEffect(JolCraftEffects.ANCIENT_MEMORY)
                 || player.isCreative()
-                || net.sievert.jolcraft.attachment.AncientDwarvenLanguage.get(player).knowsLanguage());
+                || AncientDwarvenLanguage.get(player).knowsLanguage());
     }
 
     public static boolean hasAncientMemoryServerBypassCreative(Player player) {
         return player != null && (player.hasEffect(JolCraftEffects.ANCIENT_MEMORY)
-                || net.sievert.jolcraft.attachment.AncientDwarvenLanguage.get(player).knowsLanguage());
+                || AncientDwarvenLanguage.get(player).knowsLanguage());
     }
 
     /**

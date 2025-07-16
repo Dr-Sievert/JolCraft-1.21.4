@@ -41,6 +41,12 @@ public class JolCraftCreativeModeTabs {
                         pOutput.accept(JolCraftItems.MITHRIL_INGOT);
                         pOutput.accept(JolCraftItems.MITHRIL_NUGGET);
                         pOutput.accept(JolCraftItems.MITHRIL_CHAINWEAVE);
+                        pOutput.accept(JolCraftItems.MITHRIL_SWORD);
+                        pOutput.accept(JolCraftItems.MITHRIL_WARHAMMER);
+                        pOutput.accept(JolCraftItems.MITHRIL_PICKAXE);
+                        pOutput.accept(JolCraftItems.MITHRIL_SHOVEL);
+                        pOutput.accept(JolCraftItems.MITHRIL_AXE);
+                        pOutput.accept(JolCraftItems.MITHRIL_HOE);
                         pOutput.accept(JolCraftItems.MITHRIL_HELMET);
                         pOutput.accept(JolCraftItems.MITHRIL_CHESTPLATE);
                         pOutput.accept(JolCraftItems.MITHRIL_LEGGINGS);
@@ -79,7 +85,9 @@ public class JolCraftCreativeModeTabs {
 
                         pOutput.accept(JolCraftItems.DEEPSLATE_BULBS);
                         pOutput.accept(JolCraftItems.DEEPSLATE_PLATE);
+                        pOutput.accept(JolCraftBlocks.DEEPSLATE_PLATE_BLOCK);
                         pOutput.accept(JolCraftItems.DEEPSLATE_SWORD);
+                        pOutput.accept(JolCraftItems.DEEPSLATE_WARHAMMER);
                         pOutput.accept(JolCraftItems.DEEPSLATE_PICKAXE);
                         pOutput.accept(JolCraftItems.DEEPSLATE_SHOVEL);
                         pOutput.accept(JolCraftItems.DEEPSLATE_AXE);
@@ -124,6 +132,7 @@ public class JolCraftCreativeModeTabs {
                         pOutput.accept(JolCraftItems.BOUNTY);
                         pOutput.accept(JolCraftItems.BOUNTY_CRATE);
                         pOutput.accept(JolCraftItems.RESTOCK_CRATE);
+                        pOutput.accept(JolCraftItems.REROLL_CRATE);
 
                         pOutput.accept(JolCraftItems.AEGISCORE);
                         pOutput.accept(JolCraftItems.ASHFANG);
@@ -143,9 +152,9 @@ public class JolCraftCreativeModeTabs {
 
                         pOutput.accept(JolCraftItems.UNIDENTIFIED_DWARVEN_TOME);
                         pOutput.accept(JolCraftItems.ANCIENT_UNIDENTIFIED_DWARVEN_TOME);
-                        pOutput.accept(JolCraftItems.LEGENDARY_PAGE);
                         pOutput.accept(JolCraftItems.LEGENDARY_ANCIENT_UNIDENTIFIED_DWARVEN_TOME);
-                        pOutput.accept(JolCraftItems.ANCIENT_DWARVEN_TOME_LEGENDARY);
+                        pOutput.accept(JolCraftItems.LEGENDARY_PAGE);
+
 
                         pOutput.accept(JolCraftItems.COPPER_SPANNER);
                         pOutput.accept(JolCraftItems.IRON_SPANNER);

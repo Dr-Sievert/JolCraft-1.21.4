@@ -19,6 +19,13 @@
   "item.jolcraft.mithril_nugget": "Mithril Nugget",
   "item.jolcraft.mithril_chainweave": "Mithril Chainweave",
 
+  "item.jolcraft.mithril_sword": "Mithril Sword",
+  "item.jolcraft.mithril_warhammer": "Mithril Warhammer",
+  "item.jolcraft.mithril_pickaxe": "Mithril Pickaxe",
+  "item.jolcraft.mithril_shovel": "Mithril Shovel",
+  "item.jolcraft.mithril_axe": "Mithril Axe",
+  "item.jolcraft.mithril_hoe": "Mithril Hoe",
+
   "item.jolcraft.mithril_helmet": "Mithril Helmet",
   "item.jolcraft.mithril_chestplate": "Mithril Chestplate",
   "item.jolcraft.mithril_leggings": "Mithril Leggings",
@@ -26,7 +33,9 @@
 
 
   "item.jolcraft.deepslate_plate": "Deepslate Plate",
+  "block.jolcraft.deepslate_plate_block": "Deepslate Plate Block",
   "item.jolcraft.deepslate_sword": "Deepslate Sword",
+  "item.jolcraft.deepslate_warhammer": "Deepslate Warhammer",
   "item.jolcraft.deepslate_pickaxe": "Deepslate Pickaxe",
   "item.jolcraft.deepslate_shovel": "Deepslate Shovel",
   "item.jolcraft.deepslate_axe": "Deepslate Axe",
@@ -284,9 +293,9 @@
   "tooltip.jolcraft.strongbox.locked": "This strongbox is locked.",
   "tooltip.jolcraft.strongbox.busy": "Someone else is trying to pick this lock.",
 
-  "tooltip.jolcraft.bounty.locked": "Bounty info locked",
-  "tooltip.jolcraft.bounty.invalid": "Bounty Tier: Invalid",
-  "tooltip.jolcraft.bounty.tier": "Bounty Tier: %d",
+  "tooltip.jolcraft.bounty.locked": "The parchment is marked with unfamiliar symbols.",
+  "tooltip.jolcraft.bounty.invalid": "Tier: Invalid",
+  "tooltip.jolcraft.bounty.tier": "Tier: %d",
 
   "tooltip.jolcraft.bounty_crate.target": "Target: ",
   "tooltip.jolcraft.bounty_crate.count": "Required: %s",
@@ -299,8 +308,15 @@
   "tooltip.jolcraft.bounty_crate.complete": "Ready to be turned in.",
   "tooltip.jolcraft.bounty_crate.not_complete": "This bounty has not been completed.",
 
-  "tooltip.jolcraft.restock_crate": "Can be used to restock the inventory of a dwarf trader.",
+  "tooltip.jolcraft.crate.cooldown": "You must wait before you can use another crate.",
+  "tooltip.jolcraft.crate.no_offers_villager": "This villager has no trades!",
+  "tooltip.jolcraft.crate.no_offers_dwarf": "This dwarf has no trades!",
+  "tooltip.jolcraft.restock_crate": "Can be used to restock the inventory of a trader.",
+  "tooltip.jolcraft.restock_crate.no_need": "This trader doesn't need restocking.",
   "tooltip.jolcraft.restock_crate.success": "Trader inventory restocked!",
+  "tooltip.jolcraft.reroll_crate": "Can be used to reroll the inventory of a trader.",
+  "tooltip.jolcraft.reroll_crate.fail": "This trader inventory cannot be rerolled!",
+  "tooltip.jolcraft.reroll_crate.success": "Trader inventory rerolled!",
 
   "tooltip.jolcraft.spanner": "Can be used to produce scrap from salvage.",
   "tooltip.jolcraft.salvage": "Salvagable",

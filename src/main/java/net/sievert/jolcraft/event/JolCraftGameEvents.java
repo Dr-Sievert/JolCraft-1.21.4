@@ -1,8 +1,10 @@
 package net.sievert.jolcraft.event;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -11,8 +13,11 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.npc.Villager;
+import net.minecraft.world.entity.npc.VillagerData;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.entity.player.Player;
@@ -22,6 +27,7 @@ import net.minecraft.world.item.alchemy.PotionBrewing;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.item.trading.MerchantOffer;
+import net.minecraft.world.item.trading.MerchantOffers;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LayeredCauldronBlock;
@@ -32,22 +38,22 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.AnvilUpdateEvent;
 import net.neoforged.neoforge.event.brewing.RegisterBrewingRecipesEvent;
 import net.neoforged.neoforge.event.entity.EntityInvulnerabilityCheckEvent;
-import net.neoforged.neoforge.event.entity.player.AdvancementEvent;
-import net.neoforged.neoforge.event.entity.player.PlayerEvent;
-import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
-import net.neoforged.neoforge.event.entity.player.PlayerWakeUpEvent;
+import net.neoforged.neoforge.event.entity.player.*;
 import net.neoforged.neoforge.event.village.VillagerTradesEvent;
 import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.advancement.JolCraftCriteriaTriggers;
-import net.sievert.jolcraft.attachment.Hearth;
+import net.sievert.jolcraft.attachment.custom.block.Hearth;
 import net.sievert.jolcraft.block.custom.FermentingCauldronBlock;
 import net.sievert.jolcraft.block.custom.FermentingStage;
+import net.sievert.jolcraft.entity.custom.dwarf.AbstractDwarfEntity;
 import net.sievert.jolcraft.network.JolCraftNetworking;
 import net.sievert.jolcraft.network.packet.ClientboundAncientLanguagePacket;
 import net.sievert.jolcraft.network.packet.ClientboundEndorsementsPacket;
 import net.sievert.jolcraft.network.packet.ClientboundLanguagePacket;
 import net.sievert.jolcraft.network.packet.ClientboundReputationPacket;
 import net.sievert.jolcraft.item.potion.JolCraftPotions;
+import net.sievert.jolcraft.sound.JolCraftSoundHelper;
+import net.sievert.jolcraft.sound.JolCraftSounds;
 import net.sievert.jolcraft.util.JolCraftTags;
 import net.sievert.jolcraft.entity.custom.dwarf.DwarfGuardEntity;
 import net.sievert.jolcraft.item.JolCraftItems;
@@ -103,6 +109,221 @@ public class JolCraftGameEvents {
         builder.addMix(JolCraftPotions.DWARVEN_HASTE, Items.REDSTONE, JolCraftPotions.LONG_DWARVEN_HASTE);
         builder.addMix(JolCraftPotions.DWARVEN_HASTE, Items.GLOWSTONE_DUST, JolCraftPotions.STRONG_DWARVEN_HASTE);
 
+
+    }
+
+    @SubscribeEvent
+    public static void onEntityInteractSpecific(PlayerInteractEvent.EntityInteractSpecific event) {
+        Player player = event.getEntity();
+        Entity target = event.getTarget();
+        ItemStack stack = event.getItemStack();
+
+        //Cooldown gate
+        if (player.getCooldowns().isOnCooldown(stack)) {
+            player.displayClientMessage(
+                    Component.translatable("tooltip.jolcraft.crate.cooldown").withStyle(ChatFormatting.GRAY),
+                    true
+            );
+            event.setCancellationResult(InteractionResult.SUCCESS);
+            event.setCanceled(true);
+            return;
+        }
+
+        // Dwarf logic
+        if (target instanceof AbstractDwarfEntity dwarf && !dwarf.isBaby()  && dwarf.canTrade()) {
+
+            // Restock Crate
+            if (stack.is(JolCraftItems.RESTOCK_CRATE.get())) {
+
+                //Prevent clientside crash
+                if (player.level().isClientSide) {
+                    event.setCancellationResult(InteractionResult.SUCCESS);
+                    event.setCanceled(true);
+                    return;
+                }
+
+                //Needs to actually have offers
+                if (dwarf.getOffers().isEmpty()) {
+                    player.displayClientMessage(
+                            Component.translatable("tooltip.jolcraft.crate.no_offers_dwarf").withStyle(ChatFormatting.RED),
+                            true
+                    );
+                    JolCraftSoundHelper.playDwarfNo(dwarf);
+                    event.setCancellationResult(InteractionResult.SUCCESS);
+                    event.setCanceled(true);
+                    return;
+                }
+
+                boolean needsRestock = dwarf.getOffers().stream().anyMatch(MerchantOffer::isOutOfStock);
+
+                if (!needsRestock && !dwarf.hasRandomTrades()) {
+                    player.displayClientMessage(
+                            Component.translatable("tooltip.jolcraft.restock_crate.no_need").withStyle(ChatFormatting.RED),
+                            true
+                    );
+                    JolCraftSoundHelper.playDwarfNo(dwarf);
+                } else {
+                    player.displayClientMessage(
+                            Component.translatable("tooltip.jolcraft.restock_crate.success").withStyle(ChatFormatting.GREEN),
+                            true
+                    );
+                    dwarf.crateRestock();
+                    JolCraftSoundHelper.playDwarfYes(dwarf);
+                    if (!player.isCreative()) stack.shrink(1);
+                    player.getCooldowns().addCooldown(stack, 60);
+                }
+                event.setCancellationResult(InteractionResult.SUCCESS);
+                event.setCanceled(true);
+                return;
+            }
+
+            // Reroll Crate
+            if (stack.is(JolCraftItems.REROLL_CRATE.get())) {
+
+                //Prevent clientside crash
+                if (player.level().isClientSide) {
+                    event.setCancellationResult(InteractionResult.SUCCESS);
+                    event.setCanceled(true);
+                    return;
+                }
+
+                //Needs to actually have offers
+                if (dwarf.getOffers().isEmpty()) {
+                    player.displayClientMessage(
+                            Component.translatable("tooltip.jolcraft.crate.no_offers_dwarf").withStyle(ChatFormatting.RED),
+                            true
+                    );
+                    JolCraftSoundHelper.playDwarfNo(dwarf);
+                    event.setCancellationResult(InteractionResult.SUCCESS);
+                    event.setCanceled(true);
+                    return;
+                }
+
+                if (!dwarf.canReroll()) {
+                    player.displayClientMessage(
+                            Component.translatable("tooltip.jolcraft.reroll_crate.fail").withStyle(ChatFormatting.RED),
+                            true
+                    );
+                    JolCraftSoundHelper.playDwarfNo(dwarf);
+                } else {
+                    player.displayClientMessage(
+                            Component.translatable("tooltip.jolcraft.reroll_crate.success").withStyle(ChatFormatting.GREEN),
+                            true
+                    );
+                    dwarf.rerollTrades();
+                    JolCraftSoundHelper.playDwarfYes(dwarf);
+                    if (!player.isCreative()) stack.shrink(1);
+                    player.getCooldowns().addCooldown(stack, 60);
+                }
+                event.setCancellationResult(InteractionResult.SUCCESS);
+                event.setCanceled(true);
+                return;
+            }
+        }
+
+        // Villager logic
+        if (target instanceof Villager villager) {
+
+
+            // Restock Crate
+            if (stack.is(JolCraftItems.RESTOCK_CRATE.get()) && !villager.isBaby() && villager.canRestock()) {
+
+                //Prevent clientside crash
+                if (player.level().isClientSide) {
+                    event.setCancellationResult(InteractionResult.SUCCESS);
+                    event.setCanceled(true);
+                    return;
+                }
+
+                //Needs to actually have offers
+                if (villager.getOffers().isEmpty()) {
+                    player.displayClientMessage(
+                            Component.translatable("tooltip.jolcraft.crate.no_offers_villager").withStyle(ChatFormatting.RED),
+                            true
+                    );
+                    JolCraftSoundHelper.playVillagerNo(villager);
+                    event.setCancellationResult(InteractionResult.SUCCESS);
+                    event.setCanceled(true);
+                    return;
+                }
+
+                boolean needsRestock = villager.getOffers().stream().anyMatch(MerchantOffer::isOutOfStock);
+
+                if (!needsRestock) {
+                    player.displayClientMessage(
+                            Component.translatable("tooltip.jolcraft.restock_crate.no_need").withStyle(ChatFormatting.GRAY),
+                            true
+                    );
+                    JolCraftSoundHelper.playVillagerNo(villager);
+                } else {
+                    player.displayClientMessage(
+                            Component.translatable("tooltip.jolcraft.restock_crate.success").withStyle(ChatFormatting.GREEN),
+                            true
+                    );
+                    JolCraftSoundHelper.playVillagerFisherman(villager);
+                    JolCraftSoundHelper.playVillagerYes(villager);
+                    villager.restock();
+                    if (!player.isCreative()) stack.shrink(1);
+                    player.getCooldowns().addCooldown(stack, 60);
+                }
+                event.setCancellationResult(InteractionResult.SUCCESS);
+                event.setCanceled(true);
+                return;
+            }
+
+            // Reroll Crate
+            if (stack.is(JolCraftItems.REROLL_CRATE.get()) && !villager.isBaby()) {
+
+                //Prevent clientside crash
+                if (player.level().isClientSide) {
+                    event.setCancellationResult(InteractionResult.SUCCESS);
+                    event.setCanceled(true);
+                    return;
+                }
+
+                //Needs to actually have offers
+                if (villager.getOffers().isEmpty()) {
+                    player.displayClientMessage(
+                            Component.translatable("tooltip.jolcraft.crate.no_offers_villager").withStyle(ChatFormatting.RED),
+                            true
+                    );
+                    JolCraftSoundHelper.playVillagerNo(villager);
+                    event.setCancellationResult(InteractionResult.SUCCESS);
+                    event.setCanceled(true);
+                    return;
+                }
+
+                VillagerData data = villager.getVillagerData();
+                int currentLevel = data.getLevel();
+
+                MerchantOffers accumulated = new MerchantOffers();
+
+                for (int level = 1; level <= currentLevel; level++) {
+                    villager.setVillagerData(data.setLevel(level));
+                    villager.setOffers(null); // clear to force repopulation
+                    MerchantOffers thisLevelOffers = villager.getOffers();
+
+                    for (MerchantOffer offer : thisLevelOffers) {
+                        accumulated.add(offer);
+                    }
+                }
+
+                villager.setOffers(accumulated);
+                villager.setVillagerData(data.setLevel(currentLevel)); // restore
+
+                JolCraftSoundHelper.playVillagerFisherman(villager);
+                JolCraftSoundHelper.playVillagerYes(villager);
+                player.displayClientMessage(
+                        Component.translatable("tooltip.jolcraft.reroll_crate.success").withStyle(ChatFormatting.GREEN),
+                        true
+                );
+                if (!player.isCreative()) stack.shrink(1);
+                player.getCooldowns().addCooldown(stack, 60);
+                event.setCancellationResult(InteractionResult.SUCCESS);
+                event.setCanceled(true);
+            }
+
+        }
 
     }
 
@@ -186,7 +407,9 @@ public class JolCraftGameEvents {
     public static void onPlayerWakeUp(PlayerWakeUpEvent event) {
         Player player = event.getEntity();
         Hearth hearth = Hearth.get(player);
-        hearth.setLitThisDay(false);
+        if(hearth.hasLitThisDay()){
+            hearth.setLitThisDay(false);
+        }
     }
 
     @SubscribeEvent
@@ -214,7 +437,6 @@ public class JolCraftGameEvents {
            });
        }
     }
-
 
     @SubscribeEvent
     public static void onRightClickItem(PlayerInteractEvent.RightClickItem event) {
@@ -298,6 +520,58 @@ public class JolCraftGameEvents {
             event.setOutput(result);
             event.setCost(vanilla.cost());
             event.setMaterialCost(vanilla.materialCost());
+        }
+
+        if (!left.isEmpty() && left.is(JolCraftTags.Items.MITHRIL_ITEMS)) {
+            var vanilla = JolCraftAnvilHelper.vanillaResult(left, right, rename, event.getPlayer());
+            ItemStack result = vanilla.result();
+
+            if (!result.isEmpty()) {
+                // Determine the name to show: use rename, else use default name (but filter it, for safety)
+                String baseName;
+                if (rename != null && !rename.isEmpty()) {
+                    baseName = net.minecraft.util.StringUtil.filterText(rename);
+                } else {
+                    baseName = left.getHoverName().getString();
+                }
+
+                // Remove any prior names to avoid conflicts
+                result.remove(net.minecraft.core.component.DataComponents.CUSTOM_NAME);
+                result.remove(net.minecraft.core.component.DataComponents.ITEM_NAME);
+
+                // Always set gold name, even if unchanged!
+                result.set(net.minecraft.core.component.DataComponents.ITEM_NAME,
+                        net.minecraft.network.chat.Component.literal(baseName).withStyle(ChatFormatting.AQUA));
+            }
+
+            event.setOutput(result);
+            event.setCost(vanilla.cost());
+            event.setMaterialCost(vanilla.materialCost());
+        }
+    }
+
+
+    @SubscribeEvent
+    public static void onEnchantItem(PlayerEnchantItemEvent event) {
+        ItemStack stack = event.getEnchantedItem();
+
+        // Legendary naming logic
+        if (!stack.isEmpty() && stack.is(JolCraftTags.Items.LEGENDARY_ITEMS)) {
+            // Always set gold name (you may want to use base name logic as in your anvil event)
+            String baseName = stack.getHoverName().getString();
+            stack.remove(net.minecraft.core.component.DataComponents.CUSTOM_NAME);
+            stack.remove(net.minecraft.core.component.DataComponents.ITEM_NAME);
+            stack.set(net.minecraft.core.component.DataComponents.ITEM_NAME,
+                    Component.literal(baseName).withStyle(ChatFormatting.GOLD));
+        }
+
+        // Mithril naming logic
+        if (!stack.isEmpty() && stack.is(JolCraftTags.Items.MITHRIL_ITEMS)) {
+            String baseName = stack.getHoverName().getString();
+            stack.remove(net.minecraft.core.component.DataComponents.CUSTOM_NAME);
+            stack.remove(net.minecraft.core.component.DataComponents.ITEM_NAME);
+            stack.set(net.minecraft.core.component.DataComponents.ITEM_NAME,
+                    Component.literal(baseName).withStyle(ChatFormatting.AQUA));
         }
     }
 

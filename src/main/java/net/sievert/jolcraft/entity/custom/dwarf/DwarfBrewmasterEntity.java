@@ -5,6 +5,8 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.*;
@@ -22,30 +24,39 @@ import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.block.JolCraftBlocks;
 import net.sievert.jolcraft.entity.ai.goal.*;
 import net.sievert.jolcraft.item.JolCraftItems;
+import net.sievert.jolcraft.sound.JolCraftSoundHelper;
 import net.sievert.jolcraft.util.dwarf.JolCraftDwarfTrades;
 
+import javax.annotation.Nullable;
+
 public class DwarfBrewmasterEntity extends AbstractDwarfEntity {
+
 
     public DwarfBrewmasterEntity(EntityType<? extends AbstractDwarfEntity> entityType, Level level) {
         super(entityType, level);
         this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(JolCraftItems.GLASS_MUG.get()));
+        this.instanceTrades = createRandomizedBrewmasterTrades();
     }
 
-    //Attributes
+    // ----------------------------
+    // Attributes
+    // ----------------------------
+
     public static AttributeSupplier.Builder createAttributes() {
         return DwarfEntity.createLivingAttributes()
                 .add(Attributes.MAX_HEALTH, 30d)
                 .add(Attributes.MOVEMENT_SPEED, 0.2D)
                 .add(Attributes.FOLLOW_RANGE, 24D)
-                .add(Attributes.TEMPT_RANGE, 16d)
+                .add(Attributes.TEMPT_RANGE, 16D)
                 .add(Attributes.ATTACK_DAMAGE, 3.0D);
     }
 
-    //Core
+    // ----------------------------
+    // Core
+    // ----------------------------
+
     @Override
-    public boolean canTrade() {
-        return true;
-    }
+    public boolean canTrade() { return true; }
 
     @Override
     public ItemStack getSignedContractItem() {
@@ -58,9 +69,7 @@ public class DwarfBrewmasterEntity extends AbstractDwarfEntity {
     }
 
     @Override
-    public float getVoicePitch() {
-        return 0.9F;
-    }
+    public float getVoicePitch() { return 0.9F; }
 
     @Override
     protected void registerGoals() {
@@ -88,85 +97,71 @@ public class DwarfBrewmasterEntity extends AbstractDwarfEntity {
 
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
-        ItemStack itemstack = player.getItemInHand(hand);
-        boolean client = this.level().isClientSide;
-
         // 🧠 Language check
         InteractionResult langCheck = this.languageCheck(player);
-        if (langCheck != InteractionResult.SUCCESS) {
-            return langCheck;
-        }
+        if (langCheck != InteractionResult.SUCCESS) return langCheck;
 
         // Reputation check
         InteractionResult repCheck = this.reputationCheck(player, 1);
-        if (repCheck != InteractionResult.SUCCESS) {
-            return repCheck;
-        }
-
+        if (repCheck != InteractionResult.SUCCESS) return repCheck;
 
         // Call parent for all other interactions (contracts, trades, etc)
         return super.mobInteract(player, hand);
     }
 
-    //Trades
-    public static final Int2ObjectMap<VillagerTrades.ItemListing[]> TRADES = toIntMap(
-            ImmutableMap.of(
+    // ----------------------------
+    // Trade Randomization
+    // ----------------------------
 
-                    //Novice
-                    1,
-                    new VillagerTrades.ItemListing[]{
-                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.GLASS_MUG.get(), 3, 5, 2, 1),
-                            new JolCraftDwarfTrades.ItemsForGold(Items.SUGAR, 1, 2, 10, 1)
-
-                    },
-
-                    //Apprentice
-                    2,
-                    new VillagerTrades.ItemListing[]{
-                            new JolCraftDwarfTrades.ItemsForGold(Items.CAULDRON, 10, 1, 3, 20),
-                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.BARLEY_MALT.get(), 10, 10, 10, 1)
-
-                    },
-
-                    //Journeyman
-                    3,
-                    new VillagerTrades.ItemListing[]{
-                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.ASGARNIAN_HOPS.get(), 2, 10, 15, 1),
-                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.DUSKHOLD_HOPS.get(), 2, 10, 15, 1),
-                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.KRANDONIAN_HOPS.get(), 2, 10, 15, 1),
-                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.YANILLIAN_HOPS.get(), 2, 10, 15, 1)
-                    },
-
-                    //Expert
-                    4,
-                    new VillagerTrades.ItemListing[]{
-                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.DWARVEN_BREW.get(), 1, 5, 50, 3),
-                            new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.YEAST.get(), 5, 1, 5, 50),
-                    },
-
-                    //Master
-                    5,
-                    new VillagerTrades.ItemListing[]{
-                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.EMBERGLASS.get(), 1, 1, 0, 30),
-                            new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.EMBERGLASS, 1, 30, JolCraftBlocks.HEARTH.get(), 1, 1, 0, 0.05F),
-                    }
-            )
-    );
-
-    private static Int2ObjectMap<VillagerTrades.ItemListing[]> toIntMap(ImmutableMap<Integer, VillagerTrades.ItemListing[]> pMap) {
-
-        return new Int2ObjectOpenHashMap<>(pMap);
+    /** Generates a new randomized trade set for this Brewmaster instance.
+     * No pre-randomization! All values are min/max, the trade does the rolling. */
+    public static Int2ObjectMap<VillagerTrades.ItemListing[]> createRandomizedBrewmasterTrades() {
+        return AbstractDwarfEntity.toIntMap(ImmutableMap.of(
+                // Novice
+                1, new VillagerTrades.ItemListing[]{
+                        new JolCraftDwarfTrades.GoldForItems(JolCraftItems.GLASS_MUG.get(), 1, 2, 5, 2, 1, 3),
+                        new JolCraftDwarfTrades.ItemsForGold(Items.SUGAR, 1, 2, 1, 2, 10, 1)
+                },
+                // Apprentice
+                2, new VillagerTrades.ItemListing[]{
+                        new JolCraftDwarfTrades.ItemsForGold(Items.CAULDRON, 7, 12, 1, 9, 10),
+                        new JolCraftDwarfTrades.GoldForItems(JolCraftItems.BARLEY_MALT.get(), 12, 22, 10, 15, 1, 3)
+                },
+                // Journeyman
+                3, new VillagerTrades.ItemListing[]{
+                        new JolCraftDwarfTrades.GoldForItems(JolCraftItems.ASGARNIAN_HOPS.get(), 10, 20, 10, 15, 1, 3),
+                        new JolCraftDwarfTrades.GoldForItems(JolCraftItems.DUSKHOLD_HOPS.get(), 10, 20, 10, 15, 1, 3),
+                        new JolCraftDwarfTrades.GoldForItems(JolCraftItems.KRANDONIAN_HOPS.get(), 10, 20, 10, 15, 1, 3),
+                        new JolCraftDwarfTrades.GoldForItems(JolCraftItems.YANILLIAN_HOPS.get(), 10, 20, 10, 15, 1, 3)
+                },
+                // Expert
+                4, new VillagerTrades.ItemListing[]{
+                        new JolCraftDwarfTrades.GoldForItems(JolCraftItems.DWARVEN_BREW.get(), 1, 5, 50, 3, 6),
+                        new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.YEAST.get(), 3, 5, 1, 2, 10, 10)
+                },
+                // Master
+                5, new VillagerTrades.ItemListing[]{
+                        new JolCraftDwarfTrades.GoldForItems(JolCraftItems.EMBERGLASS.get(), 1, 10, 0, 20, 40),
+                        new JolCraftDwarfTrades.ItemsAndGoldToItems(
+                                JolCraftItems.EMBERGLASS.get(), 1, 20, 40,
+                                JolCraftBlocks.HEARTH.get(), 1, 1, 0, 0F
+                        )
+                }
+        ));
     }
 
+    @Nullable
     @Override
-    protected void updateTrades() {
-        int level = this.getVillagerData().getLevel();
-        VillagerTrades.ItemListing[] listings = TRADES.get(level);
-        if (listings != null) {
-            this.addOffersFromItemListings(this.getOffers(), listings, 4); // 2 = max trades for that level
-        }
+    protected SoundEvent getRestockSound() {
+        return SoundEvents.VILLAGER_WORK_CLERIC;
     }
+
+    @Nullable
+    @Override
+    protected SoundEvent getRerollSound() {
+        return SoundEvents.VILLAGER_WORK_CLERIC;
+    }
+
+
 
 }
-
-

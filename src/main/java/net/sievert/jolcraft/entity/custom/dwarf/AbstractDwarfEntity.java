@@ -1,6 +1,8 @@
 package net.sievert.jolcraft.entity.custom.dwarf;
 
 import com.mojang.logging.LogUtils;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.core.component.DataComponents;
@@ -19,6 +21,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -26,6 +29,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.npc.*;
@@ -39,11 +43,14 @@ import net.minecraft.world.item.trading.MerchantOffers;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.entity.living.BabyEntitySpawnEvent;
 import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.advancement.JolCraftCriteriaTriggers;
-import net.sievert.jolcraft.attachment.DwarvenReputationImpl;
+import net.sievert.jolcraft.attachment.custom.rep.DwarvenReputationImpl;
 import net.sievert.jolcraft.attachment.JolCraftAttachments;
 import net.sievert.jolcraft.component.JolCraftDataComponents;
+import net.sievert.jolcraft.sound.JolCraftSoundHelper;
 import net.sievert.jolcraft.util.JolCraftTags;
 import net.sievert.jolcraft.entity.JolCraftEntities;
 import net.sievert.jolcraft.entity.ai.goal.DwarfBlockGoal;
@@ -213,10 +220,6 @@ public class AbstractDwarfEntity extends AbstractVillager {
     }
 
     //Behavior
-    public boolean canTrade() {
-        return false;
-    }
-
     public boolean canSign() {
         return true;
     }
@@ -279,7 +282,6 @@ public class AbstractDwarfEntity extends AbstractVillager {
 
     // --- Getters/setters ---
     protected boolean isPerformingAction() { return performingAction; }
-    protected void setPerformingAction(boolean val) { performingAction = val; }
 
     //Actions list
 
@@ -295,8 +297,6 @@ public class AbstractDwarfEntity extends AbstractVillager {
 
     public static final ResourceLocation ACTION_REPUTATION_ENDORSEMENT =
             ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "reputation_endorsement");
-
-
 
     //Guildmaster
 
@@ -349,7 +349,7 @@ public class AbstractDwarfEntity extends AbstractVillager {
                 : DwarvenLanguageHelper.knowsDwarvishServer(player);
 
         if (!knowsLanguage) {
-            this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, this.getVoicePitch());
+            JolCraftSoundHelper.playDwarfNo(this);
 
             if (client) {
                 player.displayClientMessage(
@@ -371,7 +371,7 @@ public class AbstractDwarfEntity extends AbstractVillager {
                 : DwarvenReputationHelper.hasTierServer(player, requiredTier);
 
         if (!hasTier) {
-            this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, this.getVoicePitch());
+            JolCraftSoundHelper.playDwarfNo(this);
 
             if (client) {
                 player.displayClientMessage(
@@ -406,7 +406,7 @@ public class AbstractDwarfEntity extends AbstractVillager {
                         Component.translatable("tooltip.jolcraft.dwarf.busy").withStyle(ChatFormatting.GRAY), true
                 );
             }else{
-                this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, this.getVoicePitch());
+                JolCraftSoundHelper.playDwarfNo(this);
             }
             return InteractionResult.FAIL; // ❌ Block interaction if any condition is met
         }
@@ -442,7 +442,7 @@ public class AbstractDwarfEntity extends AbstractVillager {
             }
 
             // ❌ If the dwarf is neither in love nor a baby, play sound indicating invalid action
-            this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, this.isBaby() ? 1.5F : this.getVoicePitch());
+            JolCraftSoundHelper.playDwarfNo(this);
         }
 
         // 🔇 Fallback to generic common interaction logic
@@ -481,7 +481,7 @@ public class AbstractDwarfEntity extends AbstractVillager {
                             Component.translatable("tooltip.jolcraft.dwarf.cannot_sign").withStyle(ChatFormatting.GRAY), true
                     );
                 }
-                this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, this.getVoicePitch());
+                JolCraftSoundHelper.playDwarfNo(this);
                 return client ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
             }
 
@@ -492,13 +492,13 @@ public class AbstractDwarfEntity extends AbstractVillager {
                             Component.translatable("tooltip.jolcraft.dwarf.not_paid").withStyle(ChatFormatting.GRAY), true
                     );
                 }
-                this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, this.getVoicePitch());
+                JolCraftSoundHelper.playDwarfNo(this);
                 return client ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
             }
 
             // ✅ All clear: proceed with contract signing
             this.usePlayerItem(player, hand, itemstack);
-            this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_YES.get(), SoundSource.NEUTRAL, 1.0F, this.getVoicePitch());
+            JolCraftSoundHelper.playDwarfYes(this);
             ItemStack prevMainHand = this.getMainHandItem().copy();
             this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(JolCraftItems.CONTRACT_WRITTEN.get()));
 
@@ -538,7 +538,7 @@ public class AbstractDwarfEntity extends AbstractVillager {
                             Component.translatable("tooltip.jolcraft.dwarf.cannot_promote").withStyle(ChatFormatting.GRAY), true
                     );
                 }
-                this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, this.getVoicePitch());
+                JolCraftSoundHelper.playDwarfNo(this);
                 return client ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
             }
 
@@ -549,7 +549,7 @@ public class AbstractDwarfEntity extends AbstractVillager {
                             Component.translatable("tooltip.jolcraft.dwarf.not_paid").withStyle(ChatFormatting.GRAY), true
                     );
                 }
-                this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, this.getVoicePitch());
+                JolCraftSoundHelper.playDwarfNo(this);
                 return client ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
             }
 
@@ -592,7 +592,7 @@ public class AbstractDwarfEntity extends AbstractVillager {
                     player.displayClientMessage(
                             Component.translatable("tooltip.jolcraft.reputation.already_endorsed").withStyle(ChatFormatting.GRAY), true);
                 }
-                this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, this.getVoicePitch());
+                JolCraftSoundHelper.playDwarfNo(this);
                 return client ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
             }
 
@@ -602,7 +602,7 @@ public class AbstractDwarfEntity extends AbstractVillager {
                     player.displayClientMessage(
                             Component.translatable("tooltip.jolcraft.reputation.never_endorse").withStyle(ChatFormatting.GRAY), true);
                 }
-                this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, this.getVoicePitch());
+                JolCraftSoundHelper.playDwarfNo(this);
                 return client ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
             }
 
@@ -612,7 +612,7 @@ public class AbstractDwarfEntity extends AbstractVillager {
                     player.displayClientMessage(
                             Component.translatable("tooltip.jolcraft.reputation.cannot_endorse").withStyle(ChatFormatting.GRAY), true);
                 }
-                this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, this.getVoicePitch());
+                JolCraftSoundHelper.playDwarfNo(this);
                 return client ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
             }
 
@@ -622,7 +622,7 @@ public class AbstractDwarfEntity extends AbstractVillager {
                     player.displayClientMessage(
                             Component.translatable("tooltip.jolcraft.dwarf.not_paid").withStyle(ChatFormatting.GRAY), true);
                 }
-                this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, this.getVoicePitch());
+                JolCraftSoundHelper.playDwarfNo(this);
                 return client ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
             }
 
@@ -631,7 +631,7 @@ public class AbstractDwarfEntity extends AbstractVillager {
             ItemStack tabletUsed = itemstack.copy();
             this.setItemSlot(EquipmentSlot.MAINHAND, tabletUsed.copy());
             this.usePlayerItem(player, hand, itemstack);
-            this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_YES.get(), SoundSource.NEUTRAL, 1.0F, this.getVoicePitch());
+            JolCraftSoundHelper.playDwarfYes(this);
 
             beginAction(player, 40, ACTION_REPUTATION_ENDORSEMENT, tabletUsed, prevMainHand, () -> {
                 this.setInspecting(false);
@@ -713,20 +713,7 @@ public class AbstractDwarfEntity extends AbstractVillager {
 
             return InteractionResult.SUCCESS;
         }
-
-        //Restock
-        if (itemstack.is(JolCraftItems.RESTOCK_CRATE.get()) && !this.isBaby()) {
-            if (!this.level().isClientSide) {
-                player.displayClientMessage(Component.translatable("tooltip.jolcraft.restock_crate.success").withStyle(ChatFormatting.GREEN), true);
-                this.restock();
-                this.level().playSound(null, this.blockPosition(), SoundEvents.VILLAGER_WORK_FISHERMAN, SoundSource.NEUTRAL, 1.0F, 1.0F);
-                this.usePlayerItem(player, hand, itemstack);
-                return InteractionResult.SUCCESS_SERVER;
-            }
-            return InteractionResult.SUCCESS;
-        }
-
-        this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, this.isBaby() ? 1.5F : this.getVoicePitch());
+        JolCraftSoundHelper.playDwarfNo(this);
         return InteractionResult.FAIL; // ❌ Block any fallback actions
     }
 
@@ -748,15 +735,13 @@ public class AbstractDwarfEntity extends AbstractVillager {
 
                 }
                 this.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 200, 0));
-                this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_YES.get(), SoundSource.NEUTRAL, 1.0F, this.getVoicePitch());
+                JolCraftSoundHelper.playDwarfYes(this);
             }
         }
-
         if (this.shouldRestock()) {
             this.restock();
             lastRestockGameTime = this.level().getGameTime(); // Reset timer
         }
-
         super.customServerAiStep(p_376777_);
     }
 
@@ -884,11 +869,11 @@ public class AbstractDwarfEntity extends AbstractVillager {
             Map.entry(JolCraftItems.CONTRACT_HISTORIAN.get(), JolCraftEntities.DWARF_HISTORIAN.get()),
             Map.entry(JolCraftItems.CONTRACT_SCRAPPER.get(), JolCraftEntities.DWARF_SCRAPPER.get()),
             // Tier 2
-            Map.entry(JolCraftItems.CONTRACT_GUARD.get(), JolCraftEntities.DWARF_GUARD.get())
-
-           /*
+            Map.entry(JolCraftItems.CONTRACT_GUARD.get(), JolCraftEntities.DWARF_GUARD.get()),
             Map.entry(JolCraftItems.CONTRACT_BREWMASTER.get(), JolCraftEntities.DWARF_BREWMASTER.get()),
-            Map.entry(JolCraftItems.CONTRACT_KEEPER.get(), JolCraftEntities.DWARF_KEEPER.get()),
+            Map.entry(JolCraftItems.CONTRACT_KEEPER.get(), JolCraftEntities.DWARF_KEEPER.get())
+
+            /*
             // Tier 3
             Map.entry(JolCraftItems.CONTRACT_MINER.get(), JolCraftEntities.DWARF_MINER.get()),
             Map.entry(JolCraftItems.CONTRACT_EXPLORER.get(), JolCraftEntities.DWARF_EXPLORER.get()),
@@ -1068,8 +1053,8 @@ public class AbstractDwarfEntity extends AbstractVillager {
 
     public void spawnChildFromBreeding(ServerLevel level, AbstractDwarfEntity partner) {
         AgeableMob ageablemob = this.getBreedOffspring(level, partner);
-        final net.neoforged.neoforge.event.entity.living.BabyEntitySpawnEvent event = new net.neoforged.neoforge.event.entity.living.BabyEntitySpawnEvent(this, partner, ageablemob);
-        final boolean cancelled = net.neoforged.neoforge.common.NeoForge.EVENT_BUS.post(event).isCanceled();
+        final net.neoforged.neoforge.event.entity.living.BabyEntitySpawnEvent event = new BabyEntitySpawnEvent(this, partner, ageablemob);
+        final boolean cancelled = NeoForge.EVENT_BUS.post(event).isCanceled();
         ageablemob = event.getChild();
         if (cancelled) {
             this.setAge(6000);
@@ -1273,7 +1258,7 @@ public class AbstractDwarfEntity extends AbstractVillager {
 
     // Helper: allow only certain gear to drop
     private boolean shouldDropEquipment(ItemStack stack) {
-        // Only drop iron axes
+        // Only drop specific
         return stack.is(Items.DIAMOND);
     }
 
@@ -1311,10 +1296,29 @@ public class AbstractDwarfEntity extends AbstractVillager {
     public static final Logger LOGGER = LogUtils.getLogger();
     public boolean increaseProfessionLevelOnUpdate = false;
     public boolean assignProfessionWhenSpawned;
+    protected Int2ObjectMap<VillagerTrades.ItemListing[]> instanceTrades;
+
+    public static Int2ObjectMap<VillagerTrades.ItemListing[]> toIntMap(Map<Integer, VillagerTrades.ItemListing[]> pMap) {
+        return new Int2ObjectOpenHashMap<>(pMap);
+    }
+
+    public boolean canTrade() {
+        return false;
+    }
+
+    public boolean hasRandomTrades(){ return false; }
+
+    public boolean canReroll(){ return true; }
 
     @Override
     protected void updateTrades() {
-        // No default trades at base level
+        int level = this.getVillagerData().getLevel();
+        if (instanceTrades != null) {
+            VillagerTrades.ItemListing[] listings = instanceTrades.get(level);
+            if (listings != null) {
+                this.addOffersFromItemListings(this.getOffers(), listings, listings.length);
+            }
+        }
     }
 
     @Override
@@ -1331,20 +1335,19 @@ public class AbstractDwarfEntity extends AbstractVillager {
         return this.entityData.get(DATA_VILLAGER_DATA);
     }
 
-    public void setVillagerData(VillagerData p_35437_) {
+    public void setVillagerData(VillagerData villagerData) {
         VillagerData villagerdata = this.getVillagerData();
-        if (villagerdata.getProfession() != p_35437_.getProfession()) {
+        if (villagerdata.getProfession() != villagerData.getProfession()) {
             this.offers = null;
         }
 
-        this.entityData.set(DATA_VILLAGER_DATA, p_35437_);
+        this.entityData.set(DATA_VILLAGER_DATA, villagerData);
     }
 
     public boolean shouldIncreaseLevel() {
         int i = this.getVillagerData().getLevel();
         return VillagerData.canLevelUp(i) && this.dwarfXp >= VillagerData.getMaxXpPerLevel(i);
     }
-
 
     public boolean shouldRestock() {
         return this.level() instanceof ServerLevel serverLevel &&
@@ -1355,35 +1358,34 @@ public class AbstractDwarfEntity extends AbstractVillager {
         if (this.getOffers().isEmpty()) return;
 
         boolean needsRestock = false;
-
         for (MerchantOffer offer : this.getOffers()) {
             if (offer.needsRestock()) {
                 offer.resetUses();
                 needsRestock = true;
             }
         }
-
         if (needsRestock) {
             this.lastRestockGameTime = this.level().getGameTime();
-            this.playSound(SoundEvents.VILLAGER_WORK_FISHERMAN, 0.8F, 0.5F);
+            this.level().playSound(null, this.blockPosition(), getRestockSound(), SoundSource.NEUTRAL, 1.2F, 1.0F);
         }
+    }
+
+    public void crateRestock() {
+        restock();
     }
 
     public void rerollTrades() {
-        // Remove all offers
         this.getOffers().clear();
-
-        // Get current level (1 = Novice, 5 = Master)
-        int level = this.getVillagerData().getLevel();
-
-        // Generate trades for each level up to current
-        for (int i = 1; i <= level; i++) {
+        int originalLevel = this.getVillagerData().getLevel();
+        for (int i = 1; i <= originalLevel; i++) {
             this.setVillagerData(this.getVillagerData().setLevel(i));
             this.updateTrades();
         }
-
-        // Custom subclasses (e.g. Merchant, Guildmaster) can override for special pools.
+        this.setVillagerData(this.getVillagerData().setLevel(originalLevel));
+        this.level().playSound(null, this.blockPosition(), getRerollSound(), SoundSource.NEUTRAL, 1.2F, 1.0F);
     }
+
+
 
     @Override
     protected void rewardTradeXp(MerchantOffer offer) {
@@ -1468,6 +1470,16 @@ public class AbstractDwarfEntity extends AbstractVillager {
         this.makeSound(JolCraftSounds.DWARF_YES.get());
     }
 
+    @Nullable
+    protected SoundEvent getRestockSound() {
+        return SoundEvents.VILLAGER_WORK_FISHERMAN;
+    }
+
+    @Nullable
+    protected SoundEvent getRerollSound() {
+        return SoundEvents.VILLAGER_WORK_FISHERMAN;
+    }
+
 
     //Spawning
     @Override
@@ -1481,6 +1493,7 @@ public class AbstractDwarfEntity extends AbstractVillager {
         this.setVariant(variant);
         this.setBeard(beard);
         this.setEye(eye);
+        this.setLeftHanded(false);
         return super.finalizeSpawn(level, difficulty, spawnType, spawnGroupData);
     }
 
@@ -1555,8 +1568,33 @@ public class AbstractDwarfEntity extends AbstractVillager {
             player.awardStat(Stats.TRADED_WITH_VILLAGER);
             JolCraftCriteriaTriggers.TRADE_WITH_DWARF.trigger(serverPlayer, this);
         }
-        net.neoforged.neoforge.common.NeoForge.EVENT_BUS.post(new net.neoforged.neoforge.event.entity.player.TradeWithVillagerEvent(this.lastTradedPlayer, offer, this));
+        NeoForge.EVENT_BUS.post(new net.neoforged.neoforge.event.entity.player.TradeWithVillagerEvent(this.lastTradedPlayer, offer, this));
     }
+
+    public void setCustomAttackDamage(double amount) {
+        if (this.getAttribute(Attributes.ATTACK_DAMAGE) != null) {
+            this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(amount);
+        }
+    }
+
+    public double getAttackDamage() {
+        // Return different values based on held item
+        if (this.getMainHandItem().is(JolCraftItems.DEEPSLATE_WARHAMMER.get())) return 16.5D;
+        if (this.getMainHandItem().is(JolCraftItems.DEEPSLATE_AXE.get())) return 9.5D;
+        return  3.0D; // default (unarmed, or whatever else)
+    }
+
+    @Override
+    public void setItemSlot(EquipmentSlot slot, ItemStack stack) {
+        ItemStack oldStack = this.getItemBySlot(slot);
+        super.setItemSlot(slot, stack); // <-- set the item first!
+        if (slot == EquipmentSlot.MAINHAND && !ItemStack.matches(oldStack, stack)) {
+            // Now update damage using the correct new item
+            this.setCustomAttackDamage(this.getAttackDamage());
+        }
+    }
+
+
 
 
 

@@ -5,13 +5,6 @@
       {
         "model": {
           "type": "minecraft:model",
-          "model": "minecraft:item/chainmail_leggings_emerald_trim"
-        },
-        "when": "minecraft:emerald"
-      },
-      {
-        "model": {
-          "type": "minecraft:model",
           "model": "minecraft:item/chainmail_leggings_quartz_trim"
         },
         "when": "minecraft:quartz"
@@ -71,6 +64,13 @@
           "model": "minecraft:item/chainmail_leggings_amethyst_trim"
         },
         "when": "minecraft:amethyst"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:item/chainmail_leggings_emerald_trim"
+        },
+        "when": "minecraft:emerald"
       },
       {
         "model": {

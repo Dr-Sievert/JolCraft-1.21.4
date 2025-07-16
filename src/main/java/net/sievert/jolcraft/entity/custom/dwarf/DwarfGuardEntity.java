@@ -42,6 +42,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.entity.ai.goal.*;
 import net.sievert.jolcraft.item.JolCraftItems;
+import net.sievert.jolcraft.sound.JolCraftSoundHelper;
 import net.sievert.jolcraft.sound.JolCraftSounds;
 import net.sievert.jolcraft.util.dwarf.JolCraftDwarfTrades;
 
@@ -51,8 +52,7 @@ public class DwarfGuardEntity extends AbstractDwarfEntity {
 
     public DwarfGuardEntity(EntityType<? extends AbstractDwarfEntity> entityType, Level level) {
         super(entityType, level);
-        this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(JolCraftItems.DEEPSLATE_AXE.get()));
-        this.setVillagerData(new VillagerData(VillagerType.PLAINS, VillagerProfession.NONE, 1));
+        this.instanceTrades = createRandomizedGuardTrades();
     }
 
     //Attributes
@@ -62,9 +62,7 @@ public class DwarfGuardEntity extends AbstractDwarfEntity {
                 .add(Attributes.MOVEMENT_SPEED, 0.25D)
                 .add(Attributes.FOLLOW_RANGE, 24D)
                 .add(Attributes.TEMPT_RANGE, 16D)
-                .add(Attributes.ATTACK_DAMAGE, 9.0D)
-                .add(Attributes.ARMOR, 0.0)
-                .add(Attributes.KNOCKBACK_RESISTANCE, 0.0);
+                .add(Attributes.ATTACK_DAMAGE, 3.0D);
     }
 
     //Core
@@ -73,6 +71,9 @@ public class DwarfGuardEntity extends AbstractDwarfEntity {
         // Only allow trading at master level (level 5)
         return this.getVillagerData().getLevel() == 5;
     }
+
+    @Override
+    public boolean canReroll(){ return false; }
 
     @Override
     public ItemStack getSignedContractItem() {
@@ -139,7 +140,7 @@ public class DwarfGuardEntity extends AbstractDwarfEntity {
             ItemStack prevMain = this.getMainHandItem().copy();
             if (!client) {
                 this.setItemSlot(EquipmentSlot.MAINHAND, armorCopy);
-                this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_YES.get(), SoundSource.NEUTRAL, 1.0F, this.getVoicePitch());
+                JolCraftSoundHelper.playDwarfYes(this);
             }
             // Always call beginAction on BOTH SIDES
             beginAction(player, 40, ACTION_PROFESSION, armorCopy, prevMain, () -> {
@@ -174,7 +175,7 @@ public class DwarfGuardEntity extends AbstractDwarfEntity {
         // 2. Already has this armor slot? No!
         if (slot != null && !this.getItemBySlot(slot).isEmpty()) {
             if (!client)
-                level().playSound(null, blockPosition(), JolCraftSounds.DWARF_NO.get(), SoundSource.NEUTRAL, 1.0F, this.getVoicePitch());
+                JolCraftSoundHelper.playDwarfNo(this);
             return InteractionResult.SUCCESS;
         }
 
@@ -205,7 +206,7 @@ public class DwarfGuardEntity extends AbstractDwarfEntity {
             if (this.updateMerchantTimer == 0) {
                 // Level-up finished: play effects (optional)
                 this.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 100, 0));
-                this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_YES.get(), SoundSource.NEUTRAL, 1.0F, this.getVoicePitch());
+                JolCraftSoundHelper.playDwarfYes(this);
             }
         }
 
@@ -224,37 +225,30 @@ public class DwarfGuardEntity extends AbstractDwarfEntity {
     }
 
     //Trades
-    public static final Int2ObjectMap<VillagerTrades.ItemListing[]> TRADES = toIntMap(
-            ImmutableMap.of(
-                    //Master
-                    5,
-                    new VillagerTrades.ItemListing[]{
-                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.AEGISCORE.get(), 1, 1, 0, 30),
-                            new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.AEGISCORE.get(), 1, 30, JolCraftItems.FORGE_ARMOR_TRIM_SMITHING_TEMPLATE.get(), 1, 1, 0, 0.05F)
-                    }
-            )
-    );
-
-    private static Int2ObjectMap<VillagerTrades.ItemListing[]> toIntMap(ImmutableMap<Integer, VillagerTrades.ItemListing[]> pMap) {
-
-        return new Int2ObjectOpenHashMap<>(pMap);
-    }
-
-    @Override
-    protected void updateTrades() {
-        int level = this.getVillagerData().getLevel();
-        VillagerTrades.ItemListing[] listings = TRADES.get(level);
-        if (listings != null) {
-            this.addOffersFromItemListings(this.getOffers(), listings, 2); // 2 = max trades for that level
-        }
+    public static Int2ObjectMap<VillagerTrades.ItemListing[]> createRandomizedGuardTrades() {
+        return AbstractDwarfEntity.toIntMap(ImmutableMap.of(
+                        //Master
+                        5,
+                        new VillagerTrades.ItemListing[]{
+                                new JolCraftDwarfTrades.GoldForItems(JolCraftItems.AEGISCORE.get(), 1, 1, 0, 30),
+                                new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.AEGISCORE.get(), 1, 30, JolCraftItems.FORGE_ARMOR_TRIM_SMITHING_TEMPLATE.get(), 1, 1, 0, 0.05F)
+                        }
+                )
+        );
     }
 
     //Spawning
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, EntitySpawnReason spawnType, @org.jetbrains.annotations.Nullable SpawnGroupData spawnGroupData) {
-        this.setLeftHanded(false);
-        this.setVillagerData(new VillagerData(VillagerType.PLAINS, VillagerProfession.NONE, 1));
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, EntitySpawnReason spawnType, @Nullable SpawnGroupData spawnGroupData) {
+        super.finalizeSpawn(level, difficulty, spawnType, spawnGroupData);
+        if (this.random.nextBoolean()) {
+            this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(JolCraftItems.DEEPSLATE_AXE.get()));
+        } else {
+            this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(JolCraftItems.DEEPSLATE_WARHAMMER.get()));
+        }
+
         return super.finalizeSpawn(level, difficulty, spawnType, spawnGroupData);
+
     }
 
     @Nullable
@@ -265,6 +259,18 @@ public class DwarfGuardEntity extends AbstractDwarfEntity {
             return null;
         }
         return JolCraftSounds.DWARF_HURT.get();
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getRestockSound() {
+        return SoundEvents.VILLAGER_WORK_WEAPONSMITH;
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getRerollSound() {
+        return SoundEvents.VILLAGER_WORK_WEAPONSMITH;
     }
 
 

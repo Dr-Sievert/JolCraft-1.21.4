@@ -24,6 +24,7 @@ import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.trading.MerchantOffer;
@@ -35,6 +36,7 @@ import net.minecraft.world.phys.Vec3;
 import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.advancement.JolCraftCriteriaTriggers;
 import net.sievert.jolcraft.component.JolCraftDataComponents;
+import net.sievert.jolcraft.sound.JolCraftSoundHelper;
 import net.sievert.jolcraft.util.bounty.BountyData;
 import net.sievert.jolcraft.entity.ai.goal.*;
 import net.sievert.jolcraft.item.JolCraftItems;
@@ -43,16 +45,14 @@ import net.sievert.jolcraft.util.bounty.BountyGenerator;
 import net.sievert.jolcraft.util.bounty.BountyReward;
 import net.sievert.jolcraft.util.dwarf.JolCraftDwarfTrades;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class DwarfMerchantEntity extends AbstractDwarfEntity {
 
     public DwarfMerchantEntity(EntityType<? extends AbstractDwarfEntity> entityType, Level level) {
         super(entityType, level);
         this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(JolCraftItems.GOLD_COIN.get()));
+        this.instanceTrades = createRandomizedMerchantTrades();
     }
 
     //Attributes
@@ -62,8 +62,7 @@ public class DwarfMerchantEntity extends AbstractDwarfEntity {
                 .add(Attributes.MOVEMENT_SPEED, 0.2D)
                 .add(Attributes.FOLLOW_RANGE, 24D)
                 .add(Attributes.TEMPT_RANGE, 16D)
-                .add(Attributes.ATTACK_DAMAGE, 3.0D)
-                .add(Attributes.ARMOR, 0.0);
+                .add(Attributes.ATTACK_DAMAGE, 3.0D);
 
     }
 
@@ -72,6 +71,13 @@ public class DwarfMerchantEntity extends AbstractDwarfEntity {
     public boolean canTrade() {
         return true;
     }
+
+    @Override
+    public boolean hasRandomTrades(){ return true; }
+
+    @Override
+    public boolean canReroll() { return false; }
+
 
     @Override
     public ItemStack getSignedContractItem() {
@@ -114,7 +120,6 @@ public class DwarfMerchantEntity extends AbstractDwarfEntity {
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
-        boolean client = this.level().isClientSide;
 
         // 🧠 Language check - ensures only players who know the Dwarvish language can interact
         InteractionResult langCheck = this.languageCheck(player);
@@ -127,7 +132,7 @@ public class DwarfMerchantEntity extends AbstractDwarfEntity {
         if (itemstack.is(JolCraftItems.BOUNTY_CRATE.get())) {
             Boolean complete = itemstack.get(JolCraftDataComponents.BOUNTY_COMPLETE.get());
             if (complete == null || !complete) {
-                this.level().playSound(null, this.blockPosition(), SoundEvents.VILLAGER_NO, SoundSource.NEUTRAL, 1.0F, 1.0F);
+                JolCraftSoundHelper.playDwarfNo(this);
                 player.displayClientMessage(Component.translatable("tooltip.jolcraft.bounty_crate.not_complete").withStyle(ChatFormatting.GRAY), true);
                 return InteractionResult.SUCCESS;
             }
@@ -136,7 +141,7 @@ public class DwarfMerchantEntity extends AbstractDwarfEntity {
             ItemStack prevMainHand = this.getMainHandItem().copy();
             this.setItemSlot(EquipmentSlot.MAINHAND, itemstack.copy());
             this.usePlayerItem(player, hand, itemstack);
-            this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_YES.get(), SoundSource.NEUTRAL, 1.0F, 1.2F);
+            JolCraftSoundHelper.playDwarfYes(this);
 
             // Begin multi-tick action
             beginAction(player, 40, ACTION_BOUNTY_CRATE_TURNIN, itemstack, prevMainHand, () -> {
@@ -192,7 +197,7 @@ public class DwarfMerchantEntity extends AbstractDwarfEntity {
             ItemStack prevMainHand = this.getMainHandItem().copy();
             this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(JolCraftItems.BOUNTY.get()));
             this.usePlayerItem(player, hand, itemstack);
-            this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_YES.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
+            JolCraftSoundHelper.playDwarfYes(this);
 
             beginAction(player, 40, ACTION_BOUNTY_NOTE_SUBMIT, itemstack, prevMainHand, () -> {
                 this.setInspecting(false);
@@ -242,7 +247,7 @@ public class DwarfMerchantEntity extends AbstractDwarfEntity {
                 // Increase the Merchant's level if XP is enough
                 this.increaseMerchantCareer();
                 this.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 200, 0));
-                this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_YES.get(), SoundSource.NEUTRAL, 1.0F, 1.4F);
+                JolCraftSoundHelper.playDwarfYes(this);
                 // Set the delay to 40 ticks (similar to vanilla)
                 this.updateMerchantTimer = 40; // Reset the timer after leveling up
             }
@@ -255,10 +260,10 @@ public class DwarfMerchantEntity extends AbstractDwarfEntity {
         if (ACTION_BOUNTY_CRATE_TURNIN.equals(currentActionId)) {
             this.setInspecting(true);
             if (currentActionTicks == 25) {
-                this.level().playSound(null, this.blockPosition(), SoundEvents.VILLAGER_WORK_FISHERMAN, SoundSource.NEUTRAL, 1.0F, 1.2F);
+                JolCraftSoundHelper.playVillagerFisherman(this);
             }
             if (currentActionTicks == 15) {
-                this.level().playSound(null, this.blockPosition(), JolCraftSounds.DWARF_YES.get(), SoundSource.NEUTRAL, 1.0F, 1.2F);
+                JolCraftSoundHelper.playDwarfYes(this);
             }
         }
         if (ACTION_BOUNTY_NOTE_SUBMIT.equals(currentActionId)) {
@@ -267,7 +272,7 @@ public class DwarfMerchantEntity extends AbstractDwarfEntity {
                 this.level().playSound(null, this.blockPosition(), SoundEvents.VILLAGER_WORK_CARTOGRAPHER, SoundSource.NEUTRAL, 1.0F, 1.2F);
             }
             if (currentActionTicks == 15) {
-                this.level().playSound(null, this.blockPosition(), SoundEvents.VILLAGER_WORK_FISHERMAN, SoundSource.NEUTRAL, 1.0F, 1.2F);
+                JolCraftSoundHelper.playVillagerFisherman(this);
             }
         }
 
@@ -300,260 +305,270 @@ public class DwarfMerchantEntity extends AbstractDwarfEntity {
         }
     }
 
-    //Trades
-    public static final Int2ObjectMap<VillagerTrades.ItemListing[]> BOUNTY_TRADES = toIntMap(
-            ImmutableMap.of(
-                    //Novice
-                    1, new VillagerTrades.ItemListing[]{
-                            new JolCraftDwarfTrades.BountyItemForItem(
-                                    JolCraftItems.PARCHMENT.get(), 1,
-                                    JolCraftItems.BOUNTY.get(), 1,
-                                    1, 0,
-                                    1 // bountyTier = 1 for Novice
-                            )
-                    },
+    // --- Bounty Trades ---
+    public static final Int2ObjectMap<VillagerTrades.ItemListing[]> BOUNTY_TRADES = AbstractDwarfEntity.toIntMap(ImmutableMap.of(
+            1, new VillagerTrades.ItemListing[] { new JolCraftDwarfTrades.BountyItemForItem(JolCraftItems.PARCHMENT.get(), 1, JolCraftItems.BOUNTY.get(), 1, 1, 0, 1) },
+            2, new VillagerTrades.ItemListing[] { new JolCraftDwarfTrades.BountyItemForItem(JolCraftItems.PARCHMENT.get(), 1, JolCraftItems.BOUNTY.get(), 1, 1, 0, 2) },
+            3, new VillagerTrades.ItemListing[] { new JolCraftDwarfTrades.BountyItemForItem(JolCraftItems.PARCHMENT.get(), 1, JolCraftItems.BOUNTY.get(), 1, 1, 0, 3) },
+            4, new VillagerTrades.ItemListing[] { new JolCraftDwarfTrades.BountyItemForItem(JolCraftItems.PARCHMENT.get(), 1, JolCraftItems.BOUNTY.get(), 1, 1, 0, 4) },
+            5, new VillagerTrades.ItemListing[] { new JolCraftDwarfTrades.BountyItemForItem(JolCraftItems.PARCHMENT.get(), 1, JolCraftItems.BOUNTY.get(), 1, 1, 0, 5) }
+    ));
 
-                    //Apprentice
-                    2, new VillagerTrades.ItemListing[]{
-                            new JolCraftDwarfTrades.BountyItemForItem(
-                                    JolCraftItems.PARCHMENT.get(), 1,
-                                    JolCraftItems.BOUNTY.get(), 1,
-                                    1, 0,
-                                    2
-                            ),
-                    },
+    // --- General Trades ---
+    public static final Int2ObjectMap<VillagerTrades.ItemListing[]> GENERAL_TRADES = AbstractDwarfEntity.toIntMap(ImmutableMap.of(
+            1, new VillagerTrades.ItemListing[]{
+                    new JolCraftDwarfTrades.ItemsForGold(Items.TORCH, 1, 2, 12, 3, 1),
+                    new JolCraftDwarfTrades.ItemsForGold(Items.COAL, 1, 2, 5, 3, 1),
+                    new JolCraftDwarfTrades.ItemsForGold(Items.FLINT, 1, 2, 5, 3, 1),
+                    new JolCraftDwarfTrades.ItemsForGold(Items.COPPER_INGOT, 1, 2, 2, 3, 1),
+                    new JolCraftDwarfTrades.ItemsForGold(Items.COBBLED_DEEPSLATE, 1, 2, 12, 3, 1),
+                    new JolCraftDwarfTrades.ItemsForGold(Items.IRON_NUGGET, 1, 2, 12, 3, 1),
+                    new JolCraftDwarfTrades.ItemsForGold(Items.BRICK, 1, 2, 4, 3, 1),
+                    new JolCraftDwarfTrades.ItemsForGold(Items.STRING, 1, 2, 3, 3, 1),
+                    new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.DEEPSLATE_MUG.get(), 1, 2, 3, 3, 1)
+            },
+            2, new VillagerTrades.ItemListing[]{
+                    new JolCraftDwarfTrades.ItemsForGold(Items.IRON_INGOT, 2, 3, 2, 3, 1),
+                    new JolCraftDwarfTrades.ItemsForGold(Items.LAPIS_LAZULI, 1, 2, 6, 3, 1),
+                    new JolCraftDwarfTrades.ItemsForGold(Items.REDSTONE, 1, 2, 6, 3, 1),
+                    new JolCraftDwarfTrades.ItemsForGold(Items.FEATHER, 1, 2, 3, 3, 1),
+                    new JolCraftDwarfTrades.ItemsForGold(Items.LEATHER, 1, 2, 2, 3, 1),
+                    new JolCraftDwarfTrades.ItemsForGold(Items.WHITE_WOOL, 1, 2, 2, 3, 1),
+                    new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.PARCHMENT.get(), 1, 2, 3, 3, 1)
+            },
+            3, new VillagerTrades.ItemListing[]{
+                    new JolCraftDwarfTrades.ItemsForGold(Items.GOLD_INGOT, 5, 7, 2, 3, 1),
+                    new JolCraftDwarfTrades.ItemsForGold(Items.EMERALD, 2, 4, 2, 3, 1),
+                    new JolCraftDwarfTrades.ItemsForGold(Items.AMETHYST_SHARD, 1, 2, 2, 3, 1),
+                    new JolCraftDwarfTrades.ItemsForGold(Items.BLAZE_POWDER, 1, 2, 1, 3, 1),
+                    new JolCraftDwarfTrades.ItemsForGold(Items.SPIDER_EYE, 1, 2, 1, 3, 1),
+                    new JolCraftDwarfTrades.ItemsForGold(Items.GUNPOWDER, 1, 2, 2, 3, 1),
+                    new JolCraftDwarfTrades.ItemsForGold(Items.BONE, 1, 2, 3, 3, 1),
+                    new JolCraftDwarfTrades.ItemsForGold(Items.INK_SAC, 1, 2, 1, 3, 1),
+                    new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.QUILL_EMPTY.get(), 1, 2, 1, 3, 1),
+                    new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.CONTRACT_BLANK.get(), 1, 2, 1, 3, 1)
+            },
+            4, new VillagerTrades.ItemListing[]{
+                    new JolCraftDwarfTrades.ItemsForGold(Items.GOLDEN_APPLE, 4, 6, 1, 3, 1),
+                    new JolCraftDwarfTrades.ItemsForGold(Items.BOOK, 1, 2, 1, 3, 1),
+                    new JolCraftDwarfTrades.ItemsForGold(Items.CAULDRON, 10, 14, 1, 3, 1),
+                    new JolCraftDwarfTrades.ItemsForGold(Items.ITEM_FRAME, 1, 2, 1, 3, 1),
+                    new JolCraftDwarfTrades.ItemsForGold(Items.ENDER_PEARL, 2, 4, 1, 3, 1)
+            },
+            5, new VillagerTrades.ItemListing[]{
+                    new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.SUNGLEAM, 1, 5, 15, JolCraftItems.RESTOCK_CRATE.get(), 1, 3, 0, 0),
+                    new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.SUNGLEAM, 1, 5, 15, JolCraftItems.REROLL_CRATE.get(), 1, 3, 0, 0),
+            }
+    ));
 
-                    //Journeyman
-                    3, new VillagerTrades.ItemListing[]{
-                            new JolCraftDwarfTrades.BountyItemForItem(
-                                    JolCraftItems.PARCHMENT.get(), 1,
-                                    JolCraftItems.BOUNTY.get(), 1,
-                                    1, 0,
-                                    3
-                            )
-                    },
+    // --- Gem Trades ---
+    public static final Int2ObjectMap<VillagerTrades.ItemListing[]> GEM_TRADES = AbstractDwarfEntity.toIntMap(ImmutableMap.of(
+            5, new VillagerTrades.ItemListing[]{
+                    new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.AEGISCORE.get(), 64, 64, 1, 1, 1),
+                    new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.ASHFANG.get(), 64, 64, 1, 1, 1),
+                    new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.DEEPMARROW.get(), 64, 64, 1, 1, 1),
+                    new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.EARTHBLOOD.get(), 64, 64, 1, 1, 1),
+                    new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.EMBERGLASS.get(), 64, 64, 1, 1, 1),
+                    new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.FROSTVEIN.get(), 64, 64, 1, 1, 1),
+                    new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.GRIMSTONE.get(), 64, 64, 1, 1, 1),
+                    new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.IRONHEART.get(), 64, 64, 1, 1, 1),
+                    new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.LUMIERE.get(), 64, 64, 1, 1, 1),
+                    new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.MOONSHARD.get(), 64, 64, 1, 1, 1),
+                    new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.RUSTAGATE.get(), 64, 64, 1, 1, 1),
+                    new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.SKYBURROW.get(), 64, 64, 1, 1, 1),
+                    new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.SUNGLEAM.get(), 64, 64, 1, 1, 1),
+                    new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.VERDANITE.get(), 64, 64, 1, 1, 1),
+                    new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.WOECRYSTAL.get(), 64, 64, 1, 1, 1)
+            }
+    ));
 
-                    //Expert
-                    4, new VillagerTrades.ItemListing[]{
-                            new JolCraftDwarfTrades.BountyItemForItem(
-                                    JolCraftItems.PARCHMENT.get(), 1,
-                                    JolCraftItems.BOUNTY.get(), 1,
-                                    1, 0,
-                                    4
-                            )
-                    },
+    private static VillagerTrades.ItemListing[] concatTradeArrays(VillagerTrades.ItemListing[]... arrays) {
+        return Arrays.stream(arrays)
+                .filter(Objects::nonNull)
+                .flatMap(Arrays::stream)
+                .toArray(VillagerTrades.ItemListing[]::new);
+    }
 
-                    //Master
-                    5, new VillagerTrades.ItemListing[]{
-                            new JolCraftDwarfTrades.BountyItemForItem(
-                                    JolCraftItems.PARCHMENT.get(), 1,
-                                    JolCraftItems.BOUNTY.get(), 1,
-                                    1, 0,
-                                    5
-                            )
-                    }
-            )
-    );
-
-    public static final Int2ObjectMap<VillagerTrades.ItemListing[]> GENERAL_TRADES = createGeneralTrades(RandomSource.create());
-    public static Int2ObjectMap<VillagerTrades.ItemListing[]> createGeneralTrades(RandomSource random) {
-        return toIntMap(ImmutableMap.of(
-
-                // Novice
-                1, new VillagerTrades.ItemListing[]{
-                        new JolCraftDwarfTrades.ItemsForGold(Items.TORCH, Mth.nextInt(random, 1, 2), 12, 3, 1),
-                        new JolCraftDwarfTrades.ItemsForGold(Items.COAL, Mth.nextInt(random, 1, 2), 5, 3, 1),
-                        new JolCraftDwarfTrades.ItemsForGold(Items.FLINT, Mth.nextInt(random, 1, 2), 5, 3, 1),
-                        new JolCraftDwarfTrades.ItemsForGold(Items.COPPER_INGOT, Mth.nextInt(random, 1, 2), 2, 3, 1),
-                        new JolCraftDwarfTrades.ItemsForGold(Items.COBBLED_DEEPSLATE, Mth.nextInt(random, 1, 2), 12, 3, 1),
-                        new JolCraftDwarfTrades.ItemsForGold(Items.IRON_NUGGET, Mth.nextInt(random, 1, 2), 12, 3, 1),
-                        new JolCraftDwarfTrades.ItemsForGold(Items.BRICK, Mth.nextInt(random, 1, 2), 4, 3, 1),
-                        new JolCraftDwarfTrades.ItemsForGold(Items.STRING, Mth.nextInt(random, 1, 2), 3, 3, 1),
-                        new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.DEEPSLATE_MUG.get(), Mth.nextInt(random, 1, 2), 3, 3, 1)
-                },
-
-                // Apprentice
-                2, new VillagerTrades.ItemListing[]{
-                        new JolCraftDwarfTrades.ItemsForGold(Items.IRON_INGOT, Mth.nextInt(random, 2, 3), 2, 3, 1),
-                        new JolCraftDwarfTrades.ItemsForGold(Items.LAPIS_LAZULI, Mth.nextInt(random, 1, 2), 6, 3, 1),
-                        new JolCraftDwarfTrades.ItemsForGold(Items.REDSTONE, Mth.nextInt(random, 1, 2), 6, 3, 1),
-                        new JolCraftDwarfTrades.ItemsForGold(Items.FEATHER, Mth.nextInt(random, 1, 2), 3, 3, 1),
-                        new JolCraftDwarfTrades.ItemsForGold(Items.LEATHER, Mth.nextInt(random, 1, 2), 2, 3, 1),
-                        new JolCraftDwarfTrades.ItemsForGold(Items.WHITE_WOOL, Mth.nextInt(random, 1, 2), 2, 3, 1),
-                        new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.PARCHMENT.get(), Mth.nextInt(random, 1, 2), 3, 3, 1)
-                },
-
-                // Journeyman
-                3, new VillagerTrades.ItemListing[]{
-                        new JolCraftDwarfTrades.ItemsForGold(Items.GOLD_INGOT, Mth.nextInt(random, 5, 7), 2, 3, 1),
-                        new JolCraftDwarfTrades.ItemsForGold(Items.EMERALD, Mth.nextInt(random, 2, 4), 2, 3, 1),
-                        new JolCraftDwarfTrades.ItemsForGold(Items.AMETHYST_SHARD, Mth.nextInt(random, 1, 2), 2, 3, 1),
-                        new JolCraftDwarfTrades.ItemsForGold(Items.BLAZE_POWDER, Mth.nextInt(random, 1, 2), 1, 3, 1),
-                        new JolCraftDwarfTrades.ItemsForGold(Items.SPIDER_EYE, Mth.nextInt(random, 1, 2), 1, 3, 1),
-                        new JolCraftDwarfTrades.ItemsForGold(Items.GUNPOWDER, Mth.nextInt(random, 1, 2), 2, 3, 1),
-                        new JolCraftDwarfTrades.ItemsForGold(Items.BONE, Mth.nextInt(random, 1, 2), 3, 3, 1),
-                        new JolCraftDwarfTrades.ItemsForGold(Items.INK_SAC, Mth.nextInt(random, 1, 2), 1, 3, 1),
-                        new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.QUILL_EMPTY.get(), Mth.nextInt(random, 1, 2), 1, 3, 1),
-                        new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.CONTRACT_BLANK.get(), Mth.nextInt(random, 1, 2), 1, 3, 1)
-                },
-
-                // Expert
-                4, new VillagerTrades.ItemListing[]{
-                        new JolCraftDwarfTrades.ItemsForGold(Items.GOLDEN_APPLE, Mth.nextInt(random, 4, 6), 1, 3, 1),
-                        new JolCraftDwarfTrades.ItemsForGold(Items.BOOK, Mth.nextInt(random, 1, 2), 1, 3, 1),
-                        new JolCraftDwarfTrades.ItemsForGold(Items.CAULDRON, Mth.nextInt(random, 10, 14), 1, 3, 1),
-                        new JolCraftDwarfTrades.ItemsForGold(Items.ITEM_FRAME, Mth.nextInt(random, 1, 2), 1, 3, 1),
-                        new JolCraftDwarfTrades.ItemsForGold(Items.ENDER_PEARL, Mth.nextInt(random, 2, 4), 1, 3, 1)
-                },
-
-                // Master
-                5, new VillagerTrades.ItemListing[]{
-                        new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.RESTOCK_CRATE.get(), Mth.nextInt(random, 5, 15), 1, 1, 1),
-                }
+    public static Int2ObjectMap<VillagerTrades.ItemListing[]> createRandomizedMerchantTrades() {
+        return AbstractDwarfEntity.toIntMap(ImmutableMap.of(
+                1, concatTradeArrays(BOUNTY_TRADES.get(1), GENERAL_TRADES.get(1)),
+                2, concatTradeArrays(BOUNTY_TRADES.get(2), GENERAL_TRADES.get(2)),
+                3, concatTradeArrays(BOUNTY_TRADES.get(3), GENERAL_TRADES.get(3)),
+                4, concatTradeArrays(BOUNTY_TRADES.get(4), GENERAL_TRADES.get(4)),
+                5, concatTradeArrays(BOUNTY_TRADES.get(5), GENERAL_TRADES.get(5), GEM_TRADES.get(5))
         ));
     }
 
-    public static final Int2ObjectMap<VillagerTrades.ItemListing[]> GEM_TRADES = toIntMap(
-            ImmutableMap.of(
-
-                    //Master
-                    5, new VillagerTrades.ItemListing[]{
-                            new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.AEGISCORE.get(), 64, 1, 1, 1),
-                            new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.ASHFANG.get(), 64, 1, 1, 1),
-                            new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.DEEPMARROW.get(), 64, 1, 1, 1),
-                            new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.EARTHBLOOD.get(), 64, 1, 1, 1),
-                            new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.EMBERGLASS.get(), 64, 1, 1, 1),
-                            new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.FROSTVEIN.get(), 64, 1, 1, 1),
-                            new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.GRIMSTONE.get(), 64, 1, 1, 1),
-                            new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.IRONHEART.get(), 64, 1, 1, 1),
-                            new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.LUMIERE.get(), 64, 1, 1, 1),
-                            new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.MOONSHARD.get(), 64, 1, 1, 1),
-                            new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.RUSTAGATE.get(), 64, 1, 1, 1),
-                            new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.SKYBURROW.get(), 64, 1, 1, 1),
-                            new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.SUNGLEAM.get(), 64, 1, 1, 1),
-                            new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.VERDANITE.get(), 64, 1, 1, 1),
-                            new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.WOECRYSTAL.get(), 64, 1, 1, 1),
-                    }
-            )
-    );
-
-    private static Int2ObjectMap<VillagerTrades.ItemListing[]> toIntMap(ImmutableMap<Integer, VillagerTrades.ItemListing[]> pMap) {
-
-        return new Int2ObjectOpenHashMap<>(pMap);
+    public static Int2ObjectMap<VillagerTrades.ItemListing[]> createGeneralTrades(RandomSource random) {
+        return GENERAL_TRADES;
     }
 
     @Override
     protected void updateTrades() {
         int level = this.getVillagerData().getLevel();
-        MerchantOffers offers = this.getOffers();
 
-        // Add the 1 bounty trade for this level
-        VillagerTrades.ItemListing[] bounty = BOUNTY_TRADES.get(level);
-        if (bounty != null) {
-            this.addOffersFromItemListings(offers, bounty, 1);
-        }
-
-        // Add 2 general trades for this level (like torches, parchment, flint, etc.)
-        VillagerTrades.ItemListing[] general = GENERAL_TRADES.get(level);
-        if (general != null) {
-            List<VillagerTrades.ItemListing> shuffled = new ArrayList<>(List.of(general));
-            Collections.shuffle(shuffled, new Random(this.random.nextLong()));
-            for (int i = 0; i < Math.min(2, shuffled.size()); i++) {
-                MerchantOffer offer = shuffled.get(i).getOffer(this, this.random);
-                if (offer != null) {
-                    offers.add(offer);
+        // 1. Add bounty trade for this level if not already present
+        for (int lvl = 1; lvl <= level; lvl++) {
+            var bountyListings = BOUNTY_TRADES.get(lvl);
+            if (bountyListings != null && bountyListings.length > 0) {
+                // Only add this bounty if not present yet (matches result item and price)
+                boolean hasThisBounty = this.getOffers().stream().anyMatch(offer -> {
+                    MerchantOffer test = bountyListings[0].getOffer(this, this.random);
+                    return test != null &&
+                            ItemStack.isSameItemSameComponents(offer.getResult(), test.getResult()) &&
+                            ItemStack.isSameItemSameComponents(offer.getBaseCostA(), test.getBaseCostA());
+                });
+                if (!hasThisBounty) {
+                    this.addOffersFromItemListings(this.getOffers(), bountyListings, 1);
                 }
             }
         }
 
-        // At Master level, add 1 gem trade as a high-tier extra
+        // 2. Add up to 2 general trades for this level, but only if missing
+        var generalPool = GENERAL_TRADES.get(level);
+        if (generalPool != null && generalPool.length > 0) {
+            // Count how many general trades from this pool are present
+            Set<Item> currentGeneral = new HashSet<>();
+            for (MerchantOffer offer : this.getOffers()) {
+                for (VillagerTrades.ItemListing listing : generalPool) {
+                    MerchantOffer test = listing.getOffer(this, this.random);
+                    if (test != null &&
+                            ItemStack.isSameItemSameComponents(offer.getResult(), test.getResult()) &&
+                            ItemStack.isSameItemSameComponents(offer.getBaseCostA(), test.getBaseCostA())) {
+                        currentGeneral.add(offer.getResult().getItem());
+                    }
+                }
+            }
+            int toAdd = 2 - currentGeneral.size();
+            if (toAdd > 0) {
+                var shuffled = new ArrayList<>(List.of(generalPool));
+                Collections.shuffle(shuffled, new Random(this.random.nextLong()));
+                for (int i = 0, added = 0; i < shuffled.size() && added < toAdd; i++) {
+                    var offer = shuffled.get(i).getOffer(this, this.random);
+                    if (offer != null && !currentGeneral.contains(offer.getResult().getItem())) {
+                        this.getOffers().add(offer);
+                        currentGeneral.add(offer.getResult().getItem());
+                        added++;
+                    }
+                }
+            }
+        }
+
+        // 3. At master, add 1 gem trade if not already present
         if (level == 5) {
-            VillagerTrades.ItemListing[] gemTrades = GEM_TRADES.get(5);
+            var gemTrades = GEM_TRADES.get(5);
             if (gemTrades != null && gemTrades.length > 0) {
-                MerchantOffer offer = gemTrades[this.random.nextInt(gemTrades.length)].getOffer(this, this.random);
-                if (offer != null) {
-                    offers.add(offer);
+                // Check if a gem trade already exists
+                boolean hasGem = this.getOffers().stream().anyMatch(offer -> {
+                    for (VillagerTrades.ItemListing listing : gemTrades) {
+                        MerchantOffer test = listing.getOffer(this, this.random);
+                        return test != null &&
+                                ItemStack.isSameItemSameComponents(offer.getResult(), test.getResult()) &&
+                                ItemStack.isSameItemSameComponents(offer.getBaseCostA(), test.getBaseCostA());
+                    }
+                    return false;
+                });
+                if (!hasGem) {
+                    var shuffled = new ArrayList<>(List.of(gemTrades));
+                    Collections.shuffle(shuffled, new Random(this.random.nextLong()));
+                    var offer = shuffled.get(0).getOffer(this, this.random);
+                    if (offer != null) this.getOffers().add(offer);
                 }
             }
         }
+    }
+
+
+    private boolean isCrateTrade(MerchantOffer offer) {
+        return offer.getResult().is(JolCraftItems.RESTOCK_CRATE.get()) ||
+                offer.getResult().is(JolCraftItems.REROLL_CRATE.get());
+    }
+
+    @Override
+    public void crateRestock() {
+        if (this.level().isClientSide) return;
+
+        // 1. Save all current crate trades
+        List<MerchantOffer> crateTrades = this.getOffers().stream()
+                .filter(this::isCrateTrade)
+                .map(MerchantOffer::copy) // Defensive copy (optional, for safety)
+                .toList();
+
+        // 2. Perform a normal restock (which will clear everything and re-add new trades)
+        this.restock();
+
+        // 3. Remove any crate trades that got rebuilt (if any)
+        this.getOffers().removeIf(this::isCrateTrade);
+
+        // 4. Re-add the original crate trades (preserving uses/availability)
+        this.getOffers().addAll(crateTrades);
+
+        // (Optional: update restock time & sound, or just let restock() handle it)
     }
 
     @Override
     public void restock() {
         if (this.level().isClientSide) return;
 
-        this.getOffers().clear(); // Remove all old trades
+        this.getOffers().clear();
 
         int level = this.getVillagerData().getLevel();
 
-        // 🟨 Bounty (always one)
+        // --- 🟨 Add 1 Bounty trade per level ---
         for (int i = 1; i <= level; i++) {
-            VillagerTrades.ItemListing[] bountyListings = BOUNTY_TRADES.get(i);
-            if (bountyListings != null) {
-                this.addOffersFromItemListings(this.getOffers(), bountyListings, bountyListings.length);
+            var bountyListings = BOUNTY_TRADES.get(i);
+            if (bountyListings != null && bountyListings.length > 0) {
+                // Only add the first bounty per level (usually only one anyway)
+                this.addOffersFromItemListings(this.getOffers(), bountyListings, 1);
             }
         }
 
-        // 🟩 General (2 random trades per level tier from 1 up to current level)
-        Int2ObjectMap<VillagerTrades.ItemListing[]> freshGeneralTrades = createGeneralTrades(this.random);
-
+        // --- 🟩 Add 2 random General trades per level ---
+        var freshGeneralTrades = createGeneralTrades(this.random);
         for (int i = 1; i <= level; i++) {
-            VillagerTrades.ItemListing[] generalPool = freshGeneralTrades.get(i);
-            if (generalPool != null) {
-                List<VillagerTrades.ItemListing> shuffled = new ArrayList<>(List.of(generalPool));
+            var generalPool = freshGeneralTrades.get(i);
+            if (generalPool != null && generalPool.length > 0) {
+                var shuffled = new ArrayList<>(List.of(generalPool));
                 Collections.shuffle(shuffled, new Random(this.random.nextLong()));
-                int added = 0;
-                for (VillagerTrades.ItemListing trade : shuffled) {
-                    if (added >= 2) break;
-                    MerchantOffer offer = trade.getOffer(this, this.random);
-                    if (offer != null) {
-                        this.getOffers().add(offer);
-                        added++;
-                    }
+                int numToAdd = Math.min(2, shuffled.size());
+                for (int j = 0; j < numToAdd; j++) {
+                    var offer = shuffled.get(j).getOffer(this, this.random);
+                    if (offer != null) this.getOffers().add(offer);
                 }
             }
         }
 
-
-        // 💎 Gem trades (master only)
+        // --- 💎 Add 1 Gem trade at Master only ---
         if (level == 5) {
-            VillagerTrades.ItemListing[] gemTrades = GEM_TRADES.get(5);
-            if (gemTrades != null) {
-                List<VillagerTrades.ItemListing> shuffled = new ArrayList<>(List.of(gemTrades));
+            var gemTrades = GEM_TRADES.get(5);
+            if (gemTrades != null && gemTrades.length > 0) {
+                var shuffled = new ArrayList<>(List.of(gemTrades));
                 Collections.shuffle(shuffled, new Random(this.random.nextLong()));
-                int added = 0;
-                for (VillagerTrades.ItemListing trade : shuffled) {
-                    if (added >= 1) break;
-                    MerchantOffer offer = trade.getOffer(this, this.random);
-                    if (offer != null) {
-                        this.getOffers().add(offer);
-                        added++;
-                    }
-                }
+                var offer = shuffled.get(0).getOffer(this, this.random);
+                if (offer != null) this.getOffers().add(offer);
             }
         }
 
         this.lastRestockGameTime = this.level().getGameTime();
-        this.playSound(SoundEvents.VILLAGER_WORK_FISHERMAN, 1.0F, 1.2F);
+        this.level().playSound(null, this.blockPosition(), getRestockSound(), SoundSource.NEUTRAL, 1.0F, 1.05F);
     }
-
 
     public void restockBountiesOnly() {
         if (this.getOffers().isEmpty()) return;
 
-        boolean needsRestock = false;
+        boolean restocked = false;
         for (MerchantOffer offer : this.getOffers()) {
-            // Refresh only bounty-related trades
             if (offer.getResult().is(JolCraftItems.BOUNTY.get()) && offer.needsRestock()) {
                 offer.resetUses();
-                needsRestock = true;
+                restocked = true;
             }
         }
 
-        if (needsRestock) {
-            this.playSound(SoundEvents.VILLAGER_WORK_FISHERMAN, 1.0F, 1.0F);
+        if (restocked) {
+            this.playSound(SoundEvents.VILLAGER_WORK_CARTOGRAPHER, 1.0F, 1.0F);
         }
     }
+
 
     @Override
     public void notifyTrade(MerchantOffer offer) {
@@ -564,7 +579,6 @@ public class DwarfMerchantEntity extends AbstractDwarfEntity {
             serverPlayer.awardStat(Stats.TRADED_WITH_VILLAGER); // optional if not already done in super
             JolCraftCriteriaTriggers.TRADE_WITH_DWARF.trigger(serverPlayer, this);
         }
-
     }
 
     //Sound

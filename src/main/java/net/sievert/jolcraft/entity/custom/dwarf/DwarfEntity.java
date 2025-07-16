@@ -11,6 +11,7 @@ import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.npc.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Blocks;
@@ -24,7 +25,7 @@ public class DwarfEntity extends AbstractDwarfEntity {
 
     public DwarfEntity(EntityType<? extends AbstractDwarfEntity> entityType, Level level) {
         super(entityType, level);
-
+        this.instanceTrades = createRandomizedDwarfTrades();
     }
 
     //Attributes
@@ -33,7 +34,7 @@ public class DwarfEntity extends AbstractDwarfEntity {
                 .add(Attributes.MAX_HEALTH, 30d)
                 .add(Attributes.MOVEMENT_SPEED, 0.2D)
                 .add(Attributes.FOLLOW_RANGE, 24D)
-                .add(Attributes.TEMPT_RANGE, 16d)
+                .add(Attributes.TEMPT_RANGE, 16D)
                 .add(Attributes.ATTACK_DAMAGE, 3.0D);
     }
 
@@ -74,60 +75,42 @@ public class DwarfEntity extends AbstractDwarfEntity {
     }
 
     //Trades
-    public static final Int2ObjectMap<VillagerTrades.ItemListing[]> TRADES = toIntMap(
-            ImmutableMap.of(
-
-                    //Novice
-                    1,
-                    new VillagerTrades.ItemListing[]{
-                            new JolCraftDwarfTrades.ItemsForGold(Items.STICK, 1, 1, 6, 500),
-                            new JolCraftDwarfTrades.GoldForItems(Items.SMITHING_TABLE, 2, 4, 4, 1)
-
-                    },
-
-                    //Apprentice
-                    2,
-                    new VillagerTrades.ItemListing[]{
-                            new JolCraftDwarfTrades.ItemsForGold(Items.BREAD, 1, 1, 5, 10),
-                            new JolCraftDwarfTrades.TreasureMapForGold(13, JolCraftTags.Structures.ON_FORGE_EXPLORER_MAPS, "filled_map.forge", MapDecorationTypes.TARGET_X, 1, 10)
-
-                    },
-
-                    //Journeyman
-                    3,
-                    new VillagerTrades.ItemListing[]{
-                            new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.CONTRACT_BLANK.get(), 3, 1, 10, 1),
-                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.QUILL_EMPTY.get(), 2, 10, 4, 1)
-                    },
-
-                    //Expert
-                    4,
-                    new VillagerTrades.ItemListing[]{
-                            new JolCraftDwarfTrades.ItemsForGold(Items.DIAMOND, 1, 1, 10, 10),
-                            new JolCraftDwarfTrades.GoldForItems(Items.EMERALD, 1, 10, 10, 1)
-                    },
-
-                    //Master
-                    5,
-                    new VillagerTrades.ItemListing[]{
-                            new JolCraftDwarfTrades.ItemsForGold(Items.NETHERITE_BLOCK, 1, 1, 5, 10),
-                            new JolCraftDwarfTrades.ItemsAndGoldToItems(Items.PURPLE_DYE, 1, 30, JolCraftItems.GUILD_SIGIL.get(), 1, 1, 0, 0.05F)
-                    }
-            )
-    );
-
-    private static Int2ObjectMap<VillagerTrades.ItemListing[]> toIntMap(ImmutableMap<Integer, VillagerTrades.ItemListing[]> pMap) {
-
-        return new Int2ObjectOpenHashMap<>(pMap);
+    public static Int2ObjectMap<VillagerTrades.ItemListing[]> createRandomizedDwarfTrades() {
+        return AbstractDwarfEntity.toIntMap(ImmutableMap.of(
+                // Novice
+                1, new VillagerTrades.ItemListing[] {
+                        new JolCraftDwarfTrades.ItemsForGold(Items.STICK, 1, 4, 2, 8, 6, 500),
+                        new JolCraftDwarfTrades.GoldForItems(Items.SMITHING_TABLE, 1, 3, 4, 1)
+                },
+                // Apprentice
+                2, new VillagerTrades.ItemListing[] {
+                        new JolCraftDwarfTrades.ItemsForGold(Items.BREAD, 1, 3, 1, 5, 10, 10),
+                        new JolCraftDwarfTrades.TreasureMapForGold(
+                                8, // min cost
+                                JolCraftTags.Structures.ON_FORGE_EXPLORER_MAPS,
+                                "filled_map.forge",
+                                MapDecorationTypes.TARGET_X,
+                                1, 10
+                        )
+                },
+                // Journeyman
+                3, new VillagerTrades.ItemListing[] {
+                        new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.CONTRACT_BLANK.get(), 2, 4, 1, 10, 1, 10),
+                        new JolCraftDwarfTrades.GoldForItems(JolCraftItems.QUILL_EMPTY.get(), 3, 7, 4, 1)
+                },
+                // Expert
+                4, new VillagerTrades.ItemListing[] {
+                        new JolCraftDwarfTrades.ItemsForGold(Items.DIAMOND, 1, 1, 10, 10, 10, 10),
+                        new JolCraftDwarfTrades.GoldForItems(Items.EMERALD, 1, 10, 10, 1)
+                },
+                // Master
+                5, new VillagerTrades.ItemListing[] {
+                        new JolCraftDwarfTrades.ItemsForGold(Items.NETHERITE_BLOCK, 1, 1, 5, 10, 5, 10),
+                        new JolCraftDwarfTrades.ItemsAndGoldToItems(Items.PURPLE_DYE, 1, 30, JolCraftItems.GUILD_SIGIL.get(), 1, 1, 0, 0.05F)
+                }
+        ));
     }
 
-    @Override
-    protected void updateTrades() {
-        int level = this.getVillagerData().getLevel();
-        VillagerTrades.ItemListing[] listings = TRADES.get(level);
-        if (listings != null) {
-            this.addOffersFromItemListings(this.getOffers(), listings, 2); // 2 = max trades for that level
-        }
-    }
+
 
 }

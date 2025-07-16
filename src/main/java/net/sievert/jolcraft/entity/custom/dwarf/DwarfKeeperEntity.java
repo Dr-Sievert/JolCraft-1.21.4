@@ -5,6 +5,8 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.*;
@@ -23,11 +25,14 @@ import net.sievert.jolcraft.entity.ai.goal.*;
 import net.sievert.jolcraft.item.JolCraftItems;
 import net.sievert.jolcraft.util.dwarf.JolCraftDwarfTrades;
 
+import javax.annotation.Nullable;
+
 public class DwarfKeeperEntity extends AbstractDwarfEntity {
 
     public DwarfKeeperEntity(EntityType<? extends AbstractDwarfEntity> entityType, Level level) {
         super(entityType, level);
         this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(JolCraftItems.BARLEY.get()));
+        this.instanceTrades = createRandomizedKeeperTrades();
     }
 
     //Attributes
@@ -36,7 +41,7 @@ public class DwarfKeeperEntity extends AbstractDwarfEntity {
                 .add(Attributes.MAX_HEALTH, 30d)
                 .add(Attributes.MOVEMENT_SPEED, 0.2D)
                 .add(Attributes.FOLLOW_RANGE, 24D)
-                .add(Attributes.TEMPT_RANGE, 16d)
+                .add(Attributes.TEMPT_RANGE, 16D)
                 .add(Attributes.ATTACK_DAMAGE, 3.0D);
     }
 
@@ -108,63 +113,65 @@ public class DwarfKeeperEntity extends AbstractDwarfEntity {
     }
 
     //Trades
-    public static final Int2ObjectMap<VillagerTrades.ItemListing[]> TRADES = toIntMap(
-            ImmutableMap.of(
+    public static Int2ObjectMap<VillagerTrades.ItemListing[]> createRandomizedKeeperTrades() {
+        return AbstractDwarfEntity.toIntMap(ImmutableMap.of(
 
-                    //Novice
-                    1,
-                    new VillagerTrades.ItemListing[]{
-                            new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.BARLEY_SEEDS.get(), 1, 1, 10, 1),
-                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.MUFFHORN_FUR.get(), 1, 5, 1, 2),
-                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.MUFFHORN_MILK_BUCKET.get(), 1, 3, 20, 3),
-                    },
+                        //Novice
+                        1,
 
-                    //Apprentice
-                    2,
-                    new VillagerTrades.ItemListing[]{
-                            new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.ASGARNIAN_SEEDS.get(), 5, 1, 3, 15),
-                            new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.DUSKHOLD_SEEDS.get(), 5, 1, 3, 15),
-                            new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.KRANDONIAN_SEEDS.get(), 5, 1, 3, 15),
-                            new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.YANILLIAN_SEEDS.get(), 5, 1, 3, 15)
-                    },
+                        new VillagerTrades.ItemListing[]{
+                                new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.BARLEY_SEEDS.get(), 1, 2, 1, 3, 10, 1),
 
-                    //Journeyman
-                    3,
-                    new VillagerTrades.ItemListing[]{
-                            new JolCraftDwarfTrades.ItemsForGold(Items.BONE_MEAL, 3, 5, 5, 10),
-                            new JolCraftDwarfTrades.ItemsAndGoldToItems(Items.DEEPSLATE, 4, 5, JolCraftItems.DEEPSLATE_BULBS.get(), 1, 3, 50, 0.05F)
-                    },
+                        },
 
-                    //Expert
-                    4,
-                    new VillagerTrades.ItemListing[]{
-                            new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.ASGARNIAN_SEEDS.get(), 5, 1, 3, 50),
-                            new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.DUSKHOLD_SEEDS.get(), 5, 1, 3, 50),
-                            new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.KRANDONIAN_SEEDS.get(), 5, 1, 3, 50),
-                            new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.YANILLIAN_SEEDS.get(), 5, 1, 3, 50),
-                    },
+                        //Apprentice
+                        2,
+                        new VillagerTrades.ItemListing[]{
+                                new JolCraftDwarfTrades.GoldForItems(JolCraftItems.BARLEY.get(), 15, 22, 10, 25, 1, 2),
 
-                    //Master
-                    5,
-                    new VillagerTrades.ItemListing[]{
-                            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.VERDANITE.get(), 30, 1, 0, 1),
-                            new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.VERDANITE, 1, 5, JolCraftItems.VERDANT_DUST.get(), 3, 3, 0, 0.05F),
-                    }
-            )
-    );
+                        },
 
-    private static Int2ObjectMap<VillagerTrades.ItemListing[]> toIntMap(ImmutableMap<Integer, VillagerTrades.ItemListing[]> pMap) {
+                        //Journeyman
+                        3,
+                        new VillagerTrades.ItemListing[]{
 
-        return new Int2ObjectOpenHashMap<>(pMap);
+                                new JolCraftDwarfTrades.GoldForItems(JolCraftItems.MUFFHORN_FUR.get(), 1, 15, 5, 2, 4),
+                                new JolCraftDwarfTrades.GoldForItems(JolCraftItems.MUFFHORN_MILK_BUCKET.get(), 1, 10, 30, 3, 5),
+                        },
+
+                        //Expert
+                        4,
+                        new VillagerTrades.ItemListing[]{
+                                new JolCraftDwarfTrades.GoldForItems(JolCraftItems.DEEPSLATE_BULBS.get(), 1, 2, 10, 30, 3, 5),
+
+                        },
+
+                        //Master
+                        5,
+                        new VillagerTrades.ItemListing[]{
+                                new JolCraftDwarfTrades.ItemsForGold(Items.BONE_MEAL, 2, 5, 3, 5, 5, 1),
+                                new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.DEEPSLATE_BULBS.get(), 5, 9, 1, 5, 0),
+                                new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.ASGARNIAN_SEEDS.get(), 5, 1, 3, 0),
+                                new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.DUSKHOLD_SEEDS.get(), 5, 1, 3, 0),
+                                new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.KRANDONIAN_SEEDS.get(), 5, 1, 3, 0),
+                                new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.YANILLIAN_SEEDS.get(), 5, 1, 3, 0),
+                                new JolCraftDwarfTrades.GoldForItems(JolCraftItems.VERDANITE.get(), 1, 40, 1, 20, 40),
+                                new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.VERDANITE, 1, 5, 8, JolCraftItems.VERDANT_DUST.get(), 3, 3, 0, 0),
+                        }
+                )
+        );
     }
 
+    @Nullable
     @Override
-    protected void updateTrades() {
-        int level = this.getVillagerData().getLevel();
-        VillagerTrades.ItemListing[] listings = TRADES.get(level);
-        if (listings != null) {
-            this.addOffersFromItemListings(this.getOffers(), listings, 4); // 2 = max trades for that level
-        }
+    protected SoundEvent getRestockSound() {
+        return SoundEvents.VILLAGER_WORK_FARMER;
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getRerollSound() {
+        return SoundEvents.VILLAGER_WORK_FARMER;
     }
 
 }

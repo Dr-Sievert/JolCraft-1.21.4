@@ -1,4 +1,4 @@
-// 1.21.4	2025-07-14T05:20:04.4945839	Tags for minecraft:item mod id jolcraft
+// 1.21.4	2025-07-15T03:13:37.9183007	Tags for minecraft:item mod id jolcraft
 b4fbeec3a15fa89ad64b1145d7f2775a193da48b data/jolcraft/tags/item/gems.json
 d60de4fc2e80779b31b1d96353673140c193859f data/jolcraft/tags/item/general_scrap.json
 79db8dbd1c373c681954ad7f22d148efe9a10d0b data/jolcraft/tags/item/global_scrap.json
@@ -6,7 +6,8 @@ f68e2065b4975ec2fcc04a9900d773ab64c19a15 data/jolcraft/tags/item/gold_scrap.json
 5b7f833bb15194a84a64e43ef6563c6e00591565 data/jolcraft/tags/item/hops.json
 dccd427a306e5bfcfd560329886f71065f9749fc data/jolcraft/tags/item/ink_and_quills.json
 941f886eea2408be764098f2dbcba9187c6201f4 data/jolcraft/tags/item/iron_scrap.json
-1e1bcff4da6c3503e74eced48e8e159b0f9624f2 data/jolcraft/tags/item/legendary_items.json
+1d633b0889119901d1e5e31cc2bc5e968e728e0b data/jolcraft/tags/item/legendary_items.json
+32c63b75cc34925e0b2f5c6481ee3ae21a90326e data/jolcraft/tags/item/mithril_items.json
 67ca2c733ca17d498c022eac4896311efd27402e data/jolcraft/tags/item/mithril_scrap.json
 53e3575a480034fde8e41051fa01a3dcdacb589b data/jolcraft/tags/item/redstone_scrap.json
 3ce79c2d874265007b52b4c31903e5a95c5ca8a3 data/jolcraft/tags/item/repairs_deepslate.json
@@ -15,6 +16,15 @@ c166a84829dcb4ff9faa0c8206c02f58e0b1a869 data/jolcraft/tags/item/reputation_tabl
 fd2ae1027d835a34c3913a9c9bf3e54219403b0d data/jolcraft/tags/item/signed_contracts.json
 fd45b2d0babc1ba749beedf446d3626275db2393 data/jolcraft/tags/item/spawn_eggs.json
 7e7239dc449926884d9c3b6dfb72455ad82d1c1d data/jolcraft/tags/item/textile_scrap.json
+c069c58124fcc8a5149e0f3dabcccfcb5876efa1 data/minecraft/tags/item/axes.json
+f6e60b5d3f1f7444952c27a68c2504107c67c5db data/minecraft/tags/item/chest_armor.json
 d93fe5c56c7aa54d5fe4fe63e5df038319fbd62f data/minecraft/tags/item/enchantable/durability.json
+ef97e7c2cb550db38b5eaa61f2675970a91c4bf2 data/minecraft/tags/item/foot_armor.json
+ed093f7677dbb5f40e4b221b448f9fc13e5bd135 data/minecraft/tags/item/head_armor.json
+9921a93d20ddc59022fd82fa30d95624b25b4940 data/minecraft/tags/item/hoes.json
+2ea17990d238b52071e91d28cce730fb656157bb data/minecraft/tags/item/leg_armor.json
+9142d4d1917af102c3a2ceb46efadc51408a934b data/minecraft/tags/item/pickaxes.json
+1a603f8a4cdeb71196715f988dc5fcb52091ae5a data/minecraft/tags/item/shovels.json
+4455387149f02042d0ae4f5bcef608b4cb83b3a6 data/minecraft/tags/item/swords.json
 dfc497893db272b2b8840579f2623d660b1121e7 data/minecraft/tags/item/trimmable_armor.json
 98d609f942533a2418160cb0ac0c83d488a5d56f data/minecraft/tags/item/trim_materials.json
