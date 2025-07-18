@@ -20,7 +20,7 @@ public class LockScreen extends AbstractContainerScreen<LockMenu> {
     private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "textures/gui/container/strongbox_lock.png");
 
     private static final ResourceLocation HIGHLIGHT =
-            ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "textures/gui/container/sprites/lockpick/button_highlighted.png");
+            ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "textures/gui/container/sprites/button_highlighted.png");
 
     private static final ResourceLocation PROGRESS_TEXTURE1 = ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "textures/gui/container/sprites/lockpick/lockpick_progress1.png");
     private static final ResourceLocation PROGRESS_TEXTURE2 = ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "textures/gui/container/sprites/lockpick/lockpick_progress2.png");
@@ -76,6 +76,12 @@ public class LockScreen extends AbstractContainerScreen<LockMenu> {
         this.imageHeight = 150; // Set the height of the background image
         this.titleLabelY = 6;   // Position of the title
         this.inventoryLabelY = 56; // Position of the inventory label
+    }
+
+    @Override
+    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
+        super.render(guiGraphics, mouseX, mouseY, partialTicks);
+        this.renderTooltip(guiGraphics, mouseX, mouseY);
     }
 
     @Override

@@ -111,9 +111,7 @@ public class DwarfHistorianEntity extends AbstractDwarfEntity {
                                 new JolCraftDwarfTrades.GoldForItems(JolCraftItems.ANCIENT_DWARVEN_TOME_EPIC.get(), 1, 10, 125, 28),
                                 new JolCraftDwarfTrades.GoldForItems(JolCraftItems.ANCIENT_DWARVEN_TOME_LEGENDARY.get(), 1, 10, 250, 35),
                                 new JolCraftDwarfTrades.GoldForItems(JolCraftItems.DEEPMARROW.get(), 1, 3, 1, 32),
-                                new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.DEEPMARROW, 1, 5, JolCraftItems.DEEPMARROW_DUST.get(), 3, 3, 1, 0.05F),
                                 new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.CONTRACT_BLANK.get(), 2, 4, 1, 2, 5, 1),
-                                // Explorer? new JolCraftDwarfTrades.GoldForItems(Items.FILLED_MAP, 1, 3, 6, 2)
                         },
 
                         //Journeyman
@@ -134,11 +132,11 @@ public class DwarfHistorianEntity extends AbstractDwarfEntity {
                         //Master
                         5,
                         new VillagerTrades.ItemListing[]{
-                                new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.ANCIENT_DWARVEN_TOME_COMMON, 1, 1, JolCraftItems.LEGENDARY_PAGE.get(), 1, 10, 0, 0.05F),
-                                new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.ANCIENT_DWARVEN_TOME_UNCOMMON, 1, 2, JolCraftItems.LEGENDARY_PAGE.get(), 2, 10, 0, 0.05F),
-                                new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.ANCIENT_DWARVEN_TOME_RARE, 1, 3, JolCraftItems.LEGENDARY_PAGE.get(), 3, 10, 0, 0.05F),
-                                new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.ANCIENT_DWARVEN_TOME_EPIC, 1, 4, JolCraftItems.LEGENDARY_PAGE.get(), 4, 10, 0, 0.05F),
-                                new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.ANCIENT_DWARVEN_TOME_LEGENDARY, 1, 5, JolCraftItems.LEGENDARY_PAGE.get(), 5, 10, 0, 0.05F),
+                                new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.ANCIENT_DWARVEN_TOME_COMMON, 1, 1, JolCraftItems.LEGENDARY_PAGE.get(), 1, 100, 0, 0.05F),
+                                new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.ANCIENT_DWARVEN_TOME_UNCOMMON, 1, 2, JolCraftItems.LEGENDARY_PAGE.get(), 2, 100, 0, 0.05F),
+                                new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.ANCIENT_DWARVEN_TOME_RARE, 1, 3, JolCraftItems.LEGENDARY_PAGE.get(), 3, 100, 0, 0.05F),
+                                new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.ANCIENT_DWARVEN_TOME_EPIC, 1, 4, JolCraftItems.LEGENDARY_PAGE.get(), 4, 100, 0, 0.05F),
+                                new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.ANCIENT_DWARVEN_TOME_LEGENDARY, 1, 5, JolCraftItems.LEGENDARY_PAGE.get(), 5, 100, 0, 0.05F),
                                 new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.LEGENDARY_PAGE, 10, 15, JolCraftItems.LEGENDARY_ANCIENT_UNIDENTIFIED_DWARVEN_TOME.get(), 1, 10, 0, 0.05F),
 
                                 new JolCraftDwarfTrades.ItemsAndGoldToItemsWithData(
@@ -147,14 +145,6 @@ public class DwarfHistorianEntity extends AbstractDwarfEntity {
                                         JolCraftItems.ANCIENT_DWARVEN_TOME_LEGENDARY.get(), 1,
                                         1, 1, 0F,
                                         (stack) -> stack.set(JolCraftDataComponents.LORE_LINE_ID, "mithril_forge_technique")
-                                ),
-
-                                new JolCraftDwarfTrades.ItemsAndGoldToItemsWithData(
-                                        JolCraftItems.LEGENDARY_PAGE.get(), 20,
-                                        30,
-                                        JolCraftItems.ANCIENT_DWARVEN_TOME_LEGENDARY.get(), 1,
-                                        1, 1, 0F,
-                                        (stack) -> stack.set(JolCraftDataComponents.LORE_LINE_ID, "forgotten_brew_formulas")
                                 ),
 
                                 new JolCraftDwarfTrades.ItemsAndGoldToItemsWithData(

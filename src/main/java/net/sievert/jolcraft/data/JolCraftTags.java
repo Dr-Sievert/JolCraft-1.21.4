@@ -22,7 +22,15 @@ public class JolCraftTags {
 
         public static final TagKey<Item> INK_AND_QUILLS = createTag("ink_and_quills");
 
+        public static final TagKey<Item> GEODES = createTag("geodes");
+
+        public static final TagKey<Item> ARTISAN_HAMMERS = createTag("artisan_hammers");
+
+        public static final TagKey<Item> CHISELS = createTag("chisels");
+
         public static final TagKey<Item> GEMS = createTag("gems");
+
+        public static final TagKey<Item> GEM_DUST = createTag("gem_dust");
 
         public static final TagKey<Item> SIGNED_CONTRACTS = createTag("signed_contracts");
 

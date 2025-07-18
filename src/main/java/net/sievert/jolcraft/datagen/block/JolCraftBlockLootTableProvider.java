@@ -39,6 +39,8 @@ public class JolCraftBlockLootTableProvider extends BlockLootSubProvider {
     @Override
     protected void generate() {
 
+        dropSelf(JolCraftBlocks.LAPIDARY_BENCH.get());
+
         add(JolCraftBlocks.DEEPSLATE_MITHRIL_ORE.get(),
                 block -> createOreDrop(JolCraftBlocks.DEEPSLATE_MITHRIL_ORE.get(), JolCraftItems.IMPURE_MITHRIL.get()));
         dropSelf(JolCraftBlocks.PURE_MITHRIL_BLOCK.get());

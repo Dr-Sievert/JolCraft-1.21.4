@@ -1,32 +1,32 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_the_recipe": {
-      "conditions": {
-        "recipe": "jolcraft:verdant_dust"
-      },
-      "trigger": "minecraft:recipe_unlocked"
-    },
-    "has_verdanite": {
+    "has_mithril_ingot": {
       "conditions": {
         "items": [
           {
-            "items": "jolcraft:verdanite"
+            "items": "jolcraft:mithril_ingot"
           }
         ]
       },
       "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "jolcraft:mithril_artisan_hammer"
+      },
+      "trigger": "minecraft:recipe_unlocked"
     }
   },
   "requirements": [
     [
       "has_the_recipe",
-      "has_verdanite"
+      "has_mithril_ingot"
     ]
   ],
   "rewards": {
     "recipes": [
-      "jolcraft:verdant_dust"
+      "jolcraft:mithril_artisan_hammer"
     ]
   }
 }

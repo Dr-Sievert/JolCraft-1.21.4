@@ -128,14 +128,10 @@ public class JolCraftRecipeProvider extends RecipeProvider {
                 .requires(JolCraftItems.DEEPMARROW.get())
                 .unlockedBy("has_deepmarrow", has(JolCraftItems.DEEPMARROW.get())).save(output);
 
-        shapeless(RecipeCategory.MISC, JolCraftItems.VERDANT_DUST.get())
-                .requires(JolCraftItems.VERDANITE.get())
-                .unlockedBy("has_verdanite", has(JolCraftItems.VERDANITE.get())).save(output);
-
         shapeless(RecipeCategory.MISC, JolCraftBlocks.VERDANT_SOIL.get())
                 .requires(Blocks.MUD)
-                .requires(JolCraftItems.VERDANT_DUST.get())
-                .unlockedBy("has_verdant_dust", has(JolCraftItems.VERDANT_DUST.get())).save(output);
+                .requires(JolCraftItems.VERDANITE_DUST.get())
+                .unlockedBy("has_verdanite_dust", has(JolCraftItems.VERDANITE_DUST.get())).save(output);
 
         // Barley -> Barley Malt (Smelting)
         SimpleCookingRecipeBuilder.smelting(
@@ -235,7 +231,7 @@ public class JolCraftRecipeProvider extends RecipeProvider {
                 .pattern("B")
                 .pattern("X")
                 .define('B', JolCraftItems.MITHRIL_INGOT.get())
-                .define('X', JolCraftItems.DEEPSLATE_PLATE.get())
+                .define('X', JolCraftItems.DEEPSLATE_ROD.get())
                 .unlockedBy("has_mithril_ingot", has(JolCraftItems.MITHRIL_INGOT.get())).save(output);
 
         shaped(RecipeCategory.MISC, JolCraftItems.MITHRIL_WARHAMMER.get())
@@ -243,7 +239,7 @@ public class JolCraftRecipeProvider extends RecipeProvider {
                 .pattern("BB")
                 .pattern(" X")
                 .define('B', JolCraftItems.MITHRIL_INGOT.get())
-                .define('X', JolCraftItems.DEEPSLATE_PLATE.get())
+                .define('X', JolCraftItems.DEEPSLATE_ROD.get())
                 .unlockedBy("has_mithril_ingot", has(JolCraftItems.MITHRIL_INGOT.get())).save(output, "mithril_warhammer_left");
 
         shaped(RecipeCategory.MISC, JolCraftItems.MITHRIL_WARHAMMER.get())
@@ -251,7 +247,7 @@ public class JolCraftRecipeProvider extends RecipeProvider {
                 .pattern("BB")
                 .pattern("X ")
                 .define('B', JolCraftItems.MITHRIL_INGOT.get())
-                .define('X', JolCraftItems.DEEPSLATE_PLATE.get())
+                .define('X', JolCraftItems.DEEPSLATE_ROD.get())
                 .unlockedBy("has_mithril_ingot", has(JolCraftItems.MITHRIL_INGOT.get())).save(output, "mithril_warhammer_right");
 
         shaped(RecipeCategory.MISC, JolCraftItems.MITHRIL_PICKAXE.get())
@@ -259,7 +255,7 @@ public class JolCraftRecipeProvider extends RecipeProvider {
                 .pattern(" X ")
                 .pattern(" X ")
                 .define('B', JolCraftItems.MITHRIL_INGOT.get())
-                .define('X', JolCraftItems.DEEPSLATE_PLATE.get())
+                .define('X', JolCraftItems.DEEPSLATE_ROD.get())
                 .unlockedBy("has_mithril_ingot", has(JolCraftItems.MITHRIL_INGOT.get())).save(output);
 
         shaped(RecipeCategory.MISC, JolCraftItems.MITHRIL_SHOVEL.get())
@@ -267,7 +263,7 @@ public class JolCraftRecipeProvider extends RecipeProvider {
                 .pattern("X")
                 .pattern("X")
                 .define('B', JolCraftItems.MITHRIL_INGOT.get())
-                .define('X', JolCraftItems.DEEPSLATE_PLATE.get())
+                .define('X', JolCraftItems.DEEPSLATE_ROD.get())
                 .unlockedBy("has_mithril_ingot", has(JolCraftItems.MITHRIL_INGOT.get())).save(output);
 
         shaped(RecipeCategory.MISC, JolCraftItems.MITHRIL_AXE.get())
@@ -275,7 +271,7 @@ public class JolCraftRecipeProvider extends RecipeProvider {
                 .pattern("BX")
                 .pattern(" X")
                 .define('B', JolCraftItems.MITHRIL_INGOT.get())
-                .define('X', JolCraftItems.DEEPSLATE_PLATE.get())
+                .define('X', JolCraftItems.DEEPSLATE_ROD.get())
                 .unlockedBy("has_mithril_ingot", has(JolCraftItems.MITHRIL_INGOT.get())).save(output, "mithril_axe_left");
 
         shaped(RecipeCategory.MISC, JolCraftItems.MITHRIL_AXE.get())
@@ -283,7 +279,7 @@ public class JolCraftRecipeProvider extends RecipeProvider {
                 .pattern("XB")
                 .pattern("X ")
                 .define('B', JolCraftItems.MITHRIL_INGOT.get())
-                .define('X', JolCraftItems.DEEPSLATE_PLATE.get())
+                .define('X', JolCraftItems.DEEPSLATE_ROD.get())
                 .unlockedBy("has_mithril_ingot", has(JolCraftItems.MITHRIL_INGOT.get())).save(output, "mithril_axe_right");
 
         shaped(RecipeCategory.MISC, JolCraftItems.MITHRIL_HOE.get())
@@ -291,7 +287,7 @@ public class JolCraftRecipeProvider extends RecipeProvider {
                 .pattern(" X")
                 .pattern(" X")
                 .define('B', JolCraftItems.MITHRIL_INGOT.get())
-                .define('X', JolCraftItems.DEEPSLATE_PLATE.get())
+                .define('X', JolCraftItems.DEEPSLATE_ROD.get())
                 .unlockedBy("has_mithril_ingot", has(JolCraftItems.MITHRIL_INGOT.get())).save(output, "mithril_hoe_left");
 
         shaped(RecipeCategory.MISC, JolCraftItems.MITHRIL_HOE.get())
@@ -299,7 +295,7 @@ public class JolCraftRecipeProvider extends RecipeProvider {
                 .pattern("X ")
                 .pattern("X ")
                 .define('B', JolCraftItems.MITHRIL_INGOT.get())
-                .define('X', JolCraftItems.DEEPSLATE_PLATE.get())
+                .define('X', JolCraftItems.DEEPSLATE_ROD.get())
                 .unlockedBy("has_mithril_ingot", has(JolCraftItems.MITHRIL_INGOT.get())).save(output, "mithril_hoe_right");
 
         shaped(RecipeCategory.MISC, JolCraftItems.MITHRIL_HELMET.get())
@@ -346,13 +342,19 @@ public class JolCraftRecipeProvider extends RecipeProvider {
                 JolCraftBlocks.DEEPSLATE_PLATE_BLOCK.get()
         );
 
+        shaped(RecipeCategory.MISC, JolCraftItems.DEEPSLATE_ROD.get(), 4)
+                .pattern("B")
+                .pattern("B")
+                .define('B', JolCraftItems.DEEPSLATE_PLATE.get())
+                .unlockedBy("has_deepslate_plate", has(JolCraftItems.DEEPSLATE_PLATE.get())).save(output);
+
         shaped(RecipeCategory.MISC, JolCraftItems.DEEPSLATE_SWORD.get())
                 .pattern("B")
                 .pattern("B")
                 .pattern("X")
                 .define('B', JolCraftItems.DEEPSLATE_PLATE.get())
                 .define('X', Items.STICK)
-                .unlockedBy("has_deepslate_bulbs", has(JolCraftItems.DEEPSLATE_PLATE.get())).save(output);
+                .unlockedBy("has_deepslate_plate", has(JolCraftItems.DEEPSLATE_PLATE.get())).save(output);
 
         shaped(RecipeCategory.MISC, JolCraftItems.DEEPSLATE_WARHAMMER.get())
                 .pattern("BB")
@@ -360,7 +362,7 @@ public class JolCraftRecipeProvider extends RecipeProvider {
                 .pattern(" X")
                 .define('B', JolCraftItems.DEEPSLATE_PLATE.get())
                 .define('X', Items.STICK)
-                .unlockedBy("has_deepslate_bulbs", has(JolCraftItems.DEEPSLATE_PLATE.get())).save(output, "deepslate_warhammer_left");
+                .unlockedBy("has_deepslate_plate", has(JolCraftItems.DEEPSLATE_PLATE.get())).save(output, "deepslate_warhammer_left");
 
         shaped(RecipeCategory.MISC, JolCraftItems.DEEPSLATE_WARHAMMER.get())
                 .pattern("BB")
@@ -368,7 +370,7 @@ public class JolCraftRecipeProvider extends RecipeProvider {
                 .pattern("X ")
                 .define('B', JolCraftItems.DEEPSLATE_PLATE.get())
                 .define('X', Items.STICK)
-                .unlockedBy("has_deepslate_bulbs", has(JolCraftItems.DEEPSLATE_PLATE.get())).save(output, "deepslate_warhammer_right");
+                .unlockedBy("has_deepslate_plate", has(JolCraftItems.DEEPSLATE_PLATE.get())).save(output, "deepslate_warhammer_right");
 
         shaped(RecipeCategory.MISC, JolCraftItems.DEEPSLATE_PICKAXE.get())
                 .pattern("BBB")
@@ -376,7 +378,7 @@ public class JolCraftRecipeProvider extends RecipeProvider {
                 .pattern(" X ")
                 .define('B', JolCraftItems.DEEPSLATE_PLATE.get())
                 .define('X', Items.STICK)
-                .unlockedBy("has_deepslate_bulbs", has(JolCraftItems.DEEPSLATE_PLATE.get())).save(output);
+                .unlockedBy("has_deepslate_plate", has(JolCraftItems.DEEPSLATE_PLATE.get())).save(output);
 
         shaped(RecipeCategory.MISC, JolCraftItems.DEEPSLATE_SHOVEL.get())
                 .pattern("B")
@@ -384,7 +386,7 @@ public class JolCraftRecipeProvider extends RecipeProvider {
                 .pattern("X")
                 .define('B', JolCraftItems.DEEPSLATE_PLATE.get())
                 .define('X', Items.STICK)
-                .unlockedBy("has_deepslate_bulbs", has(JolCraftItems.DEEPSLATE_PLATE.get())).save(output);
+                .unlockedBy("has_deepslate_plate", has(JolCraftItems.DEEPSLATE_PLATE.get())).save(output);
 
         shaped(RecipeCategory.MISC, JolCraftItems.DEEPSLATE_AXE.get())
                 .pattern("BB")
@@ -392,7 +394,7 @@ public class JolCraftRecipeProvider extends RecipeProvider {
                 .pattern(" X")
                 .define('B', JolCraftItems.DEEPSLATE_PLATE.get())
                 .define('X', Items.STICK)
-                .unlockedBy("has_deepslate_bulbs", has(JolCraftItems.DEEPSLATE_PLATE.get())).save(output, "deepslate_axe_left");
+                .unlockedBy("has_deepslate_plate", has(JolCraftItems.DEEPSLATE_PLATE.get())).save(output, "deepslate_axe_left");
 
         shaped(RecipeCategory.MISC, JolCraftItems.DEEPSLATE_AXE.get())
                 .pattern("BB")
@@ -400,7 +402,7 @@ public class JolCraftRecipeProvider extends RecipeProvider {
                 .pattern("X ")
                 .define('B', JolCraftItems.DEEPSLATE_PLATE.get())
                 .define('X', Items.STICK)
-                .unlockedBy("has_deepslate_bulbs", has(JolCraftItems.DEEPSLATE_PLATE.get())).save(output, "deepslate_axe_right");
+                .unlockedBy("has_deepslate_plate", has(JolCraftItems.DEEPSLATE_PLATE.get())).save(output, "deepslate_axe_right");
 
         shaped(RecipeCategory.MISC, JolCraftItems.DEEPSLATE_HOE.get())
                 .pattern("BB")
@@ -408,7 +410,7 @@ public class JolCraftRecipeProvider extends RecipeProvider {
                 .pattern(" X")
                 .define('B', JolCraftItems.DEEPSLATE_PLATE.get())
                 .define('X', Items.STICK)
-                .unlockedBy("has_deepslate_bulbs", has(JolCraftItems.DEEPSLATE_PLATE.get())).save(output, "deepslate_hoe_left");
+                .unlockedBy("has_deepslate_plate", has(JolCraftItems.DEEPSLATE_PLATE.get())).save(output, "deepslate_hoe_left");
 
         shaped(RecipeCategory.MISC, JolCraftItems.DEEPSLATE_HOE.get())
                 .pattern("BB")
@@ -416,7 +418,7 @@ public class JolCraftRecipeProvider extends RecipeProvider {
                 .pattern("X ")
                 .define('B', JolCraftItems.DEEPSLATE_PLATE.get())
                 .define('X', Items.STICK)
-                .unlockedBy("has_deepslate_bulbs", has(JolCraftItems.DEEPSLATE_PLATE.get())).save(output, "deepslate_hoe_right");
+                .unlockedBy("has_deepslate_plate", has(JolCraftItems.DEEPSLATE_PLATE.get())).save(output, "deepslate_hoe_right");
 
         shaped(RecipeCategory.MISC, JolCraftItems.DEEPSLATE_HELMET.get())
                 .pattern("BBB")
@@ -466,12 +468,62 @@ public class JolCraftRecipeProvider extends RecipeProvider {
                 .define('B', Items.IRON_NUGGET)
                 .unlockedBy("has_iron_nugget", has(Items.IRON_NUGGET)).save(output, "lockpick_left");
 
-        shapeless(RecipeCategory.BREWING, JolCraftItems.INVERIX.get(), 3)
+        shaped(RecipeCategory.MISC, JolCraftBlocks.LAPIDARY_BENCH.get())
+                .pattern("BXB")
+                .pattern("BXB")
+                .pattern("XXX")
+                .define('B', JolCraftItems.DEEPSLATE_PLATE.get())
+                .define('X', Items.POLISHED_DEEPSLATE)
+                .unlockedBy("has_deepslate_plate", has(JolCraftItems.DEEPSLATE_PLATE.get())).save(output);
+
+        shaped(RecipeCategory.MISC, JolCraftItems.DEEPSLATE_ARTISAN_HAMMER.get())
+                .pattern("B")
+                .pattern("X")
+                .define('B', JolCraftItems.DEEPSLATE_PLATE.get())
+                .define('X', Items.STICK)
+                .unlockedBy("has_deepslate_plate", has(JolCraftItems.DEEPSLATE_PLATE.get())).save(output);
+
+        shaped(RecipeCategory.MISC, JolCraftItems.MITHRIL_ARTISAN_HAMMER.get())
+                .pattern("B")
+                .pattern("X")
+                .define('B', JolCraftItems.MITHRIL_INGOT.get())
+                .define('X', JolCraftItems.DEEPSLATE_ROD.get())
+                .unlockedBy("has_mithril_ingot", has(JolCraftItems.MITHRIL_INGOT.get())).save(output);
+
+        shaped(RecipeCategory.MISC, JolCraftItems.DEEPSLATE_CHISEL.get())
+                .pattern(" B")
+                .pattern("X ")
+                .define('B', JolCraftItems.DEEPSLATE_PLATE.get())
+                .define('X', Items.STICK)
+                .unlockedBy("has_deepslate_plate", has(JolCraftItems.DEEPSLATE_PLATE.get())).save(output, "deepslate_chisel_right");
+
+        shaped(RecipeCategory.MISC, JolCraftItems.DEEPSLATE_CHISEL.get())
+                .pattern("B ")
+                .pattern(" X")
+                .define('B', JolCraftItems.DEEPSLATE_PLATE.get())
+                .define('X', Items.STICK)
+                .unlockedBy("has_deepslate_plate", has(JolCraftItems.DEEPSLATE_PLATE.get())).save(output, "deepslate_chisel_left");
+
+        shaped(RecipeCategory.MISC, JolCraftItems.MITHRIL_CHISEL.get())
+                .pattern(" B")
+                .pattern("X ")
+                .define('B', JolCraftItems.MITHRIL_INGOT.get())
+                .define('X', JolCraftItems.DEEPSLATE_ROD.get())
+                .unlockedBy("has_mithril_ingot", has(JolCraftItems.MITHRIL_INGOT.get())).save(output, "mithril_chisel_right");
+
+        shaped(RecipeCategory.MISC, JolCraftItems.MITHRIL_CHISEL.get())
+                .pattern("B ")
+                .pattern(" X")
+                .define('B', JolCraftItems.MITHRIL_INGOT.get())
+                .define('X', JolCraftItems.DEEPSLATE_ROD.get())
+                .unlockedBy("has_mithril_ingot", has(JolCraftItems.MITHRIL_INGOT.get())).save(output, "mithril_chisel_left");
+
+        shapeless(RecipeCategory.MISC, JolCraftItems.INVERIX.get(), 3)
                 .requires(JolCraftItems.MUFFHORN_MILK_BUCKET.get())
                 .requires(Items.COAL)
                 .unlockedBy("has_muffhorn_milk_bucket", has(JolCraftItems.MUFFHORN_MILK_BUCKET.get())).save(output, "inverix_coal");
 
-        shapeless(RecipeCategory.BREWING, JolCraftItems.INVERIX.get(), 3)
+        shapeless(RecipeCategory.MISC, JolCraftItems.INVERIX.get(), 3)
                 .requires(JolCraftItems.MUFFHORN_MILK_BUCKET.get())
                 .requires(Items.CHARCOAL)
                 .unlockedBy("has_muffhorn_milk_bucket", has(JolCraftItems.MUFFHORN_MILK_BUCKET.get())).save(output, "inverix_charcoal");

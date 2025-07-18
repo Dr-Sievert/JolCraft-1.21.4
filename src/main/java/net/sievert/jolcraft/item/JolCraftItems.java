@@ -10,13 +10,14 @@ import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.block.JolCraftBlocks;
-import net.sievert.jolcraft.data.JolCraftDataComponents;
+import net.sievert.jolcraft.data.JolCraftTags;
 import net.sievert.jolcraft.entity.JolCraftEntities;
 import net.sievert.jolcraft.item.armor.JolCraftArmorMaterials;
 import net.sievert.jolcraft.item.custom.*;
 import net.sievert.jolcraft.item.custom.scrapper.*;
 import net.sievert.jolcraft.item.custom.merchant.*;
 import net.sievert.jolcraft.item.custom.book.*;
+import net.sievert.jolcraft.item.custom.gem.*;
 import net.sievert.jolcraft.item.custom.equipment.armor.DeepslateArmorItem;
 import net.sievert.jolcraft.item.custom.equipment.armor.MithrilArmorItem;
 import net.sievert.jolcraft.item.custom.food.DwarvenBrewItem;
@@ -113,8 +114,8 @@ public class JolCraftItems {
     public static final DeferredItem<Item> DEEPSLATE_PLATE = ITEMS.registerItem("deepslate_plate",
             Item::new, new Item.Properties());
 
-    public static final DeferredItem<Item> FORGE_ARMOR_TRIM_SMITHING_TEMPLATE = ITEMS.registerItem("forge_armor_trim_smithing_template",
-            SmithingTemplateItem::createArmorTrimTemplate, new Item.Properties().rarity(Rarity.UNCOMMON));
+    public static final DeferredItem<Item> DEEPSLATE_ROD = ITEMS.registerItem("deepslate_rod",
+            Item::new, new Item.Properties());
 
     public static final DeferredItem<Item> DEEPSLATE_SWORD = ITEMS.registerItem("deepslate_sword",
             (properties) -> new SwordItem(JolCraftToolMaterials.DEEPSLATE, 3.0F, -2.4F, properties));
@@ -146,6 +147,9 @@ public class JolCraftItems {
     public static final DeferredItem<Item> DEEPSLATE_BOOTS = ITEMS.registerItem("deepslate_boots",
             props -> new DeepslateArmorItem(JolCraftArmorMaterials.DEEPSLATE_ARMOR_MATERIAL, ArmorType.BOOTS, props));
 
+    public static final DeferredItem<Item> FORGE_ARMOR_TRIM_SMITHING_TEMPLATE = ITEMS.registerItem("forge_armor_trim_smithing_template",
+            SmithingTemplateItem::createArmorTrimTemplate, new Item.Properties().rarity(Rarity.UNCOMMON));
+
     //Animal-related
     public static final DeferredItem<Item> MUFFHORN_FUR = ITEMS.registerItem("muffhorn_fur",
             Item::new, new Item.Properties());
@@ -157,14 +161,51 @@ public class JolCraftItems {
     public static final DeferredItem<Item> INVERIX = ITEMS.registerItem("inverix",
             Item::new, new Item.Properties());
 
+    public static final DeferredItem<Item> AEGISCORE_DUST = ITEMS.registerItem("aegiscore_dust",
+            Item::new, new Item.Properties());
+
+    public static final DeferredItem<Item> ASHFANG_DUST = ITEMS.registerItem("ashfang_dust",
+            Item::new, new Item.Properties());
+
     public static final DeferredItem<Item> DEEPMARROW_DUST = ITEMS.registerItem("deepmarrow_dust",
             Item::new, new Item.Properties());
 
     public static final DeferredItem<Item> EARTHBLOOD_DUST = ITEMS.registerItem("earthblood_dust",
             Item::new, new Item.Properties());
 
-    public static final DeferredItem<Item> VERDANT_DUST = ITEMS.registerItem("verdant_dust",
+    public static final DeferredItem<Item> EMBERGLASS_DUST = ITEMS.registerItem("emberglass_dust",
             Item::new, new Item.Properties());
+
+    public static final DeferredItem<Item> FROSTVEIN_DUST = ITEMS.registerItem("frostvein_dust",
+            Item::new, new Item.Properties());
+
+    public static final DeferredItem<Item> GRIMSTONE_DUST = ITEMS.registerItem("grimstone_dust",
+            Item::new, new Item.Properties());
+
+    public static final DeferredItem<Item> IRONHEART_DUST = ITEMS.registerItem("ironheart_dust",
+            Item::new, new Item.Properties());
+
+    public static final DeferredItem<Item> LUMIERE_DUST = ITEMS.registerItem("lumiere_dust",
+            Item::new, new Item.Properties());
+
+    public static final DeferredItem<Item> MOONSHARD_DUST = ITEMS.registerItem("moonshard_dust",
+            Item::new, new Item.Properties());
+
+    public static final DeferredItem<Item> RUSTAGATE_DUST = ITEMS.registerItem("rustagate_dust",
+            Item::new, new Item.Properties());
+
+    public static final DeferredItem<Item> SKYBURROW_DUST = ITEMS.registerItem("skyburrow_dust",
+            Item::new, new Item.Properties());
+
+    public static final DeferredItem<Item> SUNGLEAM_DUST = ITEMS.registerItem("sungleam_dust",
+            Item::new, new Item.Properties());
+
+    public static final DeferredItem<Item> VERDANITE_DUST = ITEMS.registerItem("verdanite_dust",
+            Item::new, new Item.Properties());
+
+    public static final DeferredItem<Item> WOECRYSTAL_DUST = ITEMS.registerItem("woecrystal_dust",
+            Item::new, new Item.Properties());
+
 
     //Bounty
     public static final DeferredItem<Item> PARCHMENT = ITEMS.registerSimpleItem("parchment");
@@ -290,12 +331,44 @@ public class JolCraftItems {
     public static final DeferredItem<Item> DWARF_KEEPER_SPAWN_EGG = ITEMS.registerItem("dwarf_keeper_spawn_egg",
             (properties) -> new SpawnEggItem(JolCraftEntities.DWARF_KEEPER.get(), properties));
 
+    public static final DeferredItem<Item> DWARF_ARTISAN_SPAWN_EGG = ITEMS.registerItem("dwarf_artisan_spawn_egg",
+            (properties) -> new SpawnEggItem(JolCraftEntities.DWARF_ARTISAN.get(), properties));
+
+    public static final DeferredItem<Item> DWARF_EXPLORER_SPAWN_EGG = ITEMS.registerItem("dwarf_explorer_spawn_egg",
+            (properties) -> new SpawnEggItem(JolCraftEntities.DWARF_EXPLORER.get(), properties));
+
+    public static final DeferredItem<Item> DWARF_MINER_SPAWN_EGG = ITEMS.registerItem("dwarf_miner_spawn_egg",
+            (properties) -> new SpawnEggItem(JolCraftEntities.DWARF_MINER.get(), properties));
+
+
+
     public static final DeferredItem<Item> MUFFHORN_SPAWN_EGG = ITEMS.registerItem("muffhorn_spawn_egg",
             (properties) -> new SpawnEggItem(JolCraftEntities.MUFFHORN.get(), properties));
 
 
-
     //Gems
+
+    public static final DeferredItem<ArtisanHammerItem> DEEPSLATE_ARTISAN_HAMMER = ITEMS.registerItem("deepslate_artisan_hammer",
+            (properties) -> new ArtisanHammerItem(JolCraftToolMaterials.DEEPSLATE, -2.0F, -3.0F, properties));
+
+    public static final DeferredItem<ArtisanHammerItem> MITHRIL_ARTISAN_HAMMER = ITEMS.registerItem("mithril_artisan_hammer",
+            (properties) -> new ArtisanHammerItem(JolCraftToolMaterials.MITHRIL, -2.0F, -3.0F, properties.fireResistant().rarity(Rarity.RARE)));
+
+    public static final DeferredItem<ChiselItem> DEEPSLATE_CHISEL = ITEMS.registerItem("deepslate_chisel",
+            (properties) -> new ChiselItem(JolCraftToolMaterials.DEEPSLATE, -3.0F, -1.0F, properties));
+
+    public static final DeferredItem<ChiselItem> MITHRIL_CHISEL = ITEMS.registerItem("mithril_chisel",
+            (properties) -> new ChiselItem(JolCraftToolMaterials.MITHRIL, -3.0F, -1.0F, properties.fireResistant().rarity(Rarity.RARE)));
+
+    public static final DeferredItem<Item> GEODE_SMALL = ITEMS.registerItem("geode_small",
+            GeodeItem::new, new Item.Properties());
+
+    public static final DeferredItem<Item> GEODE_MEDIUM = ITEMS.registerItem("geode_medium",
+            GeodeItem::new, new Item.Properties());
+
+    public static final DeferredItem<Item> GEODE_LARGE = ITEMS.registerItem("geode_large",
+            GeodeItem::new, new Item.Properties());
+
     public static final DeferredItem<Item> AEGISCORE = ITEMS.registerItem("aegiscore",
             Item::new, new Item.Properties());
 

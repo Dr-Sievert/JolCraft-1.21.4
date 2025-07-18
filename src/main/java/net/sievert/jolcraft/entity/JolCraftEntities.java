@@ -27,6 +27,9 @@ public class JolCraftEntities {
     public static ResourceKey<EntityType<?>> DWARF_BREWMASTER_KEY = ResourceKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID,"dwarf_brewmaster"));
     public static ResourceKey<EntityType<?>> DWARF_GUARD_KEY = ResourceKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID,"dwarf_guard"));
     public static ResourceKey<EntityType<?>> DWARF_KEEPER_KEY = ResourceKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID,"dwarf_keeper"));
+    public static ResourceKey<EntityType<?>> DWARF_ARTISAN_KEY = ResourceKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID,"dwarf_artisan"));
+    public static ResourceKey<EntityType<?>> DWARF_EXPLORER_KEY = ResourceKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID,"dwarf_explorer"));
+    public static ResourceKey<EntityType<?>> DWARF_MINER_KEY = ResourceKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID,"dwarf_miner"));
 
     public static final Supplier<EntityType<DwarfEntity>> DWARF =
             ENTITY_TYPES.register("dwarf", () -> EntityType.Builder.of(DwarfEntity::new, MobCategory.CREATURE)
@@ -59,6 +62,18 @@ public class JolCraftEntities {
     public static final Supplier<EntityType<DwarfKeeperEntity>> DWARF_KEEPER =
             ENTITY_TYPES.register("dwarf_keeper", () -> EntityType.Builder.of(DwarfKeeperEntity::new, MobCategory.CREATURE)
                     .sized(0.5f, 1.6f).build(DWARF_KEEPER_KEY));
+
+    public static final Supplier<EntityType<DwarfArtisanEntity>> DWARF_ARTISAN =
+            ENTITY_TYPES.register("dwarf_artisan", () -> EntityType.Builder.of(DwarfArtisanEntity::new, MobCategory.CREATURE)
+                    .sized(0.5f, 1.6f).build(DWARF_ARTISAN_KEY));
+
+    public static final Supplier<EntityType<DwarfExplorerEntity>> DWARF_EXPLORER =
+            ENTITY_TYPES.register("dwarf_explorer", () -> EntityType.Builder.of(DwarfExplorerEntity::new, MobCategory.CREATURE)
+                    .sized(0.5f, 1.6f).build(DWARF_EXPLORER_KEY));
+
+    public static final Supplier<EntityType<DwarfMinerEntity>> DWARF_MINER =
+            ENTITY_TYPES.register("dwarf_miner", () -> EntityType.Builder.of(DwarfMinerEntity::new, MobCategory.CREATURE)
+                    .sized(0.5f, 1.6f).build(DWARF_MINER_KEY));
 
     //Animals
     public static ResourceKey<EntityType<?>> MUFFHORN_KEY = ResourceKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "muffhorn"));

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": "jolcraft:deepslate_plate",
+    "X": "minecraft:polished_deepslate"
+  },
+  "pattern": [
+    "BXB",
+    "BXB",
+    "XXX"
+  ],
+  "result": {
+    "count": 1,
+    "id": "jolcraft:lapidary_bench"
+  }
+}

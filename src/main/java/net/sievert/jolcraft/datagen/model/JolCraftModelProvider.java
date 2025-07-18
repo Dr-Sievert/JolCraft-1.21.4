@@ -23,6 +23,7 @@ import net.minecraft.world.item.equipment.EquipmentAssets;
 import net.minecraft.world.item.equipment.trim.TrimMaterial;
 import net.minecraft.world.item.equipment.trim.TrimMaterials;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
@@ -90,6 +91,7 @@ public class JolCraftModelProvider extends ModelProvider {
         //Weapons and Tools
         itemModels.generateFlatItem(JolCraftItems.DEEPSLATE_PLATE.get(), ModelTemplates.FLAT_ITEM);
         blockModels.createTrivialCube(JolCraftBlocks.DEEPSLATE_PLATE_BLOCK.get());
+        itemModels.generateFlatItem(JolCraftItems.DEEPSLATE_ROD.get(), ModelTemplates.FLAT_ITEM);
 
         itemModels.generateFlatItem(JolCraftItems.DEEPSLATE_SWORD.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
         itemModels.generateFlatItem(JolCraftItems.DEEPSLATE_WARHAMMER.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
@@ -121,8 +123,21 @@ public class JolCraftModelProvider extends ModelProvider {
 
         //Alchemy
         itemModels.generateFlatItem(JolCraftItems.INVERIX.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.AEGISCORE_DUST.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.ASHFANG_DUST.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(JolCraftItems.DEEPMARROW_DUST.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(JolCraftItems.EARTHBLOOD_DUST.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.EMBERGLASS_DUST.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.FROSTVEIN_DUST.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.GRIMSTONE_DUST.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.IRONHEART_DUST.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.LUMIERE_DUST.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.MOONSHARD_DUST.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.RUSTAGATE_DUST.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.SKYBURROW_DUST.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.SUNGLEAM_DUST.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.VERDANITE_DUST.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.WOECRYSTAL_DUST.get(), ModelTemplates.FLAT_ITEM);
 
         //Animal-related
         itemModels.generateFlatItem(JolCraftItems.MUFFHORN_MILK_BUCKET.get(), ModelTemplates.FLAT_ITEM);
@@ -146,7 +161,7 @@ public class JolCraftModelProvider extends ModelProvider {
         itemModels.generateFlatItem(JolCraftItems.DWARVEN_BREW.get(), ModelTemplates.FLAT_ITEM);
 
         //Crops
-        itemModels.generateFlatItem(JolCraftItems.VERDANT_DUST.get(), ModelTemplates.FLAT_ITEM);
+
         blockModels.createTrivialCube(JolCraftBlocks.VERDANT_SOIL.get());
         createVerdantFarmland(blockModels);
 
@@ -186,6 +201,17 @@ public class JolCraftModelProvider extends ModelProvider {
 
 
         //Gems
+        blockModels.createTrivialBlock(JolCraftBlocks.LAPIDARY_BENCH.get(), TexturedModel.CUBE_TOP_BOTTOM);
+
+        itemModels.generateFlatItem(JolCraftItems.DEEPSLATE_ARTISAN_HAMMER.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.MITHRIL_ARTISAN_HAMMER.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.DEEPSLATE_CHISEL.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.MITHRIL_CHISEL.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
+
+        itemModels.generateFlatItem(JolCraftItems.GEODE_SMALL.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.GEODE_MEDIUM.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.GEODE_LARGE.get(), ModelTemplates.FLAT_ITEM);
+
         itemModels.generateFlatItem(JolCraftItems.AEGISCORE.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(JolCraftItems.ASHFANG.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(JolCraftItems.DEEPMARROW.get(), ModelTemplates.FLAT_ITEM);
@@ -261,38 +287,53 @@ public class JolCraftModelProvider extends ModelProvider {
         itemModels.generateSpawnEgg(
                 JolCraftItems.DWARF_GUILDMASTER_SPAWN_EGG.get(),
                 -4355214,
-                -11716526
+                -11788222
         );
         itemModels.generateSpawnEgg(
                 JolCraftItems.DWARF_HISTORIAN_SPAWN_EGG.get(),
                 -4355214,
-                -8807323
+                -12296406
         );
         itemModels.generateSpawnEgg(
                 JolCraftItems.DWARF_MERCHANT_SPAWN_EGG.get(),
                 -4355214,
-                -1399760
+                -6803431
         );
         itemModels.generateSpawnEgg(
                 JolCraftItems.DWARF_SCRAPPER_SPAWN_EGG.get(),
                 -4355214,
-                -3380960
+                -7316689
         );
 
         itemModels.generateSpawnEgg(
                 JolCraftItems.DWARF_BREWMASTER_SPAWN_EGG.get(),
                 -4355214,
-                -396380
+                -7506898
         );
         itemModels.generateSpawnEgg(
                 JolCraftItems.DWARF_GUARD_SPAWN_EGG.get(),
                 -4355214,
-                -2233622
+                -14606047
         );
         itemModels.generateSpawnEgg(
                 JolCraftItems.DWARF_KEEPER_SPAWN_EGG.get(),
                 -4355214,
-                -7799040
+                -14514148
+        );
+        itemModels.generateSpawnEgg(
+                JolCraftItems.DWARF_ARTISAN_SPAWN_EGG.get(),
+                -4355214,
+                -13028996
+        );
+        itemModels.generateSpawnEgg(
+                JolCraftItems.DWARF_EXPLORER_SPAWN_EGG.get(),
+                -4355214,
+                -16085340
+        );
+        itemModels.generateSpawnEgg(
+                JolCraftItems.DWARF_MINER_SPAWN_EGG.get(),
+                -4355214,
+                -13351642
         );
 
         itemModels.generateFlatItem(JolCraftItems.MUFFHORN_SPAWN_EGG.get(), ModelTemplates.FLAT_ITEM);

@@ -22,6 +22,7 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Blocks;
 import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.block.JolCraftBlocks;
+import net.sievert.jolcraft.data.JolCraftDataComponents;
 import net.sievert.jolcraft.entity.ai.goal.*;
 import net.sievert.jolcraft.item.JolCraftItems;
 import net.sievert.jolcraft.sound.JolCraftSoundHelper;
@@ -66,6 +67,18 @@ public class DwarfBrewmasterEntity extends AbstractDwarfEntity {
     @Override
     public ResourceLocation getProfessionId() {
         return ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "dwarf_brewmaster");
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getRestockSound() {
+        return SoundEvents.VILLAGER_WORK_CLERIC;
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getRerollSound() {
+        return SoundEvents.VILLAGER_WORK_CLERIC;
     }
 
     @Override
@@ -141,6 +154,13 @@ public class DwarfBrewmasterEntity extends AbstractDwarfEntity {
                 },
                 // Master
                 5, new VillagerTrades.ItemListing[]{
+                        new JolCraftDwarfTrades.ItemsAndGoldToItemsWithData(
+                                JolCraftItems.LEGENDARY_PAGE.get(), 20,
+                                30,
+                                JolCraftItems.ANCIENT_DWARVEN_TOME_LEGENDARY.get(), 1,
+                                1, 1, 0F,
+                                (stack) -> stack.set(JolCraftDataComponents.LORE_LINE_ID, "forgotten_brew_formulas")
+                        ),
                         new JolCraftDwarfTrades.GoldForItems(JolCraftItems.EMBERGLASS.get(), 1, 10, 0, 20, 40),
                         new JolCraftDwarfTrades.ItemsAndGoldToItems(
                                 JolCraftItems.EMBERGLASS.get(), 1, 20, 40,
@@ -149,19 +169,6 @@ public class DwarfBrewmasterEntity extends AbstractDwarfEntity {
                 }
         ));
     }
-
-    @Nullable
-    @Override
-    protected SoundEvent getRestockSound() {
-        return SoundEvents.VILLAGER_WORK_CLERIC;
-    }
-
-    @Nullable
-    @Override
-    protected SoundEvent getRerollSound() {
-        return SoundEvents.VILLAGER_WORK_CLERIC;
-    }
-
 
 
 }

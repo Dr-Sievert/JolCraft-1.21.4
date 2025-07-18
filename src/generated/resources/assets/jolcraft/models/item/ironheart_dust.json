@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "jolcraft:item/verdant_dust"
+    "layer0": "jolcraft:item/ironheart_dust"
   }
 }

@@ -10,7 +10,6 @@
   "container.jolcraft.strongbox_locked": "Locked Strongbox",
   "item.jolcraft.lockpick": "Lockpick",
 
-
   "block.jolcraft.deepslate_mithril_ore": "Deepslate Mithril Ore",
   "block.jolcraft.pure_mithril_block": "Pure Mithril Block",
   "block.jolcraft.mithril_block": "Mithril Block",
@@ -35,6 +34,7 @@
 
   "item.jolcraft.deepslate_plate": "Deepslate Plate",
   "block.jolcraft.deepslate_plate_block": "Deepslate Plate Block",
+  "item.jolcraft.deepslate_rod": "Deepslate Rod",
   "item.jolcraft.deepslate_sword": "Deepslate Sword",
   "item.jolcraft.deepslate_warhammer": "Deepslate Warhammer",
   "item.jolcraft.deepslate_pickaxe": "Deepslate Pickaxe",
@@ -51,6 +51,18 @@
 
   "trim_material.jolcraft.deepslate": "Deepslate",
   "trim_material.jolcraft.mithril": "Mithril",
+
+  "block.jolcraft.lapidary_bench": "Lapidary Bench",
+  "container.jolcraft.lapidary_bench": "Lapidary Bench",
+
+  "item.jolcraft.deepslate_artisan_hammer": "Deepslate Artisan Hammer",
+  "item.jolcraft.mithril_artisan_hammer": "Mithril Artisan Hammer",
+  "item.jolcraft.deepslate_chisel": "Deepslate Chisel",
+  "item.jolcraft.mithril_chisel": "Mithril Chisel",
+
+  "item.jolcraft.geode_small": "Small Geode",
+  "item.jolcraft.geode_medium": "Medium Geode",
+  "item.jolcraft.geode_large": "Large Geode",
 
   "trim_material.jolcraft.aegiscore": "Aegiscore",
   "trim_material.jolcraft.ashfang": "Ashfang",
@@ -69,8 +81,22 @@
   "trim_material.jolcraft.woecrystal": "Woecrystal",
 
   "item.jolcraft.inverix": "Inverix",
+
+  "item.jolcraft.aegiscore_dust": "Aegiscore Dust",
+  "item.jolcraft.ashfang_dust": "Ashfang Dust",
   "item.jolcraft.deepmarrow_dust": "Powdered Deepmarrow",
   "item.jolcraft.earthblood_dust": "Earthblood Dust",
+  "item.jolcraft.emberglass_dust": "Emberglass Shards",
+  "item.jolcraft.frostvein_dust": "Frostvein Dust",
+  "item.jolcraft.grimstone_dust": "Grimstone Dust",
+  "item.jolcraft.ironheart_dust": "Ironheart Dust",
+  "item.jolcraft.lumiere_dust": "Lumiere Dust",
+  "item.jolcraft.moonshard_dust": "Moonshard Dust",
+  "item.jolcraft.rustagate_dust": "Rustagate Dust",
+  "item.jolcraft.skyburrow_dust": "Skyburrow Dust",
+  "item.jolcraft.sungleam_dust": "Sungleam Dust",
+  "item.jolcraft.verdanite_dust": "Verdanite Dust",
+  "item.jolcraft.woecrystal_dust": "Woecrystal Dust",
 
   "effect.jolcraft.homestead": "Homestead",
   "effect.jolcraft.ancient_memory": "Ancient Memory",
@@ -107,7 +133,6 @@
   "item.minecraft.lingering_potion.effect.strong_dwarven_haste": "Mining Lingering Potion",
 
 
-  "item.jolcraft.verdant_dust": "Verdant Dust",
   "block.jolcraft.verdant_soil": "Verdant Soil",
   "block.jolcraft.verdant_farmland": "Verdant Farmland",
 
@@ -143,7 +168,7 @@
   "item.jolcraft.glass_mug": "Glass Mug",
   "item.jolcraft.dwarven_brew": "Dwarven Brew",
   "item.jolcraft.deepslate_bulbs": "Deepslate Bulbs",
-  "block.jolcraft.deepslate_bulbs_crop": "Deepslate Bulbs Crop",
+  "block.jolcraft.deepslate_bulbs_crop": "Deepslate Bulbs",
 
   "block.jolcraft.duskcap": "Duskcap",
   "block.jolcraft.potted_duskcap": "Potted Duskcap",
@@ -187,17 +212,6 @@
   "item.jolcraft.contract_champion": "Champion Contract",
   "item.jolcraft.contract_blacksmith": "Blacksmith Contract",
   "item.jolcraft.contract_smelter": "Smelter Contract",
-
-  "item.jolcraft.dwarf_spawn_egg": "Dwarf Spawn Egg",
-  "item.jolcraft.dwarf_guildmaster_spawn_egg": "Dwarf Guildmaster Spawn Egg",
-  "item.jolcraft.dwarf_historian_spawn_egg": "Dwarf Historian Spawn Egg",
-  "item.jolcraft.dwarf_merchant_spawn_egg": "Dwarf Merchant Spawn Egg",
-  "item.jolcraft.dwarf_scrapper_spawn_egg": "Dwarf Scrapper Spawn Egg",
-  "item.jolcraft.dwarf_brewmaster_spawn_egg": "Dwarf Brewmaster Spawn Egg",
-  "item.jolcraft.dwarf_guard_spawn_egg": "Dwarf Guard Spawn Egg",
-  "item.jolcraft.dwarf_keeper_spawn_egg": "Dwarf Keeper Spawn Egg",
-
-  "item.jolcraft.muffhorn_spawn_egg": "Muffhorn Spawn Egg",
 
   "item.jolcraft.aegiscore": "Aegiscore",
   "item.jolcraft.ashfang": "Ashfang",
@@ -325,6 +339,9 @@
   "tooltip.jolcraft.reroll_crate.fail": "This trader inventory cannot be rerolled!",
   "tooltip.jolcraft.reroll_crate.success": "Trader inventory rerolled!",
 
+  "tooltip.jolcraft.artisan_hammer": "Can be used to break geodes and gems.",
+  "tooltip.jolcraft.chisel": "Can be used to cut gems.",
+
   "tooltip.jolcraft.spanner": "Can be used to produce scrap from salvage.",
   "tooltip.jolcraft.salvage": "Salvagable",
 
@@ -410,15 +427,30 @@
   "advancement.jolcraft.rep2_dummy.description": "Your deeds echo through the halls. More dwarves are willing to work with you.",
 
   "entity.jolcraft.dwarf": "Dwarf",
+  "item.jolcraft.dwarf_spawn_egg": "Dwarf Spawn Egg",
   "entity.jolcraft.dwarf_guildmaster": "Guildmaster",
+  "item.jolcraft.dwarf_guildmaster_spawn_egg": "Dwarf Guildmaster Spawn Egg",
   "entity.jolcraft.dwarf_historian": "Historian",
+  "item.jolcraft.dwarf_historian_spawn_egg": "Dwarf Historian Spawn Egg",
   "entity.jolcraft.dwarf_merchant": "Merchant",
+  "item.jolcraft.dwarf_merchant_spawn_egg": "Dwarf Merchant Spawn Egg",
   "entity.jolcraft.dwarf_scrapper": "Scrapper",
+  "item.jolcraft.dwarf_scrapper_spawn_egg": "Dwarf Scrapper Spawn Egg",
   "entity.jolcraft.dwarf_brewmaster": "Brewmaster",
+  "item.jolcraft.dwarf_brewmaster_spawn_egg": "Dwarf Brewmaster Spawn Egg",
   "entity.jolcraft.dwarf_guard": "Guard",
+  "item.jolcraft.dwarf_guard_spawn_egg": "Dwarf Guard Spawn Egg",
   "entity.jolcraft.dwarf_keeper": "Keeper",
+  "item.jolcraft.dwarf_keeper_spawn_egg": "Dwarf Keeper Spawn Egg",
+  "entity.jolcraft.dwarf_artisan": "Artisan",
+  "item.jolcraft.dwarf_artisan_spawn_egg": "Dwarf Artisan Spawn Egg",
+  "entity.jolcraft.dwarf_explorer": "Explorer",
+  "item.jolcraft.dwarf_explorer_spawn_egg": "Dwarf Explorer Spawn Egg",
+  "entity.jolcraft.dwarf_miner": "Miner",
+  "item.jolcraft.dwarf_miner_spawn_egg": "Dwarf Miner Spawn Egg",
 
   "entity.jolcraft.muffhorn": "Muffhorn",
+  "item.jolcraft.muffhorn_spawn_egg": "Muffhorn Spawn Egg",
 
   "filled_map.forge": "Map to a Dwarven Forge"
 

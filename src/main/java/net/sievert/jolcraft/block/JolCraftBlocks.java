@@ -28,6 +28,16 @@ public class JolCraftBlocks {
     public static final DeferredRegister.Blocks BLOCKS =
             DeferredRegister.createBlocks(JolCraft.MOD_ID);
 
+    public static final DeferredBlock<Block> LAPIDARY_BENCH = registerBlock("lapidary_bench",
+            (properties) -> new LapidaryBenchBlock(properties
+                    .mapColor(MapColor.DEEPSLATE)
+                    .sound(SoundType.POLISHED_DEEPSLATE)
+                    .strength(4.5F, 3.0F)
+                    .requiresCorrectToolForDrops()
+            ),
+            BlockBehaviour.Properties.of(), true
+    );
+
     public static final DeferredBlock<Block> DEEPSLATE_MITHRIL_ORE = registerMithrilBlock("deepslate_mithril_ore",
             (properties) -> new RotatedPillarExperienceBlock(UniformInt.of(5, 10), properties
                     .mapColor(MapColor.DEEPSLATE)

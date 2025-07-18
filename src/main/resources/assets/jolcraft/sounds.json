@@ -219,5 +219,12 @@
       }
     ],
     "subtitle": "sounds.jolcraft.coin_single"
+  },
+  "gem_cut": {
+    "sounds": [
+      "block/smithing_table/smithing_table1",
+      "block/smithing_table/smithing_table3"
+    ],
+    "subtitle": "sounds.jolcraft.gem_cut"
   }
 }

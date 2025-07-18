@@ -7,7 +7,7 @@ import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.entity.JolCraftEntities;
 import net.sievert.jolcraft.entity.client.model.animal.MuffhornModel;
-import net.sievert.jolcraft.entity.client.model.block.StrongboxModel;
+import net.sievert.jolcraft.entity.client.model.blockentity.StrongboxModel;
 import net.sievert.jolcraft.entity.client.model.dwarf.*;
 import net.sievert.jolcraft.entity.custom.animal.MuffhornEntity;
 import net.sievert.jolcraft.entity.custom.dwarf.*;
@@ -28,6 +28,9 @@ public class JolCraftModEvents {
         event.registerLayerDefinition(DwarfBrewmasterModel.LAYER_LOCATION, DwarfBrewmasterModel::createBodyLayer);
         event.registerLayerDefinition(DwarfGuardModel.LAYER_LOCATION, DwarfGuardModel::createBodyLayer);
         event.registerLayerDefinition(DwarfKeeperModel.LAYER_LOCATION, DwarfKeeperModel::createBodyLayer);
+        event.registerLayerDefinition(DwarfArtisanModel.LAYER_LOCATION, DwarfArtisanModel::createBodyLayer);
+        event.registerLayerDefinition(DwarfExplorerModel.LAYER_LOCATION, DwarfExplorerModel::createBodyLayer);
+        event.registerLayerDefinition(DwarfMinerModel.LAYER_LOCATION, DwarfMinerModel::createBodyLayer);
 
         //Animals
         event.registerLayerDefinition(MuffhornModel.LAYER_LOCATION, MuffhornModel::createBodyLayer);
@@ -54,6 +57,9 @@ public class JolCraftModEvents {
         event.put(JolCraftEntities.DWARF_BREWMASTER.get(), DwarfBrewmasterEntity.createAttributes().build());
         event.put(JolCraftEntities.DWARF_GUARD.get(), DwarfGuardEntity.createAttributes().build());
         event.put(JolCraftEntities.DWARF_KEEPER.get(), DwarfKeeperEntity.createAttributes().build());
+        event.put(JolCraftEntities.DWARF_ARTISAN.get(), DwarfArtisanEntity.createAttributes().build());
+        event.put(JolCraftEntities.DWARF_EXPLORER.get(), DwarfExplorerEntity.createAttributes().build());
+        event.put(JolCraftEntities.DWARF_MINER.get(), DwarfMinerEntity.createAttributes().build());
 
         //Animals
         event.put(JolCraftEntities.MUFFHORN.get(), MuffhornEntity.createAttributes().build());

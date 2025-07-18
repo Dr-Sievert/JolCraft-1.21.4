@@ -1,10 +1,10 @@
-// 1.21.4	2025-07-16T03:00:25.153676	Tags for minecraft:block mod id jolcraft
+// 1.21.4	2025-07-18T02:07:14.6751938	Tags for minecraft:block mod id jolcraft
 c73dafa2b8586fb43a00f9a35d72fe62a13313de data/jolcraft/tags/block/deepslate_bulbs_plantable.json
 a643c53cccfa3e74996d0ef3d38233ffb7ffdbc7 data/jolcraft/tags/block/hops_bottom.json
 7cd4557c384309101c6591a20fe38183347ff98f data/jolcraft/tags/block/hops_top.json
 d8a22f9360e63c808eaaf9a1d8dce1139e0a718a data/jolcraft/tags/block/needs_netherite_tool.json
 75582362375f363667a95f4337a4d379e8163b51 data/minecraft/tags/block/incorrect_for_diamond_tool.json
 e029c9ce41c79de5335ee5ca92c10a4ba532ee4f data/minecraft/tags/block/mineable/hoe.json
-a87d5a57634d6f3db045decd06f665b653e83976 data/minecraft/tags/block/mineable/pickaxe.json
+869217e4184dd635346c7ff9891207e7951888ab data/minecraft/tags/block/mineable/pickaxe.json
 ef38dea460087029c0c7182a258c5998782c5083 data/minecraft/tags/block/mushroom_grow_block.json
 e424afbdd93cd3ef21c1e02b5bc2fda3f1474a1d data/minecraft/tags/block/needs_iron_tool.json

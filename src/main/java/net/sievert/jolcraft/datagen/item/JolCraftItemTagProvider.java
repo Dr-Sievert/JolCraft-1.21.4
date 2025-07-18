@@ -33,6 +33,11 @@ public class JolCraftItemTagProvider extends ItemTagsProvider {
                 .add(JolCraftItems.DWARF_SCRAPPER_SPAWN_EGG.get())
                 .add(JolCraftItems.DWARF_MERCHANT_SPAWN_EGG.get());
 
+        tag(JolCraftTags.Items.GEODES)
+                .add(JolCraftItems.GEODE_SMALL.get())
+                .add(JolCraftItems.GEODE_MEDIUM.get())
+                .add(JolCraftItems.GEODE_LARGE.get());
+
         tag(JolCraftTags.Items.GEMS)
                 .add(JolCraftItems.AEGISCORE.get())
                 .add(JolCraftItems.ASHFANG.get())
@@ -49,6 +54,23 @@ public class JolCraftItemTagProvider extends ItemTagsProvider {
                 .add(JolCraftItems.SUNGLEAM.get())
                 .add(JolCraftItems.VERDANITE.get())
                 .add(JolCraftItems.WOECRYSTAL.get());
+
+        tag(JolCraftTags.Items.GEM_DUST)
+                .add(JolCraftItems.AEGISCORE_DUST.get())
+                .add(JolCraftItems.ASHFANG_DUST.get())
+                .add(JolCraftItems.DEEPMARROW_DUST.get())
+                .add(JolCraftItems.EARTHBLOOD_DUST.get())
+                .add(JolCraftItems.EMBERGLASS_DUST.get())
+                .add(JolCraftItems.FROSTVEIN_DUST.get())
+                .add(JolCraftItems.GRIMSTONE_DUST.get())
+                .add(JolCraftItems.IRONHEART_DUST.get())
+                .add(JolCraftItems.LUMIERE_DUST.get())
+                .add(JolCraftItems.MOONSHARD_DUST.get())
+                .add(JolCraftItems.RUSTAGATE_DUST.get())
+                .add(JolCraftItems.SKYBURROW_DUST.get())
+                .add(JolCraftItems.SUNGLEAM_DUST.get())
+                .add(JolCraftItems.VERDANITE_DUST.get())
+                .add(JolCraftItems.WOECRYSTAL_DUST.get());
 
         tag(JolCraftTags.Items.GENERAL_SALVAGE)
                 .add(Items.TRIPWIRE_HOOK)
@@ -196,7 +218,9 @@ public class JolCraftItemTagProvider extends ItemTagsProvider {
                 .add(JolCraftItems.MITHRIL_HELMET.get())
                 .add(JolCraftItems.MITHRIL_CHESTPLATE.get())
                 .add(JolCraftItems.MITHRIL_LEGGINGS.get())
-                .add(JolCraftItems.MITHRIL_BOOTS.get());
+                .add(JolCraftItems.MITHRIL_BOOTS.get())
+                .add(JolCraftItems.MITHRIL_ARTISAN_HAMMER.get())
+                .add(JolCraftItems.MITHRIL_CHISEL.get());
 
         tag(JolCraftTags.Items.LEGENDARY_ITEMS)
                 .add(JolCraftItems.REPUTATION_TABLET_4.get())
@@ -211,6 +235,10 @@ public class JolCraftItemTagProvider extends ItemTagsProvider {
                 .add(JolCraftItems.MITHRIL_INGOT.get());
 
         tag(ItemTags.DURABILITY_ENCHANTABLE)
+                .add(JolCraftItems.DEEPSLATE_ARTISAN_HAMMER.get())
+                .add(JolCraftItems.MITHRIL_ARTISAN_HAMMER.get())
+                .add(JolCraftItems.DEEPSLATE_CHISEL.get())
+                .add(JolCraftItems.MITHRIL_CHISEL.get())
                 .add(JolCraftItems.COPPER_SPANNER.get())
                 .add(JolCraftItems.IRON_SPANNER.get());
 
@@ -252,7 +280,13 @@ public class JolCraftItemTagProvider extends ItemTagsProvider {
                 .add(JolCraftItems.DEEPSLATE_BOOTS.get())
                 .add(JolCraftItems.MITHRIL_BOOTS.get());
 
+        tag(JolCraftTags.Items.ARTISAN_HAMMERS)
+                .add(JolCraftItems.DEEPSLATE_ARTISAN_HAMMER.get())
+                .add(JolCraftItems.MITHRIL_ARTISAN_HAMMER.get());
 
+        tag(JolCraftTags.Items.CHISELS)
+                .add(JolCraftItems.DEEPSLATE_CHISEL.get())
+                .add(JolCraftItems.MITHRIL_CHISEL.get());
 
 
     }

@@ -15,7 +15,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.block.custom.StrongboxBlock;
-import net.sievert.jolcraft.entity.client.model.block.StrongboxModel;
+import net.sievert.jolcraft.entity.client.model.blockentity.StrongboxModel;
 
 public class StrongboxRenderer<T extends BlockEntity & LidBlockEntity> implements BlockEntityRenderer<T> {
     private final BlockEntityRendererProvider.Context context;

@@ -29,6 +29,4 @@ public class LockpickSlot extends Slot {
     }
 
 
-
-
 }

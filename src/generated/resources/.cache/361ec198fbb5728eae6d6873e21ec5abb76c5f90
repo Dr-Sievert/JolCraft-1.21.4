@@ -1,13 +1,17 @@
-// 1.21.4	2025-07-16T07:59:48.4201211	Tags for minecraft:item mod id jolcraft
+// 1.21.4	2025-07-18T04:50:32.241414	Tags for minecraft:item mod id jolcraft
+49091dfd66cdf5692b19d264239e608eb7709730 data/jolcraft/tags/item/artisan_hammers.json
+965e3fa8a8e0be7759fcfcded7f1362587e1c0ed data/jolcraft/tags/item/chisels.json
 b4fbeec3a15fa89ad64b1145d7f2775a193da48b data/jolcraft/tags/item/gems.json
+208b26a31faff244572e409757ee8ec052c71c95 data/jolcraft/tags/item/gem_dust.json
 ee1323a67ea734857997039e775fb9ca5ba2e2f3 data/jolcraft/tags/item/general_salvage.json
+a561e9f040bb78cefa69a4bd03c91d316192f870 data/jolcraft/tags/item/geodes.json
 493b57020c82116ffd20fee22a8f7715aabaf03c data/jolcraft/tags/item/global_salvage.json
 f68e2065b4975ec2fcc04a9900d773ab64c19a15 data/jolcraft/tags/item/gold_salvage.json
 5b7f833bb15194a84a64e43ef6563c6e00591565 data/jolcraft/tags/item/hops.json
 dccd427a306e5bfcfd560329886f71065f9749fc data/jolcraft/tags/item/ink_and_quills.json
 801ddaba1cc8d7230b9fcc689dbb73fb71002c1a data/jolcraft/tags/item/iron_salvage.json
 1d633b0889119901d1e5e31cc2bc5e968e728e0b data/jolcraft/tags/item/legendary_items.json
-32c63b75cc34925e0b2f5c6481ee3ae21a90326e data/jolcraft/tags/item/mithril_items.json
+52aaaeb4a4cacb64eba7a71510b97a19eb695d68 data/jolcraft/tags/item/mithril_items.json
 a2020a4c90516c8149f8c48d50bfbf44662a9e4b data/jolcraft/tags/item/mithril_salvage.json
 53e3575a480034fde8e41051fa01a3dcdacb589b data/jolcraft/tags/item/redstone_salvage.json
 3ce79c2d874265007b52b4c31903e5a95c5ca8a3 data/jolcraft/tags/item/repairs_deepslate.json
@@ -18,7 +22,7 @@ fd45b2d0babc1ba749beedf446d3626275db2393 data/jolcraft/tags/item/spawn_eggs.json
 ae20dfac99fd2f9a2184b816c1424998f139b93e data/jolcraft/tags/item/textile_salvage.json
 c069c58124fcc8a5149e0f3dabcccfcb5876efa1 data/minecraft/tags/item/axes.json
 f6e60b5d3f1f7444952c27a68c2504107c67c5db data/minecraft/tags/item/chest_armor.json
-d93fe5c56c7aa54d5fe4fe63e5df038319fbd62f data/minecraft/tags/item/enchantable/durability.json
+dd4b15de6ede0cef46cf2d2ae00663e3a0918ad7 data/minecraft/tags/item/enchantable/durability.json
 ef97e7c2cb550db38b5eaa61f2675970a91c4bf2 data/minecraft/tags/item/foot_armor.json
 ed093f7677dbb5f40e4b221b448f9fc13e5bd135 data/minecraft/tags/item/head_armor.json
 9921a93d20ddc59022fd82fa30d95624b25b4940 data/minecraft/tags/item/hoes.json

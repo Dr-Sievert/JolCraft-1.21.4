@@ -153,7 +153,7 @@ public class StrongboxBlock extends BaseEntityBlock implements SimpleWaterlogged
 
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new StrongboxBlockEntity(pos, state); // You’ll define StrongboxBlockEntity separately
+        return new StrongboxBlockEntity(pos, state);
     }
 
     @Override

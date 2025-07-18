@@ -20,6 +20,7 @@ public class JolCraftBlockTagProvider extends BlockTagsProvider {
     protected void addTags(HolderLookup.Provider provider) {
 
         tag(BlockTags.MINEABLE_WITH_PICKAXE)
+                .add(JolCraftBlocks.LAPIDARY_BENCH.get())
                 .add(JolCraftBlocks.DEEPSLATE_MITHRIL_ORE.get())
                 .add(JolCraftBlocks.PURE_MITHRIL_BLOCK.get())
                 .add(JolCraftBlocks.MITHRIL_BLOCK.get())

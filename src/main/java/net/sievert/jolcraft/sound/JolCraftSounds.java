@@ -28,7 +28,7 @@ public class JolCraftSounds {
     public static final Supplier<SoundEvent> STRONGBOX_LOCKPICK = registerSoundEvent("strongbox_lockpick");
     public static final Supplier<SoundEvent> STRONGBOX_LOCKPICK_BREAK = registerSoundEvent("strongbox_lockpick_break");
     public static final Supplier<SoundEvent> STRONGBOX_UNLOCK = registerSoundEvent("strongbox_unlock");
-
+    public static final Supplier<SoundEvent> GEM_CUT = registerSoundEvent("gem_cut");
     //Items
     public static final Supplier<SoundEvent> COIN_STACK = registerSoundEvent("coin_stack");
     public static final Supplier<SoundEvent> COIN_SINGLE = registerSoundEvent("coin_single");

@@ -32,6 +32,8 @@ import net.sievert.jolcraft.network.JolCraftNetworking;
 import net.sievert.jolcraft.network.client.data.MyClientDeliriumData;
 import net.sievert.jolcraft.item.potion.JolCraftPotions;
 import net.sievert.jolcraft.screen.JolCraftMenuTypes;
+import net.sievert.jolcraft.screen.custom.lapidary_bench.LapidaryBenchMenu;
+import net.sievert.jolcraft.screen.custom.lapidary_bench.LapidaryBenchScreen;
 import net.sievert.jolcraft.screen.custom.strongbox.LockMenu;
 import net.sievert.jolcraft.screen.custom.strongbox.LockScreen;
 import net.sievert.jolcraft.screen.custom.strongbox.StrongboxScreen;
@@ -121,16 +123,12 @@ public class JolCraft
         Config.items.forEach((item) -> LOGGER.info("ITEM >> {}", item.toString()));
     }
 
-    // Add items to creative tabs
+    // Add items to vanilla creative tabs
     private void addCreative(BuildCreativeModeTabContentsEvent event)
     {
         /*
         if (event.getTabKey() == CreativeModeTabs.SPAWN_EGGS){
             event.accept(JolCraftItems.DWARF_SPAWN_EGG);
-            event.accept(JolCraftItems.DWARF_GUARD_SPAWN_EGG);
-            event.accept(JolCraftItems.DWARF_HISTORIAN_SPAWN_EGG);
-            event.accept(JolCraftItems.DWARF_SCRAPPER_SPAWN_EGG);
-            event.accept(JolCraftItems.DWARF_MERCHANT_SPAWN_EGG);
         }
         */
     }
@@ -156,6 +154,7 @@ public class JolCraft
         public static void registerScreens(RegisterMenuScreensEvent event) {
             event.register(JolCraftMenuTypes.STRONGBOX_MENU.get(), StrongboxScreen::new);
             event.register(JolCraftMenuTypes.LOCK_MENU.get(), LockScreen::new);
+            event.register(JolCraftMenuTypes.LAPIDARY_BENCH_MENU.get(), LapidaryBenchScreen::new);
         }
 
         @SubscribeEvent
@@ -178,6 +177,9 @@ public class JolCraft
             EntityRenderers.register(JolCraftEntities.DWARF_BREWMASTER.get(), DwarfBrewmasterRenderer::new);
             EntityRenderers.register(JolCraftEntities.DWARF_GUARD.get(), DwarfGuardRenderer::new);
             EntityRenderers.register(JolCraftEntities.DWARF_KEEPER.get(), DwarfKeeperRenderer::new);
+            EntityRenderers.register(JolCraftEntities.DWARF_ARTISAN.get(), DwarfArtisanRenderer::new);
+            EntityRenderers.register(JolCraftEntities.DWARF_EXPLORER.get(), DwarfExplorerRenderer::new);
+            EntityRenderers.register(JolCraftEntities.DWARF_MINER.get(), DwarfMinerRenderer::new);
 
             //Animals
             EntityRenderers.register(JolCraftEntities.MUFFHORN.get(), MuffhornRenderer::new);

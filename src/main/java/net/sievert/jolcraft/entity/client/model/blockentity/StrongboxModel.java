@@ -1,4 +1,4 @@
-package net.sievert.jolcraft.entity.client.model.block;
+package net.sievert.jolcraft.entity.client.model.blockentity;
 
 import net.minecraft.client.model.Model;
 import net.minecraft.client.model.geom.ModelLayerLocation;

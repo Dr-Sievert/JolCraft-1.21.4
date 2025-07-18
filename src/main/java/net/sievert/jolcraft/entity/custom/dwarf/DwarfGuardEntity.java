@@ -146,7 +146,7 @@ public class DwarfGuardEntity extends AbstractDwarfEntity {
             beginAction(player, 40, ACTION_PROFESSION, armorCopy, prevMain, () -> {
                 this.setInspecting(false);
                 this.setItemSlot(slot, armorCopy);
-                this.level().playSound(null, blockPosition(), JolCraftSounds.ARMOR_EQUIP_DEEPSLATE.get(), SoundSource.NEUTRAL, 1.0F, 1.15F);
+                this.level().playSound(null, blockPosition(), JolCraftSounds.ARMOR_EQUIP_DEEPSLATE.get(), SoundSource.NEUTRAL, 1.0F, 1.05F);
                 this.setItemSlot(EquipmentSlot.MAINHAND, JolCraftItems.DEEPSLATE_AXE.get().getDefaultInstance());
                 if (!client) {
                     this.increaseMerchantCareer();
