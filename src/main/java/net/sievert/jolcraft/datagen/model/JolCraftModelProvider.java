@@ -123,21 +123,6 @@ public class JolCraftModelProvider extends ModelProvider {
 
         //Alchemy
         itemModels.generateFlatItem(JolCraftItems.INVERIX.get(), ModelTemplates.FLAT_ITEM);
-        itemModels.generateFlatItem(JolCraftItems.AEGISCORE_DUST.get(), ModelTemplates.FLAT_ITEM);
-        itemModels.generateFlatItem(JolCraftItems.ASHFANG_DUST.get(), ModelTemplates.FLAT_ITEM);
-        itemModels.generateFlatItem(JolCraftItems.DEEPMARROW_DUST.get(), ModelTemplates.FLAT_ITEM);
-        itemModels.generateFlatItem(JolCraftItems.EARTHBLOOD_DUST.get(), ModelTemplates.FLAT_ITEM);
-        itemModels.generateFlatItem(JolCraftItems.EMBERGLASS_DUST.get(), ModelTemplates.FLAT_ITEM);
-        itemModels.generateFlatItem(JolCraftItems.FROSTVEIN_DUST.get(), ModelTemplates.FLAT_ITEM);
-        itemModels.generateFlatItem(JolCraftItems.GRIMSTONE_DUST.get(), ModelTemplates.FLAT_ITEM);
-        itemModels.generateFlatItem(JolCraftItems.IRONHEART_DUST.get(), ModelTemplates.FLAT_ITEM);
-        itemModels.generateFlatItem(JolCraftItems.LUMIERE_DUST.get(), ModelTemplates.FLAT_ITEM);
-        itemModels.generateFlatItem(JolCraftItems.MOONSHARD_DUST.get(), ModelTemplates.FLAT_ITEM);
-        itemModels.generateFlatItem(JolCraftItems.RUSTAGATE_DUST.get(), ModelTemplates.FLAT_ITEM);
-        itemModels.generateFlatItem(JolCraftItems.SKYBURROW_DUST.get(), ModelTemplates.FLAT_ITEM);
-        itemModels.generateFlatItem(JolCraftItems.SUNGLEAM_DUST.get(), ModelTemplates.FLAT_ITEM);
-        itemModels.generateFlatItem(JolCraftItems.VERDANITE_DUST.get(), ModelTemplates.FLAT_ITEM);
-        itemModels.generateFlatItem(JolCraftItems.WOECRYSTAL_DUST.get(), ModelTemplates.FLAT_ITEM);
 
         //Animal-related
         itemModels.generateFlatItem(JolCraftItems.MUFFHORN_MILK_BUCKET.get(), ModelTemplates.FLAT_ITEM);
@@ -227,6 +212,39 @@ public class JolCraftModelProvider extends ModelProvider {
         itemModels.generateFlatItem(JolCraftItems.SUNGLEAM.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(JolCraftItems.VERDANITE.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(JolCraftItems.WOECRYSTAL.get(), ModelTemplates.FLAT_ITEM);
+
+        itemModels.generateFlatItem(JolCraftItems.AEGISCORE_CUT.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.ASHFANG_CUT.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.DEEPMARROW_CUT.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.EARTHBLOOD_CUT.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.EMBERGLASS_CUT.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.FROSTVEIN_CUT.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.GRIMSTONE_CUT.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.IRONHEART_CUT.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.LUMIERE_CUT.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.MOONSHARD_CUT.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.RUSTAGATE_CUT.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.SKYBURROW_CUT.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.SUNGLEAM_CUT.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.VERDANITE_CUT.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.WOECRYSTAL_CUT.get(), ModelTemplates.FLAT_ITEM);
+
+        itemModels.generateFlatItem(JolCraftItems.AEGISCORE_DUST.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.ASHFANG_DUST.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.DEEPMARROW_DUST.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.EARTHBLOOD_DUST.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.EMBERGLASS_DUST.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.FROSTVEIN_DUST.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.GRIMSTONE_DUST.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.IRONHEART_DUST.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.LUMIERE_DUST.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.MOONSHARD_DUST.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.RUSTAGATE_DUST.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.SKYBURROW_DUST.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.SUNGLEAM_DUST.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.VERDANITE_DUST.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.WOECRYSTAL_DUST.get(), ModelTemplates.FLAT_ITEM);
+
 
         //Reputation
         itemModels.generateFlatItem(JolCraftItems.REPUTATION_TABLET_0.get(), ModelTemplates.FLAT_ITEM);

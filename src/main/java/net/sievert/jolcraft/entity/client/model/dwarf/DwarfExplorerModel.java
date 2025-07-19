@@ -79,11 +79,11 @@ public class DwarfExplorerModel extends DwarfModel{
         // Always show equipment overlay parts (if not handled in the model constructor)
         this.head.getChild("hat").visible = true;
         this.body.getChild("bodywear").visible = true;
-        this.body.getChild("legwear").visible = true;
+        //this.body.getChild("legwear").visible = true;
         this.rightArm.getChild("right_armwear").visible = true;
         this.leftArm.getChild("left_armwear").visible = true;
-        this.rightLeg.getChild("right_footwear").visible = true;
-        this.leftLeg.getChild("left_footwear").visible = true;
+        //this.rightLeg.getChild("right_footwear").visible = true;
+        //this.leftLeg.getChild("left_footwear").visible = true;
     }
 
     @Override

@@ -172,7 +172,9 @@ public class LapidaryBenchMenu extends AbstractContainerMenu {
 
         // Chisel button: 1 (only for gems)
         if (buttonId == 1 && hasGem() && hasChisel()) {
-            // For now: just shrink the gem and maybe give shards (add logic as needed)
+            Item gemItem = stack.getItem();
+            Item cutItem = GEM_TO_CUT.get(gemItem);
+
             if (!isCreative) {
                 stack.shrink(1);
                 if (stack.isEmpty()) this.slots.getFirst().set(ItemStack.EMPTY);
@@ -182,6 +184,13 @@ public class LapidaryBenchMenu extends AbstractContainerMenu {
                 ItemStack mainHand = player.getMainHandItem();
                 mainHand.hurtAndBreak(1 + random.nextInt(50), player, EquipmentSlot.MAINHAND);
 
+            }
+
+            if (!player.level().isClientSide && player instanceof ServerPlayer serverPlayer) {
+                if (player.getRandom().nextFloat() < 0.5f) {
+                    int xp = 3 + player.getRandom().nextInt(10);
+                    serverPlayer.giveExperiencePoints(xp);
+                }
             }
 
             level.playSound(null, player.getX(), player.getY(), player.getZ(),
@@ -195,6 +204,13 @@ public class LapidaryBenchMenu extends AbstractContainerMenu {
                         1 + player.getRandom().nextInt(1), 0.4, 0.3, 0.4, 0.12
                 );
             });
+
+            if (cutItem != null) {
+                ItemStack cut = new ItemStack(cutItem, 1 + random.nextInt(2));
+                if (!player.getInventory().add(cut)) {
+                    player.drop(cut, false);
+                }
+            }
 
             return true;
         }
@@ -316,6 +332,25 @@ public class LapidaryBenchMenu extends AbstractContainerMenu {
         GEM_TO_DUST.put(JolCraftItems.SUNGLEAM.get(),     JolCraftItems.SUNGLEAM_DUST.get());
         GEM_TO_DUST.put(JolCraftItems.VERDANITE.get(),    JolCraftItems.VERDANITE_DUST.get());
         GEM_TO_DUST.put(JolCraftItems.WOECRYSTAL.get(),   JolCraftItems.WOECRYSTAL_DUST.get());
+    }
+
+    private static final Map<Item, Item> GEM_TO_CUT = new HashMap<>();
+    static {
+        GEM_TO_CUT.put(JolCraftItems.AEGISCORE.get(),    JolCraftItems.AEGISCORE_CUT.get());
+        GEM_TO_CUT.put(JolCraftItems.ASHFANG.get(),      JolCraftItems.ASHFANG_CUT.get());
+        GEM_TO_CUT.put(JolCraftItems.DEEPMARROW.get(),   JolCraftItems.DEEPMARROW_CUT.get());
+        GEM_TO_CUT.put(JolCraftItems.EARTHBLOOD.get(),   JolCraftItems.EARTHBLOOD_CUT.get());
+        GEM_TO_CUT.put(JolCraftItems.EMBERGLASS.get(),   JolCraftItems.EMBERGLASS_CUT.get());
+        GEM_TO_CUT.put(JolCraftItems.FROSTVEIN.get(),    JolCraftItems.FROSTVEIN_CUT.get());
+        GEM_TO_CUT.put(JolCraftItems.GRIMSTONE.get(),    JolCraftItems.GRIMSTONE_CUT.get());
+        GEM_TO_CUT.put(JolCraftItems.IRONHEART.get(),    JolCraftItems.IRONHEART_CUT.get());
+        GEM_TO_CUT.put(JolCraftItems.LUMIERE.get(),      JolCraftItems.LUMIERE_CUT.get());
+        GEM_TO_CUT.put(JolCraftItems.MOONSHARD.get(),    JolCraftItems.MOONSHARD_CUT.get());
+        GEM_TO_CUT.put(JolCraftItems.RUSTAGATE.get(),    JolCraftItems.RUSTAGATE_CUT.get());
+        GEM_TO_CUT.put(JolCraftItems.SKYBURROW.get(),    JolCraftItems.SKYBURROW_CUT.get());
+        GEM_TO_CUT.put(JolCraftItems.SUNGLEAM.get(),     JolCraftItems.SUNGLEAM_CUT.get());
+        GEM_TO_CUT.put(JolCraftItems.VERDANITE.get(),    JolCraftItems.VERDANITE_CUT.get());
+        GEM_TO_CUT.put(JolCraftItems.WOECRYSTAL.get(),   JolCraftItems.WOECRYSTAL_CUT.get());
     }
 
     public static void spawnParticles(Player player, ParticleOptions particle,

@@ -155,7 +155,6 @@ public class DwarfKeeperEntity extends AbstractDwarfEntity {
                                 new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.DUSKHOLD_SEEDS.get(), 5, 1, 3, 0),
                                 new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.KRANDONIAN_SEEDS.get(), 5, 1, 3, 0),
                                 new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.YANILLIAN_SEEDS.get(), 5, 1, 3, 0),
-                                new JolCraftDwarfTrades.GoldForItems(JolCraftItems.VERDANITE.get(), 1, 40, 1, 20, 40),
                         }
                 )
         );

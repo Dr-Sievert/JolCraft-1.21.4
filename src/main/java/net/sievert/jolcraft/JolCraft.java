@@ -31,6 +31,7 @@ import net.sievert.jolcraft.loot.JolCraftLootModifiers;
 import net.sievert.jolcraft.network.JolCraftNetworking;
 import net.sievert.jolcraft.network.client.data.MyClientDeliriumData;
 import net.sievert.jolcraft.item.potion.JolCraftPotions;
+import net.sievert.jolcraft.recipe.JolCraftRecipes;
 import net.sievert.jolcraft.screen.JolCraftMenuTypes;
 import net.sievert.jolcraft.screen.custom.lapidary_bench.LapidaryBenchMenu;
 import net.sievert.jolcraft.screen.custom.lapidary_bench.LapidaryBenchScreen;
@@ -88,6 +89,7 @@ public class JolCraft
         JolCraftBlockPredicateTypes.register(modEventBus);
         JolCraftAttachments.register(modEventBus);
         JolCraftEquipmentAssets.register(modEventBus);
+        JolCraftRecipes.register(modEventBus);
         JolCraftStructures.DEFERRED_REGISTRY_STRUCTURE.register(modEventBus);
 
         // Register server events

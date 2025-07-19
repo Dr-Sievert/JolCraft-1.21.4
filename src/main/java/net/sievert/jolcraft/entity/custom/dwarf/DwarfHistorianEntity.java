@@ -110,7 +110,6 @@ public class DwarfHistorianEntity extends AbstractDwarfEntity {
                                 new JolCraftDwarfTrades.GoldForItems(JolCraftItems.ANCIENT_DWARVEN_TOME_RARE.get(), 1, 10, 75, 14),
                                 new JolCraftDwarfTrades.GoldForItems(JolCraftItems.ANCIENT_DWARVEN_TOME_EPIC.get(), 1, 10, 125, 28),
                                 new JolCraftDwarfTrades.GoldForItems(JolCraftItems.ANCIENT_DWARVEN_TOME_LEGENDARY.get(), 1, 10, 250, 35),
-                                new JolCraftDwarfTrades.GoldForItems(JolCraftItems.DEEPMARROW.get(), 1, 3, 1, 32),
                                 new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.CONTRACT_BLANK.get(), 2, 4, 1, 2, 5, 1),
                         },
 

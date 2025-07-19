@@ -67,6 +67,9 @@ public class JolCraftDataComponents {
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> COIN_POUCH_AMOUNT =
             register("coin_pouch_amount", builder -> builder.persistent(Codec.INT));
 
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<String>> TRIM_BONUS =
+            register("trim_bonus", builder -> builder.persistent(Codec.STRING));
+
 
     private static <T>DeferredHolder<DataComponentType<?>, DataComponentType<T>> register(String name,
                                                                                           UnaryOperator<DataComponentType.Builder<T>> builderOperator) {

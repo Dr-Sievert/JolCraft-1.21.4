@@ -78,105 +78,105 @@ public class JolCraftTrimMaterials {
         register(
                 context,
                 AEGISCORE,
-                JolCraftItems.AEGISCORE.get(),
+                JolCraftItems.AEGISCORE_CUT.get(),
                 Style.EMPTY.withColor(TextColor.parseColor("#8397bf").getOrThrow()),
                 Map.of()
         );
         register(
                 context,
                 ASHFANG,
-                JolCraftItems.ASHFANG.get(),
+                JolCraftItems.ASHFANG_CUT.get(),
                 Style.EMPTY.withColor(TextColor.parseColor("#fe8301").getOrThrow()),
                 Map.of()
         );
         register(
                 context,
                 DEEPMARROW,
-                JolCraftItems.DEEPMARROW.get(),
+                JolCraftItems.DEEPMARROW_CUT.get(),
                 Style.EMPTY.withColor(TextColor.parseColor("#bbb2ac").getOrThrow()),
                 Map.of()
         );
         register(
                 context,
                 EARTHBLOOD,
-                JolCraftItems.EARTHBLOOD.get(),
+                JolCraftItems.EARTHBLOOD_CUT.get(),
                 Style.EMPTY.withColor(TextColor.parseColor("#3e4206").getOrThrow()),
                 Map.of()
         );
         register(
                 context,
                 EMBERGLASS,
-                JolCraftItems.EMBERGLASS.get(),
+                JolCraftItems.EMBERGLASS_CUT.get(),
                 Style.EMPTY.withColor(TextColor.parseColor("#9c584b").getOrThrow()),
                 Map.of()
         );
         register(
                 context,
                 FROSTVEIN,
-                JolCraftItems.FROSTVEIN.get(),
+                JolCraftItems.FROSTVEIN_CUT.get(),
                 Style.EMPTY.withColor(TextColor.parseColor("#067da8").getOrThrow()),
                 Map.of()
         );
         register(
                 context,
                 GRIMSTONE,
-                JolCraftItems.GRIMSTONE.get(),
+                JolCraftItems.GRIMSTONE_CUT.get(),
                 Style.EMPTY.withColor(TextColor.parseColor("#b50002").getOrThrow()),
                 Map.of()
         );
         register(
                 context,
                 IRONHEART,
-                JolCraftItems.IRONHEART.get(),
+                JolCraftItems.IRONHEART_CUT.get(),
                 Style.EMPTY.withColor(TextColor.parseColor("#5c2320").getOrThrow()),
                 Map.of()
         );
         register(
                 context,
                 LUMIERE,
-                JolCraftItems.LUMIERE.get(),
+                JolCraftItems.LUMIERE_CUT.get(),
                 Style.EMPTY.withColor(TextColor.parseColor("#f8f338").getOrThrow()),
                 Map.of()
         );
         register(
                 context,
                 MOONSHARD,
-                JolCraftItems.MOONSHARD.get(),
+                JolCraftItems.MOONSHARD_CUT.get(),
                 Style.EMPTY.withColor(TextColor.parseColor("#a5a6ff").getOrThrow()),
                 Map.of()
         );
         register(
                 context,
                 RUSTAGATE,
-                JolCraftItems.RUSTAGATE.get(),
+                JolCraftItems.RUSTAGATE_CUT.get(),
                 Style.EMPTY.withColor(TextColor.parseColor("#c95d38").getOrThrow()),
                 Map.of()
         );
         register(
                 context,
                 SKYBURROW,
-                JolCraftItems.SKYBURROW.get(),
+                JolCraftItems.SKYBURROW_CUT.get(),
                 Style.EMPTY.withColor(TextColor.parseColor("#5bc9dc").getOrThrow()),
                 Map.of()
         );
         register(
                 context,
                 SUNGLEAM,
-                JolCraftItems.SUNGLEAM.get(),
+                JolCraftItems.SUNGLEAM_CUT.get(),
                 Style.EMPTY.withColor(TextColor.parseColor("#efd03c").getOrThrow()),
                 Map.of()
         );
         register(
                 context,
                 VERDANITE,
-                JolCraftItems.VERDANITE.get(),
+                JolCraftItems.VERDANITE_CUT.get(),
                 Style.EMPTY.withColor(TextColor.parseColor("#6de775").getOrThrow()),
                 Map.of()
         );
         register(
                 context,
                 WOECRYSTAL,
-                JolCraftItems.WOECRYSTAL.get(),
+                JolCraftItems.WOECRYSTAL_CUT.get(),
                 Style.EMPTY.withColor(TextColor.parseColor("#737296").getOrThrow()),
                 Map.of()
         );

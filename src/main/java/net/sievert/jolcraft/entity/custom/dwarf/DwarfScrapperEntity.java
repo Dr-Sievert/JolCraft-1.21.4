@@ -96,7 +96,7 @@ public class DwarfScrapperEntity extends AbstractDwarfEntity {
             2, new VillagerTrades.ItemListing[] { new JolCraftDwarfTrades.GoldForItems(JolCraftItems.SCRAP.get(), 1, 256, 5, 1) },
             3, new VillagerTrades.ItemListing[] { new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.IRON_SPANNER.get(), 24, 32, 1, 3, 40) },
             4, new VillagerTrades.ItemListing[] { new JolCraftDwarfTrades.GoldForItems(JolCraftItems.SCRAP_HEAP.get(), 1, 64, 50, 4, 7) },
-            5, new VillagerTrades.ItemListing[] { new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.SCRAP_HEAP.get(), 1, 15, JolCraftItems.RUSTAGATE.get(), 1, 1, 0, 0.05F) }
+            5, new VillagerTrades.ItemListing[] { new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.SCRAP_HEAP.get(), 1, 15, JolCraftItems.RUSTAGATE.get(), 1, 3, 0, 0.05F) }
     ));
 
     // Salvage pool (full pool for randomization)

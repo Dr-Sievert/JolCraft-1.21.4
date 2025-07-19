@@ -414,6 +414,51 @@ public class JolCraftItems {
     public static final DeferredItem<Item> WOECRYSTAL = ITEMS.registerItem("woecrystal",
             Item::new, new Item.Properties());
 
+    public static final DeferredItem<Item> AEGISCORE_CUT = ITEMS.registerItem("aegiscore_cut",
+            Item::new, new Item.Properties());
+
+    public static final DeferredItem<Item> ASHFANG_CUT = ITEMS.registerItem("ashfang_cut",
+            Item::new, new Item.Properties());
+
+    public static final DeferredItem<Item> DEEPMARROW_CUT = ITEMS.registerItem("deepmarrow_cut",
+            Item::new, new Item.Properties());
+
+    public static final DeferredItem<Item> EARTHBLOOD_CUT = ITEMS.registerItem("earthblood_cut",
+            Item::new, new Item.Properties());
+
+    public static final DeferredItem<Item> EMBERGLASS_CUT = ITEMS.registerItem("emberglass_cut",
+            Item::new, new Item.Properties());
+
+    public static final DeferredItem<Item> FROSTVEIN_CUT = ITEMS.registerItem("frostvein_cut",
+            Item::new, new Item.Properties());
+
+    public static final DeferredItem<Item> GRIMSTONE_CUT = ITEMS.registerItem("grimstone_cut",
+            Item::new, new Item.Properties());
+
+    public static final DeferredItem<Item> IRONHEART_CUT = ITEMS.registerItem("ironheart_cut",
+            Item::new, new Item.Properties());
+
+    public static final DeferredItem<Item> LUMIERE_CUT = ITEMS.registerItem("lumiere_cut",
+            Item::new, new Item.Properties());
+
+    public static final DeferredItem<Item> MOONSHARD_CUT = ITEMS.registerItem("moonshard_cut",
+            Item::new, new Item.Properties());
+
+    public static final DeferredItem<Item> RUSTAGATE_CUT = ITEMS.registerItem("rustagate_cut",
+            Item::new, new Item.Properties());
+
+    public static final DeferredItem<Item> SKYBURROW_CUT = ITEMS.registerItem("skyburrow_cut",
+            Item::new, new Item.Properties());
+
+    public static final DeferredItem<Item> SUNGLEAM_CUT = ITEMS.registerItem("sungleam_cut",
+            Item::new, new Item.Properties());
+
+    public static final DeferredItem<Item> VERDANITE_CUT = ITEMS.registerItem("verdanite_cut",
+            Item::new, new Item.Properties());
+
+    public static final DeferredItem<Item> WOECRYSTAL_CUT = ITEMS.registerItem("woecrystal_cut",
+            Item::new, new Item.Properties());
+
     //Crops, food and brewing
 
     public static final DeferredItem<Item> BARLEY_SEEDS = ITEMS.registerItem("barley_seeds",

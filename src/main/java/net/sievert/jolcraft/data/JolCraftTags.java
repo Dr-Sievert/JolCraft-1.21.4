@@ -30,7 +30,11 @@ public class JolCraftTags {
 
         public static final TagKey<Item> GEMS = createTag("gems");
 
+        public static final TagKey<Item> GEM_CUT = createTag("gem_cut");
+
         public static final TagKey<Item> GEM_DUST = createTag("gem_dust");
+
+        public static final TagKey<Item> BONUS_TRIM_MATERIALS = createTag("bonus_trim_materials");
 
         public static final TagKey<Item> SIGNED_CONTRACTS = createTag("signed_contracts");
 

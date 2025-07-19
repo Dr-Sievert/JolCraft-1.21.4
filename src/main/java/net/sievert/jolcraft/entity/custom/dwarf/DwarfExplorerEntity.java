@@ -30,6 +30,8 @@ public class DwarfExplorerEntity extends AbstractDwarfEntity {
     public DwarfExplorerEntity(EntityType<? extends AbstractDwarfEntity> entityType, Level level) {
         super(entityType, level);
         this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(Items.FILLED_MAP));
+        this.setItemSlot(EquipmentSlot.LEGS, new ItemStack(Items.LEATHER_LEGGINGS));
+        this.setItemSlot(EquipmentSlot.FEET, new ItemStack(Items.LEATHER_BOOTS));
         this.instanceTrades = createRandomizedDwarfTrades();
     }
 

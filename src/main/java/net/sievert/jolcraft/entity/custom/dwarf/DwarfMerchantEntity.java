@@ -352,8 +352,8 @@ public class DwarfMerchantEntity extends AbstractDwarfEntity {
                     new JolCraftDwarfTrades.ItemsForGold(Items.ENDER_PEARL, 2, 4, 1, 3, 1)
             },
             5, new VillagerTrades.ItemListing[]{
-                    new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.SUNGLEAM, 1, 5, 15, JolCraftItems.RESTOCK_CRATE.get(), 1, 3, 0, 0),
-                    new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.SUNGLEAM, 1, 5, 15, JolCraftItems.REROLL_CRATE.get(), 1, 3, 0, 0),
+                    new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.SUNGLEAM_CUT, 1, 5, 15, JolCraftItems.RESTOCK_CRATE.get(), 1, 3, 0, 0),
+                    new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.SUNGLEAM_CUT, 1, 5, 15, JolCraftItems.REROLL_CRATE.get(), 1, 3, 0, 0),
             }
     ));
 

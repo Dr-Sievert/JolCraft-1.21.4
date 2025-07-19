@@ -29,9 +29,8 @@ public class DwarfArtisanEntity extends AbstractDwarfEntity {
 
     public DwarfArtisanEntity(EntityType<? extends AbstractDwarfEntity> entityType, Level level) {
         super(entityType, level);
-        this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(JolCraftItems.DEEPSLATE_WARHAMMER.get()));
+        this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(JolCraftItems.DEEPSLATE_CHISEL.get()));
         this.instanceTrades = createRandomizedArtisanTrades();
-
     }
 
     //Attributes

@@ -5,6 +5,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.sievert.jolcraft.JolCraft;
+import net.sievert.jolcraft.entity.client.dwarf.DwarfArmorLayer;
 import net.sievert.jolcraft.entity.client.dwarf.DwarfBeardLayer;
 import net.sievert.jolcraft.entity.client.dwarf.DwarfEyeLayer;
 import net.sievert.jolcraft.entity.client.dwarf.DwarfRenderState;
@@ -16,8 +17,9 @@ public class DwarfExplorerRenderer extends DwarfRenderer<DwarfExplorerEntity> {
 
     public DwarfExplorerRenderer(EntityRendererProvider.Context context) {
         super(context, new DwarfExplorerModel(context.bakeLayer(DwarfExplorerModel.LAYER_LOCATION)));
-        this.addLayer(new DwarfEyeLayer(this));
-        this.addLayer(new DwarfBeardLayer(this));
+        addLayer(new DwarfEyeLayer(this));
+        addLayer(new DwarfBeardLayer(this));
+        addLayer(new DwarfArmorLayer(this));
     }
 
     @Override

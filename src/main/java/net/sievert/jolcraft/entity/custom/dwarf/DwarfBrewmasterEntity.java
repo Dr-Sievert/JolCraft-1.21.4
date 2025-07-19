@@ -163,7 +163,7 @@ public class DwarfBrewmasterEntity extends AbstractDwarfEntity {
                         ),
                         new JolCraftDwarfTrades.GoldForItems(JolCraftItems.EMBERGLASS.get(), 1, 10, 0, 20, 40),
                         new JolCraftDwarfTrades.ItemsAndGoldToItems(
-                                JolCraftItems.EMBERGLASS.get(), 1, 20, 40,
+                                JolCraftItems.EMBERGLASS_CUT.get(), 2, 20, 40,
                                 JolCraftBlocks.HEARTH.get(), 1, 1, 0, 0F
                         )
                 }
