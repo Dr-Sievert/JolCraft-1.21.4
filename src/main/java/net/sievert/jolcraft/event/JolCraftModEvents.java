@@ -1,11 +1,19 @@
 package net.sievert.jolcraft.event;
 
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.event.ItemAttributeModifierEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
+import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
 import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.entity.JolCraftEntities;
+import net.sievert.jolcraft.entity.attribute.JolCraftAttributes;
 import net.sievert.jolcraft.entity.client.model.animal.MuffhornModel;
 import net.sievert.jolcraft.entity.client.model.blockentity.StrongboxModel;
 import net.sievert.jolcraft.entity.client.model.dwarf.*;
@@ -64,5 +72,15 @@ public class JolCraftModEvents {
         //Animals
         event.put(JolCraftEntities.MUFFHORN.get(), MuffhornEntity.createAttributes().build());
     }
+
+    @SubscribeEvent
+    public static void onEntityAttributeModification(EntityAttributeModificationEvent event) {
+        event.add(EntityType.PLAYER, JolCraftAttributes.XP_BOOST);
+        event.add(EntityType.PLAYER, JolCraftAttributes.SLOW_RESIST);
+    }
+
+
+
+
 
 }

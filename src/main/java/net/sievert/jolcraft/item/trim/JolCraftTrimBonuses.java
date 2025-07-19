@@ -7,15 +7,13 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
-import net.minecraft.world.item.equipment.ArmorType;
 import net.minecraft.world.item.equipment.Equippable;
 import net.minecraft.world.item.equipment.trim.ArmorTrim;
 import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.sievert.jolcraft.entity.attribute.JolCraftAttributes;
 
-import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,24 +35,24 @@ public class JolCraftTrimBonuses {
         ));
 
         TRIM_BONUSES.put("ashfang", List.of(
-                bonus(Attributes.ARMOR, 1.0, AttributeModifier.Operation.ADD_VALUE, EquipmentSlot.HEAD),
-                bonus(Attributes.ARMOR, 1.0, AttributeModifier.Operation.ADD_VALUE, EquipmentSlot.CHEST),
-                bonus(Attributes.ARMOR, 1.0, AttributeModifier.Operation.ADD_VALUE, EquipmentSlot.LEGS),
-                bonus(Attributes.ARMOR, 1.0, AttributeModifier.Operation.ADD_VALUE, EquipmentSlot.FEET)
+                bonus(Attributes.ATTACK_DAMAGE, 0.5, AttributeModifier.Operation.ADD_VALUE, EquipmentSlot.HEAD),
+                bonus(Attributes.ATTACK_DAMAGE, 0.5, AttributeModifier.Operation.ADD_VALUE, EquipmentSlot.CHEST),
+                bonus(Attributes.ATTACK_DAMAGE, 0.5, AttributeModifier.Operation.ADD_VALUE, EquipmentSlot.LEGS),
+                bonus(Attributes.ATTACK_DAMAGE, 0.5, AttributeModifier.Operation.ADD_VALUE, EquipmentSlot.FEET)
         ));
 
         TRIM_BONUSES.put("deepmarrow", List.of(
-                bonus(Attributes.ARMOR, 1.0, AttributeModifier.Operation.ADD_VALUE, EquipmentSlot.HEAD),
-                bonus(Attributes.ARMOR, 1.0, AttributeModifier.Operation.ADD_VALUE, EquipmentSlot.CHEST),
-                bonus(Attributes.ARMOR, 1.0, AttributeModifier.Operation.ADD_VALUE, EquipmentSlot.LEGS),
-                bonus(Attributes.ARMOR, 1.0, AttributeModifier.Operation.ADD_VALUE, EquipmentSlot.FEET)
+                bonus(JolCraftAttributes.XP_BOOST, 0.125, AttributeModifier.Operation.ADD_VALUE, EquipmentSlot.HEAD),
+                bonus(JolCraftAttributes.XP_BOOST, 0.125, AttributeModifier.Operation.ADD_VALUE, EquipmentSlot.CHEST),
+                bonus(JolCraftAttributes.XP_BOOST, 0.125, AttributeModifier.Operation.ADD_VALUE, EquipmentSlot.LEGS),
+                bonus(JolCraftAttributes.XP_BOOST, 0.125, AttributeModifier.Operation.ADD_VALUE, EquipmentSlot.FEET)
         ));
 
         TRIM_BONUSES.put("earthblood", List.of(
-                bonus(Attributes.ARMOR, 1.0, AttributeModifier.Operation.ADD_VALUE, EquipmentSlot.HEAD),
-                bonus(Attributes.ARMOR, 1.0, AttributeModifier.Operation.ADD_VALUE, EquipmentSlot.CHEST),
-                bonus(Attributes.ARMOR, 1.0, AttributeModifier.Operation.ADD_VALUE, EquipmentSlot.LEGS),
-                bonus(Attributes.ARMOR, 1.0, AttributeModifier.Operation.ADD_VALUE, EquipmentSlot.FEET)
+                bonus(Attributes.MINING_EFFICIENCY, 0.05, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, EquipmentSlot.HEAD),
+                bonus(Attributes.MINING_EFFICIENCY, 0.05, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, EquipmentSlot.CHEST),
+                bonus(Attributes.MINING_EFFICIENCY, 0.05, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, EquipmentSlot.LEGS),
+                bonus(Attributes.MINING_EFFICIENCY, 0.05, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, EquipmentSlot.FEET)
         ));
 
         TRIM_BONUSES.put("emberglass", List.of(
@@ -65,24 +63,24 @@ public class JolCraftTrimBonuses {
         ));
 
         TRIM_BONUSES.put("frostvein", List.of(
-                bonus(Attributes.ARMOR, 1.0, AttributeModifier.Operation.ADD_VALUE, EquipmentSlot.HEAD),
-                bonus(Attributes.ARMOR, 1.0, AttributeModifier.Operation.ADD_VALUE, EquipmentSlot.CHEST),
-                bonus(Attributes.ARMOR, 1.0, AttributeModifier.Operation.ADD_VALUE, EquipmentSlot.LEGS),
-                bonus(Attributes.ARMOR, 1.0, AttributeModifier.Operation.ADD_VALUE, EquipmentSlot.FEET)
+                bonus(JolCraftAttributes.SLOW_RESIST, 0.2D, AttributeModifier.Operation.ADD_VALUE, EquipmentSlot.HEAD),
+                bonus(JolCraftAttributes.SLOW_RESIST, 0.2D, AttributeModifier.Operation.ADD_VALUE, EquipmentSlot.CHEST),
+                bonus(JolCraftAttributes.SLOW_RESIST, 0.2D, AttributeModifier.Operation.ADD_VALUE, EquipmentSlot.LEGS),
+                bonus(JolCraftAttributes.SLOW_RESIST, 0.2D, AttributeModifier.Operation.ADD_VALUE, EquipmentSlot.FEET)
         ));
 
         TRIM_BONUSES.put("grimstone", List.of(
-                bonus(Attributes.ARMOR, 1.0, AttributeModifier.Operation.ADD_VALUE, EquipmentSlot.HEAD),
-                bonus(Attributes.ARMOR, 1.0, AttributeModifier.Operation.ADD_VALUE, EquipmentSlot.CHEST),
-                bonus(Attributes.ARMOR, 1.0, AttributeModifier.Operation.ADD_VALUE, EquipmentSlot.LEGS),
-                bonus(Attributes.ARMOR, 1.0, AttributeModifier.Operation.ADD_VALUE, EquipmentSlot.FEET)
+                bonus(Attributes.ATTACK_SPEED, 0.05, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, EquipmentSlot.HEAD),
+                bonus(Attributes.ATTACK_SPEED, 0.05, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, EquipmentSlot.CHEST),
+                bonus(Attributes.ATTACK_SPEED, 0.05, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, EquipmentSlot.LEGS),
+                bonus(Attributes.ATTACK_SPEED, 0.05, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, EquipmentSlot.FEET)
         ));
 
         TRIM_BONUSES.put("ironheart", List.of(
-                bonus(Attributes.ARMOR, 1.0, AttributeModifier.Operation.ADD_VALUE, EquipmentSlot.HEAD),
-                bonus(Attributes.ARMOR, 1.0, AttributeModifier.Operation.ADD_VALUE, EquipmentSlot.CHEST),
-                bonus(Attributes.ARMOR, 1.0, AttributeModifier.Operation.ADD_VALUE, EquipmentSlot.LEGS),
-                bonus(Attributes.ARMOR, 1.0, AttributeModifier.Operation.ADD_VALUE, EquipmentSlot.FEET)
+                bonus(Attributes.ARMOR, 3.0, AttributeModifier.Operation.ADD_VALUE, EquipmentSlot.HEAD),
+                bonus(Attributes.ARMOR, 3.0, AttributeModifier.Operation.ADD_VALUE, EquipmentSlot.CHEST),
+                bonus(Attributes.ARMOR, 3.0, AttributeModifier.Operation.ADD_VALUE, EquipmentSlot.LEGS),
+                bonus(Attributes.ARMOR, 3.0, AttributeModifier.Operation.ADD_VALUE, EquipmentSlot.FEET)
         ));
 
         TRIM_BONUSES.put("lumiere", List.of(
@@ -93,10 +91,10 @@ public class JolCraftTrimBonuses {
         ));
 
         TRIM_BONUSES.put("moonshard", List.of(
-                bonus(Attributes.ARMOR, 1.0, AttributeModifier.Operation.ADD_VALUE, EquipmentSlot.HEAD),
-                bonus(Attributes.ARMOR, 1.0, AttributeModifier.Operation.ADD_VALUE, EquipmentSlot.CHEST),
-                bonus(Attributes.ARMOR, 1.0, AttributeModifier.Operation.ADD_VALUE, EquipmentSlot.LEGS),
-                bonus(Attributes.ARMOR, 1.0, AttributeModifier.Operation.ADD_VALUE, EquipmentSlot.FEET)
+                bonus(Attributes.MOVEMENT_SPEED, 0.05, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, EquipmentSlot.HEAD),
+                bonus(Attributes.MOVEMENT_SPEED, 0.05, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, EquipmentSlot.CHEST),
+                bonus(Attributes.MOVEMENT_SPEED, 0.05, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, EquipmentSlot.LEGS),
+                bonus(Attributes.MOVEMENT_SPEED, 0.05, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, EquipmentSlot.FEET)
         ));
 
         TRIM_BONUSES.put("rustagate", List.of(
@@ -107,10 +105,10 @@ public class JolCraftTrimBonuses {
         ));
 
         TRIM_BONUSES.put("skyburrow", List.of(
-                bonus(Attributes.MOVEMENT_SPEED, 0.05, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, EquipmentSlot.HEAD),
-                bonus(Attributes.MOVEMENT_SPEED, 0.05, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, EquipmentSlot.CHEST),
-                bonus(Attributes.MOVEMENT_SPEED, 0.05, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, EquipmentSlot.LEGS),
-                bonus(Attributes.MOVEMENT_SPEED, 0.05, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, EquipmentSlot.FEET)
+                bonus(Attributes.FLYING_SPEED, 0.1, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, EquipmentSlot.HEAD),
+                bonus(Attributes.FLYING_SPEED, 0.1, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, EquipmentSlot.CHEST),
+                bonus(Attributes.FLYING_SPEED, 0.1, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, EquipmentSlot.LEGS),
+                bonus(Attributes.FLYING_SPEED, 0.1, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, EquipmentSlot.FEET)
         ));
 
         TRIM_BONUSES.put("sungleam", List.of(

@@ -4,6 +4,8 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -13,8 +15,14 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.npc.VillagerData;
@@ -25,26 +33,39 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionBrewing;
 import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.item.trading.MerchantOffers;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.LayeredCauldronBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.block.state.properties.Property;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.AnvilUpdateEvent;
+import net.neoforged.neoforge.event.ItemAttributeModifierEvent;
 import net.neoforged.neoforge.event.brewing.RegisterBrewingRecipesEvent;
+import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
 import net.neoforged.neoforge.event.entity.EntityInvulnerabilityCheckEvent;
+import net.neoforged.neoforge.event.entity.living.LivingEntityUseItemEvent;
+import net.neoforged.neoforge.event.entity.living.LivingEquipmentChangeEvent;
+import net.neoforged.neoforge.event.entity.living.MobEffectEvent;
 import net.neoforged.neoforge.event.entity.player.*;
+import net.neoforged.neoforge.event.level.BlockEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.event.village.VillagerTradesEvent;
 import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.advancement.JolCraftCriteriaTriggers;
 import net.sievert.jolcraft.data.custom.block.Hearth;
 import net.sievert.jolcraft.block.custom.FermentingCauldronBlock;
 import net.sievert.jolcraft.block.custom.FermentingStage;
+import net.sievert.jolcraft.entity.attribute.JolCraftAttributes;
 import net.sievert.jolcraft.entity.custom.dwarf.AbstractDwarfEntity;
 import net.sievert.jolcraft.network.JolCraftNetworking;
 import net.sievert.jolcraft.network.packet.ClientboundAncientLanguagePacket;
@@ -57,6 +78,7 @@ import net.sievert.jolcraft.data.JolCraftTags;
 import net.sievert.jolcraft.entity.custom.dwarf.DwarfGuardEntity;
 import net.sievert.jolcraft.item.JolCraftItems;
 import net.sievert.jolcraft.item.custom.scrapper.SpannerItem;
+import net.sievert.jolcraft.sound.JolCraftSounds;
 import net.sievert.jolcraft.util.attachment.AncientDwarvenLanguageHelper;
 import net.sievert.jolcraft.util.attachment.DwarvenLanguageHelper;
 import net.sievert.jolcraft.util.attachment.DwarvenReputationHelper;
@@ -65,8 +87,10 @@ import net.sievert.jolcraft.util.dwarf.SalvageLootHelper;
 import net.sievert.jolcraft.block.JolCraftBlocks;
 import net.sievert.jolcraft.effect.JolCraftEffects;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 @EventBusSubscriber(modid = JolCraft.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public class JolCraftGameEvents {
@@ -92,6 +116,140 @@ public class JolCraftGameEvents {
         JolCraftNetworking.sendToClient(serverPlayer, new ClientboundEndorsementsPacket(endorsements));
     }
 
+    @SubscribeEvent
+    public static void onXpChange(PlayerXpEvent.XpChange event) {
+        Player player = event.getEntity();
+        double boost = player.getAttributeValue(JolCraftAttributes.XP_BOOST);
+        if (boost > 0) {
+            int baseAmount = event.getAmount();
+            int bonus = (int) (baseAmount * boost);
+            event.setAmount(baseAmount + bonus);
+        }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerTick(PlayerTickEvent.Post event) {
+        Player player = event.getEntity();
+        if (player.level().isClientSide()) return;
+
+        double resist = player.getAttributeValue(JolCraftAttributes.SLOW_RESIST);
+        MobEffectInstance slow = player.getEffect(MobEffects.MOVEMENT_SLOWDOWN);
+        var attr = player.getAttribute(Attributes.MOVEMENT_SPEED);
+        if (attr == null) return;
+
+        // Use a unique ResourceLocation for this mod's compensation
+        ResourceLocation SLOW_RESIST_ID = ResourceLocation.fromNamespaceAndPath("jolcraft", "slow_resist");
+
+        // Remove our compensation if present
+        attr.removeModifier(SLOW_RESIST_ID);
+
+        // If slowness is active, and we have any resist, counteract it
+        // For MC 1.21.4 and later:
+        if (slow != null && resist > 0) {
+            int amp = slow.getAmplifier();
+            double vanillaMultiplier = 1.0 - 0.15 * (amp + 1);
+
+            // Resist: 0.8 (80%) means you get only 20% of the slow
+            double desiredMultiplier = resist + (1 - resist) * vanillaMultiplier;
+
+            double correction = (desiredMultiplier / vanillaMultiplier) - 1.0;
+
+            attr.addTransientModifier(new AttributeModifier(
+                    SLOW_RESIST_ID,
+                    correction,
+                    AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL
+            ));
+        }
+    }
+
+    @SubscribeEvent
+    public static void onCurseAdded(MobEffectEvent.Added event) {
+        if (!(event.getEntity() instanceof Player player)) return;
+        var instance = event.getEffectInstance();
+        if (instance != null && instance.getEffect().is(JolCraftEffects.DELIRIUM_CURSE)) {
+            if (!player.level().isClientSide()) {
+                player.level().playSound(
+                        null,
+                        player.getX(), player.getY(), player.getZ(),
+                        JolCraftSounds.CURSE.get(),
+                        player.getSoundSource(),
+                        1.0F, 1.0F
+                );
+            }
+        }
+    }
+
+
+
+    // ThreadLocal flag for tracking milk bucket effect clearing
+    private static final ThreadLocal<Boolean> isMilkRemoval = ThreadLocal.withInitial(() -> false);
+
+
+    @SubscribeEvent
+    public static void onMilkStart(LivingEntityUseItemEvent.Start event) {
+        if(!(event.getEntity() instanceof Player)){return;}
+        if ((event.getItem().is(Items.MILK_BUCKET) || event.getItem().is(JolCraftItems.MUFFHORN_MILK_BUCKET.get())) && event.getEntity().hasEffect(JolCraftEffects.DELIRIUM_CURSE)) {
+            isMilkRemoval.set(true);
+        }
+    }
+
+    @SubscribeEvent
+    public static void onEffectRemove(MobEffectEvent.Remove event) {
+        if (!(event.getEntity() instanceof Player player)) return;
+        if (isMilkRemoval.get() && event.getEffect().is(JolCraftEffects.DELIRIUM_CURSE)) {
+            event.setCanceled(true);
+            isMilkRemoval.set(false);
+
+            if (!player.level().isClientSide()) {
+                player.level().playSound(
+                        null,
+                        player.getX(), player.getY(), player.getZ(),
+                        JolCraftSounds.CURSE.get(),
+                        player.getSoundSource(),
+                        1.0F, 1.0F
+                );
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onMilkStopOrFinish(LivingEntityUseItemEvent.Stop event) {
+        if(!(event.getEntity() instanceof Player) || isMilkRemoval.get() == false){return;}
+        isMilkRemoval.set(false);
+    }
+
+    @SubscribeEvent
+    public static void onMilkFinish(LivingEntityUseItemEvent.Finish event) {
+        if(!(event.getEntity() instanceof Player) || isMilkRemoval.get() == false){return;}
+        isMilkRemoval.set(false);
+    }
+
+
+
+    @SubscribeEvent
+    public static void onBlockBreak(BlockEvent.BreakEvent event) {
+        Level level = (Level) event.getLevel();
+        BlockPos pos = event.getPos();
+        BlockState state = level.getBlockState(pos);
+        Player player = event.getPlayer();
+
+        IntegerProperty ageProperty = null;
+        for (Property<?> prop : state.getProperties()) {
+            if (prop.getName().equals("age") && prop instanceof IntegerProperty iprop) {
+                ageProperty = iprop;
+                break;
+            }
+        }
+
+        if (ageProperty != null) {
+            int age = state.getValue(ageProperty);
+            int maxAge = ageProperty.getPossibleValues().stream().max(Integer::compare).orElse(0);
+            if (age >= maxAge) {
+                // Fully grown crop of *any* type with an "age" property!
+                // Your custom logic here (reward, stat, etc.)
+            }
+        }
+    }
 
     @SubscribeEvent
     public static void onBrewingRecipeRegister(RegisterBrewingRecipesEvent event) {

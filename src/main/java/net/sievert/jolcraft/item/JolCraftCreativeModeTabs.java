@@ -27,7 +27,7 @@ public class JolCraftCreativeModeTabs {
                         //Testing
                         pOutput.accept(JolCraftItems.DEV_KEY);
 
-                        //pOutput.accept(PotionContents.createItemStack(Items.POTION, JolCraftPotions.CURSE));
+                        pOutput.accept(PotionContents.createItemStack(Items.POTION, JolCraftPotions.CURSE));
 
                         //Real
                         pOutput.accept(JolCraftItems.GOLD_COIN);

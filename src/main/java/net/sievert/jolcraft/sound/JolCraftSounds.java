@@ -41,6 +41,9 @@ public class JolCraftSounds {
     public static final Supplier<SoundEvent> DWARF_NO = registerSoundEvent("dwarf_no");
     public static final Supplier<SoundEvent> DWARF_TRADE = registerSoundEvent("dwarf_trade");
 
+    //Curse
+    public static final Supplier<SoundEvent> CURSE = registerSoundEvent("curse");
+
     private static Supplier<SoundEvent> registerSoundEvent(String name) {
         ResourceLocation id = ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, name);
         return SOUND_EVENTS.register(name, () -> SoundEvent.createVariableRangeEvent(id));

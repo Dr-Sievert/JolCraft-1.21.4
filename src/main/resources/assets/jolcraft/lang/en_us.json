@@ -82,6 +82,10 @@
 
   "item.jolcraft.inverix": "Inverix",
 
+  "attribute.jolcraft.xp_boost": "Experience Boost",
+  "attribute.jolcraft.slow_resist": "Slow Resist",
+
+
   "effect.jolcraft.homestead": "Homestead",
   "effect.jolcraft.ancient_memory": "Ancient Memory",
   "effect.jolcraft.lockpicking": "Lockpicking",

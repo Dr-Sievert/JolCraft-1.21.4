@@ -21,6 +21,7 @@ import net.sievert.jolcraft.data.JolCraftDataComponents;
 import net.sievert.jolcraft.data.custom.item.CoinPouchTooltip;
 import net.sievert.jolcraft.effect.JolCraftEffects;
 import net.sievert.jolcraft.entity.JolCraftEntities;
+import net.sievert.jolcraft.entity.attribute.JolCraftAttributes;
 import net.sievert.jolcraft.entity.client.render.animal.MuffhornRenderer;
 import net.sievert.jolcraft.entity.client.render.block.StrongboxRenderer;
 import net.sievert.jolcraft.entity.client.render.dwarf.*;
@@ -90,6 +91,7 @@ public class JolCraft
         JolCraftAttachments.register(modEventBus);
         JolCraftEquipmentAssets.register(modEventBus);
         JolCraftRecipes.register(modEventBus);
+        JolCraftAttributes.register(modEventBus);
         JolCraftStructures.DEFERRED_REGISTRY_STRUCTURE.register(modEventBus);
 
         // Register server events

@@ -226,5 +226,40 @@
       "block/smithing_table/smithing_table3"
     ],
     "subtitle": "sounds.jolcraft.gem_cut"
+  },
+  "curse": {
+    "sounds": [
+      {
+        "name": "jolcraft:curse/curse1"
+      },
+      {
+        "name": "jolcraft:curse/curse2"
+      },
+      {
+        "name": "jolcraft:curse/curse3"
+      },
+      {
+        "name": "jolcraft:curse/curse4"
+      },
+      {
+        "name": "jolcraft:curse/curse5"
+      },
+      {
+        "name": "jolcraft:curse/curse6"
+      },
+      {
+        "name": "jolcraft:curse/curse7"
+      },
+      {
+        "name": "jolcraft:curse/curse8"
+      },
+      {
+        "name": "jolcraft:curse/curse9"
+      },
+      {
+        "name": "jolcraft:curse/curse10"
+      }
+    ],
+    "subtitle": "sounds.jolcraft.curse"
   }
 }
