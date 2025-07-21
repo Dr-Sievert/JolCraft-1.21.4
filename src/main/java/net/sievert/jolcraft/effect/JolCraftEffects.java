@@ -28,6 +28,9 @@ public class JolCraftEffects {
     public static final Holder<MobEffect> DELIRIUM_CURSE = MOB_EFFECTS.register("delirium_curse",
             () -> new DeliriumCurseEffect(MobEffectCategory.HARMFUL, 0x7510a3));
 
+    public static final Holder<MobEffect> RADIANT = MOB_EFFECTS.register("radiant",
+            () -> new RadiantEffect(MobEffectCategory.BENEFICIAL, 0xfaff42));
+
     public static void register(IEventBus eventBus) {
         MOB_EFFECTS.register(eventBus);
     }

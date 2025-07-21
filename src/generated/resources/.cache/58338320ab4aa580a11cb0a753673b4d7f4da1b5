@@ -1,4 +1,4 @@
-// 1.21.4	2025-07-19T06:02:13.657706	JolCraft Recipes
+// 1.21.4	2025-07-21T08:39:02.0946048	JolCraft Recipes
 74c3cc5fdd7882ae59657d571c3fea16a5c65ece data/jolcraft/advancement/recipes/food/barley_malt_from_smelting.json
 3ff66aa802a1def274a8aca06cb4ebd8ba614b75 data/jolcraft/advancement/recipes/food/barley_malt_from_smoking.json
 cce6b7ea15063de4ed92b31b5d1c552337657e14 data/jolcraft/advancement/recipes/misc/barley.json
@@ -51,7 +51,6 @@ a47b0c867142a2fb5404a5fc16fb6fd003085f70 data/jolcraft/advancement/recipes/misc/
 be424ddb13cfeb98753b9b8bd3c148d113041c24 data/jolcraft/advancement/recipes/misc/glass_mug.json
 e0514de9d57eb07a520eeb5deca9e187ce02daa6 data/jolcraft/advancement/recipes/misc/inverix_charcoal.json
 d02e1b70e7029663a7ab6fe8b8d6e8fc4c30ffb4 data/jolcraft/advancement/recipes/misc/inverix_coal.json
-2912da41f7b214ed18ee188059c9088a04b939da data/jolcraft/advancement/recipes/misc/lapidary_bench.json
 ba1710877028eaff99f1dace5fa4b4f40c346370 data/jolcraft/advancement/recipes/misc/lockpick_left.json
 c81a0889758a234127b4ef5b399c836906c9c5bd data/jolcraft/advancement/recipes/misc/lockpick_right.json
 3859eeac1ee391359a77d801d7227e7f4cba435d data/jolcraft/advancement/recipes/misc/mithril_artisan_hammer.json
@@ -144,7 +143,6 @@ c1173d698e4b47f48da2e1ba4c710e3e7bf0ca0c data/jolcraft/recipe/deepslate_warhamme
 d0baa61656625f72888b2cc2aafeff012649f194 data/jolcraft/recipe/glass_mug.json
 22c9f79b769f6c7ceae085771e5136dfa7447ded data/jolcraft/recipe/inverix_charcoal.json
 2315bd09991c27877af368e4753489b1709c356e data/jolcraft/recipe/inverix_coal.json
-ee09920a5b749c153090d2c89ca5b8006448473f data/jolcraft/recipe/lapidary_bench.json
 5aef02cf3bf4a8b7302caf0c60dfd1730ab4f67d data/jolcraft/recipe/lockpick_left.json
 b5e07a6383eaab3bea90295d971fa8781788d817 data/jolcraft/recipe/lockpick_right.json
 ca461efa025b52564e15683166ebb4af6fc56f84 data/jolcraft/recipe/mithril_artisan_hammer.json

@@ -24,6 +24,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -276,9 +277,6 @@ public class JolCraftGameEvents {
     }
 
 
-
-
-
     @SubscribeEvent
     public static void onMagicDamage(LivingDamageEvent.Pre event) {
         DamageSource source = event.getSource();
@@ -420,19 +418,33 @@ public class JolCraftGameEvents {
             LAST_PLAYER_POS.put(uuid, current);
 
             if (ticks >= 20 && player.onGround()) {
-                double px = player.getX();
-                double py = player.getY() + player.getBbHeight() + 0.5;
-                double pz = player.getZ();
-                BlockPos targetPos = BlockPos.containing(px, py, pz);
-                BlockState targetState = level.getBlockState(targetPos);
+                // Calculate aura radius
+                int percent = (int) (radiant * 100);
+                int nearest25 = (percent / 25) * 25;
+                int radius = 1 + (nearest25 / 25); // 2–5
 
-                if (targetState.isAir() || targetState.is(Blocks.WATER)) {
-                    existing.setPos(px, py, pz);
+                double dx = existing.getX() - player.getX();
+                double dz = existing.getZ() - player.getZ();
+                double dy = existing.getY() - player.getY();
+                double horizontalDistSq = dx * dx + dz * dz;
+                boolean withinY = dy >= 0 && dy <= 4;
+
+                boolean withinRadius = horizontalDistSq <= radius * radius && withinY;
+
+                if (!withinRadius) {
+                    double px = player.getX();
+                    double py = player.getY() + player.getBbHeight() + 0.5;
+                    double pz = player.getZ();
+                    BlockPos targetPos = BlockPos.containing(px, py, pz);
+                    BlockState targetState = level.getBlockState(targetPos);
+
+                    if (targetState.isAir() || targetState.is(Blocks.WATER)) {
+                        existing.setPos(px, py, pz);
+                    }
                 }
             }
         }
     }
-
 
     @SubscribeEvent
     public static void onPlayerLoggedOut(PlayerEvent.PlayerLoggedOutEvent event) {
@@ -445,6 +457,70 @@ public class JolCraftGameEvents {
 
         LAST_PLAYER_POS.remove(uuid);
         STATIONARY_TICKS.remove(uuid);
+    }
+
+    @SubscribeEvent
+    public static void onPlayerTickRadiantAura(PlayerTickEvent.Post event) {
+        Player player = event.getEntity();
+        Level level = player.level();
+        if (level.isClientSide()) return;
+
+        for (RadiantEntity radiant : ACTIVE_RADIANT_ENTITIES.values()) {
+            if (radiant.isRemoved()) continue;
+
+            Entity ownerEntity = radiant.getOwner();
+            if (!(ownerEntity instanceof Player owner)) continue;
+
+            double radiantAttr = owner.getAttributeValue(JolCraftAttributes.RADIANT);
+            if (radiantAttr < 0.25) continue;
+
+            int percent = (int) (radiantAttr * 100);
+            int nearest25 = (percent / 25) * 25;
+            int radius = 1 + (nearest25 / 25); // 2–5
+            int amplifier = (nearest25 / 25) - 1; // 0–3
+
+            double dx = radiant.getX() - player.getX();
+            double dz = radiant.getZ() - player.getZ();
+            double dy = radiant.getY() - player.getY(); // radiant center to player feet
+
+            double horizontalDistSq = dx * dx + dz * dz;
+            boolean withinY = dy >= 0 && dy <= 4;
+
+            if (horizontalDistSq <= radius * radius && withinY) {
+                MobEffectInstance existing = player.getEffect(JolCraftEffects.RADIANT);
+
+                // Skip if already has same amplifier and decent remaining duration
+                if (existing != null && existing.getAmplifier() == amplifier && existing.getDuration() >= 200) {
+                    continue;
+                }
+
+                player.addEffect(new MobEffectInstance(JolCraftEffects.RADIANT, 400, amplifier, false, false, true));
+            }
+        }
+    }
+
+
+
+    @SubscribeEvent
+    public static void onUndeadDamage(LivingDamageEvent.Pre event) {
+        DamageSource source = event.getSource();
+        LivingEntity target = event.getEntity();
+
+        if (!(target instanceof Player player)) return;
+        if (!player.hasEffect(JolCraftEffects.RADIANT)) return;
+
+        Entity attacker = source.getEntity();
+        if (!(attacker instanceof LivingEntity livingAttacker)) return;
+        if (!livingAttacker.getType().is(EntityTypeTags.UNDEAD)) return;
+
+        // Get RADIANT effect amplifier (0–3)
+        MobEffectInstance effect = player.getEffect(JolCraftEffects.RADIANT);
+        int amplifier = effect != null ? effect.getAmplifier() : 0;
+
+        // 5% reduction per level (I–IV → 5%–20%)
+        float reductionFactor = 1.0f - (0.05f * (amplifier + 1));
+        float newDamage = event.getOriginalDamage() * reductionFactor;
+        event.setNewDamage(newDamage);
     }
 
 
@@ -634,14 +710,13 @@ public class JolCraftGameEvents {
         builder.addMix(Potions.WATER, JolCraftItems.DEEPMARROW_DUST.get(), JolCraftPotions.ANCIENT_MEMORY);
         builder.addMix(JolCraftPotions.ANCIENT_MEMORY, Items.REDSTONE, JolCraftPotions.LONG_ANCIENT_MEMORY);
 
-        builder.addMix(Potions.AWKWARD, JolCraftBlocks.DUSKCAP.asItem(), JolCraftPotions.LOCKPICKING);
+        builder.addMix(Potions.AWKWARD, JolCraftItems.SUNGLEAM_DUST.asItem(), JolCraftPotions.LOCKPICKING);
         builder.addMix(JolCraftPotions.LOCKPICKING, Items.REDSTONE, JolCraftPotions.LONG_LOCKPICKING);
         builder.addMix(JolCraftPotions.LOCKPICKING, Items.GLOWSTONE_DUST, JolCraftPotions.STRONG_LOCKPICKING);
 
         builder.addMix(Potions.AWKWARD, JolCraftItems.EARTHBLOOD_DUST.asItem(), JolCraftPotions.DWARVEN_HASTE);
         builder.addMix(JolCraftPotions.DWARVEN_HASTE, Items.REDSTONE, JolCraftPotions.LONG_DWARVEN_HASTE);
         builder.addMix(JolCraftPotions.DWARVEN_HASTE, Items.GLOWSTONE_DUST, JolCraftPotions.STRONG_DWARVEN_HASTE);
-
 
     }
 

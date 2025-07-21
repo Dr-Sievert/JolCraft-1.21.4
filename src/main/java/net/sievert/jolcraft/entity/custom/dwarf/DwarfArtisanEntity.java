@@ -19,6 +19,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Blocks;
 import net.sievert.jolcraft.JolCraft;
+import net.sievert.jolcraft.block.JolCraftBlocks;
+import net.sievert.jolcraft.data.JolCraftDataComponents;
 import net.sievert.jolcraft.entity.ai.goal.*;
 import net.sievert.jolcraft.item.JolCraftItems;
 import net.sievert.jolcraft.util.dwarf.JolCraftDwarfTrades;
@@ -103,31 +105,54 @@ public class DwarfArtisanEntity extends AbstractDwarfEntity {
         return AbstractDwarfEntity.toIntMap(ImmutableMap.of(
                 // Novice
                 1, new VillagerTrades.ItemListing[] {
-                        new JolCraftDwarfTrades.ItemsForGold(Items.STICK, 1, 4, 2, 8, 6, 500),
-                        new JolCraftDwarfTrades.GoldForItems(Items.SMITHING_TABLE, 1, 3, 4, 1)
+                        new JolCraftDwarfTrades.GoldForItems(JolCraftItems.AEGISCORE.get(), 1, 10, 10, 8, 15),
+                        new JolCraftDwarfTrades.GoldForItems(JolCraftItems.ASHFANG.get(), 1, 10, 10, 8, 15),
+                        new JolCraftDwarfTrades.GoldForItems(JolCraftItems.DEEPMARROW.get(), 1, 10, 10, 8, 15),
+                        new JolCraftDwarfTrades.GoldForItems(JolCraftItems.EARTHBLOOD.get(), 1, 10, 10, 8, 15),
+                        new JolCraftDwarfTrades.GoldForItems(JolCraftItems.EMBERGLASS.get(), 1, 10, 10, 8, 15),
+                        new JolCraftDwarfTrades.GoldForItems(JolCraftItems.FROSTVEIN.get(), 1, 10, 10, 8, 15),
+                        new JolCraftDwarfTrades.GoldForItems(JolCraftItems.GRIMSTONE.get(), 1, 10, 10, 8, 15),
+                        new JolCraftDwarfTrades.GoldForItems(JolCraftItems.IRONHEART.get(), 1, 10, 10, 8, 15),
+                        new JolCraftDwarfTrades.GoldForItems(JolCraftItems.LUMIERE.get(), 1, 10, 10, 8, 15),
+                        new JolCraftDwarfTrades.GoldForItems(JolCraftItems.MOONSHARD.get(), 1, 10, 10, 8, 15),
+                        new JolCraftDwarfTrades.GoldForItems(JolCraftItems.RUSTAGATE.get(), 1, 10, 10, 8, 15),
+                        new JolCraftDwarfTrades.GoldForItems(JolCraftItems.SKYBURROW.get(), 1, 10, 10, 8, 15),
+                        new JolCraftDwarfTrades.GoldForItems(JolCraftItems.SUNGLEAM.get(), 1, 10, 10, 8, 15),
+                        new JolCraftDwarfTrades.GoldForItems(JolCraftItems.VERDANITE.get(), 1, 10, 10, 8, 15),
+                        new JolCraftDwarfTrades.GoldForItems(JolCraftItems.WOECRYSTAL.get(), 1, 10, 10, 8, 15),
+                        new JolCraftDwarfTrades.GoldForItems(Items.DIAMOND, 1, 10, 5, 8, 15),
+                        new JolCraftDwarfTrades.GoldForItems(Items.EMERALD, 1, 10, 5, 4, 8),
+                        new JolCraftDwarfTrades.GoldForItems(Items.AMETHYST_SHARD, 2, 4, 10, 5, 2, 5),
+                        new JolCraftDwarfTrades.GoldForItems(Items.LAPIS_LAZULI, 3, 5, 10, 5, 2, 5),
+                        new JolCraftDwarfTrades.GoldForItems(Items.PRISMARINE_SHARD, 3, 5, 10, 5, 2, 5),
+                        new JolCraftDwarfTrades.GoldForItems(Items.QUARTZ, 3, 5, 10, 5, 2, 5)
+
+
                 },
                 // Apprentice
                 2, new VillagerTrades.ItemListing[] {
-                        new JolCraftDwarfTrades.ItemsForGold(Items.BREAD, 1, 3, 1, 5, 10, 10),
+                        new JolCraftDwarfTrades.ItemsForGold(JolCraftBlocks.LAPIDARY_BENCH.get().asItem(), 10, 20, 1, 3, 10),
                 },
                 // Journeyman
                 3, new VillagerTrades.ItemListing[] {
-                        new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.CONTRACT_BLANK.get(), 2, 4, 1, 10, 1, 10),
-                        new JolCraftDwarfTrades.GoldForItems(JolCraftItems.QUILL_EMPTY.get(), 3, 7, 4, 1)
+                        new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.DEEPSLATE_ARTISAN_HAMMER.get(), 2, 4, 1, 3, 10),
                 },
                 // Expert
                 4, new VillagerTrades.ItemListing[] {
-                        new JolCraftDwarfTrades.ItemsForGold(Items.DIAMOND, 1, 1, 10, 10, 10, 10),
-                        new JolCraftDwarfTrades.GoldForItems(Items.EMERALD, 1, 10, 10, 1)
+                        new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.DEEPSLATE_CHISEL.get(), 2, 4, 1, 3, 10),
                 },
                 // Master
                 5, new VillagerTrades.ItemListing[] {
-                        new JolCraftDwarfTrades.ItemsForGold(Items.NETHERITE_BLOCK, 1, 1, 5, 10, 5, 10),
-                        new JolCraftDwarfTrades.ItemsAndGoldToItems(Items.PURPLE_DYE, 1, 30, JolCraftItems.GUILD_SIGIL.get(), 1, 1, 0, 0.05F)
+                        new JolCraftDwarfTrades.ItemsAndGoldToItemsWithData(
+                                JolCraftItems.LEGENDARY_PAGE.get(), 20,
+                                30,
+                                JolCraftItems.ANCIENT_DWARVEN_TOME_LEGENDARY.get(), 1,
+                                1, 0, 0F,
+                                (stack) -> stack.set(JolCraftDataComponents.LORE_LINE_ID, "ancient_gemcraft")
+                        ),
                 }
         ));
     }
-
 
 
 }

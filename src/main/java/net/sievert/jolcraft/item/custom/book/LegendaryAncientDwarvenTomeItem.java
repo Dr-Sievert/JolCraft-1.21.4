@@ -65,6 +65,18 @@ public class LegendaryAncientDwarvenTomeItem extends AncientDwarvenTomeItem {
                             playUnlockSounds(level, player);
                         }
                     }
+                    case "ancient_gemcraft" -> {
+                        if (TomeUnlockHelper.hasUnlockServerBypassCreative(player, TomeUnlockHelper.CUTTING_GEMS)) {
+                            showEmptyUnlockMessage(player);
+                            playIdentifyFailSound(level, player);
+                        } else {
+                            TomeUnlockHelper.grantUnlock(player, TomeUnlockHelper.CUTTING_GEMS);
+                            player.displayClientMessage(
+                                    Component.translatable("tooltip.jolcraft.tome_unlock.gems").withStyle(ChatFormatting.GREEN), true
+                            );
+                            playUnlockSounds(level, player);
+                        }
+                    }
                     default -> showEmptyUnlockMessage(player);
                 }
             } else {

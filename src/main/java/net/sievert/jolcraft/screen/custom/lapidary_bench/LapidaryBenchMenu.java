@@ -1,7 +1,9 @@
 package net.sievert.jolcraft.screen.custom.lapidary_bench;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -25,6 +27,7 @@ import net.minecraft.core.particles.ParticleTypes;
 
 import net.minecraft.world.SimpleContainer;
 import net.sievert.jolcraft.sound.JolCraftSounds;
+import net.sievert.jolcraft.util.attachment.TomeUnlockHelper;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -172,6 +175,15 @@ public class LapidaryBenchMenu extends AbstractContainerMenu {
 
         // Chisel button: 1 (only for gems)
         if (buttonId == 1 && hasGem() && hasChisel()) {
+            // First, check if the player has the "Cutting Gems" unlock
+            if (!TomeUnlockHelper.hasUnlockServer(player, TomeUnlockHelper.CUTTING_GEMS)) {
+                player.displayClientMessage(
+                        Component.translatable("tooltip.jolcraft.lapidary_bench.locked_cut_gems").withStyle(ChatFormatting.RED),
+                        true
+                );
+                return true;
+            }
+
             Item gemItem = stack.getItem();
             Item cutItem = GEM_TO_CUT.get(gemItem);
 

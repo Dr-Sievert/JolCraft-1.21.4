@@ -9,6 +9,7 @@ public class TomeUnlockHelper {
 
     // --- Known Unlock IDs ---
     public static final String BREW_MULTIPLE_HOPS = "forgotten_brew_formulas";
+    public static final String CUTTING_GEMS = "ancient_gemcraft";
 
     // --- SERVER SIDE ---
 

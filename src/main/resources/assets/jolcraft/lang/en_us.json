@@ -99,7 +99,7 @@
   "effect.jolcraft.ancient_memory": "Ancient Memory",
   "effect.jolcraft.lockpicking": "Lockpicking",
   "effect.jolcraft.dwarven_haste": "Dwarven Haste",
-
+  "effect.jolcraft.radiant": "Radiant",
   "effect.jolcraft.delirium_curse": "Delirium Curse",
 
   "item.minecraft.potion.effect.ancient_memory": "Ancient Memory Potion",
@@ -335,6 +335,9 @@
 
   "tooltip.jolcraft.tome_unlock.empty": "This tome lacks knowledge that you find useful.",
   "tooltip.jolcraft.tome_unlock.brew": "You can now brew using multiple hops!",
+  "tooltip.jolcraft.tome_unlock.gems": "You can now cut gems using a chisel!",
+
+  "tooltip.jolcraft.lapidary_bench.locked_cut_gems": "You have no idea how to cut this gem without breaking it.",
 
   "tooltip.jolcraft.tablet.locked": "The stone is marked with unfamiliar symbols.",
 

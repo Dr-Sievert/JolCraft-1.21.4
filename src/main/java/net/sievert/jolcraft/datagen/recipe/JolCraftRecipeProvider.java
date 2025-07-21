@@ -471,14 +471,6 @@ public class JolCraftRecipeProvider extends RecipeProvider {
                 .define('B', Items.IRON_NUGGET)
                 .unlockedBy("has_iron_nugget", has(Items.IRON_NUGGET)).save(output, "lockpick_left");
 
-        modShaped(RecipeCategory.MISC, JolCraftBlocks.LAPIDARY_BENCH.get())
-                .pattern("BXB")
-                .pattern("BXB")
-                .pattern("XXX")
-                .define('B', JolCraftItems.DEEPSLATE_PLATE.get())
-                .define('X', Items.POLISHED_DEEPSLATE)
-                .unlockedBy("has_deepslate_plate", has(JolCraftItems.DEEPSLATE_PLATE.get())).save(output, "lapidary_bench");
-
         modShaped(RecipeCategory.MISC, JolCraftItems.DEEPSLATE_ARTISAN_HAMMER.get())
                 .pattern("B")
                 .pattern("X")
