@@ -1,13 +1,20 @@
 package net.sievert.jolcraft.event;
 
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.*;
+import net.minecraft.client.Camera;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.neoforged.neoforge.event.ItemAttributeModifierEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
@@ -17,8 +24,10 @@ import net.sievert.jolcraft.entity.attribute.JolCraftAttributes;
 import net.sievert.jolcraft.entity.client.model.animal.MuffhornModel;
 import net.sievert.jolcraft.entity.client.model.blockentity.StrongboxModel;
 import net.sievert.jolcraft.entity.client.model.dwarf.*;
+import net.sievert.jolcraft.entity.client.model.object.RadiantModel;
 import net.sievert.jolcraft.entity.custom.animal.MuffhornEntity;
 import net.sievert.jolcraft.entity.custom.dwarf.*;
+import net.sievert.jolcraft.entity.custom.object.RadiantEntity;
 
 @EventBusSubscriber(modid = JolCraft.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class JolCraftModEvents {
@@ -46,6 +55,9 @@ public class JolCraftModEvents {
                 MuffhornModel.BABY_LAYER_LOCATION,
                 () -> MuffhornModel.createBodyLayer().apply(MuffhornModel.BABY_TRANSFORMER)
         );
+
+        //Objects
+        event.registerLayerDefinition(RadiantModel.LAYER_LOCATION, RadiantModel::createBodyLayer);
 
         //Blocks
         event.registerLayerDefinition(StrongboxModel.LAYER_LOCATION, StrongboxModel::createBodyLayer);
@@ -77,6 +89,15 @@ public class JolCraftModEvents {
     public static void onEntityAttributeModification(EntityAttributeModificationEvent event) {
         event.add(EntityType.PLAYER, JolCraftAttributes.XP_BOOST);
         event.add(EntityType.PLAYER, JolCraftAttributes.SLOW_RESIST);
+        event.add(EntityType.PLAYER, JolCraftAttributes.EXTRA_CROP);
+        event.add(EntityType.PLAYER, JolCraftAttributes.EXTRA_CHEST_LOOT);
+        event.add(EntityType.PLAYER, JolCraftAttributes.RADIANT);
+        event.add(EntityType.PLAYER, JolCraftAttributes.ARMOR_UNBREAKING);
+        event.add(EntityType.PLAYER, JolCraftAttributes.MAGIC_RESISTANCE);
+        event.add(EntityType.PLAYER, JolCraftAttributes.ARMOR_INCREASE);
+        event.add(EntityType.PLAYER, JolCraftAttributes.ATTACK_DAMAGE_INCREASE);
+        event.add(EntityType.PLAYER, JolCraftAttributes.MOVEMENT_SPEED_BOOST_DAY);
+        event.add(EntityType.PLAYER, JolCraftAttributes.MOVEMENT_SPEED_BOOST_NIGHT);
     }
 
 

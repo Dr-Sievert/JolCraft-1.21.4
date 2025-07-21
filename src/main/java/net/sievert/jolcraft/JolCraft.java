@@ -1,17 +1,20 @@
 package net.sievert.jolcraft;
 
 
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.*;
+import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.neoforge.client.event.ClientTickEvent;
-import net.neoforged.neoforge.client.event.EntityRenderersEvent;
-import net.neoforged.neoforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
-import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
+import net.neoforged.neoforge.client.event.*;
 import net.sievert.jolcraft.advancement.JolCraftCriteriaTriggers;
 import net.sievert.jolcraft.block.JolCraftBlocks;
 import net.sievert.jolcraft.block.entity.JolCraftBlockEntities;
@@ -25,6 +28,8 @@ import net.sievert.jolcraft.entity.attribute.JolCraftAttributes;
 import net.sievert.jolcraft.entity.client.render.animal.MuffhornRenderer;
 import net.sievert.jolcraft.entity.client.render.block.StrongboxRenderer;
 import net.sievert.jolcraft.entity.client.render.dwarf.*;
+import net.sievert.jolcraft.entity.client.render.object.RadiantRenderer;
+import net.sievert.jolcraft.entity.custom.object.RadiantEntity;
 import net.sievert.jolcraft.item.JolCraftCreativeModeTabs;
 import net.sievert.jolcraft.item.armor.JolCraftEquipmentAssets;
 import net.sievert.jolcraft.item.JolCraftItems;
@@ -116,15 +121,7 @@ public class JolCraft
 
     private void commonSetup(final FMLCommonSetupEvent event)
     {
-        // Some common setup code
-        LOGGER.info("HELLO FROM COMMON SETUP");
 
-        if (Config.logDirtBlock)
-            LOGGER.info("DIRT BLOCK >> {}", BuiltInRegistries.BLOCK.getKey(Blocks.DIRT));
-
-        LOGGER.info(Config.magicNumberIntroduction + Config.magicNumber);
-
-        Config.items.forEach((item) -> LOGGER.info("ITEM >> {}", item.toString()));
     }
 
     // Add items to vanilla creative tabs
@@ -142,7 +139,6 @@ public class JolCraft
     public void onServerStarting(ServerStartingEvent event)
     {
         // Do something when the server starts
-        LOGGER.info("HELLO from server starting");
     }
 
     // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
@@ -187,6 +183,9 @@ public class JolCraft
 
             //Animals
             EntityRenderers.register(JolCraftEntities.MUFFHORN.get(), MuffhornRenderer::new);
+
+            //Objects
+            EntityRenderers.register(JolCraftEntities.RADIANT.get(), RadiantRenderer::new);
 
             //Blocks
             //ItemBlockRenderTypes.setRenderLayer(JolCraftBlocks.STRONGBOX.get(), RenderType.cutout());

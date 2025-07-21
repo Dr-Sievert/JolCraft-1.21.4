@@ -50,7 +50,7 @@ public class JolCraftArmorMaterials {
             }),
             20,
             SoundEvents.ARMOR_EQUIP_NETHERITE,
-            5.0f,
+            4.0f,
             0.0f,
             JolCraftTags.Items.REPAIRS_MITHRIL,
             MITHRIL_KEY

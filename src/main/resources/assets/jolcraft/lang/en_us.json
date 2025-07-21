@@ -84,6 +84,15 @@
 
   "attribute.jolcraft.xp_boost": "Experience Boost",
   "attribute.jolcraft.slow_resist": "Slow Resist",
+  "attribute.jolcraft.extra_crop": "Extra Crop Harvest",
+  "attribute.jolcraft.extra_chest_loot": "Extra Chest Loot",
+  "attribute.jolcraft.radiant": "Radiant",
+  "attribute.jolcraft.armor_unbreaking": "Armor Unbreaking",
+  "attribute.jolcraft.magic_resistance": "Magic Resistance",
+  "attribute.jolcraft.armor_increase": "Armor Increase",
+  "attribute.jolcraft.attack_damage_increase": "Attack Damage Increase",
+  "attribute.jolcraft.movement_speed_boost_day": "Sunlight Speed Boost",
+  "attribute.jolcraft.movement_speed_boost_night": "Moonlight Speed Boost",
 
 
   "effect.jolcraft.homestead": "Homestead",
@@ -472,6 +481,8 @@
 
   "entity.jolcraft.muffhorn": "Muffhorn",
   "item.jolcraft.muffhorn_spawn_egg": "Muffhorn Spawn Egg",
+
+  "entity.jolcraft.radiant": "Radiant",
 
   "filled_map.forge": "Map to a Dwarven Forge"
 

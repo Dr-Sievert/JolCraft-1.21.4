@@ -4,6 +4,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Blocks;
+import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
 import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.block.JolCraftBlocks;
@@ -19,6 +20,7 @@ public class JolCraftBlockTagProvider extends BlockTagsProvider {
     @Override
     protected void addTags(HolderLookup.Provider provider) {
 
+        //Vanilla
         tag(BlockTags.MINEABLE_WITH_PICKAXE)
                 .add(JolCraftBlocks.LAPIDARY_BENCH.get())
                 .add(JolCraftBlocks.DEEPSLATE_MITHRIL_ORE.get())
@@ -30,14 +32,6 @@ public class JolCraftBlockTagProvider extends BlockTagsProvider {
                 .add(JolCraftBlocks.HEARTH.get())
                 .add(JolCraftBlocks.FERMENTING_CAULDRON.get());
 
-        tag(JolCraftTags.Blocks.NEEDS_NETHERITE_TOOL)
-                .add(JolCraftBlocks.DEEPSLATE_MITHRIL_ORE.get())
-                .add(JolCraftBlocks.PURE_MITHRIL_BLOCK.get())
-                .add(JolCraftBlocks.MITHRIL_BLOCK.get());
-
-        tag(BlockTags.INCORRECT_FOR_DIAMOND_TOOL)
-                .addTags(JolCraftTags.Blocks.NEEDS_NETHERITE_TOOL);
-
         tag(BlockTags.NEEDS_IRON_TOOL)
                 .add(JolCraftBlocks.DEEPSLATE_BULBS_CROP.get())
                 .add(JolCraftBlocks.DEEPSLATE_PLATE_BLOCK.get());
@@ -45,10 +39,34 @@ public class JolCraftBlockTagProvider extends BlockTagsProvider {
         tag(BlockTags.MINEABLE_WITH_HOE)
                 .add(JolCraftBlocks.BARLEY_BLOCK.get());
 
-
         tag(BlockTags.MUSHROOM_GROW_BLOCK)
                 .add(JolCraftBlocks.VERDANT_SOIL.get());
 
+        //Common Neoforge
+        tag(Tags.Blocks.CHESTS)
+                .add(JolCraftBlocks.STRONGBOX.get());
+
+        tag(Tags.Blocks.STORAGE_BLOCKS)
+                .add(JolCraftBlocks.PURE_MITHRIL_BLOCK.get())
+                .add(JolCraftBlocks.MITHRIL_BLOCK.get())
+                .add(JolCraftBlocks.DEEPSLATE_PLATE_BLOCK.get())
+                .add(JolCraftBlocks.MUFFHORN_FUR_BLOCK.get());
+
+        tag(Tags.Blocks.NEEDS_NETHERITE_TOOL)
+                .add(JolCraftBlocks.DEEPSLATE_MITHRIL_ORE.get())
+                .add(JolCraftBlocks.PURE_MITHRIL_BLOCK.get())
+                .add(JolCraftBlocks.MITHRIL_BLOCK.get());
+
+        tag(Tags.Blocks.ORES)
+                .add(JolCraftBlocks.DEEPSLATE_MITHRIL_ORE.get());
+
+        tag(Tags.Blocks.ORE_RATES_SINGULAR)
+                .add(JolCraftBlocks.DEEPSLATE_MITHRIL_ORE.get());
+
+        tag(Tags.Blocks.ORES_IN_GROUND_DEEPSLATE)
+                .add(JolCraftBlocks.DEEPSLATE_MITHRIL_ORE.get());
+
+        //Custom
         tag(JolCraftTags.Blocks.DEEPSLATE_BULBS_PLANTABLE)
                 .add(JolCraftBlocks.VERDANT_SOIL.get())
                 .add(Blocks.DEEPSLATE)

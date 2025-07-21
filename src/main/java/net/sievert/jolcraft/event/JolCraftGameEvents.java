@@ -1,19 +1,33 @@
 package net.sievert.jolcraft.event;
 
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.*;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Camera;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.data.loot.packs.LootData;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -21,6 +35,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Monster;
@@ -29,6 +44,10 @@ import net.minecraft.world.entity.npc.VillagerData;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionBrewing;
@@ -38,35 +57,45 @@ import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.item.trading.MerchantOffers;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.CropBlock;
-import net.minecraft.world.level.block.LayeredCauldronBlock;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.phys.Vec3;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.LogicalSide;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
+import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.event.AnvilUpdateEvent;
 import net.neoforged.neoforge.event.ItemAttributeModifierEvent;
 import net.neoforged.neoforge.event.brewing.RegisterBrewingRecipesEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
 import net.neoforged.neoforge.event.entity.EntityInvulnerabilityCheckEvent;
-import net.neoforged.neoforge.event.entity.living.LivingEntityUseItemEvent;
-import net.neoforged.neoforge.event.entity.living.LivingEquipmentChangeEvent;
-import net.neoforged.neoforge.event.entity.living.MobEffectEvent;
+import net.neoforged.neoforge.event.entity.living.*;
 import net.neoforged.neoforge.event.entity.player.*;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
+import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import net.neoforged.neoforge.event.village.VillagerTradesEvent;
 import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.advancement.JolCraftCriteriaTriggers;
 import net.sievert.jolcraft.data.custom.block.Hearth;
 import net.sievert.jolcraft.block.custom.FermentingCauldronBlock;
 import net.sievert.jolcraft.block.custom.FermentingStage;
+import net.sievert.jolcraft.entity.JolCraftEntities;
 import net.sievert.jolcraft.entity.attribute.JolCraftAttributes;
 import net.sievert.jolcraft.entity.custom.dwarf.AbstractDwarfEntity;
+import net.sievert.jolcraft.entity.custom.object.RadiantEntity;
 import net.sievert.jolcraft.network.JolCraftNetworking;
 import net.sievert.jolcraft.network.packet.ClientboundAncientLanguagePacket;
 import net.sievert.jolcraft.network.packet.ClientboundEndorsementsPacket;
@@ -86,11 +115,9 @@ import net.sievert.jolcraft.util.random.JolCraftAnvilHelper;
 import net.sievert.jolcraft.util.dwarf.SalvageLootHelper;
 import net.sievert.jolcraft.block.JolCraftBlocks;
 import net.sievert.jolcraft.effect.JolCraftEffects;
+import org.joml.Matrix4f;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @EventBusSubscriber(modid = JolCraft.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public class JolCraftGameEvents {
@@ -117,6 +144,168 @@ public class JolCraftGameEvents {
     }
 
     @SubscribeEvent
+    public static void onAttackDamageTick(PlayerTickEvent.Post event) {
+        Player player = event.getEntity();
+        if (player.level().isClientSide()) return;
+
+        double attackDamageBoost = player.getAttributeValue(JolCraftAttributes.ATTACK_DAMAGE_INCREASE);
+
+        if (attackDamageBoost > 0) {
+            var attackDamageAttr = player.getAttribute(Attributes.ATTACK_DAMAGE);
+            if (attackDamageAttr == null) return;
+
+            ResourceLocation ATTACK_DAMAGE_INCREASE_ID = ResourceLocation.fromNamespaceAndPath("jolcraft", "attack_damage_increase");
+
+            attackDamageAttr.removeModifier(ATTACK_DAMAGE_INCREASE_ID);
+
+            AttributeModifier mod = new AttributeModifier(
+                    ATTACK_DAMAGE_INCREASE_ID,
+                    attackDamageBoost,
+                    AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL
+            );
+            attackDamageAttr.addTransientModifier(mod);
+        }
+    }
+
+
+    @SubscribeEvent
+    public static void onMovementTick(PlayerTickEvent.Post event) {
+        Player player = event.getEntity();
+        if (player.level().isClientSide()) return;
+
+        var movementAttr = player.getAttribute(Attributes.MOVEMENT_SPEED);
+        if (movementAttr == null) return;
+
+        // Prepare ResourceLocations for unique modifiers
+        ResourceLocation SKYBURROW_ID = ResourceLocation.fromNamespaceAndPath("jolcraft", "skyburrow_day_speed");
+        ResourceLocation MOONSHARD_ID = ResourceLocation.fromNamespaceAndPath("jolcraft", "moonshard_night_speed");
+
+        // Remove old modifiers every tick for consistency
+        movementAttr.removeModifier(SKYBURROW_ID);
+        movementAttr.removeModifier(MOONSHARD_ID);
+
+        // Get boosts from your custom attributes
+        double dayBoost = player.getAttributeValue(JolCraftAttributes.MOVEMENT_SPEED_BOOST_DAY);
+        double nightBoost = player.getAttributeValue(JolCraftAttributes.MOVEMENT_SPEED_BOOST_NIGHT);
+
+        // Time check (is it day or night?)
+        boolean isDay = player.level().isDay();
+
+        // Apply the correct boost as ADD_MULTIPLIED_BASE
+        if (isDay && dayBoost > 0) {
+            AttributeModifier mod = new AttributeModifier(
+                    SKYBURROW_ID,
+                    dayBoost,
+                    AttributeModifier.Operation.ADD_MULTIPLIED_BASE
+            );
+            movementAttr.addTransientModifier(mod);
+        } else if (!isDay && nightBoost > 0) {
+            AttributeModifier mod = new AttributeModifier(
+                    MOONSHARD_ID,
+                    nightBoost,
+                    AttributeModifier.Operation.ADD_MULTIPLIED_BASE
+            );
+            movementAttr.addTransientModifier(mod);
+        }
+    }
+
+    // Use this event for instant recalculation when armor changes
+    @SubscribeEvent
+    public static void onArmorChanged(LivingEquipmentChangeEvent event) {
+        if (!(event.getEntity() instanceof Player player)) return;
+        recalcIronheartBonus(player);
+    }
+
+    // Fallback: On tick, only if value doesn't match (safety net for missed events/desync)
+    @SubscribeEvent
+    public static void onPlayerArmorTick(PlayerTickEvent.Post event) {
+        Player player = event.getEntity();
+        if (player.level().isClientSide()) return;
+        // Check if actual value matches expected, skip if equal
+        if (!needsIronheartUpdate(player)) return;
+        recalcIronheartBonus(player);
+    }
+
+    // --- Helper methods ---
+    private static boolean needsIronheartUpdate(Player player) {
+        double percent = player.getAttributeValue(JolCraftAttributes.ARMOR_INCREASE);
+        var attr = player.getAttribute(Attributes.ARMOR);
+        if (attr == null || percent <= 0) return false;
+
+        ResourceLocation IRONHEART_ID = ResourceLocation.fromNamespaceAndPath("jolcraft", "ironheart_armor_bonus");
+
+        double baseArmor = 0;
+        for (AttributeModifier mod : attr.getModifiers()) {
+            if (!IRONHEART_ID.equals(mod.id())) {
+                baseArmor += mod.amount();
+            }
+        }
+        double expectedBonus = baseArmor * percent;
+
+        // Find if our modifier exists, and its amount matches
+        var existing = attr.getModifier(IRONHEART_ID);
+        if (existing == null && expectedBonus == 0) return false;
+        if (existing != null && Math.abs(existing.amount() - expectedBonus) < 0.01) return false;
+        return true;
+    }
+
+    private static void recalcIronheartBonus(Player player) {
+        double percent = player.getAttributeValue(JolCraftAttributes.ARMOR_INCREASE);
+        var attr = player.getAttribute(Attributes.ARMOR);
+        if (attr == null) return;
+
+        ResourceLocation IRONHEART_ID = ResourceLocation.fromNamespaceAndPath("jolcraft", "ironheart_armor_bonus");
+        attr.removeModifier(IRONHEART_ID);
+
+        if (percent > 0) {
+            double baseArmor = 0;
+            for (AttributeModifier mod : attr.getModifiers()) {
+                if (!IRONHEART_ID.equals(mod.id())) {
+                    baseArmor += mod.amount();
+                }
+            }
+            double bonus = baseArmor * percent;
+            if (bonus > 0) {
+                attr.addTransientModifier(new AttributeModifier(
+                        IRONHEART_ID,
+                        bonus,
+                        AttributeModifier.Operation.ADD_VALUE
+                ));
+            }
+        }
+    }
+
+
+
+
+
+    @SubscribeEvent
+    public static void onMagicDamage(LivingDamageEvent.Pre event) {
+        DamageSource source = event.getSource();
+        LivingEntity entity = event.getEntity();
+
+        // Only apply to magic damage
+        if (!source.is(Tags.DamageTypes.IS_MAGIC)) return;
+
+        double resist = entity.getAttributeValue(JolCraftAttributes.MAGIC_RESISTANCE);
+        if (resist <= 0.0) return;
+
+        float original = event.getOriginalDamage();
+        float reduced = (float)(original * (1.0 - resist));
+        event.setNewDamage(reduced);
+    }
+
+    @SubscribeEvent
+    public static void onArmorHurt(ArmorHurtEvent event) {
+        LivingEntity entity = event.getEntity();
+        double unbreakingChance = entity.getAttributeValue(JolCraftAttributes.ARMOR_UNBREAKING);
+        if (unbreakingChance <= 0.0) return;
+        if (entity.getRandom().nextDouble() < unbreakingChance) {
+            event.setCanceled(true);
+        }
+    }
+
+    @SubscribeEvent
     public static void onXpChange(PlayerXpEvent.XpChange event) {
         Player player = event.getEntity();
         double boost = player.getAttributeValue(JolCraftAttributes.XP_BOOST);
@@ -128,7 +317,7 @@ public class JolCraftGameEvents {
     }
 
     @SubscribeEvent
-    public static void onPlayerTick(PlayerTickEvent.Post event) {
+    public static void onPlayerSlowedTick(PlayerTickEvent.Post event) {
         Player player = event.getEntity();
         if (player.level().isClientSide()) return;
 
@@ -160,6 +349,173 @@ public class JolCraftGameEvents {
                     AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL
             ));
         }
+    }
+
+    public static final Map<UUID, RadiantEntity> ACTIVE_RADIANT_ENTITIES = new HashMap<>();
+    private static final Map<UUID, BlockPos> LAST_PLAYER_POS = new HashMap<>();
+    private static final Map<UUID, Integer> STATIONARY_TICKS = new HashMap<>();
+
+    @SubscribeEvent
+    public static void onPlayerRadiantTick(PlayerTickEvent.Post event) {
+        Player player = event.getEntity();
+        if (player.level().isClientSide()) return;
+
+        ServerLevel level = (ServerLevel) player.level();
+        UUID uuid = player.getUUID();
+        double radiant = player.getAttributeValue(JolCraftAttributes.RADIANT);
+        int pieces = (int) Math.round(radiant * 4.0); // number of armor pieces
+        int lightLevel = switch (pieces) {
+            case 1 -> 9;
+            case 2 -> 11;
+            case 3 -> 13;
+            case 4 -> 15;
+            default -> 0;
+        };
+
+        RadiantEntity existing = ACTIVE_RADIANT_ENTITIES.get(uuid);
+
+        // Fallback: search world for entity if map is out of sync (e.g. after relog)
+        if ((existing == null || existing.isRemoved())) {
+            for (RadiantEntity e : level.getEntitiesOfClass(RadiantEntity.class, player.getBoundingBox().inflate(32))) {
+                if (uuid.equals(e.getOwnerUUID())) {
+                    existing = e;
+                    ACTIVE_RADIANT_ENTITIES.put(uuid, e);
+                    break;
+                }
+            }
+        }
+
+        if (lightLevel == 0) {
+            if (existing != null) {
+                if (existing.oldPos != null && existing.level().getBlockState(existing.oldPos).is(Blocks.LIGHT)) {
+                    existing.level().setBlock(existing.oldPos, Blocks.AIR.defaultBlockState(), 3);
+                }
+                existing.discard();
+                ACTIVE_RADIANT_ENTITIES.remove(uuid);
+            }
+            LAST_PLAYER_POS.remove(uuid);
+            STATIONARY_TICKS.remove(uuid);
+            return;
+        }
+
+        if (existing == null || existing.isRemoved()) {
+            RadiantEntity entity = new RadiantEntity(JolCraftEntities.RADIANT.get(), level);
+            BlockPos spawnPos = player.blockPosition().above();
+            entity.moveTo(spawnPos.getX() + 0.5, spawnPos.getY() + 1, spawnPos.getZ() + 0.5);
+            entity.setOwner(player);
+            entity.setRadiantLightLevel(lightLevel);
+            level.addFreshEntity(entity);
+            ACTIVE_RADIANT_ENTITIES.put(uuid, entity);
+            LAST_PLAYER_POS.put(uuid, player.blockPosition());
+            STATIONARY_TICKS.put(uuid, 0);
+        } else {
+            existing.setRadiantLightLevel(lightLevel);
+
+            BlockPos current = player.blockPosition();
+            BlockPos previous = LAST_PLAYER_POS.getOrDefault(uuid, current);
+            int ticks = STATIONARY_TICKS.getOrDefault(uuid, 0);
+
+            ticks = current.equals(previous) ? ticks + 1 : 0;
+            STATIONARY_TICKS.put(uuid, ticks);
+            LAST_PLAYER_POS.put(uuid, current);
+
+            if (ticks >= 20 && player.onGround()) {
+                double px = player.getX();
+                double py = player.getY() + player.getBbHeight() + 0.5;
+                double pz = player.getZ();
+                BlockPos targetPos = BlockPos.containing(px, py, pz);
+                BlockState targetState = level.getBlockState(targetPos);
+
+                if (targetState.isAir() || targetState.is(Blocks.WATER)) {
+                    existing.setPos(px, py, pz);
+                }
+            }
+        }
+    }
+
+
+    @SubscribeEvent
+    public static void onPlayerLoggedOut(PlayerEvent.PlayerLoggedOutEvent event) {
+        UUID uuid = event.getEntity().getUUID();
+        RadiantEntity existing = ACTIVE_RADIANT_ENTITIES.remove(uuid);
+
+        if (existing != null && !existing.isRemoved()) {
+            existing.discard();
+        }
+
+        LAST_PLAYER_POS.remove(uuid);
+        STATIONARY_TICKS.remove(uuid);
+    }
+
+
+    private static final Map<UUID, ResourceKey<LootTable>> CHEST_LOOT_TO_REROLL = new HashMap<>();
+
+    @SubscribeEvent
+    public static void onRightContainerBlock(PlayerInteractEvent.RightClickBlock event) {
+        if (!(event.getLevel() instanceof ServerLevel serverLevel)) return;
+        Player player = event.getEntity();
+        BlockPos pos = event.getPos();
+
+        BlockEntity be = serverLevel.getBlockEntity(pos);
+        if (be instanceof RandomizableContainerBlockEntity lootable) {
+            ResourceKey<LootTable> lootTable = lootable.getLootTable();
+            if (lootTable != null) {
+                // Save the loot table for reroll use (key by player UUID)
+                CHEST_LOOT_TO_REROLL.put(player.getUUID(), lootTable);
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onContainerOpen(PlayerContainerEvent.Open event) {
+        Player player = event.getEntity();
+        if (!(player.level() instanceof ServerLevel serverLevel)) return;
+        AbstractContainerMenu menu = event.getContainer();
+
+        Set<RandomizableContainerBlockEntity> seen = new HashSet<>();
+        for (Slot slot : menu.slots) {
+            if (slot.container instanceof RandomizableContainerBlockEntity lootable && seen.add(lootable)) {
+                // Skip if loot is still packed (hasn't generated yet)
+                if (lootable.getLootTable() != null) {
+                    // The loot hasn't been generated yet (locked, or special menu like LockMenu)
+                    // Do NOT reroll, keep the entry for a real opening later
+                    continue;
+                }
+
+                // Only now remove the pending reroll, since we're actually opening a loot-filled chest
+                ResourceKey<LootTable> lootTable = CHEST_LOOT_TO_REROLL.remove(player.getUUID());
+                if (lootTable == null) continue;
+
+                double chance = player.getAttributeValue(JolCraftAttributes.EXTRA_CHEST_LOOT);
+
+                MinecraftServer server = serverLevel.getServer();
+                LootTable table = server.reloadableRegistries().getLootTable(lootTable);
+
+                for (int i = 0; i < lootable.getContainerSize(); ++i) {
+                    ItemStack stack = lootable.getItem(i);
+                    if (stack.isEmpty() && serverLevel.random.nextDouble() < chance) {
+                        LootParams.Builder builder = new LootParams.Builder(serverLevel)
+                                .withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(lootable.getBlockPos()))
+                                .withParameter(LootContextParams.THIS_ENTITY, player);
+                        LootParams params = builder.create(LootContextParamSets.CHEST);
+                        List<ItemStack> rerolled = table.getRandomItems(params);
+
+                        for (ItemStack rolled : rerolled) {
+                            if (!rolled.isEmpty()) {
+                                lootable.setItem(i, rolled.copy());
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onContainerClose(PlayerContainerEvent.Close event) {
+        Player player = event.getEntity();
+        CHEST_LOOT_TO_REROLL.remove(player.getUUID());
     }
 
     @SubscribeEvent
@@ -224,15 +580,31 @@ public class JolCraftGameEvents {
         isMilkRemoval.set(false);
     }
 
-
-
     @SubscribeEvent
     public static void onBlockBreak(BlockEvent.BreakEvent event) {
         Level level = (Level) event.getLevel();
+        if (level.isClientSide()) return;
+        Player player = event.getPlayer();
+        if (player == null) return;
         BlockPos pos = event.getPos();
         BlockState state = level.getBlockState(pos);
-        Player player = event.getPlayer();
 
+        // Attribute chance
+        double chance = player.getAttributeValue(JolCraftAttributes.EXTRA_CROP);
+        if (level.random.nextDouble() >= chance) return;
+
+        // Find first crop drop, if any
+        List<ItemStack> drops = Block.getDrops(state, (ServerLevel) level, pos, null, player, player.getMainHandItem());
+        ItemStack cropStack = null;
+        for (ItemStack stack : drops) {
+            if (stack.is(Tags.Items.CROPS)) {
+                cropStack = stack;
+                break;
+            }
+        }
+        if (cropStack == null) return; // No crops
+
+        // Check for age property
         IntegerProperty ageProperty = null;
         for (Property<?> prop : state.getProperties()) {
             if (prop.getName().equals("age") && prop instanceof IntegerProperty iprop) {
@@ -244,12 +616,16 @@ public class JolCraftGameEvents {
         if (ageProperty != null) {
             int age = state.getValue(ageProperty);
             int maxAge = ageProperty.getPossibleValues().stream().max(Integer::compare).orElse(0);
-            if (age >= maxAge) {
-                // Fully grown crop of *any* type with an "age" property!
-                // Your custom logic here (reward, stat, etc.)
-            }
+            if (age < maxAge) return; // Not mature
+        } else {
+            // No age property; if crop is a BlockItem, skip bonus (e.g. pumpkin)
+            if (cropStack.getItem() instanceof BlockItem) return;
         }
+
+        // Give exactly one extra crop
+        Block.popResource(level, pos, new ItemStack(cropStack.getItem(), 1));
     }
+
 
     @SubscribeEvent
     public static void onBrewingRecipeRegister(RegisterBrewingRecipesEvent event) {

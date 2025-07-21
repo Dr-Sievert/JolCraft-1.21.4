@@ -11,6 +11,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.entity.custom.animal.MuffhornEntity;
 import net.sievert.jolcraft.entity.custom.dwarf.*;
+import net.sievert.jolcraft.entity.custom.object.RadiantEntity;
 
 import java.util.function.Supplier;
 
@@ -81,6 +82,13 @@ public class JolCraftEntities {
     public static final Supplier<EntityType<MuffhornEntity>> MUFFHORN =
             ENTITY_TYPES.register("muffhorn", () -> EntityType.Builder.of(MuffhornEntity::new, MobCategory.CREATURE)
                     .sized(1.2f, 2.2f).build(MUFFHORN_KEY));
+
+    //Objects
+    public static ResourceKey<EntityType<?>> RADIANT_KEY = ResourceKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "radiant"));
+
+    public static final Supplier<EntityType<RadiantEntity>> RADIANT =
+            ENTITY_TYPES.register("radiant", () -> EntityType.Builder.of(RadiantEntity::new, MobCategory.MISC)
+                    .sized(0.25F, 0.25F).build(RADIANT_KEY));
 
 
     public static void register(IEventBus eventBus) {

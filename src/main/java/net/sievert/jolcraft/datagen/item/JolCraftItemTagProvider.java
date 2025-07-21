@@ -6,7 +6,9 @@ import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
+import net.neoforged.neoforge.common.Tags;
 import net.sievert.jolcraft.JolCraft;
+import net.sievert.jolcraft.block.JolCraftBlocks;
 import net.sievert.jolcraft.data.JolCraftTags;
 import net.sievert.jolcraft.item.JolCraftItems;
 
@@ -20,18 +22,211 @@ public class JolCraftItemTagProvider extends ItemTagsProvider {
 
     @Override
     protected void addTags(HolderLookup.Provider provider) {
+
+        //Vanilla
+
+        tag(ItemTags.DURABILITY_ENCHANTABLE)
+                .add(JolCraftItems.DEEPSLATE_ARTISAN_HAMMER.get())
+                .add(JolCraftItems.MITHRIL_ARTISAN_HAMMER.get())
+                .add(JolCraftItems.DEEPSLATE_CHISEL.get())
+                .add(JolCraftItems.MITHRIL_CHISEL.get())
+                .add(JolCraftItems.COPPER_SPANNER.get())
+                .add(JolCraftItems.IRON_SPANNER.get());
+
+        tag(ItemTags.SWORDS)
+                .add(JolCraftItems.DEEPSLATE_SWORD.get())
+                .add(JolCraftItems.DEEPSLATE_WARHAMMER.get())
+                .add(JolCraftItems.MITHRIL_SWORD.get())
+                .add(JolCraftItems.MITHRIL_WARHAMMER.get());
+
+        tag(ItemTags.PICKAXES)
+                .add(JolCraftItems.DEEPSLATE_PICKAXE.get())
+                .add(JolCraftItems.MITHRIL_PICKAXE.get());
+
+        tag(ItemTags.SHOVELS)
+                .add(JolCraftItems.DEEPSLATE_SHOVEL.get())
+                .add(JolCraftItems.MITHRIL_SHOVEL.get());
+
+        tag(ItemTags.AXES)
+                .add(JolCraftItems.DEEPSLATE_AXE.get())
+                .add(JolCraftItems.MITHRIL_AXE.get());
+
+        tag(ItemTags.HOES)
+                .add(JolCraftItems.DEEPSLATE_HOE.get())
+                .add(JolCraftItems.MITHRIL_HOE.get());
+
+        tag(ItemTags.HEAD_ARMOR)
+                .add(JolCraftItems.DEEPSLATE_HELMET.get())
+                .add(JolCraftItems.MITHRIL_HELMET.get());
+
+        tag(ItemTags.CHEST_ARMOR)
+                .add(JolCraftItems.DEEPSLATE_CHESTPLATE.get())
+                .add(JolCraftItems.MITHRIL_CHESTPLATE.get());
+
+        tag(ItemTags.LEG_ARMOR)
+                .add(JolCraftItems.DEEPSLATE_LEGGINGS.get())
+                .add(JolCraftItems.MITHRIL_LEGGINGS.get());
+
+        tag(ItemTags.FOOT_ARMOR)
+                .add(JolCraftItems.DEEPSLATE_BOOTS.get())
+                .add(JolCraftItems.MITHRIL_BOOTS.get());
+
+        tag(ItemTags.TRIMMABLE_ARMOR)
+                .add(JolCraftItems.DEEPSLATE_HELMET.get())
+                .add(JolCraftItems.DEEPSLATE_CHESTPLATE.get())
+                .add(JolCraftItems.DEEPSLATE_LEGGINGS.get())
+                .add(JolCraftItems.DEEPSLATE_BOOTS.get())
+                .add(JolCraftItems.MITHRIL_HELMET.get())
+                .add(JolCraftItems.MITHRIL_CHESTPLATE.get())
+                .add(JolCraftItems.MITHRIL_LEGGINGS.get())
+                .add(JolCraftItems.MITHRIL_BOOTS.get());
+
+        tag(ItemTags.TRIM_MATERIALS)
+                .add(JolCraftItems.DEEPSLATE_PLATE.get())
+                .add(JolCraftItems.MITHRIL_INGOT.get());
+
+        //Common Neoforge
+
+        tag(Tags.Items.SEEDS)
+                .add(JolCraftItems.BARLEY_SEEDS.get())
+                .add(JolCraftItems.ASGARNIAN_SEEDS.get())
+                .add(JolCraftItems.DUSKHOLD_SEEDS.get())
+                .add(JolCraftItems.KRANDONIAN_SEEDS.get())
+                .add(JolCraftItems.YANILLIAN_SEEDS.get());
+
+        tag(Tags.Items.CROPS)
+                .add(JolCraftItems.BARLEY.get())
+                .add(JolCraftItems.DEEPSLATE_BULBS.get())
+                .add(JolCraftItems.ASGARNIAN_HOPS.get())
+                .add(JolCraftItems.DUSKHOLD_HOPS.get())
+                .add(JolCraftItems.KRANDONIAN_HOPS.get())
+                .add(JolCraftItems.YANILLIAN_HOPS.get());
+
+        tag(Tags.Items.GEMS)
+                .add(JolCraftItems.AEGISCORE.get())
+                .add(JolCraftItems.ASHFANG.get())
+                .add(JolCraftItems.DEEPMARROW.get())
+                .add(JolCraftItems.EARTHBLOOD.get())
+                .add(JolCraftItems.EMBERGLASS.get())
+                .add(JolCraftItems.FROSTVEIN.get())
+                .add(JolCraftItems.GRIMSTONE.get())
+                .add(JolCraftItems.IRONHEART.get())
+                .add(JolCraftItems.LUMIERE.get())
+                .add(JolCraftItems.MOONSHARD.get())
+                .add(JolCraftItems.RUSTAGATE.get())
+                .add(JolCraftItems.SKYBURROW.get())
+                .add(JolCraftItems.SUNGLEAM.get())
+                .add(JolCraftItems.VERDANITE.get())
+                .add(JolCraftItems.WOECRYSTAL.get())
+                .add(JolCraftItems.AEGISCORE_CUT.get())
+                .add(JolCraftItems.ASHFANG_CUT.get())
+                .add(JolCraftItems.DEEPMARROW_CUT.get())
+                .add(JolCraftItems.EARTHBLOOD_CUT.get())
+                .add(JolCraftItems.EMBERGLASS_CUT.get())
+                .add(JolCraftItems.FROSTVEIN_CUT.get())
+                .add(JolCraftItems.GRIMSTONE_CUT.get())
+                .add(JolCraftItems.IRONHEART_CUT.get())
+                .add(JolCraftItems.LUMIERE_CUT.get())
+                .add(JolCraftItems.MOONSHARD_CUT.get())
+                .add(JolCraftItems.RUSTAGATE_CUT.get())
+                .add(JolCraftItems.SKYBURROW_CUT.get())
+                .add(JolCraftItems.SUNGLEAM_CUT.get())
+                .add(JolCraftItems.VERDANITE_CUT.get())
+                .add(JolCraftItems.WOECRYSTAL_CUT.get());
+
+
+        tag(Tags.Items.DUSTS)
+                .add(JolCraftItems.INVERIX.get())
+                .add(JolCraftItems.AEGISCORE_DUST.get())
+                .add(JolCraftItems.ASHFANG_DUST.get())
+                .add(JolCraftItems.DEEPMARROW_DUST.get())
+                .add(JolCraftItems.EARTHBLOOD_DUST.get())
+                .add(JolCraftItems.EMBERGLASS_DUST.get())
+                .add(JolCraftItems.FROSTVEIN_DUST.get())
+                .add(JolCraftItems.GRIMSTONE_DUST.get())
+                .add(JolCraftItems.IRONHEART_DUST.get())
+                .add(JolCraftItems.LUMIERE_DUST.get())
+                .add(JolCraftItems.MOONSHARD_DUST.get())
+                .add(JolCraftItems.RUSTAGATE_DUST.get())
+                .add(JolCraftItems.SKYBURROW_DUST.get())
+                .add(JolCraftItems.SUNGLEAM_DUST.get())
+                .add(JolCraftItems.VERDANITE_DUST.get())
+                .add(JolCraftItems.WOECRYSTAL_DUST.get());
+
+        tag(Tags.Items.MUSHROOMS)
+                .add(JolCraftBlocks.FESTERLING.get().asItem())
+                .add(JolCraftBlocks.DUSKCAP.get().asItem());
+
+        tag(Tags.Items.ORES)
+                .add(JolCraftBlocks.DEEPSLATE_MITHRIL_ORE.get().asItem());
+
+        tag(Tags.Items.ORE_RATES_SINGULAR)
+                .add(JolCraftBlocks.DEEPSLATE_MITHRIL_ORE.get().asItem());
+
+        tag(Tags.Items.ORES_IN_GROUND_DEEPSLATE)
+                .add(JolCraftBlocks.DEEPSLATE_MITHRIL_ORE.get().asItem());
+
+        tag(Tags.Items.RAW_MATERIALS)
+                .add(JolCraftItems.AEGISCORE.get())
+                .add(JolCraftItems.ASHFANG.get())
+                .add(JolCraftItems.DEEPMARROW.get())
+                .add(JolCraftItems.EARTHBLOOD.get())
+                .add(JolCraftItems.EMBERGLASS.get())
+                .add(JolCraftItems.FROSTVEIN.get())
+                .add(JolCraftItems.GRIMSTONE.get())
+                .add(JolCraftItems.IRONHEART.get())
+                .add(JolCraftItems.LUMIERE.get())
+                .add(JolCraftItems.MOONSHARD.get())
+                .add(JolCraftItems.RUSTAGATE.get())
+                .add(JolCraftItems.SKYBURROW.get())
+                .add(JolCraftItems.SUNGLEAM.get())
+                .add(JolCraftItems.VERDANITE.get())
+                .add(JolCraftItems.WOECRYSTAL.get())
+                .add(JolCraftItems.IMPURE_MITHRIL.get())
+                .add(JolCraftItems.PURE_MITHRIL.get())
+                .add(JolCraftItems.DEEPSLATE_BULBS.get());
+
+        tag(Tags.Items.INGOTS)
+                .add(JolCraftItems.MITHRIL_INGOT.get());
+
+        tag(Tags.Items.NUGGETS)
+                .add(JolCraftItems.MITHRIL_NUGGET.get());
+
+        tag(Tags.Items.DRINKS)
+                .add(JolCraftItems.DWARVEN_BREW.get());
+
+        tag(Tags.Items.DRINKS_MILK)
+                .add(JolCraftItems.MUFFHORN_MILK_BUCKET.get());
+
+        tag(Tags.Items.DRINK_CONTAINING_BUCKET)
+                .add(JolCraftItems.MUFFHORN_MILK_BUCKET.get());
+
+        tag(Tags.Items.TOOLS)
+                .addTags(JolCraftTags.Items.SPANNERS)
+                .addTags(JolCraftTags.Items.ARTISAN_HAMMERS)
+                .addTags(JolCraftTags.Items.CHISELS);
+
+        //Custom
+
         tag(JolCraftTags.Items.INK_AND_QUILLS)
                 .add(JolCraftItems.QUILL_FULL.get())
                 .add(JolCraftItems.QUILL_HALF.get())
                 .add(JolCraftItems.QUILL_SMALL.get());
 
 
-        tag(JolCraftTags.Items.SPAWN_EGGS)
+        tag(JolCraftTags.Items.DWARF_SPAWN_EGGS)
                 .add(JolCraftItems.DWARF_SPAWN_EGG.get())
                 .add(JolCraftItems.DWARF_GUARD_SPAWN_EGG.get())
                 .add(JolCraftItems.DWARF_HISTORIAN_SPAWN_EGG.get())
                 .add(JolCraftItems.DWARF_SCRAPPER_SPAWN_EGG.get())
                 .add(JolCraftItems.DWARF_MERCHANT_SPAWN_EGG.get());
+
+        tag(JolCraftTags.Items.CREATURE_SPAWN_EGGS)
+                .add(JolCraftItems.MUFFHORN_SPAWN_EGG.get());
+
+        tag(JolCraftTags.Items.SPAWN_EGGS)
+                .addTags(JolCraftTags.Items.DWARF_SPAWN_EGGS)
+                .addTags(JolCraftTags.Items.CREATURE_SPAWN_EGGS);
 
         tag(JolCraftTags.Items.GEODES)
                 .add(JolCraftItems.GEODE_SMALL.get())
@@ -196,20 +391,6 @@ public class JolCraftItemTagProvider extends ItemTagsProvider {
                 .add(JolCraftItems.KRANDONIAN_HOPS.get())
                 .add(JolCraftItems.YANILLIAN_HOPS.get());
 
-        tag(ItemTags.TRIMMABLE_ARMOR)
-                .add(JolCraftItems.DEEPSLATE_HELMET.get())
-                .add(JolCraftItems.DEEPSLATE_CHESTPLATE.get())
-                .add(JolCraftItems.DEEPSLATE_LEGGINGS.get())
-                .add(JolCraftItems.DEEPSLATE_BOOTS.get())
-                .add(JolCraftItems.MITHRIL_HELMET.get())
-                .add(JolCraftItems.MITHRIL_CHESTPLATE.get())
-                .add(JolCraftItems.MITHRIL_LEGGINGS.get())
-                .add(JolCraftItems.MITHRIL_BOOTS.get());
-
-        tag(ItemTags.TRIM_MATERIALS)
-                .add(JolCraftItems.DEEPSLATE_PLATE.get())
-                .add(JolCraftItems.MITHRIL_INGOT.get());
-
         tag(JolCraftTags.Items.BONUS_TRIM_MATERIALS)
                 .add(JolCraftItems.AEGISCORE_CUT.get())
                 .add(JolCraftItems.ASHFANG_CUT.get())
@@ -253,51 +434,9 @@ public class JolCraftItemTagProvider extends ItemTagsProvider {
         tag(JolCraftTags.Items.REPAIRS_MITHRIL)
                 .add(JolCraftItems.MITHRIL_INGOT.get());
 
-        tag(ItemTags.DURABILITY_ENCHANTABLE)
-                .add(JolCraftItems.DEEPSLATE_ARTISAN_HAMMER.get())
-                .add(JolCraftItems.MITHRIL_ARTISAN_HAMMER.get())
-                .add(JolCraftItems.DEEPSLATE_CHISEL.get())
-                .add(JolCraftItems.MITHRIL_CHISEL.get())
+        tag(JolCraftTags.Items.SPANNERS)
                 .add(JolCraftItems.COPPER_SPANNER.get())
                 .add(JolCraftItems.IRON_SPANNER.get());
-
-        tag(ItemTags.SWORDS)
-                .add(JolCraftItems.DEEPSLATE_SWORD.get())
-                .add(JolCraftItems.DEEPSLATE_WARHAMMER.get())
-                .add(JolCraftItems.MITHRIL_SWORD.get())
-                .add(JolCraftItems.MITHRIL_WARHAMMER.get());
-
-        tag(ItemTags.PICKAXES)
-                .add(JolCraftItems.DEEPSLATE_PICKAXE.get())
-                .add(JolCraftItems.MITHRIL_PICKAXE.get());
-
-        tag(ItemTags.SHOVELS)
-                .add(JolCraftItems.DEEPSLATE_SHOVEL.get())
-                .add(JolCraftItems.MITHRIL_SHOVEL.get());
-
-        tag(ItemTags.AXES)
-                .add(JolCraftItems.DEEPSLATE_AXE.get())
-                .add(JolCraftItems.MITHRIL_AXE.get());
-
-        tag(ItemTags.HOES)
-                .add(JolCraftItems.DEEPSLATE_HOE.get())
-                .add(JolCraftItems.MITHRIL_HOE.get());
-
-        tag(ItemTags.HEAD_ARMOR)
-                .add(JolCraftItems.DEEPSLATE_HELMET.get())
-                .add(JolCraftItems.MITHRIL_HELMET.get());
-
-        tag(ItemTags.CHEST_ARMOR)
-                .add(JolCraftItems.DEEPSLATE_CHESTPLATE.get())
-                .add(JolCraftItems.MITHRIL_CHESTPLATE.get());
-
-        tag(ItemTags.LEG_ARMOR)
-                .add(JolCraftItems.DEEPSLATE_LEGGINGS.get())
-                .add(JolCraftItems.MITHRIL_LEGGINGS.get());
-
-        tag(ItemTags.FOOT_ARMOR)
-                .add(JolCraftItems.DEEPSLATE_BOOTS.get())
-                .add(JolCraftItems.MITHRIL_BOOTS.get());
 
         tag(JolCraftTags.Items.ARTISAN_HAMMERS)
                 .add(JolCraftItems.DEEPSLATE_ARTISAN_HAMMER.get())

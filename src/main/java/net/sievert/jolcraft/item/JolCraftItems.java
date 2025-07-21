@@ -10,7 +10,6 @@ import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.block.JolCraftBlocks;
-import net.sievert.jolcraft.data.JolCraftTags;
 import net.sievert.jolcraft.entity.JolCraftEntities;
 import net.sievert.jolcraft.item.armor.JolCraftArmorMaterials;
 import net.sievert.jolcraft.item.custom.*;
@@ -341,7 +340,6 @@ public class JolCraftItems {
             (properties) -> new SpawnEggItem(JolCraftEntities.DWARF_MINER.get(), properties));
 
 
-
     public static final DeferredItem<Item> MUFFHORN_SPAWN_EGG = ITEMS.registerItem("muffhorn_spawn_egg",
             (properties) -> new SpawnEggItem(JolCraftEntities.MUFFHORN.get(), properties));
 
@@ -414,50 +412,21 @@ public class JolCraftItems {
     public static final DeferredItem<Item> WOECRYSTAL = ITEMS.registerItem("woecrystal",
             Item::new, new Item.Properties());
 
-    public static final DeferredItem<Item> AEGISCORE_CUT = ITEMS.registerItem("aegiscore_cut",
-            Item::new, new Item.Properties());
-
-    public static final DeferredItem<Item> ASHFANG_CUT = ITEMS.registerItem("ashfang_cut",
-            Item::new, new Item.Properties());
-
-    public static final DeferredItem<Item> DEEPMARROW_CUT = ITEMS.registerItem("deepmarrow_cut",
-            Item::new, new Item.Properties());
-
-    public static final DeferredItem<Item> EARTHBLOOD_CUT = ITEMS.registerItem("earthblood_cut",
-            Item::new, new Item.Properties());
-
-    public static final DeferredItem<Item> EMBERGLASS_CUT = ITEMS.registerItem("emberglass_cut",
-            Item::new, new Item.Properties());
-
-    public static final DeferredItem<Item> FROSTVEIN_CUT = ITEMS.registerItem("frostvein_cut",
-            Item::new, new Item.Properties());
-
-    public static final DeferredItem<Item> GRIMSTONE_CUT = ITEMS.registerItem("grimstone_cut",
-            Item::new, new Item.Properties());
-
-    public static final DeferredItem<Item> IRONHEART_CUT = ITEMS.registerItem("ironheart_cut",
-            Item::new, new Item.Properties());
-
-    public static final DeferredItem<Item> LUMIERE_CUT = ITEMS.registerItem("lumiere_cut",
-            Item::new, new Item.Properties());
-
-    public static final DeferredItem<Item> MOONSHARD_CUT = ITEMS.registerItem("moonshard_cut",
-            Item::new, new Item.Properties());
-
-    public static final DeferredItem<Item> RUSTAGATE_CUT = ITEMS.registerItem("rustagate_cut",
-            Item::new, new Item.Properties());
-
-    public static final DeferredItem<Item> SKYBURROW_CUT = ITEMS.registerItem("skyburrow_cut",
-            Item::new, new Item.Properties());
-
-    public static final DeferredItem<Item> SUNGLEAM_CUT = ITEMS.registerItem("sungleam_cut",
-            Item::new, new Item.Properties());
-
-    public static final DeferredItem<Item> VERDANITE_CUT = ITEMS.registerItem("verdanite_cut",
-            Item::new, new Item.Properties());
-
-    public static final DeferredItem<Item> WOECRYSTAL_CUT = ITEMS.registerItem("woecrystal_cut",
-            Item::new, new Item.Properties());
+    public static final DeferredItem<Item> AEGISCORE_CUT    = ITEMS.registerItem("aegiscore_cut",    props -> new CutGemItem(props, "aegiscore"));
+    public static final DeferredItem<Item> ASHFANG_CUT      = ITEMS.registerItem("ashfang_cut",      props -> new CutGemItem(props, "ashfang"));
+    public static final DeferredItem<Item> DEEPMARROW_CUT   = ITEMS.registerItem("deepmarrow_cut",   props -> new CutGemItem(props, "deepmarrow"));
+    public static final DeferredItem<Item> EARTHBLOOD_CUT   = ITEMS.registerItem("earthblood_cut",   props -> new CutGemItem(props, "earthblood"));
+    public static final DeferredItem<Item> EMBERGLASS_CUT   = ITEMS.registerItem("emberglass_cut",   props -> new CutGemItem(props, "emberglass"));
+    public static final DeferredItem<Item> FROSTVEIN_CUT    = ITEMS.registerItem("frostvein_cut",    props -> new CutGemItem(props, "frostvein"));
+    public static final DeferredItem<Item> GRIMSTONE_CUT    = ITEMS.registerItem("grimstone_cut",    props -> new CutGemItem(props, "grimstone"));
+    public static final DeferredItem<Item> IRONHEART_CUT    = ITEMS.registerItem("ironheart_cut",    props -> new CutGemItem(props, "ironheart"));
+    public static final DeferredItem<Item> LUMIERE_CUT      = ITEMS.registerItem("lumiere_cut",      props -> new CutGemItem(props, "lumiere"));
+    public static final DeferredItem<Item> MOONSHARD_CUT    = ITEMS.registerItem("moonshard_cut",    props -> new CutGemItem(props, "moonshard"));
+    public static final DeferredItem<Item> RUSTAGATE_CUT    = ITEMS.registerItem("rustagate_cut",    props -> new CutGemItem(props, "rustagate"));
+    public static final DeferredItem<Item> SKYBURROW_CUT    = ITEMS.registerItem("skyburrow_cut",    props -> new CutGemItem(props, "skyburrow"));
+    public static final DeferredItem<Item> SUNGLEAM_CUT     = ITEMS.registerItem("sungleam_cut",     props -> new CutGemItem(props, "sungleam"));
+    public static final DeferredItem<Item> VERDANITE_CUT    = ITEMS.registerItem("verdanite_cut",    props -> new CutGemItem(props, "verdanite"));
+    public static final DeferredItem<Item> WOECRYSTAL_CUT   = ITEMS.registerItem("woecrystal_cut",   props -> new CutGemItem(props, "woecrystal"));
 
     //Crops, food and brewing
 

@@ -20,9 +20,17 @@ public class JolCraftTags {
 
         public static final TagKey<Item> SPAWN_EGGS = createTag("spawn_eggs");
 
+        public static final TagKey<Item> DWARF_SPAWN_EGGS = createTag("dwarf_spawn_eggs");
+
+        public static final TagKey<Item> CREATURE_SPAWN_EGGS = createTag("creature_spawn_eggs");
+
+        public static final TagKey<Item> MONSTER_SPAWN_EGGS = createTag("monster_spawn_eggs");
+
         public static final TagKey<Item> INK_AND_QUILLS = createTag("ink_and_quills");
 
         public static final TagKey<Item> GEODES = createTag("geodes");
+
+        public static final TagKey<Item> SPANNERS = createTag("spanners");
 
         public static final TagKey<Item> ARTISAN_HAMMERS = createTag("artisan_hammers");
 

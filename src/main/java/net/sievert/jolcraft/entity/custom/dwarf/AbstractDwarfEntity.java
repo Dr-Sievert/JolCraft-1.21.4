@@ -322,7 +322,7 @@ public class AbstractDwarfEntity extends AbstractVillager {
 
     //Blocks all interactions globally (e.g., spawn eggs)
     protected boolean isGloballyBlacklistedItem(ItemStack stack) {
-        return stack.is(JolCraftTags.Items.SPAWN_EGGS);
+        return stack.is(JolCraftTags.Items.DWARF_SPAWN_EGGS);
     }
 
     protected boolean isBusyOrBlacklisted(Player player, ItemStack stack) {
