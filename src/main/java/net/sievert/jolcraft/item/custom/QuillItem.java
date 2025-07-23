@@ -7,19 +7,19 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.sievert.jolcraft.item.JolCraftItems;
+import net.sievert.jolcraft.item.custom.tooltip.SimpleTooltipItem;
 
-public class QuillItem extends Item {
+public class QuillItem extends SimpleTooltipItem {
 
-    public QuillItem(Properties properties) {
-        super(properties);
+    public QuillItem(Properties properties, String tooltipKey) {
+        super(properties, tooltipKey);
     }
 
     @Override
     public InteractionResult interactLivingEntity(ItemStack stack, Player player, LivingEntity target, InteractionHand hand) {
-        if (target.getType() == EntityType.SQUID && !stack.is(JolCraftItems.QUILL_FULL)) {
+        if (target.getType() == EntityType.SQUID && !stack.is(JolCraftItems.QUILL_FULL.get())) {
             if (!player.level().isClientSide) {
                 ItemStack fullQuill = new ItemStack(JolCraftItems.QUILL_FULL.get());
 

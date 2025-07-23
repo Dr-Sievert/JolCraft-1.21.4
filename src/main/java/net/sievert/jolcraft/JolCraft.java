@@ -1,18 +1,12 @@
 package net.sievert.jolcraft;
 
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.*;
-import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.client.event.*;
 import net.sievert.jolcraft.advancement.JolCraftCriteriaTriggers;
@@ -29,17 +23,15 @@ import net.sievert.jolcraft.entity.client.render.animal.MuffhornRenderer;
 import net.sievert.jolcraft.entity.client.render.block.StrongboxRenderer;
 import net.sievert.jolcraft.entity.client.render.dwarf.*;
 import net.sievert.jolcraft.entity.client.render.object.RadiantRenderer;
-import net.sievert.jolcraft.entity.custom.object.RadiantEntity;
 import net.sievert.jolcraft.item.JolCraftCreativeModeTabs;
 import net.sievert.jolcraft.item.armor.JolCraftEquipmentAssets;
 import net.sievert.jolcraft.item.JolCraftItems;
 import net.sievert.jolcraft.loot.JolCraftLootModifiers;
 import net.sievert.jolcraft.network.JolCraftNetworking;
-import net.sievert.jolcraft.network.client.data.MyClientDeliriumData;
+import net.sievert.jolcraft.network.client.data.ClientDeliriumData;
 import net.sievert.jolcraft.item.potion.JolCraftPotions;
 import net.sievert.jolcraft.recipe.JolCraftRecipes;
 import net.sievert.jolcraft.screen.JolCraftMenuTypes;
-import net.sievert.jolcraft.screen.custom.lapidary_bench.LapidaryBenchMenu;
 import net.sievert.jolcraft.screen.custom.lapidary_bench.LapidaryBenchScreen;
 import net.sievert.jolcraft.screen.custom.strongbox.LockMenu;
 import net.sievert.jolcraft.screen.custom.strongbox.LockScreen;
@@ -51,8 +43,6 @@ import net.sievert.jolcraft.worldgen.processor.JolCraftProcessors;
 import net.sievert.jolcraft.worldgen.structure.JolCraftStructures;
 import org.slf4j.Logger;
 import com.mojang.logging.LogUtils;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.world.level.block.Blocks;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -234,8 +224,8 @@ public class JolCraft
 
             // Delirium "rising edge" logic
             // Track previous muffleTicks value
-            int prevMuffleTicks = MyClientDeliriumData.getAndStorePreviousTicks(); // You need to implement this or use a static field here
-            int currentMuffleTicks = MyClientDeliriumData.getMuffleTicks();
+            int prevMuffleTicks = ClientDeliriumData.getAndStorePreviousTicks(); // You need to implement this or use a static field here
+            int currentMuffleTicks = ClientDeliriumData.getMuffleTicks();
 
             if (prevMuffleTicks == 0 && currentMuffleTicks > 0) {
                 // Burst just started: play hallucination sound
@@ -243,7 +233,7 @@ public class JolCraft
                     mc.player.playSound(SoundEvents.AMBIENT_CAVE.value(), 0.7F + mc.level.random.nextFloat() * 0.4F, 0.8F + mc.level.random.nextFloat() * 0.4F);
                 }
             }
-            MyClientDeliriumData.tick();
+            ClientDeliriumData.tick();
         }
     }
 

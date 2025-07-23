@@ -5,7 +5,7 @@ import net.minecraft.world.entity.player.Player;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.sievert.jolcraft.data.custom.lang.AncientDwarvenLanguage;
-import net.sievert.jolcraft.network.client.data.MyClientAncientLanguageData;
+import net.sievert.jolcraft.network.client.data.ClientAncientLanguageData;
 
 public class AncientDwarvenLanguageHelper {
 
@@ -36,12 +36,12 @@ public class AncientDwarvenLanguageHelper {
     @OnlyIn(Dist.CLIENT)
     public static boolean knowsAncientDwarvishClient() {
         Player player = Minecraft.getInstance().player;
-        return player != null && (player.isCreative() || MyClientAncientLanguageData.knowsLanguage());
+        return player != null && (player.isCreative() || ClientAncientLanguageData.knowsLanguage());
     }
 
     @OnlyIn(Dist.CLIENT)
     public static boolean knowsAncientDwarvishClientBypassCreative() {
         Player player = Minecraft.getInstance().player;
-        return player != null && MyClientAncientLanguageData.knowsLanguage();
+        return player != null && ClientAncientLanguageData.knowsLanguage();
     }
 }

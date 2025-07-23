@@ -1,4 +1,4 @@
-package net.sievert.jolcraft.item.custom;
+package net.sievert.jolcraft.item.custom.tooltip;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -73,16 +73,16 @@ public abstract class AncientUnidentifiedItem extends AncientItemBase {
 
     /** Tooltip (content only, not gating/knowledge logic). */
     @Override
-    protected abstract Component getFullyReadableTooltip(ItemStack stack, Player player, List<Component> tooltip, TooltipFlag flag);
+    protected abstract List<Component> getFullyReadableTooltip(ItemStack stack, Player player, List<Component> tooltip, TooltipFlag flag);
 
     @Override
-    protected abstract Component getLockedTooltip(ItemStack stack, Player player, List<Component> tooltip, TooltipFlag flag);
+    protected abstract List<Component> getLockedTooltip(ItemStack stack, Player player, List<Component> tooltip, TooltipFlag flag);
 
     @Override
-    protected abstract Component getPartialUnderstandingTooltip(ItemStack stack, Player player, List<Component> tooltip, TooltipFlag flag);
+    protected abstract List<Component> getPartialUnderstandingTooltip(ItemStack stack, Player player, List<Component> tooltip, TooltipFlag flag);
 
     @Override
-    protected abstract Component getUnreadableTooltipSGA(ItemStack stack, Player player, List<Component> tooltip, TooltipFlag flag);
+    protected abstract List<Component> getUnreadableTooltipSGA(ItemStack stack, Player player, List<Component> tooltip, TooltipFlag flag);
 
     /** Message when identification succeeds. */
     protected abstract Component getIdentifySuccessMessage(ServerPlayer player, ItemStack identified);

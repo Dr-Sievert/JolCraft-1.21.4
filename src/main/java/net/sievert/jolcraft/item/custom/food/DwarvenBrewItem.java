@@ -1,6 +1,7 @@
 package net.sievert.jolcraft.item.custom.food;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -42,22 +43,28 @@ public class DwarvenBrewItem extends Item {
         return hops;
     }
 
-    /** Adds hover tooltip for hops */
     @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         super.appendHoverText(stack, context, tooltip, flag);
 
-        List<HopsType> hops = getHopsFromItem(stack);
-        if (!hops.isEmpty()) {
-            tooltip.add(Component.translatable("tooltip.jolcraft.brew.hops_added").withStyle(ChatFormatting.GRAY));
-            for (HopsType hop : hops) {
-                tooltip.add(Component.translatable("tooltip.jolcraft.hops." + hop.name().toLowerCase()).withStyle(ChatFormatting.DARK_GREEN));
+        if (Screen.hasShiftDown()) {
+            List<HopsType> hops = getHopsFromItem(stack);
+            if (!hops.isEmpty()) {
+                tooltip.add(Component.translatable("tooltip.jolcraft.brew.hops_added").withStyle(ChatFormatting.GRAY));
+                for (HopsType hop : hops) {
+                    tooltip.add(Component.translatable("tooltip.jolcraft.hops." + hop.name().toLowerCase()).withStyle(ChatFormatting.DARK_GREEN));
+                }
+            } else {
+                tooltip.add(Component.translatable("tooltip.jolcraft.brew.no_hops_added").withStyle(ChatFormatting.GRAY));
             }
         } else {
-            tooltip.add(Component.translatable("tooltip.jolcraft.brew.no_hops_added").withStyle(ChatFormatting.GRAY));
+            Component shiftKey = Component.literal("Shift").withStyle(ChatFormatting.BLUE);
+            tooltip.add(Component.translatable("tooltip.jolcraft.shift", shiftKey)
+                    .withStyle(ChatFormatting.DARK_GRAY));
         }
     }
+
 
     /** Applies effects from each hop type when consumed */
     private void applyHopEffects(ItemStack stack, Player player) {

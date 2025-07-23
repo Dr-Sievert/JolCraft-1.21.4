@@ -12,7 +12,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.sievert.jolcraft.data.JolCraftDataComponents;
 import net.sievert.jolcraft.item.JolCraftItems;
-import net.sievert.jolcraft.item.custom.AncientUnidentifiedItem;
+import net.sievert.jolcraft.item.custom.tooltip.AncientUnidentifiedItem;
 import net.sievert.jolcraft.util.attachment.DwarvenLanguageHelper;
 import net.sievert.jolcraft.util.attachment.AncientEffectHelper;
 import net.sievert.jolcraft.util.dwarf.DwarvenLoreHelper;
@@ -54,26 +54,30 @@ public class AncientUnidentifiedTomeItem extends AncientUnidentifiedItem {
         return tome;
     }
 
-
     @Override
-    protected Component getFullyReadableTooltip(ItemStack stack, Player player, List<Component> tooltip, TooltipFlag flag) {
-        return Component.translatable("tooltip.jolcraft.ancient_dwarven_tome.unidentified").withStyle(ChatFormatting.GRAY);
+    protected List<Component> getFullyReadableTooltip(ItemStack stack, Player player, List<Component> tooltip, TooltipFlag flag) {
+        return List.of(Component.translatable("tooltip.jolcraft.unidentified").withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC));
     }
 
     @Override
-    protected Component getLockedTooltip(ItemStack stack, Player player, List<Component> tooltip, TooltipFlag flag) {
-        return Component.translatable("tooltip.jolcraft.dwarven_tome.locked").withStyle(ChatFormatting.GRAY);
+    protected List<Component> getLockedTooltip(ItemStack stack, Player player, List<Component> tooltip, TooltipFlag flag) {
+        return List.of(Component.translatable("tooltip.jolcraft.dwarven_tome.locked").withStyle(ChatFormatting.GRAY));
     }
 
     @Override
-    protected Component getPartialUnderstandingTooltip(ItemStack stack, Player player, List<Component> tooltip, TooltipFlag flag) {
-        return Component.translatable("tooltip.jolcraft.ancient_dwarven_tome.partial_understanding")
-                .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC);
+    protected List<Component> getPartialUnderstandingTooltip(ItemStack stack, Player player, List<Component> tooltip, TooltipFlag flag) {
+        return List.of(Component.translatable("tooltip.jolcraft.ancient_dwarven_tome.partial_understanding")
+                .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
     }
 
     @Override
-    protected Component getUnreadableTooltipSGA(ItemStack stack, Player player, List<Component> tooltip, TooltipFlag flag) {
-        return Component.translatable("tooltip.jolcraft.ancient_dwarven_tome.unidentified").withStyle(ChatFormatting.GRAY);
+    protected List<Component> getUnreadableTooltipSGA(ItemStack stack, Player player, List<Component> tooltip, TooltipFlag flag) {
+        return List.of(Component.translatable("tooltip.jolcraft.ancient_dwarven_tome.unidentified").withStyle(ChatFormatting.GRAY));
+    }
+
+    @Override
+    protected List<Component> getNoShiftTooltip(ItemStack stack, Player player, List<Component> tooltip, TooltipFlag flag) {
+        return List.of(Component.translatable("tooltip.jolcraft.ancient_dwarven_tome.unidentified").withStyle(ChatFormatting.GRAY));
     }
 
     @Override

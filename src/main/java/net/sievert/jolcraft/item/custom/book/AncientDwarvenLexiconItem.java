@@ -11,7 +11,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.sievert.jolcraft.item.custom.AncientItemBase;
+import net.sievert.jolcraft.item.custom.tooltip.AncientItemBase;
 import net.sievert.jolcraft.network.JolCraftNetworking;
 import net.sievert.jolcraft.network.packet.ClientboundAncientLanguagePacket;
 import net.sievert.jolcraft.sound.JolCraftSounds;
@@ -61,28 +61,32 @@ public class AncientDwarvenLexiconItem extends AncientItemBase {
         return InteractionResult.SUCCESS;
     }
 
-
     // ===== Tooltip Providers (no logic/gating here!) =====
 
     @Override
-    protected Component getFullyReadableTooltip(ItemStack stack, Player player, List<Component> tooltip, TooltipFlag flag) {
-        return Component.translatable("tooltip.jolcraft.ancient_dwarven_lexicon.unlocked").withStyle(ChatFormatting.GRAY);
+    protected List<Component> getFullyReadableTooltip(ItemStack stack, Player player, List<Component> tooltip, TooltipFlag flag) {
+        return List.of(Component.translatable("tooltip.jolcraft.ancient_dwarven_lexicon.shift").withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC));
     }
 
     @Override
-    protected Component getLockedTooltip(ItemStack stack, Player player, List<Component> tooltip, TooltipFlag flag) {
-        return Component.translatable("tooltip.jolcraft.ancient_dwarven_lexicon.locked").withStyle(ChatFormatting.GRAY);
+    protected List<Component> getNoShiftTooltip(ItemStack stack, Player player, List<Component> tooltip, TooltipFlag flag) {
+        return List.of(Component.translatable("tooltip.jolcraft.ancient_dwarven_lexicon.unlocked").withStyle(ChatFormatting.GRAY));
     }
 
     @Override
-    protected Component getPartialUnderstandingTooltip(ItemStack stack, Player player, List<Component> tooltip, TooltipFlag flag) {
-        return Component.translatable("tooltip.jolcraft.ancient_dwarven_tome.partial_understanding")
-                .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC);
+    protected List<Component> getLockedTooltip(ItemStack stack, Player player, List<Component> tooltip, TooltipFlag flag) {
+        return List.of(Component.translatable("tooltip.jolcraft.ancient_dwarven_lexicon.locked").withStyle(ChatFormatting.GRAY));
     }
 
     @Override
-    protected Component getUnreadableTooltipSGA(ItemStack stack, Player player, List<Component> tooltip, TooltipFlag flag) {
+    protected List<Component> getPartialUnderstandingTooltip(ItemStack stack, Player player, List<Component> tooltip, TooltipFlag flag) {
+        return List.of(Component.translatable("tooltip.jolcraft.ancient_dwarven_tome.partial_understanding")
+                .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
+    }
+
+    @Override
+    protected List<Component> getUnreadableTooltipSGA(ItemStack stack, Player player, List<Component> tooltip, TooltipFlag flag) {
         // This just returns the same as fully readable, the base will SGA-ify it if needed.
-        return Component.translatable("tooltip.jolcraft.ancient_dwarven_lexicon.unlocked").withStyle(ChatFormatting.GRAY);
+        return List.of(Component.translatable("tooltip.jolcraft.ancient_dwarven_lexicon.unlocked").withStyle(ChatFormatting.GRAY));
     }
 }

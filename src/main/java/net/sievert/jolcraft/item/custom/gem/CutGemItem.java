@@ -1,6 +1,7 @@
 package net.sievert.jolcraft.item.custom.gem;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -68,8 +69,23 @@ public class CutGemItem extends Item {
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-        List<Component> lines = GEM_TOOLTIPS.get(gemKey);
-        if (lines != null) tooltip.addAll(lines);
+        if (Screen.hasShiftDown()) {
+            // Show only one, simple, shift-aware detailed line
+            tooltip.add(Component.translatable("tooltip.jolcraft.cut_gem")
+                    .withStyle(net.minecraft.ChatFormatting.GRAY, net.minecraft.ChatFormatting.ITALIC));
+        }
+        else{
+            // Always show the main short gem tooltip first
+            List<Component> lines = GEM_TOOLTIPS.get(gemKey);
+            if (lines != null) tooltip.addAll(lines);
+            // Show shift info prompt under the short tooltip
+            Component shiftKey = Component.literal("Shift").withStyle(net.minecraft.ChatFormatting.BLUE);
+            tooltip.add(Component.translatable("tooltip.jolcraft.shift", shiftKey)
+                    .withStyle(net.minecraft.ChatFormatting.DARK_GRAY));
+        }
+
         super.appendHoverText(stack, context, tooltip, flag);
     }
+
+
 }

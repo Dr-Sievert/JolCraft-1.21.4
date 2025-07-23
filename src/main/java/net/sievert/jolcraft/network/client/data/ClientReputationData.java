@@ -4,7 +4,7 @@ import net.minecraft.resources.ResourceLocation;
 
 import java.util.*;
 
-public class MyClientReputationData {
+public class ClientReputationData {
 
     // Track endorsement/animation state per entity (by their UUID or entityId)
     private static final Map<Integer, Boolean> endorsementAnimationStates = new HashMap<>();

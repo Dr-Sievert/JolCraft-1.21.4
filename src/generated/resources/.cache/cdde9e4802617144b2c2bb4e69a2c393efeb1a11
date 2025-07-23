@@ -1,10 +1,10 @@
-// 1.21.4	2025-07-21T01:48:39.4519555	Tags for minecraft:block mod id jolcraft
+// 1.21.4	2025-07-23T02:16:04.1140871	Tags for minecraft:block mod id jolcraft
 d1ed0898dd681303ee3b03c52659d50c9dd94332 data/c/tags/block/chests.json
 0ff2a7c53c8c827943a7a6b23d342e432fd861da data/c/tags/block/ores.json
 0ff2a7c53c8c827943a7a6b23d342e432fd861da data/c/tags/block/ores_in_ground/deepslate.json
 0ff2a7c53c8c827943a7a6b23d342e432fd861da data/c/tags/block/ore_rates/singular.json
 bcb32c1f55fd63da358d8fe1b9f94379ace2e698 data/c/tags/block/storage_blocks.json
-c73dafa2b8586fb43a00f9a35d72fe62a13313de data/jolcraft/tags/block/deepslate_bulbs_plantable.json
+8a079b60d9ebeb47a535ecda3d36ac66e4961130 data/jolcraft/tags/block/deepslate_bulbs_plantable.json
 a643c53cccfa3e74996d0ef3d38233ffb7ffdbc7 data/jolcraft/tags/block/hops_bottom.json
 7cd4557c384309101c6591a20fe38183347ff98f data/jolcraft/tags/block/hops_top.json
 e029c9ce41c79de5335ee5ca92c10a4ba532ee4f data/minecraft/tags/block/mineable/hoe.json

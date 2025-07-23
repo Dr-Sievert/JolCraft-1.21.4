@@ -13,6 +13,9 @@ import net.sievert.jolcraft.block.JolCraftBlocks;
 import net.sievert.jolcraft.entity.JolCraftEntities;
 import net.sievert.jolcraft.item.armor.JolCraftArmorMaterials;
 import net.sievert.jolcraft.item.custom.*;
+import net.sievert.jolcraft.item.custom.contract.ProfessionContractItem;
+import net.sievert.jolcraft.item.custom.contract.SignedContractItem;
+import net.sievert.jolcraft.item.custom.contract.WrittenContractItem;
 import net.sievert.jolcraft.item.custom.scrapper.*;
 import net.sievert.jolcraft.item.custom.merchant.*;
 import net.sievert.jolcraft.item.custom.book.*;
@@ -23,6 +26,10 @@ import net.sievert.jolcraft.item.custom.food.DwarvenBrewItem;
 import net.sievert.jolcraft.item.custom.scrapper.SpannerItem;
 import net.sievert.jolcraft.item.custom.tablet.LegendaryReputationTabletItem;
 import net.sievert.jolcraft.item.custom.tablet.ReputationTabletItem;
+import net.sievert.jolcraft.item.custom.tooltip.LegendaryItem;
+import net.sievert.jolcraft.item.custom.tooltip.SimpleTooltipBlockItem;
+import net.sievert.jolcraft.item.custom.tooltip.SimpleTooltipItem;
+import net.sievert.jolcraft.item.custom.tooltip.SimpleTooltipLegendaryItem;
 import net.sievert.jolcraft.item.tool.JolCraftToolMaterials;
 import net.sievert.jolcraft.item.food.JolCraftFoodProperties;
 
@@ -59,9 +66,10 @@ public class JolCraftItems {
                     .component(DataComponents.CONTAINER, ItemContainerContents.EMPTY))
     );
 
-    public static final DeferredItem<Item> LOCKPICK = ITEMS.registerItem("lockpick",
-            Item::new, new Item.Properties());
-
+    public static final DeferredItem<Item> LOCKPICK = ITEMS.registerItem(
+            "lockpick",
+            props -> new SimpleTooltipItem(props, "lockpick")
+    );
 
     //Materials, Armors, Trims, Tools and Weapons
     public static final DeferredItem<Item> IMPURE_MITHRIL = ITEMS.registerItem("impure_mithril",
@@ -70,8 +78,10 @@ public class JolCraftItems {
     public static final DeferredItem<Item> PURE_MITHRIL = ITEMS.registerItem("pure_mithril",
             Item::new, new Item.Properties().fireResistant().rarity(Rarity.RARE));
 
-    public static final DeferredItem<Item> MITHRIL_INGOT = ITEMS.registerItem("mithril_ingot",
-            Item::new, new Item.Properties().fireResistant().rarity(Rarity.RARE));
+    public static final DeferredItem<Item> MITHRIL_INGOT = ITEMS.registerItem(
+            "mithril_ingot",
+            props -> new SimpleTooltipItem(props.fireResistant().rarity(Rarity.RARE), "trim_material")
+    );
 
     public static final DeferredItem<Item> MITHRIL_NUGGET = ITEMS.registerItem("mithril_nugget",
             Item::new, new Item.Properties().fireResistant().rarity(Rarity.RARE));
@@ -110,8 +120,10 @@ public class JolCraftItems {
             props -> new MithrilArmorItem(JolCraftArmorMaterials.MITHRIL_ARMOR_MATERIAL, ArmorType.BOOTS, props.fireResistant().rarity(Rarity.RARE)));
 
 
-    public static final DeferredItem<Item> DEEPSLATE_PLATE = ITEMS.registerItem("deepslate_plate",
-            Item::new, new Item.Properties());
+    public static final DeferredItem<Item> DEEPSLATE_PLATE = ITEMS.registerItem(
+            "deepslate_plate",
+            props -> new SimpleTooltipItem(props, "trim_material")
+    );
 
     public static final DeferredItem<Item> DEEPSLATE_ROD = ITEMS.registerItem("deepslate_rod",
             Item::new, new Item.Properties());
@@ -226,83 +238,88 @@ public class JolCraftItems {
             Item::new, new Item.Properties());
 
     public static final DeferredItem<Item> CONTRACT_WRITTEN = ITEMS.registerItem("contract_written",
-            Item::new, new Item.Properties());
+            WrittenContractItem::new, new Item.Properties());
 
     public static final DeferredItem<Item> CONTRACT_SIGNED = ITEMS.registerItem("contract_signed",
-            Item::new, new Item.Properties());
+            SignedContractItem::new, new Item.Properties());
 
-    public static final DeferredItem<Item> GUILD_SIGIL = ITEMS.registerItem("guild_sigil",
-            Item::new, new Item.Properties());
+    public static final DeferredItem<Item> GUILD_SIGIL = ITEMS.registerItem(
+            "guild_sigil",
+            props -> new SimpleTooltipItem(props, "guild_sigil")
+    );
 
     public static final DeferredItem<Item> CONTRACT_GUILDMASTER = ITEMS.registerItem("contract_guildmaster",
-            Item::new, new Item.Properties().rarity(Rarity.UNCOMMON));
+            ProfessionContractItem::new, new Item.Properties().rarity(Rarity.UNCOMMON));
 
 
     //Tier 1
     public static final DeferredItem<Item> CONTRACT_MERCHANT = ITEMS.registerItem("contract_merchant",
-            ContractItem::new, new Item.Properties().rarity(Rarity.UNCOMMON));
+            ProfessionContractItem::new, new Item.Properties().rarity(Rarity.UNCOMMON));
 
     public static final DeferredItem<Item> CONTRACT_HISTORIAN = ITEMS.registerItem("contract_historian",
-            ContractItem::new, new Item.Properties().rarity(Rarity.UNCOMMON));
+            ProfessionContractItem::new, new Item.Properties().rarity(Rarity.UNCOMMON));
 
     public static final DeferredItem<Item> CONTRACT_SCRAPPER = ITEMS.registerItem("contract_scrapper",
-            ContractItem::new, new Item.Properties().rarity(Rarity.UNCOMMON));
+            ProfessionContractItem::new, new Item.Properties().rarity(Rarity.UNCOMMON));
 
     //Tier 2
     public static final DeferredItem<Item> CONTRACT_GUARD = ITEMS.registerItem("contract_guard",
-            ContractItem::new, new Item.Properties().rarity(Rarity.UNCOMMON));
+            ProfessionContractItem::new, new Item.Properties().rarity(Rarity.UNCOMMON));
 
     public static final DeferredItem<Item> CONTRACT_BREWMASTER = ITEMS.registerItem("contract_brewmaster",
-            ContractItem::new, new Item.Properties().rarity(Rarity.UNCOMMON));
+            ProfessionContractItem::new, new Item.Properties().rarity(Rarity.UNCOMMON));
 
     public static final DeferredItem<Item> CONTRACT_KEEPER = ITEMS.registerItem("contract_keeper",
-            ContractItem::new, new Item.Properties().rarity(Rarity.UNCOMMON));
+            ProfessionContractItem::new, new Item.Properties().rarity(Rarity.UNCOMMON));
 
     //Tier 3
     public static final DeferredItem<Item> CONTRACT_MINER = ITEMS.registerItem("contract_miner",
-            ContractItem::new, new Item.Properties().rarity(Rarity.UNCOMMON));
+            ProfessionContractItem::new, new Item.Properties().rarity(Rarity.UNCOMMON));
 
     public static final DeferredItem<Item> CONTRACT_EXPLORER = ITEMS.registerItem("contract_explorer",
-            ContractItem::new, new Item.Properties().rarity(Rarity.UNCOMMON));
+            ProfessionContractItem::new, new Item.Properties().rarity(Rarity.UNCOMMON));
 
     public static final DeferredItem<Item> CONTRACT_ALCHEMIST = ITEMS.registerItem("contract_alchemist",
-            ContractItem::new, new Item.Properties().rarity(Rarity.UNCOMMON));
+            ProfessionContractItem::new, new Item.Properties().rarity(Rarity.UNCOMMON));
 
     //Tier 4
     public static final DeferredItem<Item> CONTRACT_ARCANIST = ITEMS.registerItem("contract_arcanist",
-            ContractItem::new, new Item.Properties().rarity(Rarity.UNCOMMON));
+            ProfessionContractItem::new, new Item.Properties().rarity(Rarity.UNCOMMON));
 
     public static final DeferredItem<Item> CONTRACT_PRIEST = ITEMS.registerItem("contract_priest",
-            ContractItem::new, new Item.Properties().rarity(Rarity.UNCOMMON));
+            ProfessionContractItem::new, new Item.Properties().rarity(Rarity.UNCOMMON));
 
     public static final DeferredItem<Item> CONTRACT_ARTISAN = ITEMS.registerItem("contract_artisan",
-            ContractItem::new, new Item.Properties().rarity(Rarity.UNCOMMON));
+            ProfessionContractItem::new, new Item.Properties().rarity(Rarity.UNCOMMON));
 
     //Tier 5
     public static final DeferredItem<Item> CONTRACT_CHAMPION = ITEMS.registerItem("contract_champion",
-            ContractItem::new, new Item.Properties().rarity(Rarity.UNCOMMON));
+            ProfessionContractItem::new, new Item.Properties().rarity(Rarity.UNCOMMON));
 
     public static final DeferredItem<Item> CONTRACT_BLACKSMITH = ITEMS.registerItem("contract_blacksmith",
-            ContractItem::new, new Item.Properties().rarity(Rarity.UNCOMMON));
+            ProfessionContractItem::new, new Item.Properties().rarity(Rarity.UNCOMMON));
 
     public static final DeferredItem<Item> CONTRACT_SMELTER = ITEMS.registerItem("contract_smelter",
-            ContractItem::new, new Item.Properties().rarity(Rarity.UNCOMMON));
+            ProfessionContractItem::new, new Item.Properties().rarity(Rarity.UNCOMMON));
+
+
 
 
     public static final DeferredItem<Item> QUILL_EMPTY =
-            ITEMS.registerItem("quill_empty", QuillItem::new, new Item.Properties().stacksTo(16));
+            ITEMS.registerItem("quill_empty",
+                    props -> new QuillItem(props.stacksTo(16), "quill_empty"));
 
-    public static final DeferredItem<Item> QUILL_SMALL = ITEMS.registerItem("quill_small",
-            props -> new QuillItem(props.craftRemainder(JolCraftItems.QUILL_EMPTY.get()).stacksTo(1))
-    );
+    public static final DeferredItem<Item> QUILL_SMALL =
+            ITEMS.registerItem("quill_small",
+                    props -> new QuillItem(props.craftRemainder(JolCraftItems.QUILL_EMPTY.get()).stacksTo(1), "quill"));
 
-    public static final DeferredItem<Item> QUILL_HALF = ITEMS.registerItem("quill_half",
-            props -> new QuillItem(props.craftRemainder(JolCraftItems.QUILL_SMALL.get()).stacksTo(1))
-    );
+    public static final DeferredItem<Item> QUILL_HALF =
+            ITEMS.registerItem("quill_half",
+                    props -> new QuillItem(props.craftRemainder(JolCraftItems.QUILL_SMALL.get()).stacksTo(1), "quill"));
 
-    public static final DeferredItem<Item> QUILL_FULL = ITEMS.registerItem("quill_full",
-            props -> new QuillItem(props.craftRemainder(JolCraftItems.QUILL_HALF.get()).stacksTo(1))
-    );
+    public static final DeferredItem<Item> QUILL_FULL =
+            ITEMS.registerItem("quill_full",
+                    props -> new QuillItem(props.craftRemainder(JolCraftItems.QUILL_HALF.get()).stacksTo(1), "quill_full"));
 
     //Eggs
 
@@ -358,59 +375,82 @@ public class JolCraftItems {
     public static final DeferredItem<ChiselItem> MITHRIL_CHISEL = ITEMS.registerItem("mithril_chisel",
             (properties) -> new ChiselItem(JolCraftToolMaterials.MITHRIL, -3.0F, -1.0F, properties.fireResistant().rarity(Rarity.RARE)));
 
-    public static final DeferredItem<Item> GEODE_SMALL = ITEMS.registerItem("geode_small",
-            GeodeItem::new, new Item.Properties());
+    public static final DeferredItem<Item> GEODE_SMALL = ITEMS.registerItem(
+            "geode_small",
+            props -> new SimpleTooltipItem(props, "geode")
+    );
 
-    public static final DeferredItem<Item> GEODE_MEDIUM = ITEMS.registerItem("geode_medium",
-            GeodeItem::new, new Item.Properties());
+    public static final DeferredItem<Item> GEODE_MEDIUM = ITEMS.registerItem(
+            "geode_medium",
+            props -> new SimpleTooltipItem(props, "geode")
+    );
 
-    public static final DeferredItem<Item> GEODE_LARGE = ITEMS.registerItem("geode_large",
-            GeodeItem::new, new Item.Properties());
+    public static final DeferredItem<Item> GEODE_LARGE = ITEMS.registerItem(
+            "geode_large",
+            props -> new SimpleTooltipItem(props, "geode")
+    );
 
-    public static final DeferredItem<Item> AEGISCORE = ITEMS.registerItem("aegiscore",
-            Item::new, new Item.Properties());
+    public static final DeferredItem<Item> AEGISCORE = ITEMS.registerItem(
+            "aegiscore", props -> new UncutGemItem(props)
+    );
 
-    public static final DeferredItem<Item> ASHFANG = ITEMS.registerItem("ashfang",
-            Item::new, new Item.Properties());
+    public static final DeferredItem<Item> ASHFANG = ITEMS.registerItem(
+            "ashfang", props -> new UncutGemItem(props)
+    );
 
-    public static final DeferredItem<Item> DEEPMARROW = ITEMS.registerItem("deepmarrow",
-            Item::new, new Item.Properties());
+    public static final DeferredItem<Item> DEEPMARROW = ITEMS.registerItem(
+            "deepmarrow", props -> new UncutGemItem(props)
+    );
 
-    public static final DeferredItem<Item> EARTHBLOOD = ITEMS.registerItem("earthblood",
-            Item::new, new Item.Properties());
+    public static final DeferredItem<Item> EARTHBLOOD = ITEMS.registerItem(
+            "earthblood", props -> new UncutGemItem(props)
+    );
 
-    public static final DeferredItem<Item> EMBERGLASS = ITEMS.registerItem("emberglass",
-            Item::new, new Item.Properties());
+    public static final DeferredItem<Item> EMBERGLASS = ITEMS.registerItem(
+            "emberglass", props -> new UncutGemItem(props)
+    );
 
-    public static final DeferredItem<Item> FROSTVEIN = ITEMS.registerItem("frostvein",
-            Item::new, new Item.Properties());
+    public static final DeferredItem<Item> FROSTVEIN = ITEMS.registerItem(
+            "frostvein", props -> new UncutGemItem(props)
+    );
 
-    public static final DeferredItem<Item> GRIMSTONE = ITEMS.registerItem("grimstone",
-            Item::new, new Item.Properties());
+    public static final DeferredItem<Item> GRIMSTONE = ITEMS.registerItem(
+            "grimstone", props -> new UncutGemItem(props)
+    );
 
-    public static final DeferredItem<Item> IRONHEART = ITEMS.registerItem("ironheart",
-            Item::new, new Item.Properties());
+    public static final DeferredItem<Item> IRONHEART = ITEMS.registerItem(
+            "ironheart", props -> new UncutGemItem(props)
+    );
 
-    public static final DeferredItem<Item> LUMIERE = ITEMS.registerItem("lumiere",
-            Item::new, new Item.Properties());
+    public static final DeferredItem<Item> LUMIERE = ITEMS.registerItem(
+            "lumiere", props -> new UncutGemItem(props)
+    );
 
-    public static final DeferredItem<Item> MOONSHARD = ITEMS.registerItem("moonshard",
-            Item::new, new Item.Properties());
+    public static final DeferredItem<Item> MOONSHARD = ITEMS.registerItem(
+            "moonshard", props -> new UncutGemItem(props)
+    );
 
-    public static final DeferredItem<Item> RUSTAGATE = ITEMS.registerItem("rustagate",
-            Item::new, new Item.Properties());
+    public static final DeferredItem<Item> RUSTAGATE = ITEMS.registerItem(
+            "rustagate", props -> new UncutGemItem(props)
+    );
 
-    public static final DeferredItem<Item> SKYBURROW = ITEMS.registerItem("skyburrow",
-            Item::new, new Item.Properties());
+    public static final DeferredItem<Item> SKYBURROW = ITEMS.registerItem(
+            "skyburrow", props -> new UncutGemItem(props)
+    );
 
-    public static final DeferredItem<Item> SUNGLEAM = ITEMS.registerItem("sungleam",
-            Item::new, new Item.Properties());
+    public static final DeferredItem<Item> SUNGLEAM = ITEMS.registerItem(
+            "sungleam", props -> new UncutGemItem(props)
+    );
 
-    public static final DeferredItem<Item> VERDANITE = ITEMS.registerItem("verdanite",
-            Item::new, new Item.Properties());
+    public static final DeferredItem<Item> VERDANITE = ITEMS.registerItem(
+            "verdanite", props -> new UncutGemItem(props)
+    );
 
-    public static final DeferredItem<Item> WOECRYSTAL = ITEMS.registerItem("woecrystal",
-            Item::new, new Item.Properties());
+    public static final DeferredItem<Item> WOECRYSTAL = ITEMS.registerItem(
+            "woecrystal", props -> new UncutGemItem(props)
+    );
+
+
 
     public static final DeferredItem<Item> AEGISCORE_CUT    = ITEMS.registerItem("aegiscore_cut",    props -> new CutGemItem(props, "aegiscore"));
     public static final DeferredItem<Item> ASHFANG_CUT      = ITEMS.registerItem("ashfang_cut",      props -> new CutGemItem(props, "ashfang"));
@@ -431,57 +471,64 @@ public class JolCraftItems {
     //Crops, food and brewing
 
     public static final DeferredItem<Item> BARLEY_SEEDS = ITEMS.registerItem("barley_seeds",
-            properties -> new BlockItem(JolCraftBlocks.BARLEY_CROP.get(), properties));
+            properties -> new SimpleTooltipBlockItem(JolCraftBlocks.BARLEY_CROP.get(), properties, "vanilla_crop"));
 
     public static final DeferredItem<Item> BARLEY =
             ITEMS.registerItem("barley", Item::new,
                     new Item.Properties());
 
     public static final DeferredItem<Item> BARLEY_MALT =
-            ITEMS.registerItem("barley_malt", Item::new,
-                    new Item.Properties());
+            ITEMS.registerItem("barley_malt",
+                    props -> new SimpleTooltipItem(props, "malt"));
+
 
     public static final DeferredItem<Item> ASGARNIAN_SEEDS = ITEMS.registerItem("asgarnian_seeds",
-            properties -> new BlockItem(JolCraftBlocks.ASGARNIAN_CROP_BOTTOM.get(), properties));
+            properties -> new SimpleTooltipBlockItem(JolCraftBlocks.ASGARNIAN_CROP_BOTTOM.get(), properties, "hops_seed"));
 
-    public static final DeferredItem<Item> ASGARNIAN_HOPS =
-            ITEMS.registerItem("asgarnian_hops", Item::new,
-                    new Item.Properties());
+    public static final DeferredItem<Item> ASGARNIAN_HOPS = ITEMS.registerItem(
+            "asgarnian_hops",
+            props -> new SimpleTooltipItem(props, "hops")
+    );
 
     public static final DeferredItem<Item> DUSKHOLD_SEEDS = ITEMS.registerItem("duskhold_seeds",
-            properties -> new BlockItem(JolCraftBlocks.DUSKHOLD_CROP_BOTTOM.get(), properties));
+            properties -> new SimpleTooltipBlockItem(JolCraftBlocks.DUSKHOLD_CROP_BOTTOM.get(), properties, "hops_seed"));
 
-    public static final DeferredItem<Item> DUSKHOLD_HOPS =
-            ITEMS.registerItem("duskhold_hops", Item::new,
-                    new Item.Properties());
+    public static final DeferredItem<Item> DUSKHOLD_HOPS = ITEMS.registerItem(
+            "duskhold_hops",
+            props -> new SimpleTooltipItem(props, "hops")
+    );
 
     public static final DeferredItem<Item> KRANDONIAN_SEEDS = ITEMS.registerItem("krandonian_seeds",
-            properties -> new BlockItem(JolCraftBlocks.KRANDONIAN_CROP_BOTTOM.get(), properties));
+            properties -> new SimpleTooltipBlockItem(JolCraftBlocks.KRANDONIAN_CROP_BOTTOM.get(), properties, "hops_seed"));
 
-    public static final DeferredItem<Item> KRANDONIAN_HOPS =
-            ITEMS.registerItem("krandonian_hops", Item::new,
-                    new Item.Properties());
+    public static final DeferredItem<Item> KRANDONIAN_HOPS = ITEMS.registerItem(
+            "krandonian_hops",
+            props -> new SimpleTooltipItem(props, "hops")
+    );
 
     public static final DeferredItem<Item> YANILLIAN_SEEDS = ITEMS.registerItem("yanillian_seeds",
-            properties -> new BlockItem(JolCraftBlocks.YANILLIAN_CROP_BOTTOM.get(), properties));
+            properties -> new SimpleTooltipBlockItem(JolCraftBlocks.YANILLIAN_CROP_BOTTOM.get(), properties, "hops_seed"));
 
-    public static final DeferredItem<Item> YANILLIAN_HOPS =
-            ITEMS.registerItem("yanillian_hops", Item::new,
-                    new Item.Properties());
+    public static final DeferredItem<Item> YANILLIAN_HOPS = ITEMS.registerItem(
+            "yanillian_hops",
+            props -> new SimpleTooltipItem(props, "hops")
+    );
 
-    public static final DeferredItem<Item> YEAST =
-            ITEMS.registerItem("yeast", Item::new,
-                    new Item.Properties().stacksTo(16).craftRemainder(Items.GLASS_BOTTLE));
+    public static final DeferredItem<Item> YEAST = ITEMS.registerItem(
+            "yeast",
+            props -> new SimpleTooltipItem(props.stacksTo(16), "yeast")
+    );
 
-    public static final DeferredItem<Item> GLASS_MUG =
-            ITEMS.registerItem("glass_mug", Item::new,
-                    new Item.Properties().stacksTo(16));
+    public static final DeferredItem<Item> GLASS_MUG = ITEMS.registerItem(
+            "glass_mug",
+            props -> new SimpleTooltipItem(props.stacksTo(16), "glass_mug")
+    );
 
     public static final DeferredItem<Item> DWARVEN_BREW =
             ITEMS.registerItem("dwarven_brew",  (properties) -> new DwarvenBrewItem(properties.food(JolCraftFoodProperties.DWARVEN_BREW, JolCraftFoodProperties.DWARVEN_BREW_EFFECT).usingConvertsTo(JolCraftItems.GLASS_MUG.get()).stacksTo(1)));
 
     public static final DeferredItem<Item> DEEPSLATE_BULBS = ITEMS.registerItem("deepslate_bulbs",
-            properties -> new BlockItem(JolCraftBlocks.DEEPSLATE_BULBS_CROP.get(), properties.food(JolCraftFoodProperties.DWARVEN_BREW, JolCraftFoodProperties.DEEPSLATE_BULBS_EFFECT)));
+            properties -> new SimpleTooltipBlockItem(JolCraftBlocks.DEEPSLATE_BULBS_CROP.get(), properties.food(JolCraftFoodProperties.DWARVEN_BREW, JolCraftFoodProperties.DEEPSLATE_BULBS_EFFECT), "deepslate_bulbs"));
 
     //Reputation
     public static final DeferredItem<Item> REPUTATION_TABLET_0 =
@@ -549,8 +596,11 @@ public class JolCraftItems {
             ITEMS.registerItem("ancient_dwarven_tome_epic", properties -> new AncientDwarvenTomeItem(properties) {
             }, new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
 
-    public static final DeferredItem<Item> LEGENDARY_PAGE = ITEMS.registerItem("legendary_page",
-            LegendaryItem::new, new Item.Properties());
+    public static final DeferredItem<Item> LEGENDARY_PAGE = ITEMS.registerItem(
+            "legendary_page",
+            props -> new SimpleTooltipLegendaryItem(props, "legendary_page")
+    );
+
 
     public static final DeferredItem<Item> LEGENDARY_ANCIENT_UNIDENTIFIED_DWARVEN_TOME =
             ITEMS.registerItem("legendary_unidentified_ancient_dwarven_tome", properties -> new LegendaryAncientUnidentifiedTomeItem(properties) {

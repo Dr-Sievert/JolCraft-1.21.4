@@ -8,12 +8,15 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.sievert.jolcraft.data.JolCraftDataComponents;
 import net.sievert.jolcraft.item.JolCraftItems;
-import net.sievert.jolcraft.item.custom.UnidentifiedItem;
+import net.sievert.jolcraft.item.custom.tooltip.UnidentifiedItem;
 import net.sievert.jolcraft.util.attachment.DwarvenLanguageHelper;
 import net.sievert.jolcraft.util.dwarf.DwarvenLoreHelper;
+
+import java.util.List;
 
 public class UnidentifiedDwarvenTomeItem extends UnidentifiedItem {
     public UnidentifiedDwarvenTomeItem(Properties properties) {
@@ -22,7 +25,7 @@ public class UnidentifiedDwarvenTomeItem extends UnidentifiedItem {
 
     @Override
     protected boolean canIdentify(ServerPlayer player) {
-        return DwarvenLanguageHelper.knowsDwarvishServer(player); // ✅ uses helper
+        return DwarvenLanguageHelper.knowsDwarvishServer(player);
     }
 
     @Override
@@ -37,20 +40,31 @@ public class UnidentifiedDwarvenTomeItem extends UnidentifiedItem {
             case UNCOMMON -> new ItemStack(JolCraftItems.DWARVEN_TOME_UNCOMMON.get());
             case RARE -> new ItemStack(JolCraftItems.DWARVEN_TOME_RARE.get());
             case EPIC -> new ItemStack(JolCraftItems.DWARVEN_TOME_EPIC.get());
-            case LEGENDARY -> ItemStack.EMPTY; // Safe fallback if ever added by accident
+            case LEGENDARY -> ItemStack.EMPTY; // Safe fallback
         };
 
         tome.set(JolCraftDataComponents.LORE_LINE_ID.get(), loreKey);
         return tome;
     }
 
+    @Override
+    protected List<Component> getShiftTooltip(ItemStack stack, Player player, List<Component> tooltip, TooltipFlag flag) {
+        boolean knowsLanguage = DwarvenLanguageHelper.knowsDwarvishClient();
+        return List.of(
+                knowsLanguage
+                        ? Component.translatable("tooltip.jolcraft.unidentified").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC)
+                        : Component.translatable("tooltip.jolcraft.dwarven_tome.locked").withStyle(ChatFormatting.GRAY)
+        );
+    }
 
     @Override
-    protected Component getUnidentifiedTooltip(Player player, ItemStack stack) {
-        boolean knowsLanguage = DwarvenLanguageHelper.knowsDwarvishClient(); // ✅ uses helper
-        return knowsLanguage
-                ? Component.translatable("tooltip.jolcraft.unidentified_dwarven_tome").withStyle(ChatFormatting.GRAY)
-                : Component.translatable("tooltip.jolcraft.dwarven_tome.locked").withStyle(ChatFormatting.GRAY);
+    protected List<Component> getNoShiftTooltip(ItemStack stack, Player player, List<Component> tooltip, TooltipFlag flag) {
+        boolean knowsLanguage = DwarvenLanguageHelper.knowsDwarvishClient();
+        return List.of(
+                knowsLanguage
+                        ? Component.translatable("tooltip.jolcraft.unidentified_dwarven_tome").withStyle(ChatFormatting.GRAY)
+                        : Component.translatable("tooltip.jolcraft.dwarven_tome.locked").withStyle(ChatFormatting.GRAY)
+        );
     }
 
     @Override

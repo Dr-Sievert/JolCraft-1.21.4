@@ -11,7 +11,7 @@
         "name": "jolcraft:entity/dwarf/ambient3"
       }
     ],
-    "subtitle": "sounds.jolcraft.dwarf_ambient"
+    "subtitle": "subtitles.jolcraft.entity.dwarf_ambient"
   },
   "dwarf_hurt": {
     "sounds": [
@@ -28,7 +28,7 @@
         "name": "jolcraft:entity/dwarf/hurt4"
       }
     ],
-    "subtitle": "sounds.jolcraft.dwarf_hit"
+    "subtitle": "subtitles.jolcraft.entity.dwarf_hit"
   },
   "dwarf_death": {
     "sounds": [
@@ -36,7 +36,7 @@
         "name": "jolcraft:entity/dwarf/death"
       }
     ],
-    "subtitle": "sounds.jolcraft.dwarf_death"
+    "subtitle": "subtitles.jolcraft.entity.dwarf_death"
   },
   "dwarf_yes": {
     "sounds": [
@@ -50,7 +50,7 @@
         "name": "jolcraft:entity/dwarf/yes3"
       }
     ],
-    "subtitle": "sounds.jolcraft.dwarf_yes"
+    "subtitle": "subtitles.jolcraft.entity.dwarf_yes"
   },
   "dwarf_no": {
     "sounds": [
@@ -64,7 +64,7 @@
         "name": "jolcraft:entity/dwarf/no3"
       }
     ],
-    "subtitle": "sounds.jolcraft.dwarf_no"
+    "subtitle": "subtitles.jolcraft.entity.dwarf_no"
   },
   "dwarf_trade": {
     "sounds": [
@@ -78,7 +78,7 @@
         "name": "jolcraft:entity/dwarf/trade3"
       }
     ],
-    "subtitle": "sounds.jolcraft.dwarf_trade"
+    "subtitle": "subtitles.jolcraft.entity.dwarf_trade"
   },
   "poof": {
     "sounds": [
@@ -92,7 +92,7 @@
         "name": "jolcraft:random/poof3"
       }
     ],
-    "subtitle": "sounds.jolcraft.poof"
+    "subtitle": "subtitles.jolcraft.poof"
   },
   "level_up": {
     "sounds": [
@@ -100,7 +100,7 @@
         "name": "jolcraft:random/levelup"
       }
     ],
-    "subtitle": "sounds.jolcraft.level_up"
+    "subtitle": "subtitles.jolcraft.level_up"
   },
   "armor_equip_deepslate": {
     "sounds": [
@@ -123,7 +123,7 @@
         "name": "block/deepslate_bricks/place6"
       }
     ],
-    "subtitle": "sounds.jolcraft.armor_equip_deepslate"
+    "subtitle": "subtitles.jolcraft.armor_equip_deepslate"
   },
   "strongbox_open": {
     "sounds": [
@@ -134,7 +134,7 @@
         "name": "jolcraft:block/strongbox/strongbox_open2"
       }
     ],
-    "subtitle": "sounds.jolcraft.strongbox_open"
+    "subtitle": "subtitles.jolcraft.strongbox_open"
   },
   "strongbox_close": {
     "sounds": [
@@ -145,7 +145,7 @@
         "name": "jolcraft:block/strongbox/strongbox_close2"
       }
     ],
-    "subtitle": "sounds.jolcraft.strongbox_close"
+    "subtitle": "subtitles.jolcraft.strongbox_close"
   },
   "strongbox_lockpick": {
     "sounds": [
@@ -162,7 +162,7 @@
         "name": "jolcraft:block/strongbox/strongbox_lockpick4"
       }
     ],
-    "subtitle": "sounds.jolcraft.strongbox_lockpick"
+    "subtitle": "subtitles.jolcraft.strongbox_lockpick"
   },
   "strongbox_lockpick_break": {
     "sounds": [
@@ -176,7 +176,7 @@
         "name": "jolcraft:block/strongbox/strongbox_lockpick_break3"
       }
     ],
-    "subtitle": "sounds.jolcraft.strongbox_lockpick_break"
+    "subtitle": "subtitles.jolcraft.strongbox_lockpick_break"
   },
   "strongbox_unlock": {
     "sounds": [
@@ -184,7 +184,7 @@
         "name": "jolcraft:block/strongbox/strongbox_unlock1"
       }
     ],
-    "subtitle": "sounds.jolcraft.strongbox_unlock"
+    "subtitle": "subtitles.jolcraft.strongbox_unlock"
   },
   "coin_stack": {
     "sounds": [
@@ -201,7 +201,7 @@
         "name": "jolcraft:item/coin/coin_stack4"
       }
     ],
-    "subtitle": "sounds.jolcraft.coin_stack"
+    "subtitle": "subtitles.jolcraft.coin_stack"
   },
   "coin_single": {
     "sounds": [
@@ -218,14 +218,14 @@
         "name": "jolcraft:item/coin/coin_single4"
       }
     ],
-    "subtitle": "sounds.jolcraft.coin_single"
+    "subtitle": "subtitles.jolcraft.coin_single"
   },
   "gem_cut": {
     "sounds": [
       "block/smithing_table/smithing_table1",
       "block/smithing_table/smithing_table3"
     ],
-    "subtitle": "sounds.jolcraft.gem_cut"
+    "subtitle": "subtitles.jolcraft.gem_cut"
   },
   "curse": {
     "sounds": [
@@ -260,6 +260,6 @@
         "name": "jolcraft:curse/curse10"
       }
     ],
-    "subtitle": "sounds.jolcraft.curse"
+    "subtitle": "subtitles.jolcraft.curse"
   }
 }

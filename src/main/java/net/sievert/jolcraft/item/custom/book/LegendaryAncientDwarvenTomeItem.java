@@ -11,12 +11,15 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.sievert.jolcraft.data.JolCraftDataComponents;
 import net.sievert.jolcraft.sound.JolCraftSounds;
 import net.sievert.jolcraft.util.attachment.AncientEffectHelper;
 import net.sievert.jolcraft.util.attachment.DwarvenLanguageHelper;
 import net.sievert.jolcraft.util.attachment.TomeUnlockHelper;
+
+import java.util.List;
 
 
 public class LegendaryAncientDwarvenTomeItem extends AncientDwarvenTomeItem {
@@ -117,6 +120,16 @@ public class LegendaryAncientDwarvenTomeItem extends AncientDwarvenTomeItem {
         }
         // Otherwise, use the default name, also gold
         return Component.translatable(this.getDescriptionId()).withStyle(style -> style.withColor(ChatFormatting.GOLD));
+    }
+
+    @Override
+    protected List<Component> getFullyReadableTooltip(ItemStack stack, Player player, List<Component> tooltip, TooltipFlag flag) {
+        var dataComponentType = JolCraftDataComponents.LORE_LINE_ID.get();
+        String loreKey = stack.get(dataComponentType);
+        if(loreKey != null){
+            return List.of(Component.translatable("tooltip.jolcraft.legendary_ancient_dwarven_tome.shift").withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC));
+        }
+        return List.of(Component.translatable("tooltip.jolcraft.ancient_dwarven_tome.shift").withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC));
     }
 
 

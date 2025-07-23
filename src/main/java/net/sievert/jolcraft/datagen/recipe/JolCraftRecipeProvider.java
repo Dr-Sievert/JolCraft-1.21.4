@@ -213,8 +213,17 @@ public class JolCraftRecipeProvider extends RecipeProvider {
                 RecipeCategory.MISC,
                 JolCraftItems.MITHRIL_INGOT.get(),
                 0.7F,
+                100,
+                "mithril_ingot_from_blasting"
+        );
+
+        oreSmelting(
+                List.of(JolCraftItems.PURE_MITHRIL.get()),
+                RecipeCategory.MISC,
+                JolCraftItems.MITHRIL_INGOT.get(),
+                0.7F,
                 200,
-                "mithril_ingot_from_pure"
+                "mithril_ingot_from_smelting"
         );
 
         modShaped(RecipeCategory.MISC, JolCraftItems.MITHRIL_CHAINWEAVE.get())

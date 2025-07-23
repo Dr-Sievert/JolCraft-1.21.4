@@ -20,6 +20,7 @@ import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.block.custom.*;
 import net.sievert.jolcraft.block.custom.crop.*;
 import net.sievert.jolcraft.item.JolCraftItems;
+import net.sievert.jolcraft.item.custom.tooltip.SimpleTooltipBlockItem;
 
 import java.util.function.Function;
 import java.util.function.ToIntFunction;
@@ -111,7 +112,8 @@ public class JolCraftBlocks {
             )
     );
 
-    public static final DeferredBlock<Block> HEARTH = registerBlock("hearth",
+    public static final DeferredBlock<Block> HEARTH = registerBlockWithTooltip(
+            "hearth",
             (properties) -> new HearthBlock(properties
                     .mapColor(MapColor.DEEPSLATE)
                     .strength(4.5F, 3.0F)
@@ -119,19 +121,20 @@ public class JolCraftBlocks {
                     .sound(SoundType.DEEPSLATE_TILES)
                     .lightLevel(litBlockEmission(13))
             ),
-            BlockBehaviour.Properties.of(), true
+            BlockBehaviour.Properties.of(),
+            "hearth"
     );
 
-    public static final DeferredBlock<Block> VERDANT_SOIL = registerBlock("verdant_soil",
+    public static final DeferredBlock<Block> VERDANT_SOIL = registerBlockWithTooltip("verdant_soil",
             (properties) -> new VerdantSoilBlock(properties
                     .mapColor(MapColor.COLOR_LIGHT_GREEN)
                     .strength(0.5F)
                     .sound(SoundType.MUD)
             ),
-            BlockBehaviour.Properties.of(), true
+            BlockBehaviour.Properties.of(), "verdant"
     );
 
-    public static final DeferredBlock<Block> VERDANT_FARMLAND = registerBlock("verdant_farmland",
+    public static final DeferredBlock<Block> VERDANT_FARMLAND = registerBlockWithTooltip("verdant_farmland",
             (properties) -> new VerdantFarmBlock(properties
                     .mapColor(MapColor.COLOR_LIGHT_GREEN)
                     .randomTicks()
@@ -140,7 +143,7 @@ public class JolCraftBlocks {
                     .isViewBlocking(JolCraftBlocks::always)
                     .isSuffocating(JolCraftBlocks::always)
             ),
-            BlockBehaviour.Properties.of(), true
+            BlockBehaviour.Properties.of(), "verdant"
     );
 
     public static final DeferredBlock<DuskcapBlock> DUSKCAP = registerBlock(
@@ -384,6 +387,19 @@ public class JolCraftBlocks {
     private static <B extends Block> void registerBlockItem(String name, DeferredBlock<B> block) {
         JolCraftItems.ITEMS.registerItem(name, props -> new BlockItem(block.get(), props.useBlockDescriptionPrefix()));
     }
+
+    private static <B extends Block> DeferredBlock<B> registerBlockWithTooltip(
+            String name,
+            Function<BlockBehaviour.Properties, ? extends B> builder,
+            BlockBehaviour.Properties properties,
+            String tooltipKey
+    ) {
+        DeferredBlock<B> block = BLOCKS.registerBlock(name, builder);
+        JolCraftItems.ITEMS.registerItem(name, props ->
+                new SimpleTooltipBlockItem(block.get(), props.useBlockDescriptionPrefix(), tooltipKey));
+        return block;
+    }
+
 
     private static <B extends Block> DeferredBlock<B> registerMithrilBlock(
             String name,

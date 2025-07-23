@@ -1,6 +1,6 @@
 package net.sievert.jolcraft.network.client.data;
 
-public class MyClientLanguageData {
+public class ClientAncientLanguageData {
     private static boolean knowsLanguage = false;
 
     public static void setKnows(boolean value) {

@@ -11,10 +11,10 @@ import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.sievert.jolcraft.JolCraft;
-import net.sievert.jolcraft.network.client.data.MyClientAncientLanguageData;
-import net.sievert.jolcraft.network.client.data.MyClientDeliriumData;
-import net.sievert.jolcraft.network.client.data.MyClientLanguageData;
-import net.sievert.jolcraft.network.client.data.MyClientReputationData;
+import net.sievert.jolcraft.network.client.data.ClientAncientLanguageData;
+import net.sievert.jolcraft.network.client.data.ClientDeliriumData;
+import net.sievert.jolcraft.network.client.data.ClientLanguageData;
+import net.sievert.jolcraft.network.client.data.ClientReputationData;
 import net.sievert.jolcraft.network.packet.*;
 
 import java.util.Set;
@@ -53,14 +53,26 @@ public class JolCraftNetworking {
                         ClientboundEndorsementsPacket.TYPE,
                         ClientboundEndorsementsPacket.CODEC,
                         JolCraftNetworking::handleSyncEndorsements
-                );
+                )
+        .playToClient(
+                ClientboundTomeUnlocksPacket.TYPE,
+                ClientboundTomeUnlocksPacket.CODEC,
+                JolCraftNetworking::handleSyncTomeUnlocks
+        );
 
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    private static void handleSyncTomeUnlocks(ClientboundTomeUnlocksPacket packet, IPayloadContext context) {
+        context.enqueueWork(() -> {
+            net.sievert.jolcraft.network.client.data.ClientTomeUnlocksData.setUnlocks(packet.unlocks());
+        });
     }
 
     @OnlyIn(Dist.CLIENT)
     private static void handleDelirium(ClientboundDeliriumPacket packet, IPayloadContext context) {
         context.enqueueWork(() -> {
-            MyClientDeliriumData.setMuffleTicks(packet.durationTicks());
+            ClientDeliriumData.setMuffleTicks(packet.durationTicks());
         });
     }
 
@@ -68,28 +80,28 @@ public class JolCraftNetworking {
     @OnlyIn(Dist.CLIENT)
     private static void handleSyncLanguage(ClientboundLanguagePacket packet, IPayloadContext context) {
         context.enqueueWork(() -> {
-            MyClientLanguageData.setKnows(packet.knowsLanguage());
+            ClientLanguageData.setKnows(packet.knowsLanguage());
         });
     }
 
     @OnlyIn(Dist.CLIENT)
     private static void handleSyncAncientLanguage(ClientboundAncientLanguagePacket packet, IPayloadContext context) {
         context.enqueueWork(() -> {
-            MyClientAncientLanguageData.setKnows(packet.knowsLanguage());
+            ClientAncientLanguageData.setKnows(packet.knowsLanguage());
         });
     }
 
     @OnlyIn(Dist.CLIENT)
     private static void handleSyncReputation(ClientboundReputationPacket packet, IPayloadContext context) {
         context.enqueueWork(() -> {
-            MyClientReputationData.setTier(packet.tier());
+            ClientReputationData.setTier(packet.tier());
         });
     }
 
     @OnlyIn(Dist.CLIENT)
     private static void handleDwarfEndorseAnimation(ClientboundDwarfEndorseAnimationPacket packet, IPayloadContext context) {
         context.enqueueWork(() -> {
-            MyClientReputationData.setEndorsementAnimation(packet.entityId(), true);
+            ClientReputationData.setEndorsementAnimation(packet.entityId(), true);
         });
     }
 
@@ -97,7 +109,7 @@ public class JolCraftNetworking {
     private static void handleSyncEndorsements(ClientboundEndorsementsPacket packet, IPayloadContext context) {
         context.enqueueWork(() -> {
             Set<ResourceLocation> set = packet.endorsements();
-            MyClientReputationData.setEndorsements(set);
+            ClientReputationData.setEndorsements(set);
         });
     }
 

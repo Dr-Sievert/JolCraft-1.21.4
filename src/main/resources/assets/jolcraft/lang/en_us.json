@@ -306,6 +306,43 @@
   "item.jolcraft.broken_mithril_sword": "Broken Mithril Sword",
   "item.jolcraft.broken_mithril_plate": "Broken Mithril Plate",
 
+  "tooltip.jolcraft.shift": "Hold %s for more info",
+
+  "tooltip.jolcraft.quill_empty": "Can be filled with ink sacs or by right-clicking a squid.",
+  "tooltip.jolcraft.quill": "Used for writing on paper. Can be filled with ink sacs or by right-clicking a squid.",
+  "tooltip.jolcraft.quill_full": "Used for writing on paper.",
+  "tooltip.jolcraft.written_contract": "Given to dwarves without professions to get signed contracts. Signed contracts are used to buy profession contracts from a guildmaster. If given to a dwarf with a profession they will create a contract for their profession.",
+  "tooltip.jolcraft.signed_contract": "Signed contracts are used to buy profession contracts from a guildmaster.",
+  "tooltip.jolcraft.profession_contract": "Profession contracts can be given to dwarves without professions to set their profession.",
+
+  "tooltip.jolcraft.guild_sigil": "Can be bought from a master dwarf without a profession.",
+  "tooltip.jolcraft.legendary_page": "Salvaged from ancient tomes by historians. Can be used to restore ancient legendary tomes by certain dwarven professions.",
+  "tooltip.jolcraft.trim_material": "Can be used to trim armor.",
+
+  "tooltip.jolcraft.coin_pouch": "Stores up to 999 coins. Right-click when held to deposit all coins in inventory. Left-click with coins in inventory to deposit up to a stack. Right-click in inventory to withdraw up to a stack.",
+  "tooltip.jolcraft.hearth": "Can be activated if placed within 10 blocks of a claimed bed. Need to sleep in a bed to activate another hearth. Multiple players can be bound to a hearth. Provides Homestead effect to bound players within range.",
+  "tooltip.jolcraft.verdant": "JolCraft crops ignores growing conditions and also grow faster on this. Other crops can be planted but no extra effects.",
+  "tooltip.jolcraft.vanilla_crop": "Grows like vanilla crops.",
+  "tooltip.jolcraft.hops_seed": "Needs two blocks height and a light level of 8 or less to grow.",
+  "tooltip.jolcraft.deepslate_bulbs": "Needs a light level of 8 or less to grow. Can only be planted on Deepslate, Tuff or Verdant Soil.",
+  "tooltip.jolcraft.malt": "Can be used on a water cauldron as a first step in brewing.",
+  "tooltip.jolcraft.hops": "Can be used on a cauldron with malt to add effects to a brew.",
+  "tooltip.jolcraft.yeast": "Can be used on a fermenting cauldron with malt/hops to start the brewing process. Created by using sugar on a water cauldron and extracted using glass bottles.",
+  "tooltip.jolcraft.glass_mug": "Can be used to extract a finished dwarven brew from a cauldron.",
+
+  "tooltip.jolcraft.spanner": "Can be used to produce scrap from salvage. Hold the spanner in one hand and salvage in the other, then right click!",
+  "tooltip.jolcraft.geode": "Can be broken in a lapidary bench with an artisan hammer.",
+  "tooltip.jolcraft.uncut_gem": "Can be broken into dust or cut in a lapidary bench.",
+  "tooltip.jolcraft.artisan_hammer": "Can be used to break geodes and gems in a lapidary bench.",
+  "tooltip.jolcraft.cut_gem": "Can be used to trim armor for bonus stats.",
+  "tooltip.jolcraft.chisel": "Can be used to cut gems in a lapidary bench.",
+  "tooltip.jolcraft.chisel.cut_locked": "You have not learned how to cut gems!",
+
+  "tooltip.jolcraft.need_lang": "You need to understand dwarvish to use this.",
+  "tooltip.jolcraft.need_ancient": "You need to understand ancient dwarvish to use this.",
+  "tooltip.jolcraft.ancient_memory": "Ancient memory effect gives you temporary understanding of ancient dwarvish.",
+  "tooltip.jolcraft.unidentified": "Right-click to identify.",
+
   "tooltip.jolcraft.language.locked": "You do not understand each other.",
   "tooltip.jolcraft.dwarf.busy": "This dwarf is currently busy.",
   "tooltip.jolcraft.dwarf.not_paid": "You should pay the dwarf first.",
@@ -314,19 +351,23 @@
 
   "tooltip.jolcraft.dwarven_lexicon.locked": "The pages are filled with unfamiliar symbols.",
   "tooltip.jolcraft.dwarven_lexicon.unlocked": "The key to dwarven speech lies within.",
+  "tooltip.jolcraft.dwarven_lexicon.shift": "Can be used to learn dwarvish. Found in mineshafts or stronghold libraries. Can be bought from master librarians.",
   "tooltip.jolcraft.dwarven_lexicon.use": "You have learned to understand the dwarven language!",
   "tooltip.jolcraft.dwarven_lexicon.knows": "You already understand the dwarven language.",
 
   "tooltip.jolcraft.ancient_dwarven_lexicon.locked": "The pages are filled with unfamiliar symbols.",
   "tooltip.jolcraft.ancient_dwarven_lexicon.unlocked": "What was once silent may now speak again.",
+  "tooltip.jolcraft.ancient_dwarven_lexicon.shift": "Can be used to learn ancient dwarvish. Found in ancient dwarven ruins.",
   "tooltip.jolcraft.ancient_dwarven_lexicon.use": "You have learned to understand the ancient dwarven language!",
   "tooltip.jolcraft.ancient_dwarven_lexicon.cant_read": "You have no idea how to decipher this.",
   "tooltip.jolcraft.ancient_dwarven_lexicon.cant_use": "The text is clearly dwarvish, but you cannot decipher its secrets.",
   "tooltip.jolcraft.ancient_dwarven_lexicon.knows": "You already understand the ancient dwarven language.",
 
   "tooltip.jolcraft.unidentified_dwarven_tome": "An unidentified dwarven tome.",
+  "tooltip.jolcraft.dwarven_tome.shift": "Can be sold to Dwarven Historians.",
   "tooltip.jolcraft.ancient_dwarven_tome.unidentified": "An unidentified dwarven tome, written in ancient dwarvish.",
   "tooltip.jolcraft.ancient_dwarven_tome.partial_understanding": "You recognize the language as Dwarvish, but cannot understand it.",
+  "tooltip.jolcraft.legendary_ancient_dwarven_tome.shift": "Can be used to gain permanent knowledge.",
   "tooltip.jolcraft.dwarven_tome.identify_success": "You identify the contents of the tome.",
   "tooltip.jolcraft.dwarven_tome.identify_fail": "You cannot make sense of the dwarven runes.",
   "tooltip.jolcraft.dwarven_tome.locked": "The pages are filled with unfamiliar symbols.",
@@ -339,7 +380,9 @@
 
   "tooltip.jolcraft.lapidary_bench.locked_cut_gems": "You have no idea how to cut this gem without breaking it.",
 
-  "tooltip.jolcraft.tablet.locked": "The stone is marked with unfamiliar symbols.",
+  "tooltip.jolcraft.paper.locked": "The paper is marked with unfamiliar symbols.",
+
+  "tooltip.jolcraft.lockpick": "Used to pick locks. Will break on failure.",
 
   "tooltip.jolcraft.strongbox.not_empty": "This strongbox has items inside.",
   "tooltip.jolcraft.strongbox.loot": "This strongbox has loot inside.",
@@ -372,11 +415,8 @@
   "tooltip.jolcraft.reroll_crate.fail": "This trader inventory cannot be rerolled!",
   "tooltip.jolcraft.reroll_crate.success": "Trader inventory rerolled!",
 
-  "tooltip.jolcraft.artisan_hammer": "Can be used to break geodes and gems.",
-  "tooltip.jolcraft.chisel": "Can be used to cut gems.",
-
-  "tooltip.jolcraft.spanner": "Can be used to produce scrap from salvage.",
-  "tooltip.jolcraft.salvage": "Salvagable",
+  "tooltip.jolcraft.salvage_tag": "Salvagable",
+  "tooltip.jolcraft.salvage": "Can be used to produce scrap using a spanner. Hold the spanner in one hand and the salvage in the other, then right click!",
 
   "jolcraft.reputation_tier.0": "Stranger",
   "jolcraft.reputation_tier.1": "Known Face",
@@ -395,6 +435,14 @@
   "tooltip.jolcraft.reputation.already_endorsed": "You already have this endorsement.",
   "tooltip.jolcraft.reputation.wrong_tablet": "You must present the correct reputation tablet.",
   "tooltip.jolcraft.reputation.level_up": "You have advanced in dwarven reputation!",
+
+  "tooltip.jolcraft.tablet.locked": "The stone is marked with unfamiliar symbols.",
+  "tooltip.jolcraft.tablet.progress": "Endorsements for reputation advancement: %s/%s",
+  "tooltip.jolcraft.tablet.progress.prefix": "Endorsements for reputation advancement: ",
+  "tooltip.jolcraft.tablet.endorsements_info": "To gain endorsements, give your reputation tablet to a master-level dwarf with a profession. Endorsements are unique per profession and can only be gained once.",
+  "tooltip.jolcraft.tablet.advance_info": "To advance in reputation level you need endorsements from dwarves with professions. When you have enough, hand over your tablet to a guildmaster to update it.",
+  "tooltip.jolcraft.tablet": "To advance in reputation level you need endorsements from dwarves that have professions. There are three professions per reputation level. When you have enough endorsements hand over your tablet to a guildmaster and he will update it. To gain endorsements you give your reputation tablet to a dwarf with a profession and master level. Endorsements are unique per profession and can only be gained once.",
+
 
   "tooltip.jolcraft.brewing.hops": "You already added this hops type to the brew.",
   "tooltip.jolcraft.brewing.locked_hops": "Adding more hops without proper knowledge would ruin the brew.",
@@ -487,7 +535,14 @@
 
   "entity.jolcraft.radiant": "Radiant",
 
+  "subtitles.jolcraft.entity.dwarf_ambient": "Dwarf mumbles",
+  "subtitles.jolcraft.entity.dwarf_hit": "Dwarf hurts",
+  "subtitles.jolcraft.entity.dwarf_death": "Dwarf dies",
+  "subtitles.jolcraft.entity.dwarf_yes": "Dwarf agrees",
+  "subtitles.jolcraft.entity.dwarf_no": "Dwarf disagrees",
+  "subtitles.jolcraft.entity.dwarf_trade": "Dwarf haggles",
+
+
+
   "filled_map.forge": "Map to a Dwarven Forge"
-
-
 }

@@ -3,7 +3,7 @@ package net.sievert.jolcraft.util.attachment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
 import net.sievert.jolcraft.data.custom.lang.DwarvenLanguage;
-import net.sievert.jolcraft.network.client.data.MyClientLanguageData;
+import net.sievert.jolcraft.network.client.data.ClientLanguageData;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
@@ -37,12 +37,12 @@ public class DwarvenLanguageHelper {
     @OnlyIn(Dist.CLIENT)
     public static boolean knowsDwarvishClient() {
         Player player = Minecraft.getInstance().player;
-        return player != null && (player.isCreative() || MyClientLanguageData.knowsLanguage());
+        return player != null && (player.isCreative() || ClientLanguageData.knowsLanguage());
     }
 
     @OnlyIn(Dist.CLIENT)
     public static boolean knowsDwarvishClientBypassCreative() {
         Player player = Minecraft.getInstance().player;
-        return player != null && MyClientLanguageData.knowsLanguage();
+        return player != null && ClientLanguageData.knowsLanguage();
     }
 }

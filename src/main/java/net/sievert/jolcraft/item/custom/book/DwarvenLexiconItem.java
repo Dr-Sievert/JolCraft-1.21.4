@@ -1,6 +1,7 @@
 package net.sievert.jolcraft.item.custom.book;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -53,15 +54,32 @@ public class DwarvenLexiconItem extends Item {
     @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-        // For UI, showing "unlocked" for creative mode is usually fine,
-        // but if you want to only show true unlock, use bypass creative here too:
         boolean knows = DwarvenLanguageHelper.knowsDwarvishClient();
-        if (knows) {
-            tooltip.add(Component.translatable("tooltip.jolcraft.dwarven_lexicon.unlocked").withStyle(ChatFormatting.GRAY));
+
+        if (Screen.hasShiftDown()) {
+            // Detailed (Shift) tooltip
+            if (knows) {
+                tooltip.add(Component.translatable("tooltip.jolcraft.dwarven_lexicon.shift")
+                        .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
+            } else {
+                tooltip.add(Component.translatable("tooltip.jolcraft.dwarven_lexicon.locked")
+                        .withStyle(ChatFormatting.GRAY));
+            }
         } else {
-            tooltip.add(Component.translatable("tooltip.jolcraft.dwarven_lexicon.locked").withStyle(ChatFormatting.GRAY));
+            // Normal summary
+            if (knows) {
+                tooltip.add(Component.translatable("tooltip.jolcraft.dwarven_lexicon.unlocked")
+                        .withStyle(ChatFormatting.GRAY));
+            } else {
+                tooltip.add(Component.translatable("tooltip.jolcraft.dwarven_lexicon.locked")
+                        .withStyle(ChatFormatting.GRAY));
+            }
+            Component shiftKey = Component.literal("Shift").withStyle(ChatFormatting.BLUE);
+            tooltip.add(Component.translatable("tooltip.jolcraft.shift", shiftKey)
+                    .withStyle(ChatFormatting.DARK_GRAY));
         }
 
         super.appendHoverText(stack, context, tooltip, flag);
     }
+
 }

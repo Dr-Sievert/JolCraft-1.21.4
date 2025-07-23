@@ -6,7 +6,7 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.sievert.jolcraft.JolCraft;
-import net.sievert.jolcraft.network.client.data.MyClientAncientLanguageData;
+import net.sievert.jolcraft.network.client.data.ClientAncientLanguageData;
 
 public record ClientboundAncientLanguagePacket(boolean knowsLanguage) implements CustomPacketPayload {
     public static final Type<ClientboundAncientLanguagePacket> TYPE =
@@ -30,6 +30,6 @@ public record ClientboundAncientLanguagePacket(boolean knowsLanguage) implements
 
     // This is your client-side handler
     public void handle() {
-        MyClientAncientLanguageData.setKnows(knowsLanguage);
+        ClientAncientLanguageData.setKnows(knowsLanguage);
     }
 }

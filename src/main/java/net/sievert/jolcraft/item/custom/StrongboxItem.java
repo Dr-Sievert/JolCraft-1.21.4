@@ -2,6 +2,7 @@ package net.sievert.jolcraft.item.custom;
 
 import com.google.common.collect.Iterables;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.BlockItem;
@@ -21,28 +22,35 @@ public class StrongboxItem extends BlockItem {
 
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext ctx, List<Component> tooltip, TooltipFlag flag) {
-        // Check if it is locked
-        if (stack.has(JolCraftDataComponents.LOCKED)) {
-            tooltip.add(Component.translatable("tooltip.jolcraft.strongbox.locked")
-                    .withStyle(ChatFormatting.RED, ChatFormatting.ITALIC));
-        }
+        if (Screen.hasShiftDown()) {
+            // Check if it is locked
+            if (stack.has(JolCraftDataComponents.LOCKED)) {
+                tooltip.add(Component.translatable("tooltip.jolcraft.strongbox.locked")
+                        .withStyle(ChatFormatting.RED, ChatFormatting.ITALIC));
+            }
 
-        // Check if the Strongbox has a loot table
-        if (stack.has(JolCraftDataComponents.LOOT_TABLE)) {
-            tooltip.add(Component.translatable("tooltip.jolcraft.strongbox.loot")
-                    .withStyle(ChatFormatting.GREEN, ChatFormatting.ITALIC));
-        }
+            // Check if the Strongbox has a loot table
+            if (stack.has(JolCraftDataComponents.LOOT_TABLE)) {
+                tooltip.add(Component.translatable("tooltip.jolcraft.strongbox.loot")
+                        .withStyle(ChatFormatting.GREEN, ChatFormatting.ITALIC));
+            }
 
-        // Check if the Strongbox has contents
-        ItemContainerContents contents = stack.get(DataComponents.CONTAINER);
-        if (contents != null && !Iterables.isEmpty(contents.nonEmptyItems())) {
-            tooltip.add(Component.translatable("tooltip.jolcraft.strongbox.not_empty")
-                    .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
+            // Check if the Strongbox has contents
+            ItemContainerContents contents = stack.get(DataComponents.CONTAINER);
+            if (contents != null && !Iterables.isEmpty(contents.nonEmptyItems())) {
+                tooltip.add(Component.translatable("tooltip.jolcraft.strongbox.not_empty")
+                        .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
+            }
+        } else {
+            // Shift hint
+            Component shiftKey = Component.literal("Shift").withStyle(ChatFormatting.BLUE);
+            tooltip.add(Component.translatable("tooltip.jolcraft.shift", shiftKey)
+                    .withStyle(ChatFormatting.DARK_GRAY));
         }
-
         // Call super to retain any default hover text functionality
         super.appendHoverText(stack, ctx, tooltip, flag);
     }
+
 
 
 

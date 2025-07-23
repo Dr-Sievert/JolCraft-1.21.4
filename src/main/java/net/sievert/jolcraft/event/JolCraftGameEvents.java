@@ -93,15 +93,13 @@ import net.sievert.jolcraft.advancement.JolCraftCriteriaTriggers;
 import net.sievert.jolcraft.data.custom.block.Hearth;
 import net.sievert.jolcraft.block.custom.FermentingCauldronBlock;
 import net.sievert.jolcraft.block.custom.FermentingStage;
+import net.sievert.jolcraft.data.custom.unlock.TomeUnlock;
 import net.sievert.jolcraft.entity.JolCraftEntities;
 import net.sievert.jolcraft.entity.attribute.JolCraftAttributes;
 import net.sievert.jolcraft.entity.custom.dwarf.AbstractDwarfEntity;
 import net.sievert.jolcraft.entity.custom.object.RadiantEntity;
 import net.sievert.jolcraft.network.JolCraftNetworking;
-import net.sievert.jolcraft.network.packet.ClientboundAncientLanguagePacket;
-import net.sievert.jolcraft.network.packet.ClientboundEndorsementsPacket;
-import net.sievert.jolcraft.network.packet.ClientboundLanguagePacket;
-import net.sievert.jolcraft.network.packet.ClientboundReputationPacket;
+import net.sievert.jolcraft.network.packet.*;
 import net.sievert.jolcraft.item.potion.JolCraftPotions;
 import net.sievert.jolcraft.sound.JolCraftSoundHelper;
 import net.sievert.jolcraft.data.JolCraftTags;
@@ -135,13 +133,17 @@ public class JolCraftGameEvents {
         boolean knowsAncient = AncientDwarvenLanguageHelper.knowsAncientDwarvishServerBypassCreative(serverPlayer);
         JolCraftNetworking.sendToClient(serverPlayer, new ClientboundAncientLanguagePacket(knowsAncient));
 
-        // Sync reputation tier
+        // Sync Reputation tier
         int tier = DwarvenReputationHelper.getTierServerBypassCreative(serverPlayer);
         JolCraftNetworking.sendToClient(serverPlayer, new ClientboundReputationPacket(tier));
 
-        // Sync endorsements
+        // Sync Endorsements
         Set<ResourceLocation> endorsements = DwarvenReputationHelper.getAllEndorsementsServerBypassCreative(serverPlayer);
         JolCraftNetworking.sendToClient(serverPlayer, new ClientboundEndorsementsPacket(endorsements));
+
+        // Sync Tome Unlocks
+        Set<String> unlocks = TomeUnlock.get(serverPlayer).getUnlocks();
+        JolCraftNetworking.sendToClient(serverPlayer, new ClientboundTomeUnlocksPacket(unlocks));
     }
 
     @SubscribeEvent
@@ -197,14 +199,14 @@ public class JolCraftGameEvents {
             AttributeModifier mod = new AttributeModifier(
                     SKYBURROW_ID,
                     dayBoost,
-                    AttributeModifier.Operation.ADD_MULTIPLIED_BASE
+                    AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL
             );
             movementAttr.addTransientModifier(mod);
         } else if (!isDay && nightBoost > 0) {
             AttributeModifier mod = new AttributeModifier(
                     MOONSHARD_ID,
                     nightBoost,
-                    AttributeModifier.Operation.ADD_MULTIPLIED_BASE
+                    AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL
             );
             movementAttr.addTransientModifier(mod);
         }
@@ -447,7 +449,7 @@ public class JolCraftGameEvents {
     }
 
     @SubscribeEvent
-    public static void onPlayerLoggedOut(PlayerEvent.PlayerLoggedOutEvent event) {
+    public static void removeRadiantOnPlayerLoggedOut(PlayerEvent.PlayerLoggedOutEvent event) {
         UUID uuid = event.getEntity().getUUID();
         RadiantEntity existing = ACTIVE_RADIANT_ENTITIES.remove(uuid);
 
@@ -1053,7 +1055,6 @@ public class JolCraftGameEvents {
            });
        }
     }
-
     @SubscribeEvent
     public static void onRightClickItem(PlayerInteractEvent.RightClickItem event) {
         Player player = event.getEntity();
@@ -1061,26 +1062,38 @@ public class JolCraftGameEvents {
         ItemStack main = event.getItemStack();
         ItemStack offhand = player.getOffhandItem();
 
-        if (!(offhand.getItem() instanceof SpannerItem)) return;
-        if (!main.is(JolCraftTags.Items.GLOBAL_SALVAGE)) return;
+        boolean mainIsSpanner = main.getItem() instanceof SpannerItem;
+        boolean offIsSpanner = offhand.getItem() instanceof SpannerItem;
+        boolean mainIsScrap = main.is(JolCraftTags.Items.GLOBAL_SALVAGE);
+        boolean offIsScrap = offhand.is(JolCraftTags.Items.GLOBAL_SALVAGE);
+
+        if (!((mainIsSpanner && offIsScrap) || (offIsSpanner && mainIsScrap))) return;
 
         if (!level.isClientSide) {
-            List<ItemStack> loot = SalvageLootHelper.generateSalvageLoot(main);
+            ItemStack scrap = mainIsScrap ? main : offhand;
+            ItemStack spanner = mainIsSpanner ? main : offhand;
+            EquipmentSlot spannerSlot = mainIsSpanner ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND;
+            InteractionHand swingHand = mainIsSpanner ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
+
+            List<ItemStack> loot = SalvageLootHelper.generateSalvageLoot(scrap);
             loot.forEach(stack -> level.addFreshEntity(new net.minecraft.world.entity.item.ItemEntity(
                     level,
                     player.getX(), player.getY() + 0.5, player.getZ(),
                     stack
             )));
 
-            main.shrink(1); // consume the scrap
-            offhand.hurtAndBreak(1, player, EquipmentSlot.OFFHAND);
-            player.swing(InteractionHand.OFF_HAND, true);
+            if(!player.isCreative()){
+                scrap.shrink(1);
+                spanner.hurtAndBreak(1, player, spannerSlot);
+            }
+            player.swing(swingHand, true);
             level.playSound(null, player.blockPosition(), SoundEvents.ITEM_BREAK, SoundSource.PLAYERS, 1.0F, 1.5F);
         }
 
         event.setCancellationResult(InteractionResult.SUCCESS);
         event.setCanceled(true);
     }
+
 
     @SubscribeEvent
     public static void onAdvancementEarned(AdvancementEvent.AdvancementEarnEvent event) {

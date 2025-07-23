@@ -4,7 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.sievert.jolcraft.data.custom.rep.DwarvenReputation;
-import net.sievert.jolcraft.network.client.data.MyClientReputationData;
+import net.sievert.jolcraft.network.client.data.ClientReputationData;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
@@ -64,37 +64,37 @@ public class DwarvenReputationHelper {
     @OnlyIn(Dist.CLIENT)
     public static boolean hasClientTier(int minTier) {
         Player player = Minecraft.getInstance().player;
-        return player != null && (player.isCreative() || MyClientReputationData.getTier() >= minTier);
+        return player != null && (player.isCreative() || ClientReputationData.getTier() >= minTier);
     }
     @OnlyIn(Dist.CLIENT)
     public static boolean hasClientTierBypassCreative(int minTier) {
         Player player = Minecraft.getInstance().player;
-        return player != null && MyClientReputationData.getTier() >= minTier;
+        return player != null && ClientReputationData.getTier() >= minTier;
     }
 
     @OnlyIn(Dist.CLIENT)
     public static boolean hasClientEndorsement(ResourceLocation professionId) {
         Player player = Minecraft.getInstance().player;
-        return player != null && (player.isCreative() || MyClientReputationData.hasEndorsement(professionId));
+        return player != null && (player.isCreative() || ClientReputationData.hasEndorsement(professionId));
     }
     @OnlyIn(Dist.CLIENT)
     public static boolean hasClientEndorsementBypassCreative(ResourceLocation professionId) {
         Player player = Minecraft.getInstance().player;
-        return player != null && MyClientReputationData.hasEndorsement(professionId);
+        return player != null && ClientReputationData.hasEndorsement(professionId);
     }
 
     @OnlyIn(Dist.CLIENT)
     public static int getClientTier() {
-        return MyClientReputationData.getTier();
+        return ClientReputationData.getTier();
     }
 
     @OnlyIn(Dist.CLIENT)
     public static int getClientEndorsementCount() {
-        return MyClientReputationData.endorsementCount();
+        return ClientReputationData.endorsementCount();
     }
 
     @OnlyIn(Dist.CLIENT)
     public static Set<ResourceLocation> getAllClientEndorsements() {
-        return MyClientReputationData.getAllEndorsements();
+        return ClientReputationData.getAllEndorsements();
     }
 }

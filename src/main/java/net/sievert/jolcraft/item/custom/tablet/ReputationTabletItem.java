@@ -1,7 +1,9 @@
 package net.sievert.jolcraft.item.custom.tablet;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -35,7 +37,8 @@ public class ReputationTabletItem extends Item {
         if (!level.isClientSide && player instanceof ServerPlayer serverPlayer) {
             if (!DwarvenLanguageHelper.knowsDwarvishServer(serverPlayer)) {
                 serverPlayer.displayClientMessage(
-                        Component.translatable("tooltip.jolcraft.tablet.locked").withStyle(ChatFormatting.GRAY), true
+                        Component.translatable("tooltip.jolcraft.tablet.locked").withStyle(ChatFormatting.GRAY),
+                        true
                 );
                 return InteractionResult.SUCCESS;
             }
@@ -45,20 +48,24 @@ public class ReputationTabletItem extends Item {
 
             if (currentTier >= ENDORSEMENT_THRESHOLDS.length) {
                 serverPlayer.displayClientMessage(
-                        Component.translatable("tooltip.jolcraft.reputation.max_tier").withStyle(ChatFormatting.GRAY), true
+                        Component.translatable("tooltip.jolcraft.reputation.max_tier").withStyle(ChatFormatting.GRAY),
+                        true
                 );
             } else {
                 int needed = ENDORSEMENT_THRESHOLDS[currentTier];
                 serverPlayer.displayClientMessage(
-                        Component.literal("Endorsements for reputation advancement: " + endorsements + "/" + needed)
-                                .withStyle(ChatFormatting.GRAY), true
+                        Component.translatable("tooltip.jolcraft.tablet.progress", endorsements, needed)
+                                .withStyle(ChatFormatting.GRAY),
+                        true
                 );
             }
 
             level.playSound(null, player.blockPosition(), SoundEvents.CHISELED_BOOKSHELF_INSERT, SoundSource.PLAYERS, 1.0f, 0.5f);
         }
+
         return InteractionResult.SUCCESS;
     }
+
 
     @Override
     public void onCraftedBy(ItemStack stack, Level level, Player player) {
@@ -85,20 +92,56 @@ public class ReputationTabletItem extends Item {
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         if (DwarvenLanguageHelper.knowsDwarvishClient()) {
             String ownerName = stack.getOrDefault(JolCraftDataComponents.REP_OWNER.get(), "Unknown");
-            int tier = stack.getOrDefault(JolCraftDataComponents.REP_TIER.get(), 0);
-            int endorsements = stack.getOrDefault(JolCraftDataComponents.REP_ENDORSEMENTS.get(), 0);
+            int statictier = stack.getOrDefault(JolCraftDataComponents.REP_TIER.get(), 0);
+            int staticendorsements = stack.getOrDefault(JolCraftDataComponents.REP_ENDORSEMENTS.get(), 0);
+            int staticneeded = statictier < ENDORSEMENT_THRESHOLDS.length ? ENDORSEMENT_THRESHOLDS[statictier] : -1;
 
-            tooltip.add(Component.translatable("tooltip.jolcraft.rep_owner", ownerName)
-                    .withStyle(ChatFormatting.GRAY));
-            tooltip.add(Component.translatable("tooltip.jolcraft.reputation_tier")
-                    .append(Component.translatable("jolcraft.reputation_tier." + tier))
-                    .withStyle(ChatFormatting.GRAY));
-            tooltip.add(Component.translatable("tooltip.jolcraft.endorsement_count", endorsements)
-                    .withStyle(ChatFormatting.GRAY));
+            if (Screen.hasShiftDown()) {
+                int tier = DwarvenReputationHelper.getClientTier();
+                int endorsements = DwarvenReputationHelper.getClientEndorsementCount();
+                int needed = tier < ENDORSEMENT_THRESHOLDS.length ? ENDORSEMENT_THRESHOLDS[tier] : -1;
+
+                if (endorsements == 0 && tier == 0) {
+                    // Only show how to gain endorsements
+                    tooltip.add(Component.translatable("tooltip.jolcraft.tablet.endorsements_info")
+                            .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
+                } else if (endorsements > 0 && tier == 0) {
+                    // Only show how to advance when you have some endorsements
+                    tooltip.add(Component.translatable("tooltip.jolcraft.tablet.advance_info")
+                            .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
+                }
+                // Show progress or max
+                if (needed > -1) {
+                    MutableComponent progressPrefix = Component.translatable("tooltip.jolcraft.tablet.progress.prefix")
+                            .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC);
+                    Component progressValue = Component.literal(endorsements + "/" + needed)
+                            .withStyle(ChatFormatting.BLUE, ChatFormatting.ITALIC);
+                    tooltip.add(progressPrefix.append(progressValue));
+                } else {
+                    tooltip.add(Component.translatable("tooltip.jolcraft.reputation.max_tier")
+                            .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
+                }
+            }
+            else {
+                tooltip.add(Component.translatable("tooltip.jolcraft.rep_owner", ownerName)
+                        .withStyle(ChatFormatting.GRAY));
+                tooltip.add(Component.translatable("tooltip.jolcraft.reputation_tier")
+                        .append(Component.translatable("jolcraft.reputation_tier." + statictier))
+                        .withStyle(ChatFormatting.GRAY));
+                tooltip.add(Component.translatable("tooltip.jolcraft.endorsement_count", staticendorsements)
+                        .withStyle(ChatFormatting.GRAY));
+                Component shiftKey = Component.literal("Shift").withStyle(ChatFormatting.BLUE);
+                tooltip.add(Component.translatable("tooltip.jolcraft.shift", shiftKey)
+                        .withStyle(ChatFormatting.DARK_GRAY));
+            }
         } else {
             tooltip.add(Component.translatable("tooltip.jolcraft.tablet.locked")
                     .withStyle(ChatFormatting.GRAY));
         }
+
         super.appendHoverText(stack, context, tooltip, flag);
     }
+
+
+
 }

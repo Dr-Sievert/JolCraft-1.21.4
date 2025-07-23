@@ -6,14 +6,14 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.PlayLevelSoundEvent;
 import net.sievert.jolcraft.JolCraft;
-import net.sievert.jolcraft.network.client.data.MyClientDeliriumData;
+import net.sievert.jolcraft.network.client.data.ClientDeliriumData;
 
 @EventBusSubscriber(modid = JolCraft.MOD_ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
 public class JolCraftSoundEvents {
 
     @SubscribeEvent
     public static void onPlaySound(PlayLevelSoundEvent event) {
-        if (MyClientDeliriumData.getMuffleTicks() > 0) {
+        if (ClientDeliriumData.getMuffleTicks() > 0) {
             var soundHolder = event.getSound();
             if (soundHolder == null) return;
 

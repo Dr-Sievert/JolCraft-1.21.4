@@ -1,5 +1,8 @@
-package net.sievert.jolcraft.item.custom;
+package net.sievert.jolcraft.item.custom.tooltip;
 
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -25,7 +28,7 @@ public abstract class UnidentifiedItem extends Item {
                 ItemStack identified = getRandomIdentifiedItem(serverPlayer, stack);
 
                 if (!identified.isEmpty()) {
-                    if (player.getAbilities().instabuild) {
+                    if (player.isCreative()) {
                         boolean added = false;
                         for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
                             if (player.getInventory().getItem(i).isEmpty()) {
@@ -64,8 +67,11 @@ public abstract class UnidentifiedItem extends Item {
     /** Must define in subclasses: which item to return upon identification. */
     protected abstract ItemStack getRandomIdentifiedItem(ServerPlayer player, ItemStack original);
 
-    /** Must define in subclasses: tooltip for unidentified state. */
-    protected abstract Component getUnidentifiedTooltip(Player player, ItemStack stack);
+    /** Subclass provides all lines shown when holding Shift. */
+    protected abstract List<Component> getShiftTooltip(ItemStack stack, Player player, List<Component> tooltip, TooltipFlag flag);
+
+    /** Subclass provides lines shown when NOT holding Shift (before the "Hold Shift" line). */
+    protected abstract List<Component> getNoShiftTooltip(ItemStack stack, Player player, List<Component> tooltip, TooltipFlag flag);
 
     /** Must define in subclasses: message on successful identification. */
     protected abstract Component getIdentifySuccessMessage(ServerPlayer player, ItemStack identified);
@@ -82,8 +88,17 @@ public abstract class UnidentifiedItem extends Item {
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         if (context.level() != null && context.level().isClientSide()) {
-            Player player = net.minecraft.client.Minecraft.getInstance().player;
-            tooltip.add(getUnidentifiedTooltip(player, stack));
+            Player player = Minecraft.getInstance().player;
+            if (player != null) {
+                if (Screen.hasShiftDown()) {
+                    tooltip.addAll(getShiftTooltip(stack, player, tooltip, flag));
+                } else {
+                    tooltip.addAll(getNoShiftTooltip(stack, player, tooltip, flag));
+                    Component shiftKey = Component.literal("Shift").withStyle(ChatFormatting.BLUE);
+                    tooltip.add(Component.translatable("tooltip.jolcraft.shift", shiftKey)
+                            .withStyle(ChatFormatting.DARK_GRAY));
+                }
+            }
         }
         super.appendHoverText(stack, context, tooltip, flag);
     }
