@@ -25,6 +25,10 @@ public class JolCraftBiomeModifiers {
     public static final ResourceKey<BiomeModifier> ADD_LARGE_MITHRIL_ORE = registerKey("add_large_mithril_ore");
     public static final ResourceKey<BiomeModifier> ADD_SPECIAL_MITHRIL_ORE = registerKey("add_special_mithril_ore");
 
+    //Geodes
+    public static final ResourceKey<BiomeModifier> ADD_BASALT_GEODE = registerKey("add_basalt_geode");
+
+
     public static void bootstrap(BootstrapContext<BiomeModifier> context) {
         var placedFeatures = context.lookup(Registries.PLACED_FEATURE);
         var biomes = context.lookup(Registries.BIOME);
@@ -68,6 +72,17 @@ public class JolCraftBiomeModifiers {
                 biomes.getOrThrow(JolCraftTags.Biomes.MOUNTAINS_AND_HILLS),
                 HolderSet.direct(placedFeatures.getOrThrow(JolCraftPlacedFeatures.SPECIAL_MITHRIL_ORE_PLACED_KEY)),
                 GenerationStep.Decoration.UNDERGROUND_ORES));
+
+        //Geodes
+        context.register(
+                ADD_BASALT_GEODE,
+                new BiomeModifiers.AddFeaturesBiomeModifier(
+                        biomes.getOrThrow(BiomeTags.IS_OVERWORLD),
+                        HolderSet.direct(placedFeatures.getOrThrow(JolCraftPlacedFeatures.BASALT_GEODE_PLACED_KEY)),
+                        GenerationStep.Decoration.UNDERGROUND_STRUCTURES
+                )
+        );
+
 
     }
 

@@ -109,6 +109,7 @@ public class JolCraftCreativeModeTabs {
                         pOutput.accept(JolCraftItems.DEEPSLATE_CHISEL);
                         pOutput.accept(JolCraftItems.MITHRIL_CHISEL);
 
+                        pOutput.accept(JolCraftBlocks.GEODE_BLOCK);
                         pOutput.accept(JolCraftItems.GEODE_SMALL);
                         pOutput.accept(JolCraftItems.GEODE_MEDIUM);
                         pOutput.accept(JolCraftItems.GEODE_LARGE);

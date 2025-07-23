@@ -158,10 +158,14 @@ public class JolCraftItemTagProvider extends ItemTagsProvider {
                 .add(JolCraftBlocks.DUSKCAP.get().asItem());
 
         tag(Tags.Items.ORES)
+                .add(JolCraftBlocks.GEODE_BLOCK.get().asItem())
                 .add(JolCraftBlocks.DEEPSLATE_MITHRIL_ORE.get().asItem());
 
         tag(Tags.Items.ORE_RATES_SINGULAR)
                 .add(JolCraftBlocks.DEEPSLATE_MITHRIL_ORE.get().asItem());
+
+        tag(Tags.Items.ORE_RATES_DENSE)
+                .add(JolCraftBlocks.GEODE_BLOCK.get().asItem());
 
         tag(Tags.Items.ORES_IN_GROUND_DEEPSLATE)
                 .add(JolCraftBlocks.DEEPSLATE_MITHRIL_ORE.get().asItem());

@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "jolcraft:block/geode_block"
+    }
+  }
+}

@@ -24,6 +24,7 @@ public class JolCraftBlockTagProvider extends BlockTagsProvider {
         tag(BlockTags.MINEABLE_WITH_PICKAXE)
                 .add(JolCraftBlocks.LAPIDARY_BENCH.get())
                 .add(JolCraftBlocks.DEEPSLATE_MITHRIL_ORE.get())
+                .add(JolCraftBlocks.GEODE_BLOCK.get())
                 .add(JolCraftBlocks.PURE_MITHRIL_BLOCK.get())
                 .add(JolCraftBlocks.MITHRIL_BLOCK.get())
                 .add(JolCraftBlocks.STRONGBOX.get())
@@ -58,10 +59,14 @@ public class JolCraftBlockTagProvider extends BlockTagsProvider {
                 .add(JolCraftBlocks.MITHRIL_BLOCK.get());
 
         tag(Tags.Blocks.ORES)
+                .add(JolCraftBlocks.GEODE_BLOCK.get())
                 .add(JolCraftBlocks.DEEPSLATE_MITHRIL_ORE.get());
 
         tag(Tags.Blocks.ORE_RATES_SINGULAR)
                 .add(JolCraftBlocks.DEEPSLATE_MITHRIL_ORE.get());
+
+        tag(Tags.Blocks.ORE_RATES_DENSE)
+                .add(JolCraftBlocks.GEODE_BLOCK.get());
 
         tag(Tags.Blocks.ORES_IN_GROUND_DEEPSLATE)
                 .add(JolCraftBlocks.DEEPSLATE_MITHRIL_ORE.get());

@@ -28,6 +28,10 @@ public class JolCraftPlacedFeatures {
     public static final ResourceKey<PlacedFeature> LARGE_MITHRIL_ORE_PLACED_KEY = registerKey("large_mithril_ore_placed");
     public static final ResourceKey<PlacedFeature> SPECIAL_MITHRIL_ORE_PLACED_KEY = registerKey("special_mithril_ore_placed");
 
+    //Geodes
+    public static final ResourceKey<PlacedFeature> BASALT_GEODE_PLACED_KEY = registerKey("basalt_geode_placed");
+
+
     public static void bootstrap(BootstrapContext<PlacedFeature> context) {
         var configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
 
@@ -77,6 +81,22 @@ public class JolCraftPlacedFeatures {
                 JolCraftOreReplacement.rareOrePlacement(4, HeightRangePlacement.triangle(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(0))));
         register(context, SPECIAL_MITHRIL_ORE_PLACED_KEY, configuredFeatures.getOrThrow(JolCraftConfiguredFeatures.SPECIAL_MITHRIL_ORE_KEY),
                 JolCraftOreReplacement.rareOrePlacement(1, HeightRangePlacement.triangle(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(0))));
+
+        //Geodes
+        register(
+                context,
+                BASALT_GEODE_PLACED_KEY,
+                configuredFeatures.getOrThrow(JolCraftConfiguredFeatures.BASALT_GEODE_KEY),
+                List.of(
+                        RarityFilter.onAverageOnceEvery(8),
+                        InSquarePlacement.spread(),
+                        HeightRangePlacement.uniform(
+                                VerticalAnchor.absolute(-64),
+                                VerticalAnchor.absolute(0)
+                        ),
+                        BiomeFilter.biome()
+                )
+        );
     }
 
     private static ResourceKey<PlacedFeature> registerKey(String name) {

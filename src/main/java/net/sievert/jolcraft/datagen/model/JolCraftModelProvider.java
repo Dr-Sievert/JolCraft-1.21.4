@@ -193,6 +193,8 @@ public class JolCraftModelProvider extends ModelProvider {
         itemModels.generateFlatItem(JolCraftItems.DEEPSLATE_CHISEL.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
         itemModels.generateFlatItem(JolCraftItems.MITHRIL_CHISEL.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
 
+        blockModels.createTrivialCube(JolCraftBlocks.GEODE_BLOCK.get());
+
         itemModels.generateFlatItem(JolCraftItems.GEODE_SMALL.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(JolCraftItems.GEODE_MEDIUM.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(JolCraftItems.GEODE_LARGE.get(), ModelTemplates.FLAT_ITEM);

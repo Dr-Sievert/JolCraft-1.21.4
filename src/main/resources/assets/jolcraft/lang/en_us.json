@@ -52,18 +52,6 @@
   "trim_material.jolcraft.deepslate": "Deepslate",
   "trim_material.jolcraft.mithril": "Mithril",
 
-  "block.jolcraft.lapidary_bench": "Lapidary Bench",
-  "container.jolcraft.lapidary_bench": "Lapidary Bench",
-
-  "item.jolcraft.deepslate_artisan_hammer": "Deepslate Artisan Hammer",
-  "item.jolcraft.mithril_artisan_hammer": "Mithril Artisan Hammer",
-  "item.jolcraft.deepslate_chisel": "Deepslate Chisel",
-  "item.jolcraft.mithril_chisel": "Mithril Chisel",
-
-  "item.jolcraft.geode_small": "Small Geode",
-  "item.jolcraft.geode_medium": "Medium Geode",
-  "item.jolcraft.geode_large": "Large Geode",
-
   "trim_material.jolcraft.aegiscore": "Aegiscore",
   "trim_material.jolcraft.ashfang": "Ashfang",
   "trim_material.jolcraft.deepmarrow": "Deepmarrow",
@@ -209,6 +197,20 @@
   "item.jolcraft.contract_champion": "Champion Contract",
   "item.jolcraft.contract_blacksmith": "Blacksmith Contract",
   "item.jolcraft.contract_smelter": "Smelter Contract",
+
+
+  "block.jolcraft.lapidary_bench": "Lapidary Bench",
+  "container.jolcraft.lapidary_bench": "Lapidary Bench",
+
+  "item.jolcraft.deepslate_artisan_hammer": "Deepslate Artisan Hammer",
+  "item.jolcraft.mithril_artisan_hammer": "Mithril Artisan Hammer",
+  "item.jolcraft.deepslate_chisel": "Deepslate Chisel",
+  "item.jolcraft.mithril_chisel": "Mithril Chisel",
+
+  "block.jolcraft.geode_block": "Basalt Geode Cluster",
+  "item.jolcraft.geode_small": "Small Geode",
+  "item.jolcraft.geode_medium": "Medium Geode",
+  "item.jolcraft.geode_large": "Large Geode",
 
   "item.jolcraft.aegiscore": "Aegiscore",
   "item.jolcraft.ashfang": "Ashfang",

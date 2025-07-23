@@ -1,4 +1,4 @@
-// 1.21.4	2025-07-18T02:07:14.6762105	Loot Tables
+// 1.21.4	2025-07-23T04:01:55.2183518	Loot Tables
 b7cebd8660eb88808c3319f226db36325ccb1526 data/jolcraft/loot_table/blocks/asgarnian_crop_bottom.json
 c40e9946b18dfd4b829ebda82e51bc3fc3d8145d data/jolcraft/loot_table/blocks/asgarnian_crop_top.json
 faaa7e28a7da3b3da8d8bdf71408d90bb22eef82 data/jolcraft/loot_table/blocks/barley_block.json
@@ -12,6 +12,7 @@ b088b0c2ccff2bac886c82c4505381e9b44871b0 data/jolcraft/loot_table/blocks/duskhol
 6480b4facd46c45cbc101a5cef3520b81e3651be data/jolcraft/loot_table/blocks/fermenting_cauldron.json
 a0c01aaac4736f9a2e347e9e8833d0c32c343c0f data/jolcraft/loot_table/blocks/festerling.json
 54b09ac6ecb40ad3c1187817ac02565068d9aab7 data/jolcraft/loot_table/blocks/festerling_crop.json
+6d719fe6d776ea839e054e5f4b9f4253628ea9c3 data/jolcraft/loot_table/blocks/geode_block.json
 0aed2eceb474f5703b4a01232e9c20701bef764f data/jolcraft/loot_table/blocks/hearth.json
 dcfdf9720d27965b792e4fb2e5afaa67800b58fc data/jolcraft/loot_table/blocks/krandonian_crop_bottom.json
 5fed12e06c1da0798c4de734fa039b98add7b642 data/jolcraft/loot_table/blocks/krandonian_crop_top.json

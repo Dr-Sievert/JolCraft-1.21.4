@@ -1,4 +1,4 @@
-// 1.21.4	2025-07-21T05:01:28.6475671	Tags for minecraft:item mod id jolcraft
+// 1.21.4	2025-07-23T03:56:05.3444823	Tags for minecraft:item mod id jolcraft
 408625162012b71b4ebe01382789c1cb4648c851 data/c/tags/item/crops.json
 5964f0cd5f51d73982612239044d1c95430b5c1e data/c/tags/item/drinks.json
 d2f15c155e30f0429ba5bcea12b2853f30b27a90 data/c/tags/item/drinks/milk.json
@@ -8,8 +8,9 @@ d2f15c155e30f0429ba5bcea12b2853f30b27a90 data/c/tags/item/drink_containing/bucke
 1e48b47117300da60f201cd262fec0c2bf1ca530 data/c/tags/item/ingots.json
 899e40b7f10b4b18a73ff2ee8cdaa022c4e4e5b6 data/c/tags/item/mushrooms.json
 4c4b1b98113f0b6ef116447e6b3141cf2df1f21c data/c/tags/item/nuggets.json
-0ff2a7c53c8c827943a7a6b23d342e432fd861da data/c/tags/item/ores.json
+36010070a405be6ba7c6a4ab001ef97e4c854241 data/c/tags/item/ores.json
 0ff2a7c53c8c827943a7a6b23d342e432fd861da data/c/tags/item/ores_in_ground/deepslate.json
+e8ed0cd1f317f9bd38d173b0b76f9ea5b768efd0 data/c/tags/item/ore_rates/dense.json
 0ff2a7c53c8c827943a7a6b23d342e432fd861da data/c/tags/item/ore_rates/singular.json
 0dff7f7418358c8c44d9f542f1c31d6e630959de data/c/tags/item/raw_materials.json
 b6ab53117751ed97da9b15f56ccea5240d543523 data/c/tags/item/seeds.json

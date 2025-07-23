@@ -1,14 +1,17 @@
 package net.sievert.jolcraft.datagen.block;
 
-import net.minecraft.advancements.critereon.StatePropertiesPredicate;
+import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -18,10 +21,12 @@ import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
+import net.minecraft.world.level.storage.loot.functions.ApplyExplosionDecay;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
+import net.minecraft.world.level.storage.loot.predicates.MatchTool;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.sievert.jolcraft.block.JolCraftBlocks;
@@ -29,6 +34,8 @@ import net.sievert.jolcraft.block.custom.*;
 import net.sievert.jolcraft.block.custom.crop.*;
 import net.sievert.jolcraft.item.JolCraftItems;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 public class JolCraftBlockLootTableProvider extends BlockLootSubProvider {
@@ -38,6 +45,15 @@ public class JolCraftBlockLootTableProvider extends BlockLootSubProvider {
 
     @Override
     protected void generate() {
+
+        add(JolCraftBlocks.GEODE_BLOCK.get(),
+                createGeodeOreDrop(
+                        JolCraftBlocks.GEODE_BLOCK.get(),
+                        JolCraftItems.GEODE_SMALL.get(),
+                        JolCraftItems.GEODE_MEDIUM.get(),
+                        JolCraftItems.GEODE_LARGE.get()
+                )
+        );
 
         dropSelf(JolCraftBlocks.LAPIDARY_BENCH.get());
 
@@ -166,13 +182,13 @@ public class JolCraftBlockLootTableProvider extends BlockLootSubProvider {
 
     }
 
+
     protected LootTable.Builder createCropDrops(Block cropBlock, Item cropItem, Item seedItem, IntegerProperty ageProperty, int maxAge) {
         LootItemCondition.Builder mature = LootItemBlockStatePropertyCondition
                 .hasBlockStateProperties(cropBlock)
                 .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(ageProperty, maxAge));
         return createCropDrops(cropBlock, cropItem, seedItem, mature);
     }
-
 
     private void addHopsCropDrops(
             Block bottom,
@@ -270,15 +286,58 @@ public class JolCraftBlockLootTableProvider extends BlockLootSubProvider {
                 );
     }
 
+    protected LootTable.Builder createGeodeOreDrop(Block block, Item small, Item medium, Item large) {
+        HolderLookup.RegistryLookup<Enchantment> enchantments = registries.lookupOrThrow(Registries.ENCHANTMENT);
 
+        // Silk Touch: drop the block itself
+        LootPool.Builder silkTouchPool = LootPool.lootPool()
+                .setRolls(ConstantValue.exactly(1))
+                .when(hasSilkTouch())
+                .add(LootItem.lootTableItem(block));
 
-    protected LootTable.Builder createMultipleOreDrops(Block pBlock, Item item, float minDrops, float maxDrops) {
-        HolderLookup.RegistryLookup<Enchantment> registrylookup = registries.lookupOrThrow(Registries.ENCHANTMENT);
-        return createSilkTouchDispatchTable(pBlock,
-                applyExplosionDecay(pBlock, LootItem.lootTableItem(item)
-                        .apply(SetItemCountFunction.setCount(UniformGenerator.between(minDrops, maxDrops)))
-                        .apply(ApplyBonusCount.addOreBonusCount(registrylookup.getOrThrow(Enchantments.FORTUNE)))));
+        // Not Silk Touch: 1-3 weighted geodes with fortune and explosion decay
+        LootPool.Builder geodePool = LootPool.lootPool()
+                .setRolls(ConstantValue.exactly(1))
+                .when(hasSilkTouch().invert())
+                .add(LootItem.lootTableItem(small).setWeight(4))
+                .add(LootItem.lootTableItem(medium).setWeight(2))
+                .add(LootItem.lootTableItem(large).setWeight(1));
+        enchantments.get(Enchantments.FORTUNE).ifPresent(fortune ->
+                geodePool.apply(ApplyBonusCount.addOreBonusCount(fortune))
+        );
+        geodePool.apply(ApplyExplosionDecay.explosionDecay());
+
+        return LootTable.lootTable()
+                .withPool(silkTouchPool)
+                .withPool(geodePool);
     }
+
+    protected LootTable.Builder createMultipleOreDrops(Block block, Item item, float minDrops, float maxDrops) {
+        HolderLookup.RegistryLookup<Enchantment> enchantments = registries.lookupOrThrow(Registries.ENCHANTMENT);
+
+        // NOT Silk Touch: drop item with count and fortune/explosion decay
+        LootPool.Builder defaultPool = LootPool.lootPool()
+                .setRolls(ConstantValue.exactly(1))
+                .when(hasSilkTouch().invert())
+                .add(LootItem.lootTableItem(item)
+                        .apply(SetItemCountFunction.setCount(UniformGenerator.between(minDrops, maxDrops)))
+                );
+        enchantments.get(Enchantments.FORTUNE).ifPresent(fortune ->
+                defaultPool.apply(ApplyBonusCount.addOreBonusCount(fortune))
+        );
+        defaultPool.apply(ApplyExplosionDecay.explosionDecay());
+
+        // Silk Touch: drop the block itself
+        LootPool.Builder silkTouchPool = LootPool.lootPool()
+                .setRolls(ConstantValue.exactly(1))
+                .when(hasSilkTouch())
+                .add(LootItem.lootTableItem(block));
+
+        return LootTable.lootTable()
+                .withPool(silkTouchPool)
+                .withPool(defaultPool);
+    }
+
 
     @Override
     protected Iterable<Block> getKnownBlocks() {
