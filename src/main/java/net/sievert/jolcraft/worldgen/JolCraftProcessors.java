@@ -1,4 +1,4 @@
-package net.sievert.jolcraft.worldgen.processor;
+package net.sievert.jolcraft.worldgen;
 
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
@@ -6,6 +6,8 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.bus.api.IEventBus;
 import net.sievert.jolcraft.JolCraft;
+import net.sievert.jolcraft.worldgen.custom.processor.RandomReplaceWithLootProcessor;
+import net.sievert.jolcraft.worldgen.custom.processor.StructureVoidProcessor;
 
 public class JolCraftProcessors {
 

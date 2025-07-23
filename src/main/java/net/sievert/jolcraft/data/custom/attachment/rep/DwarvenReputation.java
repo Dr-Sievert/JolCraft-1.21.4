@@ -1,4 +1,4 @@
-package net.sievert.jolcraft.data.custom.rep;
+package net.sievert.jolcraft.data.custom.attachment.rep;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;

@@ -5,11 +5,11 @@ import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import net.sievert.jolcraft.JolCraft;
-import net.sievert.jolcraft.data.custom.block.HearthImpl;
-import net.sievert.jolcraft.data.custom.lang.AncientDwarvenLanguageImpl;
-import net.sievert.jolcraft.data.custom.lang.DwarvenLanguageImpl;
-import net.sievert.jolcraft.data.custom.rep.DwarvenReputationImpl;
-import net.sievert.jolcraft.data.custom.unlock.TomeUnlockImpl;
+import net.sievert.jolcraft.data.custom.attachment.block.HearthImpl;
+import net.sievert.jolcraft.data.custom.attachment.lang.AncientDwarvenLanguageImpl;
+import net.sievert.jolcraft.data.custom.attachment.lang.DwarvenLanguageImpl;
+import net.sievert.jolcraft.data.custom.attachment.rep.DwarvenReputationImpl;
+import net.sievert.jolcraft.data.custom.attachment.unlock.TomeUnlockImpl;
 
 import java.util.function.Supplier;
 

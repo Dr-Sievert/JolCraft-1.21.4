@@ -1,4 +1,4 @@
-package net.sievert.jolcraft.data.custom.block;
+package net.sievert.jolcraft.data.custom.attachment.block;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;

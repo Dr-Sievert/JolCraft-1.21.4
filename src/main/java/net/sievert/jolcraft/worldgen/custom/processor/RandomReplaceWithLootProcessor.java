@@ -1,4 +1,4 @@
-package net.sievert.jolcraft.worldgen.processor;
+package net.sievert.jolcraft.worldgen.custom.processor;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -11,6 +11,7 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.*;
+import net.sievert.jolcraft.worldgen.JolCraftProcessors;
 
 public class RandomReplaceWithLootProcessor extends StructureProcessor {
 

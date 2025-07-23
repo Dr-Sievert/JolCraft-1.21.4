@@ -12,7 +12,7 @@ import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.placement.*;
 import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.data.JolCraftTags;
-import net.sievert.jolcraft.worldgen.custom.DarknessPredicate;
+import net.sievert.jolcraft.worldgen.custom.predicate.DarknessPredicate;
 
 import java.util.List;
 

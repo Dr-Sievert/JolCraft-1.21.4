@@ -205,7 +205,7 @@ public class CoinPouchItem extends Item {
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         if (net.minecraft.client.gui.screens.Screen.hasShiftDown()) {
             tooltip.add(net.minecraft.network.chat.Component.translatable("tooltip.jolcraft.coin_pouch")
-                    .withStyle(net.minecraft.ChatFormatting.GRAY, net.minecraft.ChatFormatting.ITALIC));
+                    .withStyle(net.minecraft.ChatFormatting.GRAY));
         } else {
             net.minecraft.network.chat.Component shiftKey = net.minecraft.network.chat.Component.literal("Shift")
                     .withStyle(net.minecraft.ChatFormatting.BLUE);

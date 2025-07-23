@@ -18,7 +18,7 @@ public class AncientDwarvenTomeItem extends AncientItemBase {
 
     @Override
     protected List<Component> getFullyReadableTooltip(ItemStack stack, Player player, List<Component> tooltip, TooltipFlag flag) {
-        return List.of(Component.translatable("tooltip.jolcraft.dwarven_tome.shift").withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC));
+        return List.of(Component.translatable("tooltip.jolcraft.dwarven_tome.shift").withStyle(ChatFormatting.GRAY));
     }
 
     @Override
@@ -29,7 +29,7 @@ public class AncientDwarvenTomeItem extends AncientItemBase {
     @Override
     protected List<Component> getPartialUnderstandingTooltip(ItemStack stack, Player player, List<Component> tooltip, TooltipFlag flag) {
         return List.of(Component.translatable("tooltip.jolcraft.ancient_dwarven_tome.partial_understanding")
-                .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
+                .withStyle(ChatFormatting.GRAY));
     }
 
     @Override

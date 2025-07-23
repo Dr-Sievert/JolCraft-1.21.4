@@ -23,7 +23,7 @@ public class SignedContractItem extends Item {
         if (DwarvenLanguageHelper.knowsDwarvishClient()) {
             if (Screen.hasShiftDown()) {
                 tooltip.add(Component.translatable("tooltip.jolcraft.signed_contract")
-                        .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
+                        .withStyle(ChatFormatting.GRAY));
             }else{
                 Component shiftKey = Component.literal("Shift").withStyle(ChatFormatting.BLUE);
                 tooltip.add(Component.translatable("tooltip.jolcraft.shift", shiftKey)

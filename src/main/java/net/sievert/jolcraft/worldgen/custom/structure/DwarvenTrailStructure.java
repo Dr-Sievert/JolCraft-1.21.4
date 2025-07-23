@@ -1,4 +1,4 @@
-package net.sievert.jolcraft.worldgen.structure;
+package net.sievert.jolcraft.worldgen.custom.structure;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
@@ -20,6 +20,7 @@ import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 import net.minecraft.world.level.levelgen.structure.pools.alias.PoolAliasLookup;
 import net.minecraft.world.level.levelgen.structure.structures.JigsawStructure;
 import net.minecraft.world.level.levelgen.structure.templatesystem.LiquidSettings;
+import net.sievert.jolcraft.worldgen.JolCraftStructures;
 
 import java.util.Optional;
 

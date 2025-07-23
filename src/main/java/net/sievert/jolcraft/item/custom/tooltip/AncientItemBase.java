@@ -46,7 +46,7 @@ public abstract class AncientItemBase extends Item {
                         tooltip.add(Component.translatable("tooltip.jolcraft.need_lang")
                                 .withStyle(ChatFormatting.RED));
                         tooltip.add(Component.translatable("tooltip.jolcraft.ancient_memory")
-                                .withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC));
+                                .withStyle(ChatFormatting.GRAY));
                     }
                 } else {
                     if(DwarvenLanguageHelper.knowsDwarvishClient()) {

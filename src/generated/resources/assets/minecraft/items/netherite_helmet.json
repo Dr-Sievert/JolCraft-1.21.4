@@ -5,6 +5,20 @@
       {
         "model": {
           "type": "minecraft:model",
+          "model": "minecraft:item/netherite_helmet_copper_trim"
+        },
+        "when": "minecraft:copper"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:item/netherite_helmet_gold_trim"
+        },
+        "when": "minecraft:gold"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
           "model": "minecraft:item/netherite_helmet_amethyst_trim"
         },
         "when": "minecraft:amethyst"
@@ -57,20 +71,6 @@
           "model": "minecraft:item/netherite_helmet_redstone_trim"
         },
         "when": "minecraft:redstone"
-      },
-      {
-        "model": {
-          "type": "minecraft:model",
-          "model": "minecraft:item/netherite_helmet_copper_trim"
-        },
-        "when": "minecraft:copper"
-      },
-      {
-        "model": {
-          "type": "minecraft:model",
-          "model": "minecraft:item/netherite_helmet_gold_trim"
-        },
-        "when": "minecraft:gold"
       },
       {
         "model": {

@@ -1,4 +1,4 @@
-package net.sievert.jolcraft.worldgen.structure;
+package net.sievert.jolcraft.worldgen;
 
 import com.mojang.serialization.MapCodec;
 import net.sievert.jolcraft.JolCraft;
@@ -7,6 +7,8 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import net.sievert.jolcraft.worldgen.custom.structure.DwarvenTrailStructure;
+import net.sievert.jolcraft.worldgen.custom.structure.ForgeStructure;
 
 public class JolCraftStructures {
 

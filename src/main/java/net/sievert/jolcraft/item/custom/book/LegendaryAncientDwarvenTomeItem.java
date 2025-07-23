@@ -127,9 +127,9 @@ public class LegendaryAncientDwarvenTomeItem extends AncientDwarvenTomeItem {
         var dataComponentType = JolCraftDataComponents.LORE_LINE_ID.get();
         String loreKey = stack.get(dataComponentType);
         if(loreKey != null){
-            return List.of(Component.translatable("tooltip.jolcraft.legendary_ancient_dwarven_tome.shift").withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC));
+            return List.of(Component.translatable("tooltip.jolcraft.legendary_ancient_dwarven_tome.shift").withStyle(ChatFormatting.GRAY));
         }
-        return List.of(Component.translatable("tooltip.jolcraft.ancient_dwarven_tome.shift").withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC));
+        return List.of(Component.translatable("tooltip.jolcraft.tome_unlock.empty").withStyle(ChatFormatting.GRAY));
     }
 
 

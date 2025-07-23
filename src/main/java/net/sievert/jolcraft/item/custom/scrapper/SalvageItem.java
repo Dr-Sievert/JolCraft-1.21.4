@@ -17,10 +17,10 @@ public class SalvageItem extends Item {
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         if (Screen.hasShiftDown()) {
             tooltip.add(Component.translatable("tooltip.jolcraft.salvage")
-                    .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
+                    .withStyle(ChatFormatting.GRAY));
         } else {
             tooltip.add(Component.translatable("tooltip.jolcraft.salvage_tag")
-                    .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
+                    .withStyle(ChatFormatting.GRAY));
             Component shiftKey = Component.literal("Shift").withStyle(ChatFormatting.BLUE);
             tooltip.add(Component.translatable("tooltip.jolcraft.shift", shiftKey)
                     .withStyle(ChatFormatting.DARK_GRAY));

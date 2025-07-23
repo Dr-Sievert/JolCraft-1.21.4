@@ -1,4 +1,4 @@
-package net.sievert.jolcraft.data.custom.rep;
+package net.sievert.jolcraft.data.custom.attachment.rep;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;

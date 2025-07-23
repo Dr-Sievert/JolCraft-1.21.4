@@ -1,4 +1,4 @@
-package net.sievert.jolcraft.data.custom.block;
+package net.sievert.jolcraft.data.custom.attachment.block;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;

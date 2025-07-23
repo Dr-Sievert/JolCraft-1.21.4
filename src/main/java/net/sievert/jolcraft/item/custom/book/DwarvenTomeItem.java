@@ -28,7 +28,7 @@ public class DwarvenTomeItem extends Item {
 
             if (Screen.hasShiftDown()) {
                 if (knowsLanguage) {
-                    tooltip.add(Component.translatable("tooltip.jolcraft.dwarven_tome.shift").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
+                    tooltip.add(Component.translatable("tooltip.jolcraft.dwarven_tome.shift").withStyle(ChatFormatting.GRAY));
                 } else {
                     tooltip.add(Component.translatable("tooltip.jolcraft.dwarven_tome.locked").withStyle(ChatFormatting.GRAY));
                 }

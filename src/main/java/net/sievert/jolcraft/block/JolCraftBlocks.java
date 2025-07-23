@@ -157,7 +157,7 @@ public class JolCraftBlocks {
             BlockBehaviour.Properties.of(), "verdant"
     );
 
-    public static final DeferredBlock<DuskcapBlock> DUSKCAP = registerBlock(
+    public static final DeferredBlock<DuskcapBlock> DUSKCAP = registerBlockWithTooltip(
             "duskcap",
             (properties) -> new DuskcapBlock(
                     properties
@@ -168,7 +168,7 @@ public class JolCraftBlocks {
                             .sound(SoundType.GRASS)
                             .pushReaction(PushReaction.DESTROY)
             ),
-            BlockBehaviour.Properties.of(), true
+            BlockBehaviour.Properties.of(), "mushroom"
     );
 
     public static final DeferredBlock<FlowerPotBlock> POTTED_DUSKCAP = registerBlock(
@@ -188,7 +188,7 @@ public class JolCraftBlocks {
             )
     );
 
-    public static final DeferredBlock<FesterlingBlock> FESTERLING = registerBlock(
+    public static final DeferredBlock<FesterlingBlock> FESTERLING = registerBlockWithTooltip(
             "festerling",
             (properties) -> new FesterlingBlock(
                     properties
@@ -199,8 +199,9 @@ public class JolCraftBlocks {
                             .sound(SoundType.GRASS)
                             .pushReaction(PushReaction.DESTROY)
             ),
-            BlockBehaviour.Properties.of(), true
+            BlockBehaviour.Properties.of(), "festerling"
     );
+
 
     public static final DeferredBlock<FlowerPotBlock> POTTED_FESTERLING = registerBlock(
             "potted_festerling",

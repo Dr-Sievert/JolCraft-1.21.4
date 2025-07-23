@@ -60,7 +60,7 @@ public class DwarvenLexiconItem extends Item {
             // Detailed (Shift) tooltip
             if (knows) {
                 tooltip.add(Component.translatable("tooltip.jolcraft.dwarven_lexicon.shift")
-                        .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
+                        .withStyle(ChatFormatting.GRAY));
             } else {
                 tooltip.add(Component.translatable("tooltip.jolcraft.dwarven_lexicon.locked")
                         .withStyle(ChatFormatting.GRAY));

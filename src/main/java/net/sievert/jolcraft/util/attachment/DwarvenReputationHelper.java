@@ -3,7 +3,7 @@ package net.sievert.jolcraft.util.attachment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
-import net.sievert.jolcraft.data.custom.rep.DwarvenReputation;
+import net.sievert.jolcraft.data.custom.attachment.rep.DwarvenReputation;
 import net.sievert.jolcraft.network.client.data.ClientReputationData;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;

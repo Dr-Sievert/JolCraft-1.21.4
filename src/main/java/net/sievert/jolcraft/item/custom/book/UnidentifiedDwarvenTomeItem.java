@@ -52,7 +52,7 @@ public class UnidentifiedDwarvenTomeItem extends UnidentifiedItem {
         boolean knowsLanguage = DwarvenLanguageHelper.knowsDwarvishClient();
         return List.of(
                 knowsLanguage
-                        ? Component.translatable("tooltip.jolcraft.unidentified").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC)
+                        ? Component.translatable("tooltip.jolcraft.unidentified").withStyle(ChatFormatting.GRAY)
                         : Component.translatable("tooltip.jolcraft.dwarven_tome.locked").withStyle(ChatFormatting.GRAY)
         );
     }

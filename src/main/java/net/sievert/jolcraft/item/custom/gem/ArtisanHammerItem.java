@@ -25,7 +25,7 @@ public class ArtisanHammerItem extends ToolItem {
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         if (Screen.hasShiftDown()) {
             tooltip.add(Component.translatable("tooltip.jolcraft.artisan_hammer")
-                    .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
+                    .withStyle(ChatFormatting.GRAY));
         } else {
             Component shiftKey = Component.literal("Shift").withStyle(ChatFormatting.BLUE);
             tooltip.add(Component.translatable("tooltip.jolcraft.shift", shiftKey)

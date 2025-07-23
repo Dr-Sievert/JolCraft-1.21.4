@@ -1,4 +1,4 @@
-package net.sievert.jolcraft.worldgen.custom;
+package net.sievert.jolcraft.worldgen.custom.predicate;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;

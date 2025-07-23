@@ -9,7 +9,7 @@ import net.neoforged.neoforge.common.data.GlobalLootModifierProvider;
 import net.neoforged.neoforge.common.loot.LootTableIdCondition;
 import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.item.JolCraftItems;
-import net.sievert.jolcraft.loot.AddItemModifier;
+import net.sievert.jolcraft.loot.custom.AddItemModifier;
 
 import java.util.concurrent.CompletableFuture;
 

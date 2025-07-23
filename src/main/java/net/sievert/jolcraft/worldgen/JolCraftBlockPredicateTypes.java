@@ -6,7 +6,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.sievert.jolcraft.JolCraft;
-import net.sievert.jolcraft.worldgen.custom.DarknessPredicate;
+import net.sievert.jolcraft.worldgen.custom.predicate.DarknessPredicate;
 
 public class JolCraftBlockPredicateTypes {
     public static final DeferredRegister<BlockPredicateType<?>> BLOCK_PREDICATE_TYPES =

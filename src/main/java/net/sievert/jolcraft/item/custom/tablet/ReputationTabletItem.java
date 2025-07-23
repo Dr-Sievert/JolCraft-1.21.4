@@ -104,22 +104,22 @@ public class ReputationTabletItem extends Item {
                 if (endorsements == 0 && tier == 0) {
                     // Only show how to gain endorsements
                     tooltip.add(Component.translatable("tooltip.jolcraft.tablet.endorsements_info")
-                            .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
+                            .withStyle(ChatFormatting.GRAY));
                 } else if (endorsements > 0 && tier == 0) {
                     // Only show how to advance when you have some endorsements
                     tooltip.add(Component.translatable("tooltip.jolcraft.tablet.advance_info")
-                            .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
+                            .withStyle(ChatFormatting.GRAY));
                 }
                 // Show progress or max
                 if (needed > -1) {
                     MutableComponent progressPrefix = Component.translatable("tooltip.jolcraft.tablet.progress.prefix")
-                            .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC);
+                            .withStyle(ChatFormatting.GRAY);
                     Component progressValue = Component.literal(endorsements + "/" + needed)
-                            .withStyle(ChatFormatting.BLUE, ChatFormatting.ITALIC);
+                            .withStyle(ChatFormatting.BLUE);
                     tooltip.add(progressPrefix.append(progressValue));
                 } else {
                     tooltip.add(Component.translatable("tooltip.jolcraft.reputation.max_tier")
-                            .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
+                            .withStyle(ChatFormatting.GRAY));
                 }
             }
             else {

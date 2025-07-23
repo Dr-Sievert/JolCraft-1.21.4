@@ -26,20 +26,20 @@ public class StrongboxItem extends BlockItem {
             // Check if it is locked
             if (stack.has(JolCraftDataComponents.LOCKED)) {
                 tooltip.add(Component.translatable("tooltip.jolcraft.strongbox.locked")
-                        .withStyle(ChatFormatting.RED, ChatFormatting.ITALIC));
+                        .withStyle(ChatFormatting.RED));
             }
 
             // Check if the Strongbox has a loot table
             if (stack.has(JolCraftDataComponents.LOOT_TABLE)) {
                 tooltip.add(Component.translatable("tooltip.jolcraft.strongbox.loot")
-                        .withStyle(ChatFormatting.GREEN, ChatFormatting.ITALIC));
+                        .withStyle(ChatFormatting.GREEN));
             }
 
             // Check if the Strongbox has contents
             ItemContainerContents contents = stack.get(DataComponents.CONTAINER);
             if (contents != null && !Iterables.isEmpty(contents.nonEmptyItems())) {
                 tooltip.add(Component.translatable("tooltip.jolcraft.strongbox.not_empty")
-                        .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
+                        .withStyle(ChatFormatting.GRAY));
             }
         } else {
             // Shift hint

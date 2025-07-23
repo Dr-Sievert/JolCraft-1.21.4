@@ -72,7 +72,7 @@ public class CutGemItem extends Item {
         if (Screen.hasShiftDown()) {
             // Show only one, simple, shift-aware detailed line
             tooltip.add(Component.translatable("tooltip.jolcraft.cut_gem")
-                    .withStyle(net.minecraft.ChatFormatting.GRAY, net.minecraft.ChatFormatting.ITALIC));
+                    .withStyle(net.minecraft.ChatFormatting.GRAY));
         }
         else{
             // Always show the main short gem tooltip first

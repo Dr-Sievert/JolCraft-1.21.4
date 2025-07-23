@@ -26,7 +26,7 @@ public class ChiselItem extends ToolItem {
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         if (Screen.hasShiftDown()) {
             tooltip.add(Component.translatable("tooltip.jolcraft.chisel")
-                    .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
+                    .withStyle(ChatFormatting.GRAY));
 
             if (!TomeUnlockHelper.hasUnlockClient(TomeUnlockHelper.CUTTING_GEMS)) {
                 tooltip.add(Component.translatable("tooltip.jolcraft.chisel.cut_locked")
