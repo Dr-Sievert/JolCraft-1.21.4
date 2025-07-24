@@ -1,6 +1,7 @@
 package net.sievert.jolcraft.item.custom.merchant;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -21,26 +22,32 @@ public class BountyItem extends Item {
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         boolean knowsLanguage = DwarvenLanguageHelper.knowsDwarvishClient(); // ✅ use helper
-
-        if (knowsLanguage) {
-            int tier = BountyHelper.getBountyTier(stack);
-            if (tier <= 0) {
-                tooltip.add(Component.translatable("tooltip.jolcraft.bounty.invalid").withStyle(ChatFormatting.RED));
-            } else {
-                String tierName = switch (tier) {
-                    case 1 -> "Novice";
-                    case 2 -> "Apprentice";
-                    case 3 -> "Journeyman";
-                    case 4 -> "Expert";
-                    case 5 -> "Master";
-                    default -> "Unknown";
-                };
-                tooltip.add(Component.translatable("tooltip.jolcraft.bounty.tier", tierName).withStyle(ChatFormatting.GRAY));
-            }
-        } else {
-            tooltip.add(Component.translatable("tooltip.jolcraft.bounty.locked").withStyle(ChatFormatting.GRAY));
+        if (Screen.hasShiftDown()) {
+            tooltip.add(Component.translatable("tooltip.jolcraft.bounty").withStyle(ChatFormatting.GRAY));
         }
-
+        else{
+            if (knowsLanguage) {
+                int tier = BountyHelper.getBountyTier(stack);
+                if (tier <= 0) {
+                    tooltip.add(Component.translatable("tooltip.jolcraft.bounty.invalid").withStyle(ChatFormatting.RED));
+                } else {
+                    String tierName = switch (tier) {
+                        case 1 -> "Novice";
+                        case 2 -> "Apprentice";
+                        case 3 -> "Journeyman";
+                        case 4 -> "Expert";
+                        case 5 -> "Master";
+                        default -> "Unknown";
+                    };
+                    tooltip.add(Component.translatable("tooltip.jolcraft.bounty.tier", tierName).withStyle(ChatFormatting.GRAY));
+                }
+            } else {
+                tooltip.add(Component.translatable("tooltip.jolcraft.bounty.locked").withStyle(ChatFormatting.GRAY));
+            }
+            Component shiftKey = Component.literal("Shift").withStyle(ChatFormatting.BLUE);
+            tooltip.add(Component.translatable("tooltip.jolcraft.shift", shiftKey)
+                    .withStyle(ChatFormatting.DARK_GRAY));
+        }
         super.appendHoverText(stack, context, tooltip, flag);
     }
 

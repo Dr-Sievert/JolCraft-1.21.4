@@ -14,6 +14,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.saveddata.maps.MapDecorationTypes;
+import net.sievert.jolcraft.data.JolCraftDataComponents;
 import net.sievert.jolcraft.entity.ai.goal.*;
 import net.sievert.jolcraft.item.JolCraftItems;
 import net.sievert.jolcraft.data.JolCraftTags;
@@ -78,11 +79,12 @@ public class DwarfEntity extends AbstractDwarfEntity {
                 // Novice
                 1, new VillagerTrades.ItemListing[] {
                         new JolCraftDwarfTrades.ItemsForGold(Items.STICK, 1, 4, 2, 8, 6, 500),
-                        new JolCraftDwarfTrades.GoldForItems(Items.SMITHING_TABLE, 1, 3, 4, 1)
+                        new JolCraftDwarfTrades.ItemForItem(Items.OAK_PLANKS, 2, Items.STICK,  4, 3, 1),
+                        new JolCraftDwarfTrades.BountyItemForItem(JolCraftItems.PARCHMENT.get(), 1, JolCraftItems.BOUNTY.get(), 1, 1, 0, 1),
+
                 },
                 // Apprentice
                 2, new VillagerTrades.ItemListing[] {
-                        new JolCraftDwarfTrades.ItemsForGold(Items.BREAD, 1, 3, 1, 5, 10, 10),
                         new JolCraftDwarfTrades.TreasureMapForGold(
                                 8, // min cost
                                 JolCraftTags.Structures.ON_FORGE_EXPLORER_MAPS,
@@ -93,17 +95,20 @@ public class DwarfEntity extends AbstractDwarfEntity {
                 },
                 // Journeyman
                 3, new VillagerTrades.ItemListing[] {
-                        new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.CONTRACT_BLANK.get(), 2, 4, 1, 10, 1, 10),
-                        new JolCraftDwarfTrades.GoldForItems(JolCraftItems.QUILL_EMPTY.get(), 3, 7, 4, 1)
+                        new JolCraftDwarfTrades.GoldForItems(Items.SMITHING_TABLE, 1, 3, 4, 1)
                 },
                 // Expert
                 4, new VillagerTrades.ItemListing[] {
-                        new JolCraftDwarfTrades.ItemsForGold(Items.DIAMOND, 1, 1, 10, 10, 10, 10),
-                        new JolCraftDwarfTrades.GoldForItems(Items.EMERALD, 1, 10, 10, 1)
+                        new JolCraftDwarfTrades.ItemsAndGoldToItemsWithData(
+                                JolCraftItems.LEGENDARY_PAGE.get(), 20,
+                                30,
+                                JolCraftItems.ANCIENT_DWARVEN_TOME_LEGENDARY.get(), 1,
+                                1, 0, 0F,
+                                (stack) -> stack.set(JolCraftDataComponents.LORE_LINE_ID, "ancient_gemcraft")
+                        ),
                 },
                 // Master
                 5, new VillagerTrades.ItemListing[] {
-                        new JolCraftDwarfTrades.ItemsForGold(Items.NETHERITE_BLOCK, 1, 1, 5, 10, 5, 10),
                         new JolCraftDwarfTrades.ItemsAndGoldToItems(Items.PURPLE_DYE, 1, 30, JolCraftItems.GUILD_SIGIL.get(), 1, 1, 0, 0.05F)
                 }
         ));

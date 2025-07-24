@@ -1296,7 +1296,7 @@ public class AbstractDwarfEntity extends AbstractVillager {
     public static final Logger LOGGER = LogUtils.getLogger();
     public boolean increaseProfessionLevelOnUpdate = false;
     public boolean assignProfessionWhenSpawned;
-    protected Int2ObjectMap<VillagerTrades.ItemListing[]> instanceTrades;
+    public Int2ObjectMap<VillagerTrades.ItemListing[]> instanceTrades;
 
     public static Int2ObjectMap<VillagerTrades.ItemListing[]> toIntMap(Map<Integer, VillagerTrades.ItemListing[]> pMap) {
         return new Int2ObjectOpenHashMap<>(pMap);

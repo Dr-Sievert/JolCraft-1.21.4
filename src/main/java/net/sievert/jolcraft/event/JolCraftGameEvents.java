@@ -86,7 +86,7 @@ import net.sievert.jolcraft.sound.JolCraftSounds;
 import net.sievert.jolcraft.util.attachment.AncientDwarvenLanguageHelper;
 import net.sievert.jolcraft.util.attachment.DwarvenLanguageHelper;
 import net.sievert.jolcraft.util.attachment.DwarvenReputationHelper;
-import net.sievert.jolcraft.util.random.JolCraftAnvilHelper;
+import net.sievert.jolcraft.util.vanilla.JolCraftAnvilHelper;
 import net.sievert.jolcraft.util.dwarf.SalvageLootHelper;
 import net.sievert.jolcraft.block.JolCraftBlocks;
 import net.sievert.jolcraft.effect.JolCraftEffects;
@@ -273,12 +273,16 @@ public class JolCraftGameEvents {
     @SubscribeEvent
     public static void onArmorHurt(ArmorHurtEvent event) {
         LivingEntity entity = event.getEntity();
-        double unbreakingChance = entity.getAttributeValue(JolCraftAttributes.ARMOR_UNBREAKING);
+        if (!(entity instanceof Player player)) return;
+
+        double unbreakingChance = player.getAttributeValue(JolCraftAttributes.ARMOR_UNBREAKING);
         if (unbreakingChance <= 0.0) return;
-        if (entity.getRandom().nextDouble() < unbreakingChance) {
+
+        if (player.getRandom().nextDouble() < unbreakingChance) {
             event.setCanceled(true);
         }
     }
+
 
     @SubscribeEvent
     public static void onXpChange(PlayerXpEvent.XpChange event) {

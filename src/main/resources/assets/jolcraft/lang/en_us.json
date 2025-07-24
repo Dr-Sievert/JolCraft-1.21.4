@@ -312,16 +312,15 @@
 
   "tooltip.jolcraft.dev_key": "Used for testing/creative mode.",
   "tooltip.jolcraft.quill_empty": "Can be filled with ink sacs or by right-clicking a squid.",
-  "tooltip.jolcraft.quill": "Used for writing on paper. Can be filled with ink sacs or by right-clicking a squid.",
+  "tooltip.jolcraft.quill": "Used for writing on paper. Can be filled by right-clicking a squid.",
   "tooltip.jolcraft.quill_full": "Used for writing on paper.",
   "tooltip.jolcraft.written_contract": "Given to dwarves without professions to get signed contracts. Signed contracts are used to buy profession contracts from a guildmaster. If given to a dwarf with a profession they will create a contract for their profession.",
   "tooltip.jolcraft.signed_contract": "Signed contracts are used to buy profession contracts from a guildmaster.",
   "tooltip.jolcraft.profession_contract": "Profession contracts can be given to dwarves without professions to set their profession.",
-
   "tooltip.jolcraft.guild_sigil": "Can be bought from a master dwarf without a profession.",
   "tooltip.jolcraft.legendary_page": "Salvaged from ancient tomes by historians. Can be used to restore ancient legendary tomes by certain dwarven professions.",
   "tooltip.jolcraft.trim_material": "Can be used to trim armor.",
-
+  "tooltip.jolcraft.strongbox": "Strongboxes are chests that can generate with locks that needs to be picked. Breaking a locked strongbox also breaks the lock but removes any ungenerated loot. Breaking a strongbox with silk touch retains all of its contents.",
   "tooltip.jolcraft.coin_pouch": "Stores up to 999 coins. Right-click when held to deposit all coins in inventory. Left-click with coins in inventory to deposit up to a stack. Right-click in inventory to withdraw up to a stack.",
   "tooltip.jolcraft.hearth": "Can be activated if placed within 10 blocks of a claimed bed. Need to sleep in a bed to activate a hearth again. Multiple players can be bound to a hearth. Provides Homestead effect to bound players within range.",
   "tooltip.jolcraft.verdant": "JolCraft crops ignores growing conditions and also grow faster on this. Other crops can be planted but no extra effects.",
@@ -334,7 +333,6 @@
   "tooltip.jolcraft.hops": "Can be used on a cauldron with malt to add effects to a brew.",
   "tooltip.jolcraft.yeast": "Can be used on a fermenting cauldron with malt/hops to start the brewing process. Created by using sugar on a water cauldron and extracted using glass bottles.",
   "tooltip.jolcraft.glass_mug": "Can be used to extract a finished dwarven brew from a cauldron.",
-
   "tooltip.jolcraft.spanner": "Can be used to produce scrap from salvage. Hold the spanner in one hand and salvage in the other, then right click!",
   "tooltip.jolcraft.geode": "Can be broken into dust using an artisan hammer at a lapidary bench.",
   "tooltip.jolcraft.uncut_gem": "Can be broken into dust using an artisan hammer or cut using a chisel at a lapidary bench.",
@@ -342,11 +340,12 @@
   "tooltip.jolcraft.cut_gem": "Can be used to trim armor for bonus stats. Cosmetic trims do not override given stats. Only new stat trims.",
   "tooltip.jolcraft.chisel": "Can be used to cut gems at a lapidary bench.",
   "tooltip.jolcraft.chisel.cut_locked": "You have not learned how to cut gems!",
-
   "tooltip.jolcraft.need_lang": "You need to understand dwarvish to use this.",
   "tooltip.jolcraft.need_ancient": "You need to understand ancient dwarvish to use this.",
   "tooltip.jolcraft.ancient_memory": "Ancient memory effect gives you temporary understanding of ancient dwarvish.",
   "tooltip.jolcraft.unidentified": "Right-click to identify.",
+  "tooltip.jolcraft.bounty": "Give this to a merchant to get a bounty crate.",
+  "tooltip.jolcraft.bounty_crate": "Needs to be filled and handed in for a reward. Right-click when held to fill from inventory. Left-click in inventory with required item to fill or right-click to insert single item. Right-click in inventory to extract items.",
 
   "tooltip.jolcraft.language.locked": "You do not understand each other.",
   "tooltip.jolcraft.dwarf.busy": "This dwarf is currently busy.",
@@ -387,7 +386,7 @@
 
   "tooltip.jolcraft.paper.locked": "The paper is marked with unfamiliar symbols.",
 
-  "tooltip.jolcraft.lockpick": "Used to pick locks. Will break on failure.",
+  "tooltip.jolcraft.lockpick": "Used to pick locks. Will break on failure. Lockpicking is easier when using potions.",
 
   "tooltip.jolcraft.strongbox.not_empty": "This strongbox has items inside.",
   "tooltip.jolcraft.strongbox.loot": "This strongbox has loot inside.",
@@ -402,7 +401,7 @@
   "tooltip.jolcraft.bounty_crate.target": "Target: ",
   "tooltip.jolcraft.bounty_crate.count": "Required: %s",
   "tooltip.jolcraft.bounty_crate.tier": "Tier: %s",
-  "tooltip.jolcraft.bounty_crate.invalid": "Invalid bounty data",
+  "tooltip.jolcraft.bounty_crate.invalid": "No bounty data",
   "tooltip.jolcraft.bounty_crate.locked": "The crate is marked with unfamiliar symbols.",
   "tooltip.jolcraft.bounty_crate.filled": "The crate is already full.",
   "tooltip.jolcraft.bounty_crate.filled_some": "Added %s items to the crate.",
@@ -547,7 +546,6 @@
   "subtitles.jolcraft.entity.dwarf_no": "Dwarf disagrees",
   "subtitles.jolcraft.entity.dwarf_trade": "Dwarf haggles",
 
-
-
-  "filled_map.forge": "Map to a Dwarven Forge"
+  "filled_map.forge": "Map to a Dwarven Forge",
+  "jei.jolcraft.dwarf_trades": "Dwarf Trades"
 }

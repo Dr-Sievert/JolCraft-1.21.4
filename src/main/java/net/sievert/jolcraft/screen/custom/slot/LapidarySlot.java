@@ -12,7 +12,7 @@ public class LapidarySlot extends Slot {
 
     @Override
     public boolean mayPlace(ItemStack stack) {
-        return stack.is(JolCraftTags.Items.GEODES) || stack.is(JolCraftTags.Items.GEMS);
+        return stack.is(JolCraftTags.Items.GEODES) || stack.is(JolCraftTags.Items.GEMS_UNCUT);
     }
 
     @Override

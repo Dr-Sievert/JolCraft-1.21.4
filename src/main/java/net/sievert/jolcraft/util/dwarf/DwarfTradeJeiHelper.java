@@ -1,0 +1,116 @@
+package net.sievert.jolcraft.util.dwarf;
+
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.npc.VillagerTrades;
+import net.minecraft.world.item.Item;
+import net.neoforged.neoforge.registries.DeferredItem;
+import net.sievert.jolcraft.entity.custom.dwarf.*;
+import net.sievert.jolcraft.integration.jei.custom.DwarfTradeRecipe;
+import net.sievert.jolcraft.item.JolCraftItems;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class DwarfTradeJeiHelper {
+
+    public static List<DwarfTradeRecipe> getAllDwarfJeiTrades() {
+        List<DwarfTradeRecipe> recipes = new ArrayList<>();
+        for (DwarfProfession prof : PROFESSIONS) {
+            Int2ObjectMap<VillagerTrades.ItemListing[]> trades = prof.trades();
+            if (trades == null) continue;
+            for (int level = 1; level <= 5; ++level) {
+                VillagerTrades.ItemListing[] tradeArr = trades.get(level);
+                if (tradeArr == null) continue;
+                for (VillagerTrades.ItemListing listing : tradeArr) {
+                    var inputA = JolCraftDwarfTrades.getExampleInputA(listing);
+                    var inputB = JolCraftDwarfTrades.getExampleInputB(listing);
+                    var output = JolCraftDwarfTrades.getExampleOutput(listing);
+                    if ((!inputA.isEmpty() || (inputB != null && !inputB.isEmpty())) && !output.isEmpty()) {
+                        recipes.add(new DwarfTradeRecipe(
+                                prof.displayName(), level, inputA, inputB, output, prof.spawnEgg()
+                        ));
+                    }
+                }
+            }
+        }
+        return recipes;
+    }
+
+    public record DwarfProfession(
+            String id,
+            String displayName,
+            Int2ObjectMap<VillagerTrades.ItemListing[]> trades,
+            DeferredItem<Item> spawnEgg
+    ) {}
+
+    public static final List<DwarfProfession> PROFESSIONS = List.of(
+            new DwarfProfession(
+                    "dwarf",
+                    "Dwarf",
+                    DwarfEntity.createRandomizedDwarfTrades(),
+                    JolCraftItems.DWARF_SPAWN_EGG
+            ),
+            new DwarfProfession(
+                    "guildmaster",
+                    "Guildmaster",
+                    DwarfGuildmasterEntity.createRandomizedGuildmasterTrades(),
+                    JolCraftItems.DWARF_GUILDMASTER_SPAWN_EGG
+            ),
+            new DwarfProfession(
+                    "historian",
+                    "Historian",
+                    DwarfHistorianEntity.createRandomizedHistorianTrades(),
+                    JolCraftItems.DWARF_HISTORIAN_SPAWN_EGG
+            ),
+            new DwarfProfession(
+                    "merchant",
+                    "Merchant",
+                    DwarfMerchantEntity.getAllJeiTrades(), // pooled trade list
+                    JolCraftItems.DWARF_MERCHANT_SPAWN_EGG
+            ),
+            new DwarfProfession(
+                    "scrapper",
+                    "Scrapper",
+                    DwarfScrapperEntity.getAllJeiTrades(), // pooled trade list
+                    JolCraftItems.DWARF_SCRAPPER_SPAWN_EGG
+            ),
+            new DwarfProfession(
+                    "brewmaster",
+                    "Brewmaster",
+                    DwarfBrewmasterEntity.createRandomizedBrewmasterTrades(),
+                    JolCraftItems.DWARF_BREWMASTER_SPAWN_EGG
+            ),
+            new DwarfProfession(
+                    "guard",
+                    "Guard",
+                    DwarfGuardEntity.createRandomizedGuardTrades(),
+                    JolCraftItems.DWARF_GUARD_SPAWN_EGG
+            ),
+            new DwarfProfession(
+                    "keeper",
+                    "Keeper",
+                    DwarfKeeperEntity.createRandomizedKeeperTrades(),
+                    JolCraftItems.DWARF_KEEPER_SPAWN_EGG
+            ),
+            new DwarfProfession(
+                    "artisan",
+                    "Artisan",
+                    DwarfArtisanEntity.createRandomizedArtisanTrades(),
+                    JolCraftItems.DWARF_ARTISAN_SPAWN_EGG
+            ),
+            new DwarfProfession(
+                    "explorer",
+                    "Explorer",
+                    DwarfExplorerEntity.createRandomizedExplorerTrades(),
+                    JolCraftItems.DWARF_EXPLORER_SPAWN_EGG
+            ),
+            new DwarfProfession(
+                    "miner",
+                    "Miner",
+                    DwarfMinerEntity.createRandomizedMinerTrades(),
+                    JolCraftItems.DWARF_MINER_SPAWN_EGG
+            )
+    );
+
+}

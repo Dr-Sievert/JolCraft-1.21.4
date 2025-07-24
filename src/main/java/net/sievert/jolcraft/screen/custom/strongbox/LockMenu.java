@@ -57,7 +57,7 @@ public class LockMenu extends AbstractContainerMenu {
     }
 
     private int tickCounter = 0; // Counter to track ticks for updating the button
-    private int tickRate = 20 + new Random().nextInt(81); // 20 to 100 ticks (1s to 5s)
+    private int tickRate = 40 + new Random().nextInt(61); // 40 to 100 ticks (2s to 5s)
 
     public void tick() {
         Player player = blockEntity.currentInteractingPlayer;
@@ -114,6 +114,8 @@ public class LockMenu extends AbstractContainerMenu {
             updatechanges();
         }
         tickCounter = 0;
+        tickRate = 40 + new Random().nextInt(61); // 40 to 100 ticks (2s to 5s)
+
     }
 
 

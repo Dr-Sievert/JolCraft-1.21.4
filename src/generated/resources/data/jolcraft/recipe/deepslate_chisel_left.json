@@ -3,7 +3,7 @@
   "category": "misc",
   "key": {
     "B": "jolcraft:deepslate_plate",
-    "X": "minecraft:stick"
+    "X": "#c:rods/wooden"
   },
   "pattern": [
     "B ",

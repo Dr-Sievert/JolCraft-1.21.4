@@ -28,7 +28,7 @@ public class DwarfExplorerEntity extends AbstractDwarfEntity {
         this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(Items.FILLED_MAP));
         this.setItemSlot(EquipmentSlot.LEGS, new ItemStack(Items.LEATHER_LEGGINGS));
         this.setItemSlot(EquipmentSlot.FEET, new ItemStack(Items.LEATHER_BOOTS));
-        this.instanceTrades = createRandomizedDwarfTrades();
+        this.instanceTrades = createRandomizedExplorerTrades();
     }
 
     //Attributes
@@ -85,7 +85,7 @@ public class DwarfExplorerEntity extends AbstractDwarfEntity {
     }
 
     //Trades
-    public static Int2ObjectMap<VillagerTrades.ItemListing[]> createRandomizedDwarfTrades() {
+    public static Int2ObjectMap<VillagerTrades.ItemListing[]> createRandomizedExplorerTrades() {
         return AbstractDwarfEntity.toIntMap(ImmutableMap.of(
                 // Novice
                 1, new VillagerTrades.ItemListing[] {

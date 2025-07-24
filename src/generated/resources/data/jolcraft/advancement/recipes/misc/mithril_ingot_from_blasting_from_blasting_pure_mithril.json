@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "jolcraft:mithril_ingot_from_blasting_from_smelting_pure_mithril"
+        "recipe": "jolcraft:mithril_ingot_from_blasting_from_blasting_pure_mithril"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -26,7 +26,7 @@
   ],
   "rewards": {
     "recipes": [
-      "jolcraft:mithril_ingot_from_blasting_from_smelting_pure_mithril"
+      "jolcraft:mithril_ingot_from_blasting_from_blasting_pure_mithril"
     ]
   }
 }

@@ -237,7 +237,7 @@ public class JolCraftItemTagProvider extends ItemTagsProvider {
                 .add(JolCraftItems.GEODE_MEDIUM.get())
                 .add(JolCraftItems.GEODE_LARGE.get());
 
-        tag(JolCraftTags.Items.GEMS)
+        tag(JolCraftTags.Items.GEMS_UNCUT)
                 .add(JolCraftItems.AEGISCORE.get())
                 .add(JolCraftItems.ASHFANG.get())
                 .add(JolCraftItems.DEEPMARROW.get())

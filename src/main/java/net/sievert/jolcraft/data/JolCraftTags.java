@@ -36,7 +36,7 @@ public class JolCraftTags {
 
         public static final TagKey<Item> CHISELS = createTag("chisels");
 
-        public static final TagKey<Item> GEMS = createTag("gems");
+        public static final TagKey<Item> GEMS_UNCUT = createTag("gems_uncut");
 
         public static final TagKey<Item> GEM_CUT = createTag("gem_cut");
 

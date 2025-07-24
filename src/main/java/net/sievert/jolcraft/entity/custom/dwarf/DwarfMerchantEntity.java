@@ -47,7 +47,7 @@ public class DwarfMerchantEntity extends AbstractDwarfEntity {
 
     public DwarfMerchantEntity(EntityType<? extends AbstractDwarfEntity> entityType, Level level) {
         super(entityType, level);
-        this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(JolCraftItems.GOLD_COIN.get()));
+        this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(JolCraftItems.COIN_POUCH.get()));
         this.instanceTrades = createRandomizedMerchantTrades();
     }
 
@@ -575,6 +575,19 @@ public class DwarfMerchantEntity extends AbstractDwarfEntity {
             serverPlayer.awardStat(Stats.TRADED_WITH_VILLAGER); // optional if not already done in super
             JolCraftCriteriaTriggers.TRADE_WITH_DWARF.trigger(serverPlayer, this);
         }
+    }
+
+    public static Int2ObjectMap<VillagerTrades.ItemListing[]> getAllJeiTrades() {
+        // Merge all trade sources relevant for display
+        Int2ObjectMap<VillagerTrades.ItemListing[]> out = new it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap<>();
+        for (int lvl = 1; lvl <= 5; lvl++) {
+            List<VillagerTrades.ItemListing> all = new ArrayList<>();
+            if (BOUNTY_TRADES.get(lvl) != null) all.addAll(List.of(BOUNTY_TRADES.get(lvl)));
+            if (GENERAL_TRADES.get(lvl) != null) all.addAll(List.of(GENERAL_TRADES.get(lvl)));
+            if (lvl == 5 && GEM_TRADES.get(5) != null) all.addAll(List.of(GEM_TRADES.get(5)));
+            out.put(lvl, all.toArray(VillagerTrades.ItemListing[]::new));
+        }
+        return out;
     }
 
     //Sound

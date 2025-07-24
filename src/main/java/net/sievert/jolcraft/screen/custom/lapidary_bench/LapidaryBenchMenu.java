@@ -282,7 +282,7 @@ public class LapidaryBenchMenu extends AbstractContainerMenu {
 
     public boolean hasGem() {
         ItemStack stack = getLapidarySlotItem();
-        return !stack.isEmpty() && stack.is(net.sievert.jolcraft.data.JolCraftTags.Items.GEMS);
+        return !stack.isEmpty() && stack.is(JolCraftTags.Items.GEMS_UNCUT);
     }
 
     public boolean hasGeode() {

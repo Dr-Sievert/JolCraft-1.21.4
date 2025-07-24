@@ -273,7 +273,7 @@ public class JolCraftDwarfTrades extends VillagerTrades {
     public static class ItemForItem implements VillagerTrades.ItemListing {
         private final ItemLike input;
         private final int minInputCount, maxInputCount;
-        private final ItemLike output;
+        final ItemLike output;
         private final int minOutputCount, maxOutputCount;
         private final int maxUses, villagerXp;
         private final float priceMultiplier;
@@ -423,4 +423,64 @@ public class JolCraftDwarfTrades extends VillagerTrades {
             );
         }
     }
+
+    public static ItemStack getExampleInputA(VillagerTrades.ItemListing listing) {
+        if (listing instanceof JolCraftDwarfTrades.ItemsForGold) {
+            return new ItemStack(JolCraftItems.GOLD_COIN.get());
+        } else if (listing instanceof JolCraftDwarfTrades.GoldForItems trade) {
+            return new ItemStack(trade.item);
+        } else if (listing instanceof JolCraftDwarfTrades.ItemsAndGoldToItems
+                || listing instanceof JolCraftDwarfTrades.ItemsAndGoldToItemsWithData) {
+            return new ItemStack(JolCraftItems.GOLD_COIN.get());
+        } else if (listing instanceof ItemForItem trade) {
+            return new ItemStack(trade.input.asItem());
+        } else if (listing instanceof JolCraftDwarfTrades.TreasureMapForGold) {
+            return new ItemStack(JolCraftItems.GOLD_COIN.get());
+        }
+        return ItemStack.EMPTY;
+    }
+
+    public static ItemStack getExampleInputB(VillagerTrades.ItemListing listing) {
+        if (listing instanceof JolCraftDwarfTrades.ItemsAndGoldToItems trade) {
+            return new ItemStack(trade.inputItem);
+        } else if (listing instanceof JolCraftDwarfTrades.ItemsAndGoldToItemsWithData) {
+            return new ItemStack(((JolCraftDwarfTrades.ItemsAndGoldToItemsWithData) listing).inputItem);
+        } else if (listing instanceof JolCraftDwarfTrades.TreasureMapForGold) {
+            return new ItemStack(Items.MAP);
+        }
+        return ItemStack.EMPTY;
+    }
+
+    public static ItemStack getExampleOutput(VillagerTrades.ItemListing listing) {
+        if (listing instanceof JolCraftDwarfTrades.ItemsForGold trade) {
+            return new ItemStack(trade.item);
+        } else if (listing instanceof JolCraftDwarfTrades.GoldForItems) {
+            return new ItemStack(JolCraftItems.GOLD_COIN.get());
+        } else if (listing instanceof JolCraftDwarfTrades.ItemsAndGoldToItems trade) {
+            return new ItemStack(trade.outputItem);
+        } else if (listing instanceof JolCraftDwarfTrades.ItemsWithDataForGold trade) {
+            ItemStack stack = new ItemStack(trade.item);
+            trade.stackModifier.accept(stack);
+            return stack;
+        } else if (listing instanceof JolCraftDwarfTrades.ItemsAndGoldToItemsWithData trade) {
+            ItemStack stack = new ItemStack(trade.outputItem);
+            trade.stackModifier.accept(stack);
+            return stack;
+        } else if (listing instanceof JolCraftDwarfTrades.ItemForItem trade) {
+            return new ItemStack(trade.output.asItem());
+        } else if (listing instanceof JolCraftDwarfTrades.BountyItemForItem trade) {
+            return new ItemStack(trade.output.asItem());
+        } else if (listing instanceof JolCraftDwarfTrades.TreasureMapForGold trade) {
+            ItemStack stack = new ItemStack(Items.FILLED_MAP);
+            stack.set(DataComponents.ITEM_NAME, Component.translatable(trade.displayName));
+            return stack;
+        }
+        return ItemStack.EMPTY;
+    }
+
+
+
+
+
+
 }

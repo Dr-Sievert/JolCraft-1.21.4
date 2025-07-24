@@ -30,7 +30,7 @@ public class DwarfMinerEntity extends AbstractDwarfEntity {
     public DwarfMinerEntity(EntityType<? extends AbstractDwarfEntity> entityType, Level level) {
         super(entityType, level);
         this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(JolCraftItems.DEEPSLATE_PICKAXE.get()));
-        this.instanceTrades = createRandomizedDwarfTrades();
+        this.instanceTrades = createRandomizedMinerTrades();
     }
 
     //Attributes
@@ -100,7 +100,7 @@ public class DwarfMinerEntity extends AbstractDwarfEntity {
     }
 
     //Trades
-    public static Int2ObjectMap<VillagerTrades.ItemListing[]> createRandomizedDwarfTrades() {
+    public static Int2ObjectMap<VillagerTrades.ItemListing[]> createRandomizedMinerTrades() {
         return AbstractDwarfEntity.toIntMap(ImmutableMap.of(
                 // Novice
                 1, new VillagerTrades.ItemListing[] {

@@ -1,6 +1,7 @@
 package net.sievert.jolcraft.item.custom.merchant;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
@@ -38,10 +39,38 @@ public class BountyCrateItem extends Item implements IItemExtension {
 
     @Override
     public boolean overrideOtherStackedOnMe(ItemStack stack, ItemStack other, Slot slot, ClickAction action, Player player, SlotAccess access) {
+
+        // Extract whatever has been filled (even partially) if right-click and cursor is empty
+        if (action == ClickAction.SECONDARY && other.isEmpty()) {
+            BountyData data = stack.get(JolCraftDataComponents.BOUNTY_DATA.get());
+            int currentFilled = stack.getOrDefault(JolCraftDataComponents.BOUNTY_FILL.get(), 0);
+
+            if (data != null && currentFilled > 0) {
+                Item targetItem = BuiltInRegistries.ITEM.get(data.targetItem())
+                        .map(Holder::value)
+                        .orElse(null);
+
+                if (targetItem != null) {
+                    int toExtract = Math.min(64, currentFilled); // up to a full stack max
+                    ItemStack out = new ItemStack(targetItem, toExtract);
+                    access.set(out);
+
+                    int remaining = currentFilled - toExtract;
+                    stack.set(JolCraftDataComponents.BOUNTY_FILL.get(), remaining);
+                    stack.set(JolCraftDataComponents.BOUNTY_COMPLETE.get(), remaining >= data.requiredCount());
+
+                    player.level().playSound(
+                            null, player.blockPosition(), SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS, 0.6f, 1.2f
+                    );
+                    return true;
+                }
+            }
+        }
+
         if (action == ClickAction.PRIMARY || action == ClickAction.SECONDARY) {
             int maxTransfer = action == ClickAction.PRIMARY ? Integer.MAX_VALUE : 1;
             boolean filled = tryFillCrate(stack, access.get(), access, maxTransfer);
-            if (filled && player.level() != null) {
+            if (filled) {
                 player.level().playSound(
                         null,
                         player.blockPosition(),
@@ -181,58 +210,66 @@ public class BountyCrateItem extends Item implements IItemExtension {
     @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-        boolean knowsLanguage = DwarvenLanguageHelper.knowsDwarvishClient(); // ✅ use helper
+        boolean knowsLanguage = DwarvenLanguageHelper.knowsDwarvishClient();
 
-        if (knowsLanguage) {
-            BountyData data = stack.get(JolCraftDataComponents.BOUNTY_DATA.get());
-            if (data != null) {
-                ResourceLocation targetItem = data.targetItem();
-                int count = data.requiredCount();
-                int tier = data.tier();
-
-                // Try to get translated item name; fallback to literal if missing
-                Component itemName = Component.translatable(targetItem.toLanguageKey("item"));
-                if (itemName.getString().equals(targetItem.toLanguageKey("item"))) {
-                    // Translation missing, try fallback from registry
-                    Optional<Item> itemOpt = BuiltInRegistries.ITEM.getOptional(targetItem);
-                    if (itemOpt.isPresent()) {
-                        itemName = itemOpt.get().getDefaultInstance().getHoverName();
-                    }
-                }
-
-                tooltip.add(Component.translatable("tooltip.jolcraft.bounty_crate.target")
-                        .append(itemName)
-                        .withStyle(ChatFormatting.GRAY));
-                tooltip.add(Component.translatable("tooltip.jolcraft.bounty_crate.count", count)
-                        .withStyle(ChatFormatting.GRAY));
-
-                String tierName = switch (tier) {
-                    case 1 -> "Novice";
-                    case 2 -> "Apprentice";
-                    case 3 -> "Journeyman";
-                    case 4 -> "Expert";
-                    case 5 -> "Master";
-                    default -> "Unknown";
-                };
-                tooltip.add(Component.translatable("tooltip.jolcraft.bounty_crate.tier", tierName)
-                        .withStyle(ChatFormatting.GRAY));
-
-                if (stack.has(JolCraftDataComponents.BOUNTY_COMPLETE.get()) &&
-                        stack.get(JolCraftDataComponents.BOUNTY_COMPLETE.get())) {
-                    tooltip.add(Component.translatable("tooltip.jolcraft.bounty_crate.complete")
-                            .withStyle(ChatFormatting.GREEN));
-                }
-
-            } else {
-                tooltip.add(Component.translatable("tooltip.jolcraft.bounty_crate.invalid")
-                        .withStyle(ChatFormatting.RED));
-            }
-        } else {
-            tooltip.add(Component.translatable("tooltip.jolcraft.bounty_crate.locked")
+        if (Screen.hasShiftDown()) {
+            tooltip.add(Component.translatable("tooltip.jolcraft.bounty_crate")
                     .withStyle(ChatFormatting.GRAY));
+
+        } else {
+            if (knowsLanguage) {
+                BountyData data = stack.get(JolCraftDataComponents.BOUNTY_DATA.get());
+                if (data != null) {
+                    ResourceLocation targetItem = data.targetItem();
+                    int count = data.requiredCount();
+                    int tier = data.tier();
+
+                    Component itemName = Component.translatable(targetItem.toLanguageKey("item"));
+                    if (itemName.getString().equals(targetItem.toLanguageKey("item"))) {
+                        Optional<Item> itemOpt = BuiltInRegistries.ITEM.getOptional(targetItem);
+                        if (itemOpt.isPresent()) {
+                            itemName = itemOpt.get().getDefaultInstance().getHoverName();
+                        }
+                    }
+
+                    tooltip.add(Component.translatable("tooltip.jolcraft.bounty_crate.target")
+                            .append(itemName)
+                            .withStyle(ChatFormatting.GRAY));
+                    tooltip.add(Component.translatable("tooltip.jolcraft.bounty_crate.count", count)
+                            .withStyle(ChatFormatting.GRAY));
+
+                    String tierName = switch (tier) {
+                        case 1 -> "Novice";
+                        case 2 -> "Apprentice";
+                        case 3 -> "Journeyman";
+                        case 4 -> "Expert";
+                        case 5 -> "Master";
+                        default -> "Unknown";
+                    };
+                    tooltip.add(Component.translatable("tooltip.jolcraft.bounty_crate.tier", tierName)
+                            .withStyle(ChatFormatting.GRAY));
+
+                    if (stack.has(JolCraftDataComponents.BOUNTY_COMPLETE.get()) &&
+                            stack.get(JolCraftDataComponents.BOUNTY_COMPLETE.get())) {
+                        tooltip.add(Component.translatable("tooltip.jolcraft.bounty_crate.complete")
+                                .withStyle(ChatFormatting.GREEN));
+                    }
+                } else {
+                    tooltip.add(Component.translatable("tooltip.jolcraft.bounty_crate.invalid")
+                            .withStyle(ChatFormatting.RED));
+                }
+            } else {
+                tooltip.add(Component.translatable("tooltip.jolcraft.bounty_crate.locked")
+                        .withStyle(ChatFormatting.GRAY));
+            }
+
+            Component shiftKey = Component.literal("Shift").withStyle(ChatFormatting.BLUE);
+            tooltip.add(Component.translatable("tooltip.jolcraft.shift", shiftKey)
+                    .withStyle(ChatFormatting.DARK_GRAY));
         }
 
         super.appendHoverText(stack, context, tooltip, flag);
     }
+
 
 }

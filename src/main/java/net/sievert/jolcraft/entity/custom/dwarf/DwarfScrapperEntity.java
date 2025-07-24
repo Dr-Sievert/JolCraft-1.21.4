@@ -205,9 +205,16 @@ public class DwarfScrapperEntity extends AbstractDwarfEntity {
         this.level().playSound(null, this.blockPosition(), getRerollSound(), SoundSource.NEUTRAL, 1.0F, 1.05F);
     }
 
-
-
-
+    public static Int2ObjectMap<VillagerTrades.ItemListing[]> getAllJeiTrades() {
+        Int2ObjectMap<VillagerTrades.ItemListing[]> out = new it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap<>();
+        for (int lvl = 1; lvl <= 5; lvl++) {
+            List<VillagerTrades.ItemListing> all = new ArrayList<>();
+            if (MAIN_TRADES.get(lvl) != null) all.addAll(List.of(MAIN_TRADES.get(lvl)));
+            if (lvl == 1) all.addAll(List.of(SALVAGE_POOL)); // Only include salvage pool at Novice
+            out.put(lvl, all.toArray(VillagerTrades.ItemListing[]::new));
+        }
+        return out;
+    }
 
     // Sound
     @Override
