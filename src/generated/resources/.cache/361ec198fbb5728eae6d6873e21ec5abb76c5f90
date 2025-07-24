@@ -1,4 +1,4 @@
-// 1.21.4	2025-07-23T10:00:02.5671556	Tags for minecraft:item mod id jolcraft
+// 1.21.4	2025-07-24T12:49:35.363661	Tags for minecraft:item mod id jolcraft
 408625162012b71b4ebe01382789c1cb4648c851 data/c/tags/item/crops.json
 5964f0cd5f51d73982612239044d1c95430b5c1e data/c/tags/item/drinks.json
 d2f15c155e30f0429ba5bcea12b2853f30b27a90 data/c/tags/item/drinks/milk.json
@@ -19,7 +19,7 @@ b6ab53117751ed97da9b15f56ccea5240d543523 data/c/tags/item/seeds.json
 e5699b1973026f0f0bebf9aa6368bcd82c81dca8 data/jolcraft/tags/item/bonus_trim_materials.json
 965e3fa8a8e0be7759fcfcded7f1362587e1c0ed data/jolcraft/tags/item/chisels.json
 99071210438208e98db1c372e06fbed9806c9b13 data/jolcraft/tags/item/creature_spawn_eggs.json
-fd45b2d0babc1ba749beedf446d3626275db2393 data/jolcraft/tags/item/dwarf_spawn_eggs.json
+eced0ff6bdcc5ad6091879a7316dbf46a18fded2 data/jolcraft/tags/item/dwarf_spawn_eggs.json
 b4fbeec3a15fa89ad64b1145d7f2775a193da48b data/jolcraft/tags/item/gems_uncut.json
 e5699b1973026f0f0bebf9aa6368bcd82c81dca8 data/jolcraft/tags/item/gem_cut.json
 208b26a31faff244572e409757ee8ec052c71c95 data/jolcraft/tags/item/gem_dust.json

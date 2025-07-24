@@ -1,4 +1,4 @@
-package net.sievert.jolcraft.entity.ai.goal;
+package net.sievert.jolcraft.entity.ai.goal.dwarf;
 
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;

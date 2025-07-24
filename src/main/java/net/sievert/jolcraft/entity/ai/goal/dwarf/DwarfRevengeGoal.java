@@ -1,4 +1,4 @@
-package net.sievert.jolcraft.entity.ai.goal;
+package net.sievert.jolcraft.entity.ai.goal.dwarf;
 
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;

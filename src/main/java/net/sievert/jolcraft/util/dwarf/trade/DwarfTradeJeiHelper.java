@@ -1,8 +1,6 @@
-package net.sievert.jolcraft.util.dwarf;
+package net.sievert.jolcraft.util.dwarf.trade;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.sievert.jolcraft.entity.custom.dwarf.*;
@@ -17,15 +15,16 @@ public class DwarfTradeJeiHelper {
     public static List<DwarfTradeRecipe> getAllDwarfJeiTrades() {
         List<DwarfTradeRecipe> recipes = new ArrayList<>();
         for (DwarfProfession prof : PROFESSIONS) {
-            Int2ObjectMap<VillagerTrades.ItemListing[]> trades = prof.trades();
+            Int2ObjectMap<DwarfTrades.ItemListing[]> trades = prof.trades();
             if (trades == null) continue;
             for (int level = 1; level <= 5; ++level) {
-                VillagerTrades.ItemListing[] tradeArr = trades.get(level);
+                DwarfTrades.ItemListing[] tradeArr = trades.get(level);
                 if (tradeArr == null) continue;
-                for (VillagerTrades.ItemListing listing : tradeArr) {
-                    var inputA = JolCraftDwarfTrades.getExampleInputA(listing);
-                    var inputB = JolCraftDwarfTrades.getExampleInputB(listing);
-                    var output = JolCraftDwarfTrades.getExampleOutput(listing);
+                for (DwarfTrades.ItemListing listing : tradeArr) {
+                    var inputA = DwarfTrades.getExampleInputA(listing);
+                    var inputB = DwarfTrades.getExampleInputB(listing);
+                    var output = DwarfTrades.getExampleOutput(listing);
+
                     if ((!inputA.isEmpty() || (inputB != null && !inputB.isEmpty())) && !output.isEmpty()) {
                         recipes.add(new DwarfTradeRecipe(
                                 prof.displayName(), level, inputA, inputB, output, prof.spawnEgg()
@@ -37,10 +36,11 @@ public class DwarfTradeJeiHelper {
         return recipes;
     }
 
+
     public record DwarfProfession(
             String id,
             String displayName,
-            Int2ObjectMap<VillagerTrades.ItemListing[]> trades,
+            Int2ObjectMap<DwarfTrades.ItemListing[]> trades,
             DeferredItem<Item> spawnEgg
     ) {}
 

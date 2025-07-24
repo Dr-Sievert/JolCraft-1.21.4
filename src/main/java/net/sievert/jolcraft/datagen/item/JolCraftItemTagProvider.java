@@ -220,10 +220,16 @@ public class JolCraftItemTagProvider extends ItemTagsProvider {
 
         tag(JolCraftTags.Items.DWARF_SPAWN_EGGS)
                 .add(JolCraftItems.DWARF_SPAWN_EGG.get())
-                .add(JolCraftItems.DWARF_GUARD_SPAWN_EGG.get())
+                .add(JolCraftItems.DWARF_GUILDMASTER_SPAWN_EGG.get())
                 .add(JolCraftItems.DWARF_HISTORIAN_SPAWN_EGG.get())
+                .add(JolCraftItems.DWARF_MERCHANT_SPAWN_EGG.get())
                 .add(JolCraftItems.DWARF_SCRAPPER_SPAWN_EGG.get())
-                .add(JolCraftItems.DWARF_MERCHANT_SPAWN_EGG.get());
+                .add(JolCraftItems.DWARF_BREWMASTER_SPAWN_EGG.get())
+                .add(JolCraftItems.DWARF_GUARD_SPAWN_EGG.get())
+                .add(JolCraftItems.DWARF_KEEPER_SPAWN_EGG.get())
+                .add(JolCraftItems.DWARF_ARTISAN_SPAWN_EGG.get())
+                .add(JolCraftItems.DWARF_EXPLORER_SPAWN_EGG.get())
+                .add(JolCraftItems.DWARF_MINER_SPAWN_EGG.get());
 
         tag(JolCraftTags.Items.CREATURE_SPAWN_EGGS)
                 .add(JolCraftItems.MUFFHORN_SPAWN_EGG.get());
@@ -449,7 +455,6 @@ public class JolCraftItemTagProvider extends ItemTagsProvider {
         tag(JolCraftTags.Items.CHISELS)
                 .add(JolCraftItems.DEEPSLATE_CHISEL.get())
                 .add(JolCraftItems.MITHRIL_CHISEL.get());
-
 
     }
 

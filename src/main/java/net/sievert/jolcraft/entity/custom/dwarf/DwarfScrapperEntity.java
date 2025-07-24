@@ -12,17 +12,17 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
-import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Blocks;
 import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.entity.ai.goal.*;
+import net.sievert.jolcraft.entity.ai.goal.dwarf.*;
 import net.sievert.jolcraft.item.JolCraftItems;
-import net.sievert.jolcraft.util.dwarf.JolCraftDwarfTrades;
+import net.sievert.jolcraft.util.dwarf.trade.DwarfMerchantOffer;
+import net.sievert.jolcraft.util.dwarf.trade.DwarfTrades;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -71,8 +71,8 @@ public class DwarfScrapperEntity extends AbstractDwarfEntity {
         this.targetSelector.addGoal(2, new DwarfNonPlayerAlertGoal(this).setAlertOthers());
         this.goalSelector.addGoal(2, new DwarfAttackGoal(this, 1.2D, true));
         this.goalSelector.addGoal(3, new DwarfRevengeGoal(this));
-        this.goalSelector.addGoal(3, new TradeWithPlayerGoal(this));
-        this.goalSelector.addGoal(4, new LookAtTradingPlayerGoal(this));
+        this.goalSelector.addGoal(3, new DwarfTradeWithPlayerGoal(this));
+        this.goalSelector.addGoal(4, new DwarfLookAtTradingPlayerGoal(this));
         this.goalSelector.addGoal(5, new DwarfBreedGoal(this, 1.0, AbstractDwarfEntity.class));
         this.goalSelector.addGoal(6, new TemptGoal(this, 1.25, stack -> stack.is(JolCraftItems.GOLD_COIN), false));
         this.goalSelector.addGoal(6, new OpenDoorGoal(this, true));
@@ -90,33 +90,33 @@ public class DwarfScrapperEntity extends AbstractDwarfEntity {
 
     // --- Trade tables ---
     // Only static main trades (one per level)
-    public static final Int2ObjectMap<VillagerTrades.ItemListing[]> MAIN_TRADES = AbstractDwarfEntity.toIntMap(ImmutableMap.of(
-            1, new VillagerTrades.ItemListing[] { new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.COPPER_SPANNER.get(), 8, 15, 1, 3, 10) },
-            2, new VillagerTrades.ItemListing[] { new JolCraftDwarfTrades.GoldForItems(JolCraftItems.SCRAP.get(), 1, 256, 5, 1) },
-            3, new VillagerTrades.ItemListing[] { new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.IRON_SPANNER.get(), 24, 32, 1, 3, 40) },
-            4, new VillagerTrades.ItemListing[] { new JolCraftDwarfTrades.GoldForItems(JolCraftItems.SCRAP_HEAP.get(), 1, 64, 50, 4, 7) },
-            5, new VillagerTrades.ItemListing[] { new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.SCRAP_HEAP.get(), 1, 15, JolCraftItems.RUSTAGATE.get(), 1, 3, 0, 0.05F) }
+    public static final Int2ObjectMap<DwarfTrades.ItemListing[]> MAIN_TRADES = AbstractDwarfEntity.toIntMap(ImmutableMap.of(
+            1, new DwarfTrades.ItemListing[] { new DwarfTrades.ItemsForGold(JolCraftItems.COPPER_SPANNER.get(), 8, 15, 1, 3, 10) },
+            2, new DwarfTrades.ItemListing[] { new DwarfTrades.GoldForItems(JolCraftItems.SCRAP.get(), 1, 256, 5, 1) },
+            3, new DwarfTrades.ItemListing[] { new DwarfTrades.ItemsForGold(JolCraftItems.IRON_SPANNER.get(), 24, 32, 1, 3, 40) },
+            4, new DwarfTrades.ItemListing[] { new DwarfTrades.GoldForItems(JolCraftItems.SCRAP_HEAP.get(), 1, 64, 50, 4, 7) },
+            5, new DwarfTrades.ItemListing[] { new DwarfTrades.ItemsAndGoldToItems(JolCraftItems.SCRAP_HEAP.get(), 1, 15, JolCraftItems.RUSTAGATE.get(), 1, 3, 0, 0.05F) }
     ));
 
     // Salvage pool (full pool for randomization)
-    public static final VillagerTrades.ItemListing[] SALVAGE_POOL = new VillagerTrades.ItemListing[] {
-            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.EXPIRED_POTION.get(), 1, 5, 3, 1, 3),
-            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.OLD_FABRIC.get(), 1, 5, 3, 1, 3),
-            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.BROKEN_PICKAXE.get(), 1, 5, 3, 1, 4),
-            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.BROKEN_AMULET.get(), 1, 5, 3, 1, 4),
-            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.BROKEN_BELT.get(), 1, 5, 3, 1, 4),
-            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.BROKEN_COINS.get(), 1, 5, 3, 1, 4),
-            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.RUSTY_TONGS.get(), 1, 5, 3, 1, 4),
-            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.INGOT_MOULD.get(), 1, 5, 3, 1, 4),
-            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.DEEPSLATE_MUG.get(), 1, 5, 3, 3, 5),
-            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.BROKEN_TABLET.get(), 1, 5, 3, 3, 5),
-            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.BROKEN_DEEPSLATE_PICKAXE_HEAD.get(), 1, 5, 3, 3, 5),
-            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.BROKEN_DEEPSLATE_GEAR.get(), 1, 5, 3, 3, 5),
-            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.BROKEN_DEEPSLATE_PLATES.get(), 1, 5, 3, 3, 5),
-            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.BROKEN_DEEPSLATE_PICKAXE_HEAD.get(), 1, 5, 3, 1, 5),
-            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.MITHRIL_SALVAGE.get(), 1, 5, 3, 5, 10),
-            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.BROKEN_MITHRIL_PLATE.get(), 1, 5, 3, 5, 10),
-            new JolCraftDwarfTrades.GoldForItems(JolCraftItems.BROKEN_MITHRIL_SWORD.get(), 1, 5, 3, 5, 10)
+    public static final DwarfTrades.ItemListing[] SALVAGE_POOL = new DwarfTrades.ItemListing[] {
+            new DwarfTrades.GoldForItems(JolCraftItems.EXPIRED_POTION.get(), 1, 5, 3, 1, 3),
+            new DwarfTrades.GoldForItems(JolCraftItems.OLD_FABRIC.get(), 1, 5, 3, 1, 3),
+            new DwarfTrades.GoldForItems(JolCraftItems.BROKEN_PICKAXE.get(), 1, 5, 3, 1, 4),
+            new DwarfTrades.GoldForItems(JolCraftItems.BROKEN_AMULET.get(), 1, 5, 3, 1, 4),
+            new DwarfTrades.GoldForItems(JolCraftItems.BROKEN_BELT.get(), 1, 5, 3, 1, 4),
+            new DwarfTrades.GoldForItems(JolCraftItems.BROKEN_COINS.get(), 1, 5, 3, 1, 4),
+            new DwarfTrades.GoldForItems(JolCraftItems.RUSTY_TONGS.get(), 1, 5, 3, 1, 4),
+            new DwarfTrades.GoldForItems(JolCraftItems.INGOT_MOULD.get(), 1, 5, 3, 1, 4),
+            new DwarfTrades.GoldForItems(JolCraftItems.DEEPSLATE_MUG.get(), 1, 5, 3, 3, 5),
+            new DwarfTrades.GoldForItems(JolCraftItems.BROKEN_TABLET.get(), 1, 5, 3, 3, 5),
+            new DwarfTrades.GoldForItems(JolCraftItems.BROKEN_DEEPSLATE_PICKAXE_HEAD.get(), 1, 5, 3, 3, 5),
+            new DwarfTrades.GoldForItems(JolCraftItems.BROKEN_DEEPSLATE_GEAR.get(), 1, 5, 3, 3, 5),
+            new DwarfTrades.GoldForItems(JolCraftItems.BROKEN_DEEPSLATE_PLATES.get(), 1, 5, 3, 3, 5),
+            new DwarfTrades.GoldForItems(JolCraftItems.BROKEN_DEEPSLATE_PICKAXE_HEAD.get(), 1, 5, 3, 1, 5),
+            new DwarfTrades.GoldForItems(JolCraftItems.MITHRIL_SALVAGE.get(), 1, 5, 3, 5, 10),
+            new DwarfTrades.GoldForItems(JolCraftItems.BROKEN_MITHRIL_PLATE.get(), 1, 5, 3, 5, 10),
+            new DwarfTrades.GoldForItems(JolCraftItems.BROKEN_MITHRIL_SWORD.get(), 1, 5, 3, 5, 10)
 
     };
 
@@ -133,13 +133,13 @@ public class DwarfScrapperEntity extends AbstractDwarfEntity {
 
         int quota = Math.min(level * 2, SALVAGE_POOL.length);
 
-        List<VillagerTrades.ItemListing> pool = new ArrayList<>(List.of(SALVAGE_POOL));
+        List<DwarfTrades.ItemListing> pool = new ArrayList<>(List.of(SALVAGE_POOL));
         Collections.shuffle(pool, new Random(this.random.nextLong()));
 
         int added = 0;
-        for (VillagerTrades.ItemListing salvage : pool) {
+        for (DwarfTrades.ItemListing salvage : pool) {
             if (added >= quota) break;
-            MerchantOffer offer = salvage.getOffer(this, this.random);
+            DwarfMerchantOffer offer = salvage.getOffer(this, this.random);
             if (offer != null) {
                 this.getOffers().add(offer);
                 added++;
@@ -150,9 +150,9 @@ public class DwarfScrapperEntity extends AbstractDwarfEntity {
 
 
 
-    private boolean isSalvageOffer(MerchantOffer offer) {
-        for (VillagerTrades.ItemListing salvage : SALVAGE_POOL) {
-            MerchantOffer test = salvage.getOffer(this, this.random);
+    private boolean isSalvageOffer(DwarfMerchantOffer offer) {
+        for (DwarfTrades.ItemListing salvage : SALVAGE_POOL) {
+            DwarfMerchantOffer test = salvage.getOffer(this, this.random);
             if (test != null &&
                     ItemStack.isSameItemSameComponents(offer.getResult(), test.getResult()) &&
                     ItemStack.isSameItemSameComponents(offer.getBaseCostA(), test.getBaseCostA())
@@ -188,10 +188,10 @@ public class DwarfScrapperEntity extends AbstractDwarfEntity {
 
         // Add all main trades up to current level
         for (int level = 1; level <= currentLevel; level++) {
-            VillagerTrades.ItemListing[] listings = MAIN_TRADES.get(level);
+            DwarfTrades.ItemListing[] listings = MAIN_TRADES.get(level);
             if (listings != null) {
-                for (VillagerTrades.ItemListing listing : listings) {
-                    MerchantOffer offer = listing.getOffer(this, this.random);
+                for (DwarfTrades.ItemListing listing : listings) {
+                    DwarfMerchantOffer offer = listing.getOffer(this, this.random);
                     if (offer != null) {
                         this.getOffers().add(offer);
                     }
@@ -205,13 +205,13 @@ public class DwarfScrapperEntity extends AbstractDwarfEntity {
         this.level().playSound(null, this.blockPosition(), getRerollSound(), SoundSource.NEUTRAL, 1.0F, 1.05F);
     }
 
-    public static Int2ObjectMap<VillagerTrades.ItemListing[]> getAllJeiTrades() {
-        Int2ObjectMap<VillagerTrades.ItemListing[]> out = new it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap<>();
+    public static Int2ObjectMap<DwarfTrades.ItemListing[]> getAllJeiTrades() {
+        Int2ObjectMap<DwarfTrades.ItemListing[]> out = new it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap<>();
         for (int lvl = 1; lvl <= 5; lvl++) {
-            List<VillagerTrades.ItemListing> all = new ArrayList<>();
+            List<DwarfTrades.ItemListing> all = new ArrayList<>();
             if (MAIN_TRADES.get(lvl) != null) all.addAll(List.of(MAIN_TRADES.get(lvl)));
             if (lvl == 1) all.addAll(List.of(SALVAGE_POOL)); // Only include salvage pool at Novice
-            out.put(lvl, all.toArray(VillagerTrades.ItemListing[]::new));
+            out.put(lvl, all.toArray(DwarfTrades.ItemListing[]::new));
         }
         return out;
     }

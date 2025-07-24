@@ -22,14 +22,21 @@ public class BountyItem extends Item {
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         boolean knowsLanguage = DwarvenLanguageHelper.knowsDwarvishClient(); // ✅ use helper
+        String type = BountyHelper.getBountyType(stack);
+
         if (Screen.hasShiftDown()) {
-            tooltip.add(Component.translatable("tooltip.jolcraft.bounty").withStyle(ChatFormatting.GRAY));
+            tooltip.add(Component.translatable("tooltip.jolcraft.bounty." + type).withStyle(ChatFormatting.GRAY));
         }
         else{
             if (knowsLanguage) {
+                if (type.isEmpty()) {
+                    tooltip.add(Component.translatable("tooltip.jolcraft.bounty.type.invalid").withStyle(ChatFormatting.RED));
+                } else {
+                    tooltip.add(Component.translatable("tooltip.jolcraft.bounty.type").append(Component.translatable("entity.jolcraft.dwarf_" + type)).withStyle(ChatFormatting.GRAY));
+                }
                 int tier = BountyHelper.getBountyTier(stack);
                 if (tier <= 0) {
-                    tooltip.add(Component.translatable("tooltip.jolcraft.bounty.invalid").withStyle(ChatFormatting.RED));
+                    tooltip.add(Component.translatable("tooltip.jolcraft.bounty.tier.invalid").withStyle(ChatFormatting.RED));
                 } else {
                     String tierName = switch (tier) {
                         case 1 -> "Novice";

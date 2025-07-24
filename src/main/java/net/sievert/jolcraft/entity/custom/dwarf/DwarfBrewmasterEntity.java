@@ -12,7 +12,6 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
-import net.minecraft.world.entity.npc.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -23,8 +22,9 @@ import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.block.JolCraftBlocks;
 import net.sievert.jolcraft.data.JolCraftDataComponents;
 import net.sievert.jolcraft.entity.ai.goal.*;
+import net.sievert.jolcraft.entity.ai.goal.dwarf.*;
 import net.sievert.jolcraft.item.JolCraftItems;
-import net.sievert.jolcraft.util.dwarf.JolCraftDwarfTrades;
+import net.sievert.jolcraft.util.dwarf.trade.DwarfTrades;
 
 import javax.annotation.Nullable;
 
@@ -89,8 +89,8 @@ public class DwarfBrewmasterEntity extends AbstractDwarfEntity {
         this.targetSelector.addGoal(2, new DwarfNonPlayerAlertGoal(this).setAlertOthers());
         this.goalSelector.addGoal(2, new DwarfAttackGoal(this, 1.2D, true));
         this.goalSelector.addGoal(3, new DwarfRevengeGoal(this));
-        this.goalSelector.addGoal(3, new TradeWithPlayerGoal(this));
-        this.goalSelector.addGoal(4, new LookAtTradingPlayerGoal(this));
+        this.goalSelector.addGoal(3, new DwarfTradeWithPlayerGoal(this));
+        this.goalSelector.addGoal(4, new DwarfLookAtTradingPlayerGoal(this));
         this.goalSelector.addGoal(5, new DwarfBreedGoal(this, 1.0, AbstractDwarfEntity.class));
         this.goalSelector.addGoal(6, new TemptGoal(this, 1.25, stack -> stack.is(JolCraftItems.GOLD_COIN), false));
         this.goalSelector.addGoal(6, new OpenDoorGoal(this, true));
@@ -126,41 +126,41 @@ public class DwarfBrewmasterEntity extends AbstractDwarfEntity {
 
     /** Generates a new randomized trade set for this Brewmaster instance.
      * No pre-randomization! All values are min/max, the trade does the rolling. */
-    public static Int2ObjectMap<VillagerTrades.ItemListing[]> createRandomizedBrewmasterTrades() {
+    public static Int2ObjectMap<DwarfTrades.ItemListing[]> createRandomizedBrewmasterTrades() {
         return AbstractDwarfEntity.toIntMap(ImmutableMap.of(
                 // Novice
-                1, new VillagerTrades.ItemListing[]{
-                        new JolCraftDwarfTrades.GoldForItems(JolCraftItems.GLASS_MUG.get(), 1, 2, 5, 2, 1, 3),
-                        new JolCraftDwarfTrades.ItemsForGold(Items.SUGAR, 1, 2, 1, 2, 10, 1)
+                1, new DwarfTrades.ItemListing[]{
+                        new DwarfTrades.GoldForItems(JolCraftItems.GLASS_MUG.get(), 1, 2, 5, 2, 1, 3),
+                        new DwarfTrades.ItemsForGold(Items.SUGAR, 1, 2, 1, 2, 10, 1)
                 },
                 // Apprentice
-                2, new VillagerTrades.ItemListing[]{
-                        new JolCraftDwarfTrades.ItemsForGold(Items.CAULDRON, 7, 12, 1, 9, 10),
-                        new JolCraftDwarfTrades.GoldForItems(JolCraftItems.BARLEY_MALT.get(), 12, 22, 10, 15, 1, 3)
+                2, new DwarfTrades.ItemListing[]{
+                        new DwarfTrades.ItemsForGold(Items.CAULDRON, 7, 12, 1, 9, 10),
+                        new DwarfTrades.GoldForItems(JolCraftItems.BARLEY_MALT.get(), 12, 22, 10, 15, 1, 3)
                 },
                 // Journeyman
-                3, new VillagerTrades.ItemListing[]{
-                        new JolCraftDwarfTrades.GoldForItems(JolCraftItems.ASGARNIAN_HOPS.get(), 10, 20, 10, 15, 1, 3),
-                        new JolCraftDwarfTrades.GoldForItems(JolCraftItems.DUSKHOLD_HOPS.get(), 10, 20, 10, 15, 1, 3),
-                        new JolCraftDwarfTrades.GoldForItems(JolCraftItems.KRANDONIAN_HOPS.get(), 10, 20, 10, 15, 1, 3),
-                        new JolCraftDwarfTrades.GoldForItems(JolCraftItems.YANILLIAN_HOPS.get(), 10, 20, 10, 15, 1, 3)
+                3, new DwarfTrades.ItemListing[]{
+                        new DwarfTrades.GoldForItems(JolCraftItems.ASGARNIAN_HOPS.get(), 10, 20, 10, 15, 1, 3),
+                        new DwarfTrades.GoldForItems(JolCraftItems.DUSKHOLD_HOPS.get(), 10, 20, 10, 15, 1, 3),
+                        new DwarfTrades.GoldForItems(JolCraftItems.KRANDONIAN_HOPS.get(), 10, 20, 10, 15, 1, 3),
+                        new DwarfTrades.GoldForItems(JolCraftItems.YANILLIAN_HOPS.get(), 10, 20, 10, 15, 1, 3)
                 },
                 // Expert
-                4, new VillagerTrades.ItemListing[]{
-                        new JolCraftDwarfTrades.GoldForItems(JolCraftItems.DWARVEN_BREW.get(), 1, 5, 50, 3, 6),
-                        new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.YEAST.get(), 3, 5, 1, 2, 10, 10)
+                4, new DwarfTrades.ItemListing[]{
+                        new DwarfTrades.GoldForItems(JolCraftItems.DWARVEN_BREW.get(), 1, 5, 50, 3, 6),
+                        new DwarfTrades.ItemsForGold(JolCraftItems.YEAST.get(), 3, 5, 1, 2, 10, 10)
                 },
                 // Master
-                5, new VillagerTrades.ItemListing[]{
-                        new JolCraftDwarfTrades.ItemsAndGoldToItemsWithData(
+                5, new DwarfTrades.ItemListing[]{
+                        new DwarfTrades.ItemsAndGoldToItemsWithData(
                                 JolCraftItems.LEGENDARY_PAGE.get(), 20,
                                 30,
                                 JolCraftItems.ANCIENT_DWARVEN_TOME_LEGENDARY.get(), 1,
                                 1, 0, 0F,
                                 (stack) -> stack.set(JolCraftDataComponents.LORE_LINE_ID, "forgotten_brew_formulas")
                         ),
-                        new JolCraftDwarfTrades.GoldForItems(JolCraftItems.EMBERGLASS.get(), 1, 10, 0, 20, 40),
-                        new JolCraftDwarfTrades.ItemsAndGoldToItems(
+                        new DwarfTrades.GoldForItems(JolCraftItems.EMBERGLASS.get(), 1, 10, 0, 20, 40),
+                        new DwarfTrades.ItemsAndGoldToItems(
                                 JolCraftItems.EMBERGLASS_CUT.get(), 2, 20, 40,
                                 JolCraftBlocks.HEARTH.get(), 1, 1, 0, 0F
                         )

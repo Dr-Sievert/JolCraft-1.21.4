@@ -1,10 +1,12 @@
 package net.sievert.jolcraft.network;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -16,6 +18,8 @@ import net.sievert.jolcraft.network.client.data.ClientDeliriumData;
 import net.sievert.jolcraft.network.client.data.ClientLanguageData;
 import net.sievert.jolcraft.network.client.data.ClientReputationData;
 import net.sievert.jolcraft.network.packet.*;
+import net.sievert.jolcraft.screen.custom.dwarf.DwarfMerchantMenu;
+import net.sievert.jolcraft.screen.custom.dwarf.DwarfMerchantScreen;
 
 import java.util.Set;
 
@@ -54,12 +58,55 @@ public class JolCraftNetworking {
                         ClientboundEndorsementsPacket.CODEC,
                         JolCraftNetworking::handleSyncEndorsements
                 )
-        .playToClient(
+                .playToClient(
                 ClientboundTomeUnlocksPacket.TYPE,
                 ClientboundTomeUnlocksPacket.CODEC,
                 JolCraftNetworking::handleSyncTomeUnlocks
-        );
+                )
+                .playToClient(
+                ClientboundDwarfMerchantOffersPacket.TYPE,
+                ClientboundDwarfMerchantOffersPacket.CODEC,
+                JolCraftNetworking::handleDwarfMerchantOffers
+                )
+                .playToServer(
+                        ServerboundDwarfSelectTradePacket.TYPE,
+                        ServerboundDwarfSelectTradePacket.CODEC,
+                        JolCraftNetworking::handleServerboundDwarfSelectTrade
+                );
 
+
+    }
+
+    public static void handleServerboundDwarfSelectTrade(ServerboundDwarfSelectTradePacket packet, net.neoforged.neoforge.network.handling.IPayloadContext context) {
+        // Ensure on server thread
+        context.enqueueWork(() -> {
+            // Get the player sending the packet
+            var player = context.player();
+            if (player == null) return; // Defensive: should always exist
+
+            // Get the menu (your custom merchant menu)
+            if (player.containerMenu instanceof DwarfMerchantMenu menu) {
+                // Optionally, check menu containerId matches (packet can carry it if you want extra safety)
+                menu.setSelectionHint(packet.getItem());
+                menu.tryMoveItems(packet.getItem());
+            }
+        });
+    }
+
+
+    @OnlyIn(Dist.CLIENT)
+    private static void handleDwarfMerchantOffers(ClientboundDwarfMerchantOffersPacket packet, IPayloadContext context) {
+        context.enqueueWork(() -> {
+            Minecraft mc = Minecraft.getInstance();
+            AbstractContainerMenu abstractContainerMenu = mc.player.containerMenu;
+            if (packet.containerId() == abstractContainerMenu.containerId && abstractContainerMenu instanceof DwarfMerchantMenu dwarfMenu) {
+                dwarfMenu.setOffers(packet.offers());
+                dwarfMenu.setXp(packet.dwarfXp());
+                dwarfMenu.setMerchantLevel(packet.dwarfLevel());
+                dwarfMenu.setShowProgressBar(packet.showProgress());
+                dwarfMenu.setCanRestock(packet.canRestock());
+            }
+        });
     }
 
     @OnlyIn(Dist.CLIENT)

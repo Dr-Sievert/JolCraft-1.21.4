@@ -344,7 +344,6 @@
   "tooltip.jolcraft.need_ancient": "You need to understand ancient dwarvish to use this.",
   "tooltip.jolcraft.ancient_memory": "Ancient memory effect gives you temporary understanding of ancient dwarvish.",
   "tooltip.jolcraft.unidentified": "Right-click to identify.",
-  "tooltip.jolcraft.bounty": "Give this to a merchant to get a bounty crate.",
   "tooltip.jolcraft.bounty_crate": "Needs to be filled and handed in for a reward. Right-click when held to fill from inventory. Left-click in inventory with required item to fill or right-click to insert single item. Right-click in inventory to extract items.",
 
   "tooltip.jolcraft.language.locked": "You do not understand each other.",
@@ -395,8 +394,12 @@
   "tooltip.jolcraft.strongbox.busy": "Someone else is trying to pick this lock.",
 
   "tooltip.jolcraft.bounty.locked": "The parchment is marked with unfamiliar symbols.",
-  "tooltip.jolcraft.bounty.invalid": "Tier: Invalid",
+  "tooltip.jolcraft.bounty.tier.invalid": "Tier: Invalid",
   "tooltip.jolcraft.bounty.tier": "Tier: %d",
+  "tooltip.jolcraft.bounty.type.invalid": "Type: Invalid",
+  "tooltip.jolcraft.bounty.type": "Type: ",
+  "tooltip.jolcraft.bounty.wrong_type": "This is the wrong type of bounty to give to this dwarf.",
+  "tooltip.jolcraft.bounty.merchant": "Give this to a merchant to get a bounty crate.",
 
   "tooltip.jolcraft.bounty_crate.target": "Target: ",
   "tooltip.jolcraft.bounty_crate.count": "Required: %s",
@@ -408,6 +411,7 @@
   "tooltip.jolcraft.bounty_crate.no_items": "You don't have any items to fill the crate.",
   "tooltip.jolcraft.bounty_crate.complete": "Ready to be turned in.",
   "tooltip.jolcraft.bounty_crate.not_complete": "This bounty has not been completed.",
+  "tooltip.jolcraft.bounty_crate.wrong_type": "This is the wrong type of crate to give to this dwarf.",
 
   "tooltip.jolcraft.crate.cooldown": "You must wait before you can use another crate.",
   "tooltip.jolcraft.crate.no_offers_villager": "This villager has no trades!",

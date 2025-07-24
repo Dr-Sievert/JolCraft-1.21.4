@@ -9,7 +9,6 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
-import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -18,8 +17,9 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Blocks;
 import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.entity.ai.goal.*;
+import net.sievert.jolcraft.entity.ai.goal.dwarf.*;
 import net.sievert.jolcraft.item.JolCraftItems;
-import net.sievert.jolcraft.util.dwarf.JolCraftDwarfTrades;
+import net.sievert.jolcraft.util.dwarf.trade.DwarfTrades;
 
 public class DwarfExplorerEntity extends AbstractDwarfEntity {
 
@@ -67,8 +67,8 @@ public class DwarfExplorerEntity extends AbstractDwarfEntity {
         this.targetSelector.addGoal(2, new DwarfNonPlayerAlertGoal(this).setAlertOthers());
         this.goalSelector.addGoal(2, new DwarfAttackGoal(this, 1.2D, true));
         this.goalSelector.addGoal(3, new DwarfRevengeGoal(this));
-        this.goalSelector.addGoal(3, new TradeWithPlayerGoal(this));
-        this.goalSelector.addGoal(4, new LookAtTradingPlayerGoal(this));
+        this.goalSelector.addGoal(3, new DwarfTradeWithPlayerGoal(this));
+        this.goalSelector.addGoal(4, new DwarfLookAtTradingPlayerGoal(this));
         this.goalSelector.addGoal(5, new DwarfBreedGoal(this, 1.0, AbstractDwarfEntity.class));
         this.goalSelector.addGoal(6, new TemptGoal(this, 1.25, stack -> stack.is(JolCraftItems.GOLD_COIN), false));
         this.goalSelector.addGoal(6, new OpenDoorGoal(this, true));
@@ -85,31 +85,31 @@ public class DwarfExplorerEntity extends AbstractDwarfEntity {
     }
 
     //Trades
-    public static Int2ObjectMap<VillagerTrades.ItemListing[]> createRandomizedExplorerTrades() {
+    public static Int2ObjectMap<DwarfTrades.ItemListing[]> createRandomizedExplorerTrades() {
         return AbstractDwarfEntity.toIntMap(ImmutableMap.of(
                 // Novice
-                1, new VillagerTrades.ItemListing[] {
-                        new JolCraftDwarfTrades.ItemsForGold(Items.STICK, 1, 4, 2, 8, 6, 500),
-                        new JolCraftDwarfTrades.GoldForItems(Items.SMITHING_TABLE, 1, 3, 4, 1)
+                1, new DwarfTrades.ItemListing[] {
+                        new DwarfTrades.ItemsForGold(Items.STICK, 1, 4, 2, 8, 6, 500),
+                        new DwarfTrades.GoldForItems(Items.SMITHING_TABLE, 1, 3, 4, 1)
                 },
                 // Apprentice
-                2, new VillagerTrades.ItemListing[] {
-                        new JolCraftDwarfTrades.ItemsForGold(Items.BREAD, 1, 3, 1, 5, 10, 10),
+                2, new DwarfTrades.ItemListing[] {
+                        new DwarfTrades.ItemsForGold(Items.BREAD, 1, 3, 1, 5, 10, 10),
                 },
                 // Journeyman
-                3, new VillagerTrades.ItemListing[] {
-                        new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.CONTRACT_BLANK.get(), 2, 4, 1, 10, 1, 10),
-                        new JolCraftDwarfTrades.GoldForItems(JolCraftItems.QUILL_EMPTY.get(), 3, 7, 4, 1)
+                3, new DwarfTrades.ItemListing[] {
+                        new DwarfTrades.ItemsForGold(JolCraftItems.CONTRACT_BLANK.get(), 2, 4, 1, 10, 1, 10),
+                        new DwarfTrades.GoldForItems(JolCraftItems.QUILL_EMPTY.get(), 3, 7, 4, 1)
                 },
                 // Expert
-                4, new VillagerTrades.ItemListing[] {
-                        new JolCraftDwarfTrades.ItemsForGold(Items.DIAMOND, 1, 1, 10, 10, 10, 10),
-                        new JolCraftDwarfTrades.GoldForItems(Items.EMERALD, 1, 10, 10, 1)
+                4, new DwarfTrades.ItemListing[] {
+                        new DwarfTrades.ItemsForGold(Items.DIAMOND, 1, 1, 10, 10, 10, 10),
+                        new DwarfTrades.GoldForItems(Items.EMERALD, 1, 10, 10, 1)
                 },
                 // Master
-                5, new VillagerTrades.ItemListing[] {
-                        new JolCraftDwarfTrades.ItemsForGold(Items.NETHERITE_BLOCK, 1, 1, 5, 10, 5, 10),
-                        new JolCraftDwarfTrades.ItemsAndGoldToItems(Items.PURPLE_DYE, 1, 30, JolCraftItems.GUILD_SIGIL.get(), 1, 1, 0, 0.05F)
+                5, new DwarfTrades.ItemListing[] {
+                        new DwarfTrades.ItemsForGold(Items.NETHERITE_BLOCK, 1, 1, 5, 10, 5, 10),
+                        new DwarfTrades.ItemsAndGoldToItems(Items.PURPLE_DYE, 1, 30, JolCraftItems.GUILD_SIGIL.get(), 1, 1, 0, 0.05F)
                 }
         ));
     }

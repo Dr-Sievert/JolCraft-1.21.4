@@ -24,7 +24,6 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.AbstractSkeleton;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.monster.piglin.AbstractPiglin;
-import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.item.ItemStack;
@@ -36,11 +35,11 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.sievert.jolcraft.JolCraft;
-import net.sievert.jolcraft.entity.ai.goal.*;
+import net.sievert.jolcraft.entity.ai.goal.dwarf.*;
 import net.sievert.jolcraft.item.JolCraftItems;
 import net.sievert.jolcraft.sound.JolCraftSoundHelper;
 import net.sievert.jolcraft.sound.JolCraftSounds;
-import net.sievert.jolcraft.util.dwarf.JolCraftDwarfTrades;
+import net.sievert.jolcraft.util.dwarf.trade.DwarfTrades;
 
 import javax.annotation.Nullable;
 
@@ -221,13 +220,13 @@ public class DwarfGuardEntity extends AbstractDwarfEntity {
     }
 
     //Trades
-    public static Int2ObjectMap<VillagerTrades.ItemListing[]> createRandomizedGuardTrades() {
+    public static Int2ObjectMap<DwarfTrades.ItemListing[]> createRandomizedGuardTrades() {
         return AbstractDwarfEntity.toIntMap(ImmutableMap.of(
                         //Master
                         5,
-                        new VillagerTrades.ItemListing[]{
-                                new JolCraftDwarfTrades.GoldForItems(JolCraftItems.AEGISCORE.get(), 1, 1, 0, 30),
-                                new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.AEGISCORE.get(), 1, 30, JolCraftItems.FORGE_ARMOR_TRIM_SMITHING_TEMPLATE.get(), 1, 1, 0, 0.05F)
+                        new DwarfTrades.ItemListing[]{
+                                new DwarfTrades.GoldForItems(JolCraftItems.AEGISCORE.get(), 1, 1, 0, 30),
+                                new DwarfTrades.ItemsAndGoldToItems(JolCraftItems.AEGISCORE.get(), 1, 30, JolCraftItems.FORGE_ARMOR_TRIM_SMITHING_TEMPLATE.get(), 1, 1, 0, 0.05F)
                         }
                 )
         );

@@ -1,4 +1,4 @@
-package net.sievert.jolcraft.util.dwarf;
+package net.sievert.jolcraft.util.dwarf.trade;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -10,28 +10,24 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.MapItem;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.providers.EnchantmentProvider;
-import net.minecraft.world.item.trading.ItemCost;
-import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.saveddata.maps.MapDecorationType;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
 import net.sievert.jolcraft.item.JolCraftItems;
-import net.sievert.jolcraft.util.dwarf.bounty.BountyHelper;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-public class JolCraftDwarfTrades extends VillagerTrades {
+public class DwarfTrades {
 
     // -- BUYING (player pays gold, gets item) --
 
@@ -63,6 +59,7 @@ public class JolCraftDwarfTrades extends VillagerTrades {
             this(stack.getItem(), minGoldCost, maxGoldCost, stack.getCount(), stack.getCount(), maxUses, villagerXp);
         }
 
+        // Full constructor with price multiplier and enchantments
         public ItemsForGold(Item item, int minGoldCost, int maxGoldCost, int minItemCount, int maxItemCount, int maxUses, int villagerXp, float priceMultiplier, Optional<ResourceKey<EnchantmentProvider>> enchantmentProvider) {
             this.item = item;
             this.minItemCount = minItemCount;
@@ -76,17 +73,32 @@ public class JolCraftDwarfTrades extends VillagerTrades {
         }
 
         @Override
-        public MerchantOffer getOffer(Entity entity, RandomSource random) {
+        public DwarfMerchantOffer getOffer(Entity entity, RandomSource random) {
+            // Randomly generate values for the items and gold cost
             int gold = Mth.nextInt(random, minGoldCost, maxGoldCost);
             int items = Mth.nextInt(random, minItemCount, maxItemCount);
             ItemStack stack = new ItemStack(item, items);
+
+            // Apply enchantments if available
             if (enchantmentProvider.isPresent()) {
                 Level level = entity.level();
                 EnchantmentHelper.enchantItemFromProvider(stack, level.registryAccess(), enchantmentProvider.get(), level.getCurrentDifficultyAt(entity.blockPosition()), random);
             }
-            return new MerchantOffer(
-                    new ItemCost(JolCraftItems.GOLD_COIN.get(), gold),
-                    stack,
+
+            // Handle the gold cost, check for CoinPouchItem
+            DwarfItemCost itemCost;
+            if (gold > 0) {
+                // If the cost is gold, check if it's being handled via a coin pouch
+                itemCost = new DwarfItemCost(JolCraftItems.GOLD_COIN.get(), gold);
+            } else {
+                // If there's no gold, no coin pouch, this part will be empty
+                itemCost = new DwarfItemCost(JolCraftItems.GOLD_COIN.get(), 0);
+            }
+
+            // Return the DwarfMerchantOffer with a dynamic cost handling
+            return new DwarfMerchantOffer(
+                    itemCost,  // This will be used for the gold cost
+                    stack,     // The item to return
                     maxUses,
                     villagerXp,
                     priceMultiplier
@@ -115,6 +127,8 @@ public class JolCraftDwarfTrades extends VillagerTrades {
                                    int maxUses, int villagerXp, float priceMultiplier) {
             this(fromItem, minInputCount, maxInputCount, minGoldCost, maxGoldCost, toItem, minOutputCount, maxOutputCount, maxUses, villagerXp, priceMultiplier, Optional.empty());
         }
+
+        // Constructor with enchantments support
         public ItemsAndGoldToItems(ItemLike fromItem, int minInputCount, int maxInputCount,
                                    int minGoldCost, int maxGoldCost,
                                    ItemLike toItem, int minOutputCount, int maxOutputCount,
@@ -133,7 +147,8 @@ public class JolCraftDwarfTrades extends VillagerTrades {
             this.priceMultiplier = priceMultiplier;
             this.enchantmentProvider = enchantmentProvider;
         }
-        // Single value constructor (backward compat)
+
+        // Single value constructor (backward compatibility)
         public ItemsAndGoldToItems(ItemLike fromItem, int fromCount, int goldCost, ItemLike toItem, int toCount, int maxUses, int villagerXp, float priceMultiplier) {
             this(fromItem, fromCount, fromCount, goldCost, goldCost, toItem, toCount, toCount, maxUses, villagerXp, priceMultiplier, Optional.empty());
         }
@@ -150,42 +165,53 @@ public class JolCraftDwarfTrades extends VillagerTrades {
                     toItem, toCount, toCount, maxUses, villagerXp, priceMultiplier, Optional.empty()
             );
         }
+
         @Nullable
         @Override
-        public MerchantOffer getOffer(Entity entity, RandomSource random) {
+        public DwarfMerchantOffer getOffer(Entity entity, RandomSource random) {
+            // Generate random item counts for input and output, and random gold cost
             int inputCount = Mth.nextInt(random, minInputCount, maxInputCount);
             int outputCount = Mth.nextInt(random, minOutputCount, maxOutputCount);
             int gold = Mth.nextInt(random, minGoldCost, maxGoldCost);
             ItemStack input = new ItemStack(inputItem, inputCount);
             ItemStack output = new ItemStack(outputItem, outputCount);
+
+            // Apply enchantments if available
             if (enchantmentProvider.isPresent()) {
                 Level level = entity.level();
                 EnchantmentHelper.enchantItemFromProvider(output, level.registryAccess(), enchantmentProvider.get(), level.getCurrentDifficultyAt(entity.blockPosition()), random);
             }
-            return new MerchantOffer(
-                    new ItemCost(JolCraftItems.GOLD_COIN.get(), gold),
-                    Optional.of(new ItemCost(inputItem, inputCount)),
-                    output,
-                    0,
-                    maxUses,
-                    villagerXp,
-                    priceMultiplier
+
+            // Return the offer with a dynamic cost handling
+            return new DwarfMerchantOffer(
+                    new DwarfItemCost(JolCraftItems.GOLD_COIN.get(), gold),  // Handle gold cost using DwarfItemCost
+                    Optional.of(new DwarfItemCost(inputItem, inputCount)),  // Handle item input count
+                    output,  // Item output
+                    0,  // Set the default uses (can be set dynamically in other logic)
+                    maxUses,  // Max uses for the trade
+                    villagerXp,  // XP reward for trade
+                    priceMultiplier  // Price multiplier for the trade
             );
         }
     }
 
+
     // -- WITH CUSTOM STACK MODIFIERS --
 
-    public static class ItemsWithDataForGold implements VillagerTrades.ItemListing {
+    public static class ItemsWithDataForGold implements ItemListing {
         private final Item item;
         private final int minItemCount, maxItemCount;
         private final int minGoldCost, maxGoldCost;
         private final int maxUses, villagerXp;
         private final float priceMultiplier;
         private final Consumer<ItemStack> stackModifier;
+
+        // Constructor with random item count and gold cost
         public ItemsWithDataForGold(Item item, int minItemCount, int maxItemCount, int minGoldCost, int maxGoldCost, int maxUses, int villagerXp, Consumer<ItemStack> stackModifier) {
             this(item, minItemCount, maxItemCount, minGoldCost, maxGoldCost, maxUses, villagerXp, 0.05F, stackModifier);
         }
+
+        // Full constructor with priceMultiplier and stackModifier
         public ItemsWithDataForGold(Item item, int minItemCount, int maxItemCount, int minGoldCost, int maxGoldCost, int maxUses, int villagerXp, float priceMultiplier, Consumer<ItemStack> stackModifier) {
             this.item = item;
             this.minItemCount = minItemCount;
@@ -195,30 +221,36 @@ public class JolCraftDwarfTrades extends VillagerTrades {
             this.maxUses = maxUses;
             this.villagerXp = villagerXp;
             this.priceMultiplier = priceMultiplier;
-            this.stackModifier = stackModifier != null ? stackModifier : s -> {};
+            this.stackModifier = stackModifier != null ? stackModifier : s -> {};  // Default no-op if null
         }
-        // Legacy
+
+        // Legacy constructor for compatibility
         public ItemsWithDataForGold(Item item, int itemCount, int goldCost, int maxUses, int villagerXp, Consumer<ItemStack> stackModifier) {
             this(item, itemCount, itemCount, goldCost, goldCost, maxUses, villagerXp, stackModifier);
         }
+
         @Override
-        public MerchantOffer getOffer(Entity trader, RandomSource random) {
+        public DwarfMerchantOffer getOffer(Entity trader, RandomSource random) {
+            // Generate random values for the item and gold cost
             int itemCount = Mth.nextInt(random, minItemCount, maxItemCount);
             int gold = Mth.nextInt(random, minGoldCost, maxGoldCost);
             ItemStack stack = new ItemStack(item, itemCount);
+
+            // Apply any stack modifications (e.g., enchantments, etc.)
             stackModifier.accept(stack);
-            return new MerchantOffer(
-                    new ItemCost(JolCraftItems.GOLD_COIN.get(), gold),
-                    stack,
-                    maxUses,
-                    villagerXp,
-                    priceMultiplier
+
+            // Return the offer with the gold cost handled separately in the trade logic
+            return new DwarfMerchantOffer(
+                    new DwarfItemCost(JolCraftItems.GOLD_COIN.get(), gold),  // Gold cost for the trade
+                    stack,     // Output item stack
+                    maxUses,   // Max uses for the offer
+                    villagerXp,// XP reward for trade
+                    priceMultiplier // Price multiplier for the offer
             );
         }
     }
 
-
-    public static class ItemsAndGoldToItemsWithData implements VillagerTrades.ItemListing {
+    public static class ItemsAndGoldToItemsWithData implements ItemListing {
         private final Item inputItem;
         private final int minInputCount, maxInputCount;
         private final int minGoldCost, maxGoldCost;
@@ -228,6 +260,7 @@ public class JolCraftDwarfTrades extends VillagerTrades {
         private final float priceMultiplier;
         private final Consumer<ItemStack> stackModifier;
 
+        // Constructor for random item counts and gold costs
         public ItemsAndGoldToItemsWithData(ItemLike input, int minInputCount, int maxInputCount, int minGoldCost, int maxGoldCost,
                                            Item output, int minOutputCount, int maxOutputCount,
                                            int maxUses, int villagerXp, float priceMultiplier, Consumer<ItemStack> stackModifier) {
@@ -242,94 +275,90 @@ public class JolCraftDwarfTrades extends VillagerTrades {
             this.maxUses = maxUses;
             this.villagerXp = villagerXp;
             this.priceMultiplier = priceMultiplier;
-            this.stackModifier = stackModifier != null ? stackModifier : s -> {};
+            this.stackModifier = stackModifier != null ? stackModifier : s -> {};  // Default no-op if null
         }
-        // Legacy
+
+        // Legacy constructor for backward compatibility
         public ItemsAndGoldToItemsWithData(ItemLike input, int inputCount, int goldCost, Item output, int outputCount, int maxUses, int villagerXp, float priceMultiplier, Consumer<ItemStack> stackModifier) {
             this(input, inputCount, inputCount, goldCost, goldCost, output, outputCount, outputCount, maxUses, villagerXp, priceMultiplier, stackModifier);
         }
+
         @Override
-        public MerchantOffer getOffer(Entity entity, RandomSource random) {
+        public DwarfMerchantOffer getOffer(Entity entity, RandomSource random) {
+            // Randomly generate input, gold cost, and output counts
             int inputCount = Mth.nextInt(random, minInputCount, maxInputCount);
             int gold = Mth.nextInt(random, minGoldCost, maxGoldCost);
             int outputCount = Mth.nextInt(random, minOutputCount, maxOutputCount);
+
+            // Create the output item stack
             ItemStack stack = new ItemStack(outputItem, outputCount);
+
+            // Apply any stack modifications (e.g., enchantments)
             stackModifier.accept(stack);
-            return new MerchantOffer(
-                    new ItemCost(JolCraftItems.GOLD_COIN.get(), gold),
-                    Optional.of(new ItemCost(inputItem, inputCount)),
-                    stack,
-                    0,
-                    maxUses,
-                    villagerXp,
-                    priceMultiplier
+
+            // Return the DwarfMerchantOffer with gold cost and item output
+            return new DwarfMerchantOffer(
+                    new DwarfItemCost(JolCraftItems.GOLD_COIN.get(), gold),  // Gold cost as DwarfItemCost
+                    Optional.of(new DwarfItemCost(inputItem, inputCount)),  // Input item count
+                    stack,  // Output item stack
+                    0,  // Default uses, can be updated later
+                    maxUses,  // Max uses for the trade
+                    villagerXp,  // XP reward for the trade
+                    priceMultiplier  // Price multiplier for the trade
             );
         }
     }
 
-
     // -- EXCHANGING (item for item, with ranges) --
 
-    public static class ItemForItem implements VillagerTrades.ItemListing {
-        private final ItemLike input;
+    public static class ItemForItemWithData implements ItemListing {
+        private final Item inputItem;
         private final int minInputCount, maxInputCount;
-        final ItemLike output;
+        private final Item outputItem;
         private final int minOutputCount, maxOutputCount;
         private final int maxUses, villagerXp;
         private final float priceMultiplier;
-        public ItemForItem(ItemLike input, int minInputCount, int maxInputCount, ItemLike output, int minOutputCount, int maxOutputCount, int maxUses, int villagerXp, float priceMultiplier) {
-            this.input = input;
+        private final Consumer<ItemStack> stackModifier;
+
+        // Constructor for random item counts and item output, with stackModifier included
+        public ItemForItemWithData(ItemLike input, int minInputCount, int maxInputCount, ItemLike output, int minOutputCount, int maxOutputCount, int maxUses, int villagerXp, float priceMultiplier, Consumer<ItemStack> stackModifier) {
+            this.inputItem = input.asItem();
             this.minInputCount = minInputCount;
             this.maxInputCount = maxInputCount;
-            this.output = output;
+            this.outputItem = output.asItem();
             this.minOutputCount = minOutputCount;
             this.maxOutputCount = maxOutputCount;
             this.maxUses = maxUses;
             this.villagerXp = villagerXp;
             this.priceMultiplier = priceMultiplier;
+            this.stackModifier = stackModifier != null ? stackModifier : s -> {};  // Default no-op if null
         }
-        public ItemForItem(ItemLike input, int inputCount, ItemLike output, int outputCount, int maxUses, int villagerXp) {
-            this(input, inputCount, inputCount, output, outputCount, outputCount, maxUses, villagerXp, 0.05F);
+
+        // Legacy constructor for backward compatibility, with stackModifier
+        public ItemForItemWithData(ItemLike input, int inputCount, ItemLike output, int outputCount, int maxUses, int villagerXp, float priceMultiplier, Consumer<ItemStack> stackModifier) {
+            this(input, inputCount, inputCount, output, outputCount, outputCount, maxUses, villagerXp, priceMultiplier, stackModifier);
         }
+
         @Nullable
         @Override
-        public MerchantOffer getOffer(Entity entity, RandomSource random) {
+        public DwarfMerchantOffer getOffer(Entity entity, RandomSource random) {
+            // Randomly generate input and output counts
             int inputCount = Mth.nextInt(random, minInputCount, maxInputCount);
             int outputCount = Mth.nextInt(random, minOutputCount, maxOutputCount);
-            return new MerchantOffer(
-                    new ItemCost(input.asItem(), inputCount),
-                    new ItemStack(output.asItem(), outputCount),
-                    maxUses,
-                    villagerXp,
-                    priceMultiplier
-            );
-        }
-    }
 
-    public static class BountyItemForItem extends JolCraftDwarfTrades.ItemForItem {
-        private final int bountyTier;
-        public BountyItemForItem(ItemLike input, int inputCount, ItemLike output, int outputCount, int maxUses, int villagerXp, int bountyTier) {
-            super(input, inputCount, output, outputCount, maxUses, villagerXp);
-            this.bountyTier = bountyTier;
-        }
-        public BountyItemForItem(ItemLike input, int minInputCount, int maxInputCount, ItemLike output, int minOutputCount, int maxOutputCount, int maxUses, int villagerXp, int bountyTier) {
-            super(input, minInputCount, maxInputCount, output, minOutputCount, maxOutputCount, maxUses, villagerXp, 0.05F);
-            this.bountyTier = bountyTier;
-        }
-        @Nullable
-        @Override
-        public MerchantOffer getOffer(Entity entity, RandomSource random) {
-            MerchantOffer offer = super.getOffer(entity, random);
-            if (offer == null) return null;
-            ItemStack result = offer.getResult().copy();
-            BountyHelper.setBountyTier(result, bountyTier);
-            return new MerchantOffer(
-                    offer.getItemCostA(),
-                    offer.getItemCostB(),
-                    result,
-                    offer.getMaxUses(),
-                    offer.getXp(),
-                    offer.getPriceMultiplier()
+            // Create the output item stack
+            ItemStack stack = new ItemStack(outputItem, outputCount);
+
+            // Apply any stack modifications (e.g., enchantments, lore lines, bounty tier)
+            stackModifier.accept(stack);
+
+            // Create and return the trade offer
+            return new DwarfMerchantOffer(
+                    new DwarfItemCost(inputItem, inputCount),  // Input item and count
+                    stack,  // Output item stack (modified with stackModifier)
+                    maxUses,   // Max uses for the offer
+                    villagerXp,// XP reward for trade
+                    priceMultiplier // Price multiplier for the offer
             );
         }
     }
@@ -337,7 +366,7 @@ public class JolCraftDwarfTrades extends VillagerTrades {
 
     // -- SELLING (player sells item, gets gold payout) --
 
-    public static class GoldForItems implements VillagerTrades.ItemListing {
+    public static class GoldForItems implements ItemListing {
         private final ItemLike item;
         private final int minInputCount, maxInputCount;
         private final int maxUses, villagerXp;
@@ -362,11 +391,11 @@ public class JolCraftDwarfTrades extends VillagerTrades {
             this(item, inputCount, inputCount, maxUses, villagerXp, minGold, maxGold);
         }
         @Override
-        public MerchantOffer getOffer(Entity entity, RandomSource random) {
+        public DwarfMerchantOffer getOffer(Entity entity, RandomSource random) {
             int inputCount = Mth.nextInt(random, minInputCount, maxInputCount);
             int payout = Mth.nextInt(random, minGoldAmount, maxGoldAmount);
-            return new MerchantOffer(
-                    new ItemCost(item.asItem(), inputCount),
+            return new DwarfMerchantOffer(
+                    new DwarfItemCost(item.asItem(), inputCount),
                     new ItemStack(JolCraftItems.GOLD_COIN.get(), payout),
                     maxUses,
                     villagerXp,
@@ -378,7 +407,7 @@ public class JolCraftDwarfTrades extends VillagerTrades {
 
     // -- MAPS (special) --
 
-    public static class TreasureMapForGold implements VillagerTrades.ItemListing {
+    public static class TreasureMapForGold implements ItemListing {
         private final int goldCost;
         private final TagKey<Structure> destinationTag;
         private final String displayName;
@@ -397,7 +426,7 @@ public class JolCraftDwarfTrades extends VillagerTrades {
 
         @Nullable
         @Override
-        public MerchantOffer getOffer(Entity trader, RandomSource random) {
+        public DwarfMerchantOffer getOffer(Entity trader, RandomSource random) {
             if (!(trader.level() instanceof ServerLevel serverLevel)) {
                 return null;
             }
@@ -412,9 +441,9 @@ public class JolCraftDwarfTrades extends VillagerTrades {
             MapItem.renderBiomePreviewMap(serverLevel, map);
             MapItemSavedData.addTargetDecoration(map, targetPos, "+", this.destinationType);
             map.set(DataComponents.ITEM_NAME, Component.translatable(this.displayName));
-            return new MerchantOffer(
-                    new ItemCost(JolCraftItems.GOLD_COIN.get(), this.goldCost),
-                    Optional.of(new ItemCost(Items.MAP, 1)),
+            return new DwarfMerchantOffer(
+                    new DwarfItemCost(JolCraftItems.GOLD_COIN.get(), this.goldCost),
+                    Optional.of(new DwarfItemCost(Items.MAP, 1)),
                     map,
                     0,
                     this.maxUses,
@@ -424,59 +453,67 @@ public class JolCraftDwarfTrades extends VillagerTrades {
         }
     }
 
-    public static ItemStack getExampleInputA(VillagerTrades.ItemListing listing) {
-        if (listing instanceof JolCraftDwarfTrades.ItemsForGold) {
+    public interface ItemListing {
+        @Nullable
+        DwarfMerchantOffer getOffer(Entity trader, RandomSource random);
+    }
+
+    //JEI
+    public static ItemStack getExampleInputA(DwarfTrades.ItemListing listing) {
+        // Revert to original logic without the alternating logic
+        if (listing instanceof DwarfTrades.ItemsForGold) {
             return new ItemStack(JolCraftItems.GOLD_COIN.get());
-        } else if (listing instanceof JolCraftDwarfTrades.GoldForItems trade) {
-            return new ItemStack(trade.item);
-        } else if (listing instanceof JolCraftDwarfTrades.ItemsAndGoldToItems
-                || listing instanceof JolCraftDwarfTrades.ItemsAndGoldToItemsWithData) {
+        } else if (listing instanceof DwarfTrades.GoldForItems trade) {
+            return new ItemStack(trade.item.asItem());
+        } else if (listing instanceof DwarfTrades.ItemsAndGoldToItems || listing instanceof DwarfTrades.ItemsAndGoldToItemsWithData) {
             return new ItemStack(JolCraftItems.GOLD_COIN.get());
-        } else if (listing instanceof ItemForItem trade) {
-            return new ItemStack(trade.input.asItem());
-        } else if (listing instanceof JolCraftDwarfTrades.TreasureMapForGold) {
+        } else if (listing instanceof ItemForItemWithData trade) {
+            return new ItemStack(trade.inputItem);
+        } else if (listing instanceof DwarfTrades.TreasureMapForGold) {
             return new ItemStack(JolCraftItems.GOLD_COIN.get());
         }
+
         return ItemStack.EMPTY;
     }
 
-    public static ItemStack getExampleInputB(VillagerTrades.ItemListing listing) {
-        if (listing instanceof JolCraftDwarfTrades.ItemsAndGoldToItems trade) {
+    public static ItemStack getExampleInputB(DwarfTrades.ItemListing listing) {
+        if (listing instanceof DwarfTrades.ItemsAndGoldToItems trade) {
             return new ItemStack(trade.inputItem);
-        } else if (listing instanceof JolCraftDwarfTrades.ItemsAndGoldToItemsWithData) {
-            return new ItemStack(((JolCraftDwarfTrades.ItemsAndGoldToItemsWithData) listing).inputItem);
-        } else if (listing instanceof JolCraftDwarfTrades.TreasureMapForGold) {
+        } else if (listing instanceof DwarfTrades.ItemsAndGoldToItemsWithData) {
+            return new ItemStack(((DwarfTrades.ItemsAndGoldToItemsWithData) listing).inputItem);
+        } else if (listing instanceof DwarfTrades.TreasureMapForGold) {
             return new ItemStack(Items.MAP);
         }
         return ItemStack.EMPTY;
     }
 
-    public static ItemStack getExampleOutput(VillagerTrades.ItemListing listing) {
-        if (listing instanceof JolCraftDwarfTrades.ItemsForGold trade) {
+    public static ItemStack getExampleOutput(DwarfTrades.ItemListing listing) {
+        if (listing instanceof DwarfTrades.ItemsForGold trade) {
             return new ItemStack(trade.item);
-        } else if (listing instanceof JolCraftDwarfTrades.GoldForItems) {
+        } else if (listing instanceof DwarfTrades.GoldForItems) {
             return new ItemStack(JolCraftItems.GOLD_COIN.get());
-        } else if (listing instanceof JolCraftDwarfTrades.ItemsAndGoldToItems trade) {
+        } else if (listing instanceof DwarfTrades.ItemsAndGoldToItems trade) {
             return new ItemStack(trade.outputItem);
-        } else if (listing instanceof JolCraftDwarfTrades.ItemsWithDataForGold trade) {
+        } else if (listing instanceof DwarfTrades.ItemsWithDataForGold trade) {
             ItemStack stack = new ItemStack(trade.item);
             trade.stackModifier.accept(stack);
             return stack;
-        } else if (listing instanceof JolCraftDwarfTrades.ItemsAndGoldToItemsWithData trade) {
+        } else if (listing instanceof DwarfTrades.ItemsAndGoldToItemsWithData trade) {
             ItemStack stack = new ItemStack(trade.outputItem);
             trade.stackModifier.accept(stack);
             return stack;
-        } else if (listing instanceof JolCraftDwarfTrades.ItemForItem trade) {
-            return new ItemStack(trade.output.asItem());
-        } else if (listing instanceof JolCraftDwarfTrades.BountyItemForItem trade) {
-            return new ItemStack(trade.output.asItem());
-        } else if (listing instanceof JolCraftDwarfTrades.TreasureMapForGold trade) {
+        } else if (listing instanceof ItemForItemWithData trade) {
+            ItemStack stack = new ItemStack(trade.outputItem);
+            trade.stackModifier.accept(stack);
+            return stack;
+        } else if (listing instanceof DwarfTrades.TreasureMapForGold trade) {
             ItemStack stack = new ItemStack(Items.FILLED_MAP);
             stack.set(DataComponents.ITEM_NAME, Component.translatable(trade.displayName));
             return stack;
         }
         return ItemStack.EMPTY;
     }
+
 
 
 

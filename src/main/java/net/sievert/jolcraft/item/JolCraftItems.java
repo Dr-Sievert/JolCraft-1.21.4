@@ -14,6 +14,7 @@ import net.sievert.jolcraft.entity.JolCraftEntities;
 import net.sievert.jolcraft.item.armor.JolCraftArmorMaterials;
 import net.sievert.jolcraft.item.custom.*;
 import net.sievert.jolcraft.item.custom.contract.ProfessionContractItem;
+import net.sievert.jolcraft.item.custom.QuillItem;
 import net.sievert.jolcraft.item.custom.contract.SignedContractItem;
 import net.sievert.jolcraft.item.custom.contract.WrittenContractItem;
 import net.sievert.jolcraft.item.custom.scrapper.*;

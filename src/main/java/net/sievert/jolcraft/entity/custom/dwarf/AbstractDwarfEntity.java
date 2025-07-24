@@ -1,5 +1,6 @@
 package net.sievert.jolcraft.entity.custom.dwarf;
 
+import com.google.common.collect.Lists;
 import com.mojang.logging.LogUtils;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
@@ -24,6 +25,7 @@ import net.minecraft.stats.Stats;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -37,10 +39,9 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.UseRemainder;
-import net.minecraft.world.item.trading.MerchantOffer;
-import net.minecraft.world.item.trading.MerchantOffers;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.pathfinder.PathType;
+import net.minecraft.world.level.portal.TeleportTransition;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.living.BabyEntitySpawnEvent;
@@ -49,10 +50,16 @@ import net.sievert.jolcraft.advancement.JolCraftCriteriaTriggers;
 import net.sievert.jolcraft.data.custom.attachment.rep.DwarvenReputationImpl;
 import net.sievert.jolcraft.data.JolCraftAttachments;
 import net.sievert.jolcraft.data.JolCraftDataComponents;
+import net.sievert.jolcraft.network.packet.ClientboundDwarfMerchantOffersPacket;
+import net.sievert.jolcraft.screen.custom.dwarf.DwarfMerchantMenu;
+import net.sievert.jolcraft.util.dwarf.trade.DwarfMerchant;
+import net.sievert.jolcraft.util.dwarf.trade.DwarfMerchantOffer;
+import net.sievert.jolcraft.util.dwarf.trade.DwarfMerchantOffers;
+import net.sievert.jolcraft.util.dwarf.trade.DwarfTrades;
 import net.sievert.jolcraft.sound.JolCraftSoundHelper;
 import net.sievert.jolcraft.data.JolCraftTags;
 import net.sievert.jolcraft.entity.JolCraftEntities;
-import net.sievert.jolcraft.entity.ai.goal.DwarfBlockGoal;
+import net.sievert.jolcraft.entity.ai.goal.dwarf.DwarfBlockGoal;
 import net.sievert.jolcraft.entity.client.dwarf.DwarfAnimationType;
 import net.sievert.jolcraft.entity.custom.dwarf.variation.DwarfBeardColor;
 import net.sievert.jolcraft.entity.custom.dwarf.variation.DwarfEyeColor;
@@ -69,14 +76,16 @@ import net.sievert.jolcraft.util.attachment.DwarvenLanguageHelper;
 import org.slf4j.Logger;
 
 import javax.annotation.Nullable;
-import java.util.EnumMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
-public class AbstractDwarfEntity extends AbstractVillager {
+public class AbstractDwarfEntity extends AgeableMob implements Npc, DwarfMerchant {
 
-    public AbstractDwarfEntity(EntityType<? extends AbstractVillager> entityType, Level level) {
+    @Nullable
+    private Player tradingPlayer;
+    @Nullable
+    protected DwarfMerchantOffers offers;
+
+    public AbstractDwarfEntity(EntityType<? extends AgeableMob> entityType, Level level) {
         super(entityType, level);
         ((GroundPathNavigation)this.getNavigation()).setCanOpenDoors(true);
         this.setPathfindingMalus(PathType.DANGER_FIRE, 16.0F);
@@ -1152,6 +1161,14 @@ public class AbstractDwarfEntity extends AbstractVillager {
         if (this.assignProfessionWhenSpawned) {
             compound.putBoolean("AssignProfessionWhenSpawned", true);
         }
+        if (!this.level().isClientSide) {
+            DwarfMerchantOffers merchantoffers = this.getOffers();
+            if (!merchantoffers.isEmpty()) {
+                compound.put(
+                        "Offers", DwarfMerchantOffers.CODEC.encodeStart(this.registryAccess().createSerializationContext(NbtOps.INSTANCE), merchantoffers).getOrThrow()
+                );
+            }
+        }
     }
 
     @Override
@@ -1178,6 +1195,12 @@ public class AbstractDwarfEntity extends AbstractVillager {
         }
         if (compound.contains("AssignProfessionWhenSpawned")) {
             this.assignProfessionWhenSpawned = compound.getBoolean("AssignProfessionWhenSpawned");
+        }
+        if (compound.contains("Offers")) {
+            DwarfMerchantOffers.CODEC
+                    .parse(this.registryAccess().createSerializationContext(NbtOps.INSTANCE), compound.get("Offers"))
+                    .resultOrPartial(Util.prefix("Failed to load offers: ", LOGGER::warn))
+                    .ifPresent(p_323775_ -> this.offers = p_323775_);
         }
     }
 
@@ -1296,9 +1319,9 @@ public class AbstractDwarfEntity extends AbstractVillager {
     public static final Logger LOGGER = LogUtils.getLogger();
     public boolean increaseProfessionLevelOnUpdate = false;
     public boolean assignProfessionWhenSpawned;
-    public Int2ObjectMap<VillagerTrades.ItemListing[]> instanceTrades;
+    public Int2ObjectMap<DwarfTrades.ItemListing[]> instanceTrades;
 
-    public static Int2ObjectMap<VillagerTrades.ItemListing[]> toIntMap(Map<Integer, VillagerTrades.ItemListing[]> pMap) {
+    public static Int2ObjectMap<DwarfTrades.ItemListing[]> toIntMap(Map<Integer, DwarfTrades.ItemListing[]> pMap) {
         return new Int2ObjectOpenHashMap<>(pMap);
     }
 
@@ -1310,11 +1333,10 @@ public class AbstractDwarfEntity extends AbstractVillager {
 
     public boolean canReroll(){ return true; }
 
-    @Override
     protected void updateTrades() {
         int level = this.getVillagerData().getLevel();
         if (instanceTrades != null) {
-            VillagerTrades.ItemListing[] listings = instanceTrades.get(level);
+            DwarfTrades.ItemListing[] listings = instanceTrades.get(level);
             if (listings != null) {
                 this.addOffersFromItemListings(this.getOffers(), listings, listings.length);
             }
@@ -1358,7 +1380,7 @@ public class AbstractDwarfEntity extends AbstractVillager {
         if (this.getOffers().isEmpty()) return;
 
         boolean needsRestock = false;
-        for (MerchantOffer offer : this.getOffers()) {
+        for (DwarfMerchantOffer offer : this.getOffers()) {
             if (offer.needsRestock()) {
                 offer.resetUses();
                 needsRestock = true;
@@ -1385,10 +1407,7 @@ public class AbstractDwarfEntity extends AbstractVillager {
         this.level().playSound(null, this.blockPosition(), getRerollSound(), SoundSource.NEUTRAL, 1.2F, 1.0F);
     }
 
-
-
-    @Override
-    protected void rewardTradeXp(MerchantOffer offer) {
+    protected void rewardTradeXp(DwarfMerchantOffer offer) {
         int i = 3 + this.random.nextInt(4);
         this.dwarfXp = this.dwarfXp + offer.getXp();
         this.lastTradedPlayer = this.getTradingPlayer();
@@ -1404,19 +1423,23 @@ public class AbstractDwarfEntity extends AbstractVillager {
     }
 
     public void resendOffersToTradingPlayer() {
-        MerchantOffers merchantoffers = this.getOffers();
+        DwarfMerchantOffers merchantOffers = this.getOffers();
         Player player = this.getTradingPlayer();
-        if (player != null && !merchantoffers.isEmpty()) {
-            player.sendMerchantOffers(
-                    player.containerMenu.containerId,
-                    merchantoffers,
-                    this.getVillagerData().getLevel(),
-                    this.getVillagerXp(),
-                    this.showProgressBar(),
-                    this.canRestock()
+        if (player instanceof ServerPlayer serverPlayer && !merchantOffers.isEmpty()) {
+            JolCraftNetworking.sendToClient(
+                    serverPlayer,
+                    new ClientboundDwarfMerchantOffersPacket(
+                            serverPlayer.containerMenu.containerId,
+                            merchantOffers,
+                            this.getVillagerData().getLevel(),
+                            this.getVillagerXp(),
+                            this.showProgressBar(),
+                            this.canRestock()
+                    )
             );
         }
     }
+
 
     protected void increaseMerchantCareer() {
         int current = this.getVillagerData().getLevel();
@@ -1426,6 +1449,90 @@ public class AbstractDwarfEntity extends AbstractVillager {
             this.updateTrades();
             this.resendOffersToTradingPlayer();
         }
+    }
+
+    @Override
+    public void openTradingScreen(Player player, Component displayName, int level) {
+        OptionalInt menuId = player.openMenu(new SimpleMenuProvider(
+                (containerId, inventory, accessingPlayer) -> new DwarfMerchantMenu(containerId, inventory, this),
+                displayName
+        ));
+
+        if (menuId.isPresent() && !player.level().isClientSide() && player instanceof ServerPlayer serverPlayer) {
+            DwarfMerchantOffers offers = this.getOffers();
+            if (!offers.isEmpty()) {
+                JolCraftNetworking.sendToClient(
+                        serverPlayer,
+                        new ClientboundDwarfMerchantOffersPacket(
+                                menuId.getAsInt(),
+                                offers,
+                                level,                   // Pass level argument as dwarfLevel
+                                this.getVillagerXp(),
+                                this.showProgressBar(),
+                                this.canRestock()
+                        )
+                );
+            }
+        }
+    }
+
+
+
+    @Override
+    public void notifyTrade(DwarfMerchantOffer offer) {
+        Player player = this.getTradingPlayer();
+        offer.increaseUses();
+        this.ambientSoundTime = -this.getAmbientSoundInterval();
+        this.rewardTradeXp(offer);
+        if (player instanceof ServerPlayer serverPlayer) {
+            player.awardStat(Stats.TRADED_WITH_VILLAGER);
+            JolCraftCriteriaTriggers.TRADE_WITH_DWARF.trigger(serverPlayer, this);
+        }
+    }
+
+    @Override
+    public void setTradingPlayer(@Nullable Player player) {
+        this.tradingPlayer = player;
+    }
+
+    @Nullable
+    @Override
+    public Player getTradingPlayer() {
+        return this.tradingPlayer;
+    }
+
+    public boolean isTrading() {
+        return this.tradingPlayer != null;
+    }
+
+    @Override
+    public DwarfMerchantOffers getOffers() {
+        if (this.level().isClientSide) {
+            throw new IllegalStateException("Cannot load Villager offers on the client");
+        } else {
+            if (this.offers == null) {
+                this.offers = new DwarfMerchantOffers();
+                this.updateTrades();
+            }
+
+            return this.offers;
+        }
+    }
+
+    @Override
+    public void notifyTradeUpdated(ItemStack stack) {
+        if (!this.level().isClientSide && this.ambientSoundTime > -this.getAmbientSoundInterval() + 20) {
+            this.ambientSoundTime = -this.getAmbientSoundInterval();
+            this.makeSound(this.getTradeUpdatedSound(!stack.isEmpty()));
+        }
+    }
+
+    @Override
+    public void overrideOffers(@Nullable DwarfMerchantOffers offers) {
+    }
+
+    @Override
+    public void overrideXp(int xp) {
     }
 
     //Sounds
@@ -1459,13 +1566,11 @@ public class AbstractDwarfEntity extends AbstractVillager {
     }
 
     @Nullable
-    @Override
     protected SoundEvent getTradeUpdatedSound(boolean isYesSound) {
         return isYesSound ? JolCraftSounds.DWARF_YES.get() : JolCraftSounds.DWARF_NO.get();
     }
 
     @Nullable
-    @Override
     public void playCelebrateSound() {
         this.makeSound(JolCraftSounds.DWARF_YES.get());
     }
@@ -1558,19 +1663,6 @@ public class AbstractDwarfEntity extends AbstractVillager {
         return HumanoidArm.RIGHT;
     }
 
-    @Override
-    public void notifyTrade(MerchantOffer offer) {
-        Player player = this.getTradingPlayer();
-        offer.increaseUses();
-        this.ambientSoundTime = -this.getAmbientSoundInterval();
-        this.rewardTradeXp(offer);
-        if (player instanceof ServerPlayer serverPlayer) {
-            player.awardStat(Stats.TRADED_WITH_VILLAGER);
-            JolCraftCriteriaTriggers.TRADE_WITH_DWARF.trigger(serverPlayer, this);
-        }
-        NeoForge.EVENT_BUS.post(new net.neoforged.neoforge.event.entity.player.TradeWithVillagerEvent(this.lastTradedPlayer, offer, this));
-    }
-
     public void setCustomAttackDamage(double amount) {
         if (this.getAttribute(Attributes.ATTACK_DAMAGE) != null) {
             this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(amount);
@@ -1594,12 +1686,50 @@ public class AbstractDwarfEntity extends AbstractVillager {
         }
     }
 
+    @Nullable
+    @Override
+    public Entity teleport(TeleportTransition p_379715_) {
+        this.stopTrading();
+        return super.teleport(p_379715_);
+    }
 
+    @Override
+    public void die(DamageSource cause) {
+        super.die(cause);
+        this.stopTrading();
+    }
 
+    @Override
+    public boolean isClientSide() {
+        return this.level().isClientSide;
+    }
 
+    @Override
+    public boolean canBeLeashed() {
+        return false;
+    }
 
+    protected void stopTrading() {
+        this.setTradingPlayer(null);
+    }
 
+    protected void addOffersFromItemListings(DwarfMerchantOffers givenMerchantOffers, DwarfTrades.ItemListing[] newTrades, int maxNumbers) {
+        ArrayList<DwarfTrades.ItemListing> arraylist = Lists.newArrayList(newTrades);
+        int i = 0;
 
+        while (i < maxNumbers && !arraylist.isEmpty()) {
+            DwarfMerchantOffer merchantoffer = arraylist.remove(this.random.nextInt(arraylist.size())).getOffer(this, this.random);
+            if (merchantoffer != null) {
+                givenMerchantOffers.add(merchantoffer);
+                i++;
+            }
+        }
+    }
+
+    @Override
+    public boolean stillValid(Player p_383034_) {
+        return this.getTradingPlayer() == p_383034_ && this.isAlive() && p_383034_.canInteractWithEntity(this, 4.0);
+    }
 
 
 }

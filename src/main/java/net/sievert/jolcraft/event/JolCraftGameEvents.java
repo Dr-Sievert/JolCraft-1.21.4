@@ -86,6 +86,7 @@ import net.sievert.jolcraft.sound.JolCraftSounds;
 import net.sievert.jolcraft.util.attachment.AncientDwarvenLanguageHelper;
 import net.sievert.jolcraft.util.attachment.DwarvenLanguageHelper;
 import net.sievert.jolcraft.util.attachment.DwarvenReputationHelper;
+import net.sievert.jolcraft.util.dwarf.trade.DwarfMerchantOffer;
 import net.sievert.jolcraft.util.vanilla.JolCraftAnvilHelper;
 import net.sievert.jolcraft.util.dwarf.SalvageLootHelper;
 import net.sievert.jolcraft.block.JolCraftBlocks;
@@ -751,7 +752,7 @@ public class JolCraftGameEvents {
                     return;
                 }
 
-                boolean needsRestock = dwarf.getOffers().stream().anyMatch(MerchantOffer::isOutOfStock);
+                boolean needsRestock = dwarf.getOffers().stream().anyMatch(DwarfMerchantOffer::isOutOfStock);
 
                 if (!needsRestock && !dwarf.hasRandomTrades()) {
                     player.displayClientMessage(

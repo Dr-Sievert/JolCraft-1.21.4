@@ -137,12 +137,21 @@ public class DwarfTradeCategory implements IRecipeCategory<DwarfTradeRecipe> {
         // Profession egg slot (always first)
         builder.addSlot(RecipeIngredientRole.INPUT, 95, 42)
                 .add(recipe.getSpawnEgg());
+        if(recipe.getInputA().is(JolCraftItems.GOLD_COIN.get())){
+            // Input A (coin pouch or gold coin)
+            builder.addSlot(RecipeIngredientRole.INPUT, 2, 36).add(new ItemStack(JolCraftItems.GOLD_COIN.get())).add(new ItemStack(JolCraftItems.COIN_POUCH.get()));
+        }else{
+            builder.addSlot(RecipeIngredientRole.INPUT, 2, 36).add(recipe.getInputA());
+        }
 
-        // Input A always
-        builder.addSlot(RecipeIngredientRole.INPUT, 2, 36).add(recipe.getInputA());
-        // Input B if present
+        // Input B if present (for recipes requiring two inputs)
         if (recipe.getInputB() != null && !recipe.getInputB().isEmpty()) {
-            builder.addSlot(RecipeIngredientRole.INPUT, 27, 36).add(recipe.getInputB());
+            if(recipe.getInputB().is(JolCraftItems.GOLD_COIN.get())){
+                // Input B (coin pouch or gold coin)
+                builder.addSlot(RecipeIngredientRole.INPUT, 27, 36).add(new ItemStack(JolCraftItems.GOLD_COIN.get())).add(new ItemStack(JolCraftItems.COIN_POUCH.get()));
+            }else{
+                builder.addSlot(RecipeIngredientRole.INPUT, 27, 36).add(recipe.getInputB());
+            }
             // Output farther right for double input
             builder.addSlot(RecipeIngredientRole.OUTPUT, 68, 36).add(recipe.getOutput());
         } else {
@@ -150,6 +159,7 @@ public class DwarfTradeCategory implements IRecipeCategory<DwarfTradeRecipe> {
             builder.addSlot(RecipeIngredientRole.OUTPUT, 45, 36).add(recipe.getOutput());
         }
     }
+
 
     public static LivingEntity getOrCreateDwarf(DwarfTradeRecipe recipe) {
         String profession = recipe.getProfession();

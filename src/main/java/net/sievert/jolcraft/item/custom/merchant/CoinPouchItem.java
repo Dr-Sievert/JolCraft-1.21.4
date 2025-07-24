@@ -1,4 +1,4 @@
-package net.sievert.jolcraft.item.custom;
+package net.sievert.jolcraft.item.custom.merchant;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.ARGB;

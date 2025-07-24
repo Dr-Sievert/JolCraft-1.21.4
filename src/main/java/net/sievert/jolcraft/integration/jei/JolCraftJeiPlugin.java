@@ -7,7 +7,7 @@ import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import net.minecraft.resources.ResourceLocation;
 import net.sievert.jolcraft.integration.jei.custom.DwarfTradeCategory;
-import net.sievert.jolcraft.util.dwarf.DwarfTradeJeiHelper;
+import net.sievert.jolcraft.util.dwarf.trade.DwarfTradeJeiHelper;
 import org.jetbrains.annotations.NotNull;
 
 @JeiPlugin

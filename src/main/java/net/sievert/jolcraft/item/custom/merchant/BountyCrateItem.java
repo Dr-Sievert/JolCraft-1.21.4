@@ -25,6 +25,7 @@ import net.neoforged.neoforge.common.extensions.IItemExtension;
 import net.sievert.jolcraft.data.JolCraftDataComponents;
 import net.sievert.jolcraft.util.attachment.DwarvenLanguageHelper;
 import net.sievert.jolcraft.util.dwarf.bounty.BountyData;
+import net.sievert.jolcraft.util.dwarf.bounty.BountyHelper;
 
 import java.util.List;
 import java.util.Optional;
@@ -232,11 +233,12 @@ public class BountyCrateItem extends Item implements IItemExtension {
                         }
                     }
 
-                    tooltip.add(Component.translatable("tooltip.jolcraft.bounty_crate.target")
-                            .append(itemName)
-                            .withStyle(ChatFormatting.GRAY));
-                    tooltip.add(Component.translatable("tooltip.jolcraft.bounty_crate.count", count)
-                            .withStyle(ChatFormatting.GRAY));
+                    String type = BountyHelper.getBountyType(stack);
+                    if (type.isEmpty()) {
+                        tooltip.add(Component.translatable("tooltip.jolcraft.bounty.type.invalid").withStyle(ChatFormatting.RED));
+                    } else {
+                        tooltip.add(Component.translatable("tooltip.jolcraft.bounty.type").append(Component.translatable("entity.jolcraft.dwarf_" + type)).withStyle(ChatFormatting.GRAY));
+                    }
 
                     String tierName = switch (tier) {
                         case 1 -> "Novice";
@@ -247,6 +249,12 @@ public class BountyCrateItem extends Item implements IItemExtension {
                         default -> "Unknown";
                     };
                     tooltip.add(Component.translatable("tooltip.jolcraft.bounty_crate.tier", tierName)
+                            .withStyle(ChatFormatting.GRAY));
+
+                    tooltip.add(Component.translatable("tooltip.jolcraft.bounty_crate.target")
+                            .append(itemName)
+                            .withStyle(ChatFormatting.GRAY));
+                    tooltip.add(Component.translatable("tooltip.jolcraft.bounty_crate.count", count)
                             .withStyle(ChatFormatting.GRAY));
 
                     if (stack.has(JolCraftDataComponents.BOUNTY_COMPLETE.get()) &&

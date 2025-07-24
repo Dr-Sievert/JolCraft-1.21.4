@@ -37,6 +37,9 @@ public class JolCraftDataComponents {
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> BOUNTY_TIER =
             register("bounty_tier", builder -> builder.persistent(Codec.INT));
 
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<String>> BOUNTY_TYPE =
+            register("bounty_type", builder -> builder.persistent(Codec.STRING));
+
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<BountyData>> BOUNTY_DATA =
             register("bounty_data", builder -> builder.persistent(BountyData.CODEC));
 

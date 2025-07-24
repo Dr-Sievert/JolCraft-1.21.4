@@ -1,6 +1,7 @@
 package net.sievert.jolcraft.event;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.inventory.MerchantScreen;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderers;
@@ -26,6 +27,7 @@ import net.sievert.jolcraft.entity.client.render.dwarf.*;
 import net.sievert.jolcraft.entity.client.render.object.RadiantRenderer;
 import net.sievert.jolcraft.network.client.data.ClientDeliriumData;
 import net.sievert.jolcraft.screen.JolCraftMenuTypes;
+import net.sievert.jolcraft.screen.custom.dwarf.DwarfMerchantScreen;
 import net.sievert.jolcraft.screen.custom.lapidary_bench.LapidaryBenchScreen;
 import net.sievert.jolcraft.screen.custom.strongbox.LockMenu;
 import net.sievert.jolcraft.screen.custom.strongbox.LockScreen;
@@ -91,6 +93,7 @@ public class JolCraftClientModEvents {
 
     @SubscribeEvent
     public static void registerScreens(RegisterMenuScreensEvent event) {
+        event.register(JolCraftMenuTypes.DWARF_MERCHANT_MENU.get(), DwarfMerchantScreen::new);
         event.register(JolCraftMenuTypes.STRONGBOX_MENU.get(), StrongboxScreen::new);
         event.register(JolCraftMenuTypes.LOCK_MENU.get(), LockScreen::new);
         event.register(JolCraftMenuTypes.LAPIDARY_BENCH_MENU.get(), LapidaryBenchScreen::new);

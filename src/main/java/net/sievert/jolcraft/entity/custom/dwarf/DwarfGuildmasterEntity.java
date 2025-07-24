@@ -33,6 +33,7 @@ import net.sievert.jolcraft.advancement.JolCraftCriteriaTriggers;
 import net.sievert.jolcraft.data.custom.attachment.rep.DwarvenReputationImpl;
 import net.sievert.jolcraft.data.JolCraftAttachments;
 import net.sievert.jolcraft.data.JolCraftDataComponents;
+import net.sievert.jolcraft.entity.ai.goal.dwarf.*;
 import net.sievert.jolcraft.sound.JolCraftSoundHelper;
 import net.sievert.jolcraft.data.JolCraftTags;
 import net.sievert.jolcraft.entity.ai.goal.*;
@@ -42,7 +43,8 @@ import net.sievert.jolcraft.network.packet.ClientboundEndorsementsPacket;
 import net.sievert.jolcraft.network.packet.ClientboundReputationPacket;
 import net.sievert.jolcraft.sound.JolCraftSounds;
 import net.sievert.jolcraft.util.attachment.DwarvenReputationHelper;
-import net.sievert.jolcraft.util.dwarf.JolCraftDwarfTrades;
+import net.sievert.jolcraft.util.dwarf.trade.DwarfMerchantOffer;
+import net.sievert.jolcraft.util.dwarf.trade.DwarfTrades;
 
 import javax.annotation.Nullable;
 
@@ -113,9 +115,9 @@ public class DwarfGuildmasterEntity extends AbstractDwarfEntity {
         this.targetSelector.addGoal(2, new DwarfNonPlayerAlertGoal(this).setAlertOthers());
         this.goalSelector.addGoal(2, new DwarfAttackGoal(this, 1.2D, true));
         this.goalSelector.addGoal(3, new DwarfRevengeGoal(this));
-        this.goalSelector.addGoal(3, new TradeWithPlayerGoal(this));
+        this.goalSelector.addGoal(3, new DwarfTradeWithPlayerGoal(this));
         this.goalSelector.addGoal(4, new DwarfUseItemGoal<>(this, PotionContents.createItemStack(Items.POTION, Potions.STRONG_HEALING), SoundEvents.PLAYER_BURP, mob -> mob.getHealth() < mob.getMaxHealth(), 300));
-        this.goalSelector.addGoal(4, new LookAtTradingPlayerGoal(this));
+        this.goalSelector.addGoal(4, new DwarfLookAtTradingPlayerGoal(this));
         this.goalSelector.addGoal(5, new DwarfBreedGoal(this, 1.0, AbstractDwarfEntity.class));
         this.goalSelector.addGoal(6, new TemptGoal(this, 1.25, stack -> stack.is(JolCraftItems.GOLD_COIN), false));
         this.goalSelector.addGoal(6, new OpenDoorGoal(this, true));
@@ -310,49 +312,49 @@ public class DwarfGuildmasterEntity extends AbstractDwarfEntity {
     }
 
     //Trades
-    public static Int2ObjectMap<VillagerTrades.ItemListing[]> createRandomizedGuildmasterTrades() {
+    public static Int2ObjectMap<DwarfTrades.ItemListing[]> createRandomizedGuildmasterTrades() {
         return AbstractDwarfEntity.toIntMap(ImmutableMap.of(
 
                         //Novice
                         1,
-                        new VillagerTrades.ItemListing[]{
-                                new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.REPUTATION_TABLET_0.get(), 15, 1, 5, 1),
-                                new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.CONTRACT_SIGNED.get(), 1, 30, JolCraftItems.CONTRACT_MERCHANT.get(), 1, 1, 0, 0.05F),
-                                new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.CONTRACT_SIGNED.get(), 1, 30, JolCraftItems.CONTRACT_HISTORIAN.get(), 1, 1, 0, 0.05F),
-                                new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.CONTRACT_SIGNED.get(), 1, 30, JolCraftItems.CONTRACT_SCRAPPER.get(), 1, 1, 0, 0.05F)
+                        new DwarfTrades.ItemListing[]{
+                                new DwarfTrades.ItemsForGold(JolCraftItems.REPUTATION_TABLET_0.get(), 15, 1, 5, 1),
+                                new DwarfTrades.ItemsAndGoldToItems(JolCraftItems.CONTRACT_SIGNED.get(), 1, 30, JolCraftItems.CONTRACT_MERCHANT.get(), 1, 1, 0, 0.05F),
+                                new DwarfTrades.ItemsAndGoldToItems(JolCraftItems.CONTRACT_SIGNED.get(), 1, 30, JolCraftItems.CONTRACT_HISTORIAN.get(), 1, 1, 0, 0.05F),
+                                new DwarfTrades.ItemsAndGoldToItems(JolCraftItems.CONTRACT_SIGNED.get(), 1, 30, JolCraftItems.CONTRACT_SCRAPPER.get(), 1, 1, 0, 0.05F)
 
                         },
 
                         //Apprentice
                         2,
-                        new VillagerTrades.ItemListing[]{
-                                new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.CONTRACT_SIGNED.get(), 1, 30, JolCraftItems.CONTRACT_BREWMASTER.get(), 1, 1, 0, 0.05F),
-                                new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.CONTRACT_SIGNED.get(), 1, 30, JolCraftItems.CONTRACT_GUARD.get(), 1, 1, 0, 0.05F),
-                                new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.CONTRACT_SIGNED.get(), 1, 30, JolCraftItems.CONTRACT_KEEPER.get(), 1, 1, 0, 0.05F)
+                        new DwarfTrades.ItemListing[]{
+                                new DwarfTrades.ItemsAndGoldToItems(JolCraftItems.CONTRACT_SIGNED.get(), 1, 30, JolCraftItems.CONTRACT_BREWMASTER.get(), 1, 1, 0, 0.05F),
+                                new DwarfTrades.ItemsAndGoldToItems(JolCraftItems.CONTRACT_SIGNED.get(), 1, 30, JolCraftItems.CONTRACT_GUARD.get(), 1, 1, 0, 0.05F),
+                                new DwarfTrades.ItemsAndGoldToItems(JolCraftItems.CONTRACT_SIGNED.get(), 1, 30, JolCraftItems.CONTRACT_KEEPER.get(), 1, 1, 0, 0.05F)
                         },
 
                         //Journeyman
                         3,
-                        new VillagerTrades.ItemListing[]{
-                                new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.CONTRACT_SIGNED.get(), 1, 30, JolCraftItems.CONTRACT_ALCHEMIST.get(), 1, 1, 0, 0.05F),
-                                new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.CONTRACT_SIGNED.get(), 1, 30, JolCraftItems.CONTRACT_EXPLORER.get(), 1, 1, 0, 0.05F),
-                                new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.CONTRACT_SIGNED.get(), 1, 30, JolCraftItems.CONTRACT_MINER.get(), 1, 1, 0, 0.05F)
+                        new DwarfTrades.ItemListing[]{
+                                new DwarfTrades.ItemsAndGoldToItems(JolCraftItems.CONTRACT_SIGNED.get(), 1, 30, JolCraftItems.CONTRACT_ALCHEMIST.get(), 1, 1, 0, 0.05F),
+                                new DwarfTrades.ItemsAndGoldToItems(JolCraftItems.CONTRACT_SIGNED.get(), 1, 30, JolCraftItems.CONTRACT_EXPLORER.get(), 1, 1, 0, 0.05F),
+                                new DwarfTrades.ItemsAndGoldToItems(JolCraftItems.CONTRACT_SIGNED.get(), 1, 30, JolCraftItems.CONTRACT_MINER.get(), 1, 1, 0, 0.05F)
                         },
 
                         //Expert
                         4,
-                        new VillagerTrades.ItemListing[]{
-                                new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.CONTRACT_SIGNED.get(), 1, 30, JolCraftItems.CONTRACT_ARCANIST.get(), 1, 1, 0, 0.05F),
-                                new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.CONTRACT_SIGNED.get(), 1, 30, JolCraftItems.CONTRACT_ARTISAN.get(), 1, 1, 0, 0.05F),
-                                new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.CONTRACT_SIGNED.get(), 1, 30, JolCraftItems.CONTRACT_PRIEST.get(), 1, 1, 0, 0.05F)
+                        new DwarfTrades.ItemListing[]{
+                                new DwarfTrades.ItemsAndGoldToItems(JolCraftItems.CONTRACT_SIGNED.get(), 1, 30, JolCraftItems.CONTRACT_ARCANIST.get(), 1, 1, 0, 0.05F),
+                                new DwarfTrades.ItemsAndGoldToItems(JolCraftItems.CONTRACT_SIGNED.get(), 1, 30, JolCraftItems.CONTRACT_ARTISAN.get(), 1, 1, 0, 0.05F),
+                                new DwarfTrades.ItemsAndGoldToItems(JolCraftItems.CONTRACT_SIGNED.get(), 1, 30, JolCraftItems.CONTRACT_PRIEST.get(), 1, 1, 0, 0.05F)
                         },
 
                         //Master
                         5,
-                        new VillagerTrades.ItemListing[]{
-                                new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.CONTRACT_SIGNED.get(), 1, 30, JolCraftItems.CONTRACT_BLACKSMITH.get(), 1, 1, 0, 0.05F),
-                                new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.CONTRACT_SIGNED.get(), 1, 30, JolCraftItems.CONTRACT_CHAMPION.get(), 1, 1, 0, 0.05F),
-                                new JolCraftDwarfTrades.ItemsAndGoldToItems(JolCraftItems.CONTRACT_SIGNED.get(), 1, 30, JolCraftItems.CONTRACT_SMELTER.get(), 1, 1, 0, 0.05F)
+                        new DwarfTrades.ItemListing[]{
+                                new DwarfTrades.ItemsAndGoldToItems(JolCraftItems.CONTRACT_SIGNED.get(), 1, 30, JolCraftItems.CONTRACT_BLACKSMITH.get(), 1, 1, 0, 0.05F),
+                                new DwarfTrades.ItemsAndGoldToItems(JolCraftItems.CONTRACT_SIGNED.get(), 1, 30, JolCraftItems.CONTRACT_CHAMPION.get(), 1, 1, 0, 0.05F),
+                                new DwarfTrades.ItemsAndGoldToItems(JolCraftItems.CONTRACT_SIGNED.get(), 1, 30, JolCraftItems.CONTRACT_SMELTER.get(), 1, 1, 0, 0.05F)
                         }
                 )
         );
@@ -363,11 +365,11 @@ public class DwarfGuildmasterEntity extends AbstractDwarfEntity {
     protected void updateTrades() {
         int level = this.getVillagerData().getLevel();
         if (instanceTrades != null) {
-            VillagerTrades.ItemListing[] listings = instanceTrades.get(level);
+            DwarfTrades.ItemListing[] listings = instanceTrades.get(level);
             if (listings != null) {
                 // Ensure exact order: add them in the original array order
-                for (VillagerTrades.ItemListing trade : listings) {
-                    MerchantOffer offer = trade.getOffer(this, this.random);
+                for (DwarfTrades.ItemListing trade : listings) {
+                    DwarfMerchantOffer offer = trade.getOffer(this, this.random);
                     if (offer != null) {
                         this.getOffers().add(offer);
                     }

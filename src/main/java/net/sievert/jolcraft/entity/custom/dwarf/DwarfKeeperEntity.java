@@ -12,7 +12,6 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
-import net.minecraft.world.entity.npc.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -21,8 +20,9 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Blocks;
 import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.entity.ai.goal.*;
+import net.sievert.jolcraft.entity.ai.goal.dwarf.*;
 import net.sievert.jolcraft.item.JolCraftItems;
-import net.sievert.jolcraft.util.dwarf.JolCraftDwarfTrades;
+import net.sievert.jolcraft.util.dwarf.trade.DwarfTrades;
 
 import javax.annotation.Nullable;
 
@@ -72,8 +72,8 @@ public class DwarfKeeperEntity extends AbstractDwarfEntity {
         this.targetSelector.addGoal(2, new DwarfNonPlayerAlertGoal(this).setAlertOthers());
         this.goalSelector.addGoal(2, new DwarfAttackGoal(this, 1.2D, true));
         this.goalSelector.addGoal(3, new DwarfRevengeGoal(this));
-        this.goalSelector.addGoal(3, new TradeWithPlayerGoal(this));
-        this.goalSelector.addGoal(4, new LookAtTradingPlayerGoal(this));
+        this.goalSelector.addGoal(3, new DwarfTradeWithPlayerGoal(this));
+        this.goalSelector.addGoal(4, new DwarfLookAtTradingPlayerGoal(this));
         this.goalSelector.addGoal(5, new DwarfBreedGoal(this, 1.0, AbstractDwarfEntity.class));
         this.goalSelector.addGoal(6, new TemptGoal(this, 1.25, stack -> stack.is(JolCraftItems.GOLD_COIN), false));
         this.goalSelector.addGoal(6, new OpenDoorGoal(this, true));
@@ -112,48 +112,48 @@ public class DwarfKeeperEntity extends AbstractDwarfEntity {
     }
 
     //Trades
-    public static Int2ObjectMap<VillagerTrades.ItemListing[]> createRandomizedKeeperTrades() {
+    public static Int2ObjectMap<DwarfTrades.ItemListing[]> createRandomizedKeeperTrades() {
         return AbstractDwarfEntity.toIntMap(ImmutableMap.of(
 
                         //Novice
                         1,
 
-                        new VillagerTrades.ItemListing[]{
-                                new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.BARLEY_SEEDS.get(), 1, 2, 1, 3, 10, 1),
+                        new DwarfTrades.ItemListing[]{
+                                new DwarfTrades.ItemsForGold(JolCraftItems.BARLEY_SEEDS.get(), 1, 2, 1, 3, 10, 1),
 
                         },
 
                         //Apprentice
                         2,
-                        new VillagerTrades.ItemListing[]{
-                                new JolCraftDwarfTrades.GoldForItems(JolCraftItems.BARLEY.get(), 15, 22, 10, 25, 1, 2),
+                        new DwarfTrades.ItemListing[]{
+                                new DwarfTrades.GoldForItems(JolCraftItems.BARLEY.get(), 15, 22, 10, 25, 1, 2),
 
                         },
 
                         //Journeyman
                         3,
-                        new VillagerTrades.ItemListing[]{
+                        new DwarfTrades.ItemListing[]{
 
-                                new JolCraftDwarfTrades.GoldForItems(JolCraftItems.MUFFHORN_FUR.get(), 1, 15, 5, 2, 4),
-                                new JolCraftDwarfTrades.GoldForItems(JolCraftItems.MUFFHORN_MILK_BUCKET.get(), 1, 10, 30, 3, 5),
+                                new DwarfTrades.GoldForItems(JolCraftItems.MUFFHORN_FUR.get(), 1, 15, 5, 2, 4),
+                                new DwarfTrades.GoldForItems(JolCraftItems.MUFFHORN_MILK_BUCKET.get(), 1, 10, 30, 3, 5),
                         },
 
                         //Expert
                         4,
-                        new VillagerTrades.ItemListing[]{
-                                new JolCraftDwarfTrades.GoldForItems(JolCraftItems.DEEPSLATE_BULBS.get(), 1, 2, 10, 30, 3, 5),
+                        new DwarfTrades.ItemListing[]{
+                                new DwarfTrades.GoldForItems(JolCraftItems.DEEPSLATE_BULBS.get(), 1, 2, 10, 30, 3, 5),
 
                         },
 
                         //Master
                         5,
-                        new VillagerTrades.ItemListing[]{
-                                new JolCraftDwarfTrades.ItemsForGold(Items.BONE_MEAL, 2, 5, 3, 5, 5, 1),
-                                new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.DEEPSLATE_BULBS.get(), 5, 9, 1, 5, 0),
-                                new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.ASGARNIAN_SEEDS.get(), 5, 1, 3, 0),
-                                new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.DUSKHOLD_SEEDS.get(), 5, 1, 3, 0),
-                                new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.KRANDONIAN_SEEDS.get(), 5, 1, 3, 0),
-                                new JolCraftDwarfTrades.ItemsForGold(JolCraftItems.YANILLIAN_SEEDS.get(), 5, 1, 3, 0),
+                        new DwarfTrades.ItemListing[]{
+                                new DwarfTrades.ItemsForGold(Items.BONE_MEAL, 2, 5, 3, 5, 5, 1),
+                                new DwarfTrades.ItemsForGold(JolCraftItems.DEEPSLATE_BULBS.get(), 5, 9, 1, 5, 0),
+                                new DwarfTrades.ItemsForGold(JolCraftItems.ASGARNIAN_SEEDS.get(), 5, 1, 3, 0),
+                                new DwarfTrades.ItemsForGold(JolCraftItems.DUSKHOLD_SEEDS.get(), 5, 1, 3, 0),
+                                new DwarfTrades.ItemsForGold(JolCraftItems.KRANDONIAN_SEEDS.get(), 5, 1, 3, 0),
+                                new DwarfTrades.ItemsForGold(JolCraftItems.YANILLIAN_SEEDS.get(), 5, 1, 3, 0),
                         }
                 )
         );
