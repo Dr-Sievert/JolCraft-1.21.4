@@ -25,7 +25,11 @@ public class BountyItem extends Item {
         String type = BountyHelper.getBountyType(stack);
 
         if (Screen.hasShiftDown()) {
-            tooltip.add(Component.translatable("tooltip.jolcraft.bounty." + type).withStyle(ChatFormatting.GRAY));
+            if (type.isEmpty()) {
+                tooltip.add(Component.translatable("tooltip.jolcraft.bounty.no_type").withStyle(ChatFormatting.GRAY));
+            } else {
+                tooltip.add(Component.translatable("tooltip.jolcraft.bounty." + type).withStyle(ChatFormatting.GRAY));
+            }
         }
         else{
             if (knowsLanguage) {

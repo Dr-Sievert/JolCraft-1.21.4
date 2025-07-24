@@ -5,6 +5,27 @@
       {
         "model": {
           "type": "minecraft:model",
+          "model": "minecraft:item/golden_leggings_lapis_trim"
+        },
+        "when": "minecraft:lapis"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:item/golden_leggings_iron_trim"
+        },
+        "when": "minecraft:iron"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:item/golden_leggings_quartz_trim"
+        },
+        "when": "minecraft:quartz"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
           "model": "minecraft:item/golden_leggings_emerald_trim"
         },
         "when": "minecraft:emerald"
@@ -50,27 +71,6 @@
           "model": "minecraft:item/golden_leggings_netherite_trim"
         },
         "when": "minecraft:netherite"
-      },
-      {
-        "model": {
-          "type": "minecraft:model",
-          "model": "minecraft:item/golden_leggings_lapis_trim"
-        },
-        "when": "minecraft:lapis"
-      },
-      {
-        "model": {
-          "type": "minecraft:model",
-          "model": "minecraft:item/golden_leggings_iron_trim"
-        },
-        "when": "minecraft:iron"
-      },
-      {
-        "model": {
-          "type": "minecraft:model",
-          "model": "minecraft:item/golden_leggings_quartz_trim"
-        },
-        "when": "minecraft:quartz"
       },
       {
         "model": {

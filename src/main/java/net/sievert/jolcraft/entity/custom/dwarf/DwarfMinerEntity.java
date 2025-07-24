@@ -18,6 +18,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Blocks;
 import net.sievert.jolcraft.JolCraft;
+import net.sievert.jolcraft.data.JolCraftDataComponents;
 import net.sievert.jolcraft.entity.ai.goal.*;
 import net.sievert.jolcraft.entity.ai.goal.dwarf.*;
 import net.sievert.jolcraft.item.JolCraftItems;
@@ -102,29 +103,66 @@ public class DwarfMinerEntity extends AbstractDwarfEntity {
     //Trades
     public static Int2ObjectMap<DwarfTrades.ItemListing[]> createRandomizedMinerTrades() {
         return AbstractDwarfEntity.toIntMap(ImmutableMap.of(
-                // Novice
                 1, new DwarfTrades.ItemListing[] {
-                        new DwarfTrades.ItemsForGold(Items.STICK, 1, 4, 2, 8, 6, 500),
-                        new DwarfTrades.GoldForItems(Items.SMITHING_TABLE, 1, 3, 4, 1)
+                        new DwarfTrades.ItemForItemWithData(
+                                JolCraftItems.PARCHMENT.get(),
+                                1,
+                                JolCraftItems.BOUNTY.get(),
+                                1,
+                                1, 0, 0,
+                                (stack) -> {
+                                    stack.set(JolCraftDataComponents.BOUNTY_TIER.get(), 1);
+                                    stack.set(JolCraftDataComponents.BOUNTY_TYPE.get(), "miner");
+                                }
+                        ),
                 },
-                // Apprentice
                 2, new DwarfTrades.ItemListing[] {
-                        new DwarfTrades.ItemsForGold(Items.BREAD, 1, 3, 1, 5, 10, 10),
+                        new DwarfTrades.ItemForItemWithData(
+                                JolCraftItems.PARCHMENT.get(),
+                                1,
+                                JolCraftItems.BOUNTY.get(),
+                                1,
+                                1, 0, 0,
+                                (stack) -> {
+                                    stack.set(JolCraftDataComponents.BOUNTY_TIER.get(), 2);
+                                    stack.set(JolCraftDataComponents.BOUNTY_TYPE.get(), "miner");
+                                }                    ),
                 },
-                // Journeyman
                 3, new DwarfTrades.ItemListing[] {
-                        new DwarfTrades.ItemsForGold(JolCraftItems.CONTRACT_BLANK.get(), 2, 4, 1, 10, 1, 10),
-                        new DwarfTrades.GoldForItems(JolCraftItems.QUILL_EMPTY.get(), 3, 7, 4, 1)
+                        new DwarfTrades.ItemForItemWithData(
+                                JolCraftItems.PARCHMENT.get(),
+                                1,
+                                JolCraftItems.BOUNTY.get(),
+                                1,
+                                1, 0, 0,
+                                (stack) -> {
+                                    stack.set(JolCraftDataComponents.BOUNTY_TIER.get(), 3);
+                                    stack.set(JolCraftDataComponents.BOUNTY_TYPE.get(), "miner");
+                                }                    ),
                 },
-                // Expert
                 4, new DwarfTrades.ItemListing[] {
-                        new DwarfTrades.ItemsForGold(Items.DIAMOND, 1, 1, 10, 10, 10, 10),
-                        new DwarfTrades.GoldForItems(Items.EMERALD, 1, 10, 10, 1)
+                        new DwarfTrades.ItemForItemWithData(
+                                JolCraftItems.PARCHMENT.get(),
+                                1,
+                                JolCraftItems.BOUNTY.get(),
+                                1,
+                                1, 0, 0,
+                                (stack) -> {
+                                    stack.set(JolCraftDataComponents.BOUNTY_TIER.get(), 4);
+                                    stack.set(JolCraftDataComponents.BOUNTY_TYPE.get(), "miner");
+                                }                    ),
                 },
-                // Master
                 5, new DwarfTrades.ItemListing[] {
-                        new DwarfTrades.ItemsForGold(Items.NETHERITE_BLOCK, 1, 1, 5, 10, 5, 10),
-                        new DwarfTrades.ItemsAndGoldToItems(Items.PURPLE_DYE, 1, 30, JolCraftItems.GUILD_SIGIL.get(), 1, 1, 0, 0.05F)
+                        new DwarfTrades.ItemForItemWithData(
+                                JolCraftItems.PARCHMENT.get(),
+                                1,
+                                JolCraftItems.BOUNTY.get(),
+                                1,
+                                1, 0, 0,
+                                (stack) -> {
+                                    stack.set(JolCraftDataComponents.BOUNTY_TIER.get(), 5);
+                                    stack.set(JolCraftDataComponents.BOUNTY_TYPE.get(), "miner");
+                                }                    ),
                 }
         ));
     }

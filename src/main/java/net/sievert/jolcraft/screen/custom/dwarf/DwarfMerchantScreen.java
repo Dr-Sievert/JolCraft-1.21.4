@@ -6,7 +6,6 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.game.ServerboundSelectTradePacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.npc.VillagerData;
@@ -14,13 +13,14 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.network.packet.ServerboundDwarfSelectTradePacket;
 import net.sievert.jolcraft.util.dwarf.trade.DwarfMerchantOffer;
 import net.sievert.jolcraft.util.dwarf.trade.DwarfMerchantOffers;
 
 @OnlyIn(Dist.CLIENT)
 public class DwarfMerchantScreen extends AbstractContainerScreen<DwarfMerchantMenu> {
-    private static final ResourceLocation OUT_OF_STOCK_SPRITE = ResourceLocation.withDefaultNamespace("container/villager/out_of_stock");
+    private static final ResourceLocation OUT_OF_STOCK_SPRITE = ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "trade/out_of_stock");
     private static final ResourceLocation EXPERIENCE_BAR_BACKGROUND_SPRITE = ResourceLocation.withDefaultNamespace(
             "container/villager/experience_bar_background"
     );
@@ -34,7 +34,7 @@ public class DwarfMerchantScreen extends AbstractContainerScreen<DwarfMerchantMe
     /**
      * The GUI texture for the villager merchant GUI.
      */
-    private static final ResourceLocation VILLAGER_LOCATION = ResourceLocation.withDefaultNamespace("textures/gui/container/villager.png");
+    private static final ResourceLocation TEXTURE_LOCATION = ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "textures/gui/container/dwarf_trade.png");
     private static final int TEXTURE_WIDTH = 512;
     private static final int TEXTURE_HEIGHT = 256;
     private static final int MERCHANT_MENU_PART_X = 99;
@@ -100,21 +100,21 @@ public class DwarfMerchantScreen extends AbstractContainerScreen<DwarfMerchantMe
             Component component = Component.translatable("merchant.title", this.title, Component.translatable("merchant.level." + i));
             int j = this.font.width(component);
             int k = 49 + this.imageWidth / 2 - j / 2;
-            p_283337_.drawString(this.font, component, k, 6, 4210752, false);
+            p_283337_.drawString(this.font, component, k, 6, 0xDDDDDD, false);
         } else {
-            p_283337_.drawString(this.font, this.title, 49 + this.imageWidth / 2 - this.font.width(this.title) / 2, 6, 4210752, false);
+            p_283337_.drawString(this.font, this.title, 49 + this.imageWidth / 2 - this.font.width(this.title) / 2, 6, 0xDDDDDD, false);
         }
 
-        p_283337_.drawString(this.font, this.playerInventoryTitle, this.inventoryLabelX, this.inventoryLabelY, 4210752, false);
+        p_283337_.drawString(this.font, this.playerInventoryTitle, this.inventoryLabelX, this.inventoryLabelY, 0xDDDDDD, false);
         int l = this.font.width(TRADES_LABEL);
-        p_283337_.drawString(this.font, TRADES_LABEL, 5 - l / 2 + 48, 6, 4210752, false);
+        p_283337_.drawString(this.font, TRADES_LABEL, 5 - l / 2 + 48, 6, 0xDDDDDD, false);
     }
 
     @Override
     protected void renderBg(GuiGraphics p_283072_, float p_281275_, int p_282312_, int p_282984_) {
         int i = (this.width - this.imageWidth) / 2;
         int j = (this.height - this.imageHeight) / 2;
-        p_283072_.blit(RenderType::guiTextured, VILLAGER_LOCATION, i, j, 0.0F, 0.0F, this.imageWidth, this.imageHeight, 512, 256);
+        p_283072_.blit(RenderType::guiTextured, TEXTURE_LOCATION, i, j, 0.0F, 0.0F, this.imageWidth, this.imageHeight, 512, 256);
         DwarfMerchantOffers merchantoffers = this.menu.getOffers();
         if (!merchantoffers.isEmpty()) {
             int k = this.shopItem;

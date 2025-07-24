@@ -83,27 +83,14 @@ public class DwarfEntity extends AbstractDwarfEntity {
                 },
                 // Apprentice
                 2, new DwarfTrades.ItemListing[] {
-                        new DwarfTrades.TreasureMapForGold(
-                                8, // min cost
-                                JolCraftTags.Structures.ON_FORGE_EXPLORER_MAPS,
-                                "filled_map.forge",
-                                MapDecorationTypes.TARGET_X,
-                                1, 10
-                        )
+
                 },
                 // Journeyman
                 3, new DwarfTrades.ItemListing[] {
-                        new DwarfTrades.GoldForItems(Items.SMITHING_TABLE, 1, 3, 4, 1)
                 },
                 // Expert
                 4, new DwarfTrades.ItemListing[] {
-                        new DwarfTrades.ItemsAndGoldToItemsWithData(
-                                JolCraftItems.LEGENDARY_PAGE.get(), 20,
-                                30,
-                                JolCraftItems.ANCIENT_DWARVEN_TOME_LEGENDARY.get(), 1,
-                                1, 0, 0F,
-                                (stack) -> stack.set(JolCraftDataComponents.LORE_LINE_ID, "ancient_gemcraft")
-                        ),
+
                 },
                 // Master
                 5, new DwarfTrades.ItemListing[] {

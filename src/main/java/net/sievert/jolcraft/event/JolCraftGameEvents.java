@@ -24,12 +24,16 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.monster.Creeper;
+import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.npc.VillagerData;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.BlockItem;
@@ -267,7 +271,7 @@ public class JolCraftGameEvents {
         if (resist <= 0.0) return;
 
         float original = event.getOriginalDamage();
-        float reduced = (float)(original * (1.0 - resist));
+        float reduced = (float) (original * (1.0 - resist));
         event.setNewDamage(reduced);
     }
 
@@ -482,7 +486,6 @@ public class JolCraftGameEvents {
     }
 
 
-
     @SubscribeEvent
     public static void onUndeadDamage(LivingDamageEvent.Pre event) {
         DamageSource source = event.getSource();
@@ -594,14 +597,15 @@ public class JolCraftGameEvents {
     }
 
 
-
     // ThreadLocal flag for tracking milk bucket effect clearing
     private static final ThreadLocal<Boolean> isMilkRemoval = ThreadLocal.withInitial(() -> false);
 
 
     @SubscribeEvent
     public static void onMilkStart(LivingEntityUseItemEvent.Start event) {
-        if(!(event.getEntity() instanceof Player)){return;}
+        if (!(event.getEntity() instanceof Player)) {
+            return;
+        }
         if ((event.getItem().is(Items.MILK_BUCKET) || event.getItem().is(JolCraftItems.MUFFHORN_MILK_BUCKET.get())) && event.getEntity().hasEffect(JolCraftEffects.DELIRIUM_CURSE)) {
             isMilkRemoval.set(true);
         }
@@ -628,13 +632,17 @@ public class JolCraftGameEvents {
 
     @SubscribeEvent
     public static void onMilkStopOrFinish(LivingEntityUseItemEvent.Stop event) {
-        if(!(event.getEntity() instanceof Player) || isMilkRemoval.get() == false){return;}
+        if (!(event.getEntity() instanceof Player) || isMilkRemoval.get() == false) {
+            return;
+        }
         isMilkRemoval.set(false);
     }
 
     @SubscribeEvent
     public static void onMilkFinish(LivingEntityUseItemEvent.Finish event) {
-        if(!(event.getEntity() instanceof Player) || isMilkRemoval.get() == false){return;}
+        if (!(event.getEntity() instanceof Player) || isMilkRemoval.get() == false) {
+            return;
+        }
         isMilkRemoval.set(false);
     }
 
@@ -720,7 +728,7 @@ public class JolCraftGameEvents {
         }
 
         // Dwarf logic
-        if (target instanceof AbstractDwarfEntity dwarf && !dwarf.isBaby()  && dwarf.canTrade()) {
+        if (target instanceof AbstractDwarfEntity dwarf && !dwarf.isBaby() && dwarf.canTrade()) {
 
             // --- Language Check (block event if player can't interact) ---
             InteractionResult langResult = dwarf.languageCheck(player);
@@ -1005,7 +1013,7 @@ public class JolCraftGameEvents {
     public static void onPlayerWakeUp(PlayerWakeUpEvent event) {
         Player player = event.getEntity();
         Hearth hearth = Hearth.get(player);
-        if(hearth.hasLitThisDay()){
+        if (hearth.hasLitThisDay()) {
             hearth.setLitThisDay(false);
         }
     }
@@ -1015,26 +1023,43 @@ public class JolCraftGameEvents {
         if (event.getEntity() instanceof DwarfGuardEntity dwarf &&
                 event.getSource().getEntity() instanceof Monster &&
                 dwarf.isBlockCooldownReady()) {
-            dwarf.markForBlocking();
-            event.setInvulnerable(true);
+
+            // Check if the attack is a melee attack (within melee range)
+            if (event.getSource().getEntity() instanceof Monster monster) {
+                if (monster.isWithinMeleeAttackRange((LivingEntity) event.getEntity())) {
+                    // Melee attack detected, mark for blocking
+                    dwarf.markForBlocking();
+                    event.setInvulnerable(true);
+                    return;
+                }
+
+                // Check if the source is a projectile (like an arrow)
+                if (event.getSource().getDirectEntity() instanceof Projectile) {
+                    // Ranged attack (e.g., arrow) detected, mark for blocking
+                    dwarf.markForBlocking();
+                    event.setInvulnerable(true);
+                }
+            }
         }
     }
 
+
     @SubscribeEvent
     public static void registerCustomTrades(final VillagerTradesEvent event) {
-       if(event.getType() == VillagerProfession.LIBRARIAN) {
-           Int2ObjectMap<List<VillagerTrades.ItemListing>> trades = event.getTrades();
+        if (event.getType() == VillagerProfession.LIBRARIAN) {
+            Int2ObjectMap<List<VillagerTrades.ItemListing>> trades = event.getTrades();
 
-           trades.get(5).add((pTrader, pRandom) -> {
-               int baseCost = 32 + pRandom.nextInt(33); // Random between 32 and 64
-               return new MerchantOffer(
-                       new ItemCost(Items.EMERALD, baseCost),
-                       new ItemStack(JolCraftItems.DWARVEN_LEXICON.get(), 1),
-                       1, 1, 0.05f
-               );
-           });
-       }
+            trades.get(5).add((pTrader, pRandom) -> {
+                int baseCost = 32 + pRandom.nextInt(33); // Random between 32 and 64
+                return new MerchantOffer(
+                        new ItemCost(Items.EMERALD, baseCost),
+                        new ItemStack(JolCraftItems.DWARVEN_LEXICON.get(), 1),
+                        1, 1, 0.05f
+                );
+            });
+        }
     }
+
     @SubscribeEvent
     public static void onRightClickItem(PlayerInteractEvent.RightClickItem event) {
         Player player = event.getEntity();
@@ -1062,7 +1087,7 @@ public class JolCraftGameEvents {
                     stack
             )));
 
-            if(!player.isCreative()){
+            if (!player.isCreative()) {
                 scrap.shrink(1);
                 spanner.hurtAndBreak(1, player, spannerSlot);
             }
@@ -1184,8 +1209,14 @@ public class JolCraftGameEvents {
         }
     }
 
-
-
+    @SubscribeEvent
+    public static void onFinalizeSpawn(FinalizeSpawnEvent event) {
+        LivingEntity entity = event.getEntity();
+        if (entity instanceof Monster && !(entity instanceof Creeper) && !(entity instanceof EnderMan)) {
+            Monster mob = (Monster) entity;
+            mob.goalSelector.addGoal(3, new NearestAttackableTargetGoal<>(mob, AbstractDwarfEntity.class, true));
+        }
+    }
 
 
 

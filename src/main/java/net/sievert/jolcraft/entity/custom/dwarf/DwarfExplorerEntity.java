@@ -15,7 +15,9 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.saveddata.maps.MapDecorationTypes;
 import net.sievert.jolcraft.JolCraft;
+import net.sievert.jolcraft.data.JolCraftTags;
 import net.sievert.jolcraft.entity.ai.goal.*;
 import net.sievert.jolcraft.entity.ai.goal.dwarf.*;
 import net.sievert.jolcraft.item.JolCraftItems;
@@ -90,26 +92,25 @@ public class DwarfExplorerEntity extends AbstractDwarfEntity {
                 // Novice
                 1, new DwarfTrades.ItemListing[] {
                         new DwarfTrades.ItemsForGold(Items.STICK, 1, 4, 2, 8, 6, 500),
-                        new DwarfTrades.GoldForItems(Items.SMITHING_TABLE, 1, 3, 4, 1)
                 },
                 // Apprentice
                 2, new DwarfTrades.ItemListing[] {
-                        new DwarfTrades.ItemsForGold(Items.BREAD, 1, 3, 1, 5, 10, 10),
+                        new DwarfTrades.TreasureMapForGold(
+                                8, // min cost
+                                JolCraftTags.Structures.ON_FORGE_EXPLORER_MAPS,
+                                "filled_map.forge",
+                                MapDecorationTypes.TARGET_X,
+                                1, 10
+                        )
                 },
                 // Journeyman
                 3, new DwarfTrades.ItemListing[] {
-                        new DwarfTrades.ItemsForGold(JolCraftItems.CONTRACT_BLANK.get(), 2, 4, 1, 10, 1, 10),
-                        new DwarfTrades.GoldForItems(JolCraftItems.QUILL_EMPTY.get(), 3, 7, 4, 1)
                 },
                 // Expert
                 4, new DwarfTrades.ItemListing[] {
-                        new DwarfTrades.ItemsForGold(Items.DIAMOND, 1, 1, 10, 10, 10, 10),
-                        new DwarfTrades.GoldForItems(Items.EMERALD, 1, 10, 10, 1)
                 },
                 // Master
                 5, new DwarfTrades.ItemListing[] {
-                        new DwarfTrades.ItemsForGold(Items.NETHERITE_BLOCK, 1, 1, 5, 10, 5, 10),
-                        new DwarfTrades.ItemsAndGoldToItems(Items.PURPLE_DYE, 1, 30, JolCraftItems.GUILD_SIGIL.get(), 1, 1, 0, 0.05F)
                 }
         ));
     }

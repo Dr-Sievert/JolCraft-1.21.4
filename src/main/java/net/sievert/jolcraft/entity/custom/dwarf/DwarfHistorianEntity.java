@@ -151,14 +151,6 @@ public class DwarfHistorianEntity extends AbstractDwarfEntity {
                                         30,
                                         JolCraftItems.ANCIENT_DWARVEN_TOME_LEGENDARY.get(), 1,
                                         1, 1, 0F,
-                                        (stack) -> stack.set(JolCraftDataComponents.LORE_LINE_ID, "ancient_gemcraft")
-                                ),
-
-                                new DwarfTrades.ItemsAndGoldToItemsWithData(
-                                        JolCraftItems.LEGENDARY_PAGE.get(), 20,
-                                        30,
-                                        JolCraftItems.ANCIENT_DWARVEN_TOME_LEGENDARY.get(), 1,
-                                        1, 1, 0F,
                                         (stack) -> stack.set(JolCraftDataComponents.LORE_LINE_ID, "coin_press_manual")
                                 )
 
