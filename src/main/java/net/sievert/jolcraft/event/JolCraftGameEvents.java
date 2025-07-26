@@ -4,6 +4,8 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -14,6 +16,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.EntityTypeTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
@@ -45,6 +48,7 @@ import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.item.trading.MerchantOffers;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
@@ -52,6 +56,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
@@ -125,6 +130,29 @@ public class JolCraftGameEvents {
         Set<String> unlocks = TomeUnlock.get(serverPlayer).getUnlocks();
         JolCraftNetworking.sendToClient(serverPlayer, new ClientboundTomeUnlocksPacket(unlocks));
     }
+
+    @SubscribeEvent
+    public static void onStructureTick(PlayerTickEvent.Post event) {
+        var player = event.getEntity();
+        if (!(player.level() instanceof ServerLevel serverLevel)) return;
+
+        BlockPos pos = player.blockPosition();
+        var structureManager = serverLevel.structureManager();
+
+        var structureLookup = serverLevel.registryAccess().lookupOrThrow(Registries.STRUCTURE);
+        var forgeKey = ResourceKey.create(Registries.STRUCTURE, ResourceLocation.fromNamespaceAndPath("jolcraft", "forge"));
+        var forgeHolder = structureLookup.get(forgeKey).orElse(null);
+        if (forgeHolder == null) return;
+
+        HolderSet<Structure> forgeSet = HolderSet.direct(forgeHolder);
+        var ref = structureManager.getStructureWithPieceAt(pos, forgeSet);
+        if (ref.isValid()) {
+            player.displayClientMessage(Component.literal("You discovered the Forge!"), true);
+        }
+    }
+
+
+
 
     @SubscribeEvent
     public static void onAttackDamageTick(PlayerTickEvent.Post event) {

@@ -6,8 +6,10 @@ import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import net.minecraft.resources.ResourceLocation;
-import net.sievert.jolcraft.integration.jei.custom.DwarfTradeCategory;
-import net.sievert.jolcraft.util.dwarf.trade.DwarfTradeJeiHelper;
+import net.sievert.jolcraft.integration.jei.custom.trade.DwarfTradeCategory;
+import net.sievert.jolcraft.integration.jei.custom.info.InfoPageCategory;
+import net.sievert.jolcraft.integration.jei.custom.trade.DwarfTradeJeiHelper;
+import net.sievert.jolcraft.integration.jei.custom.info.InfoPageHelper;
 import org.jetbrains.annotations.NotNull;
 
 @JeiPlugin
@@ -21,12 +23,17 @@ public class JolCraftJeiPlugin implements IModPlugin {
 
     @Override
     public void registerCategories(IRecipeCategoryRegistration registration) {
-        registration.addRecipeCategories(new DwarfTradeCategory(registration.getJeiHelpers().getGuiHelper()));
+        var guiHelper = registration.getJeiHelpers().getGuiHelper();
+        registration.addRecipeCategories(
+                new DwarfTradeCategory(guiHelper),
+                new InfoPageCategory(guiHelper)
+        );
     }
 
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
         registration.addRecipes(DwarfTradeCategory.RECIPE_TYPE, DwarfTradeJeiHelper.getAllDwarfJeiTrades());
+        registration.addRecipes(InfoPageCategory.RECIPE_TYPE, InfoPageHelper.getAllInfoPages());
     }
 
     @Override
@@ -38,6 +45,8 @@ public class JolCraftJeiPlugin implements IModPlugin {
             );
         }
     }
+
+
 
 
 

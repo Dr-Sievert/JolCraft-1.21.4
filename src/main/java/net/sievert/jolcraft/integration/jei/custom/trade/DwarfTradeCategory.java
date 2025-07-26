@@ -1,4 +1,4 @@
-package net.sievert.jolcraft.integration.jei.custom;
+package net.sievert.jolcraft.integration.jei.custom.trade;
 
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;

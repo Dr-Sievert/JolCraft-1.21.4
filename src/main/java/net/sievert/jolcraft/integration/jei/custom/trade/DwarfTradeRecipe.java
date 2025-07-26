@@ -1,4 +1,4 @@
-package net.sievert.jolcraft.integration.jei.custom;
+package net.sievert.jolcraft.integration.jei.custom.trade;
 
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;

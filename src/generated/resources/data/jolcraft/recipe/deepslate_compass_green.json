@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "jolcraft:deepslate_compass",
+    "minecraft:red_dye"
+  ],
+  "result": {
+    "components": {
+      "minecraft:dyed_color": {
+        "rgb": 3887386
+      }
+    },
+    "count": 1,
+    "id": "jolcraft:deepslate_compass"
+  }
+}

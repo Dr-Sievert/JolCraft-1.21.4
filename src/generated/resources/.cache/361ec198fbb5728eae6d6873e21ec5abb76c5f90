@@ -1,4 +1,4 @@
-// 1.21.4	2025-07-24T12:49:35.363661	Tags for minecraft:item mod id jolcraft
+// 1.21.4	2025-07-26T21:49:39.0955872	Tags for minecraft:item mod id jolcraft
 408625162012b71b4ebe01382789c1cb4648c851 data/c/tags/item/crops.json
 5964f0cd5f51d73982612239044d1c95430b5c1e data/c/tags/item/drinks.json
 d2f15c155e30f0429ba5bcea12b2853f30b27a90 data/c/tags/item/drinks/milk.json
@@ -13,7 +13,7 @@ d2f15c155e30f0429ba5bcea12b2853f30b27a90 data/c/tags/item/drink_containing/bucke
 e8ed0cd1f317f9bd38d173b0b76f9ea5b768efd0 data/c/tags/item/ore_rates/dense.json
 0ff2a7c53c8c827943a7a6b23d342e432fd861da data/c/tags/item/ore_rates/singular.json
 0dff7f7418358c8c44d9f542f1c31d6e630959de data/c/tags/item/raw_materials.json
-b6ab53117751ed97da9b15f56ccea5240d543523 data/c/tags/item/seeds.json
+d242ef41fbd45c6c9ddc7b53537eb991205cd435 data/c/tags/item/seeds.json
 0d6516a75353a725713a0e7616dc97df436f028a data/c/tags/item/tools.json
 49091dfd66cdf5692b19d264239e608eb7709730 data/jolcraft/tags/item/artisan_hammers.json
 e5699b1973026f0f0bebf9aa6368bcd82c81dca8 data/jolcraft/tags/item/bonus_trim_materials.json
@@ -43,6 +43,7 @@ d93fe5c56c7aa54d5fe4fe63e5df038319fbd62f data/jolcraft/tags/item/spanners.json
 ae20dfac99fd2f9a2184b816c1424998f139b93e data/jolcraft/tags/item/textile_salvage.json
 c069c58124fcc8a5149e0f3dabcccfcb5876efa1 data/minecraft/tags/item/axes.json
 f6e60b5d3f1f7444952c27a68c2504107c67c5db data/minecraft/tags/item/chest_armor.json
+8ff83648d144ade8b8bd8192fbe9574581e9d0da data/minecraft/tags/item/dyeable.json
 dd4b15de6ede0cef46cf2d2ae00663e3a0918ad7 data/minecraft/tags/item/enchantable/durability.json
 ef97e7c2cb550db38b5eaa61f2675970a91c4bf2 data/minecraft/tags/item/foot_armor.json
 ed093f7677dbb5f40e4b221b448f9fc13e5bd135 data/minecraft/tags/item/head_armor.json

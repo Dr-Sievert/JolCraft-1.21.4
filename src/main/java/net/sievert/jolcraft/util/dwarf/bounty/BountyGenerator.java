@@ -3,143 +3,203 @@ package net.sievert.jolcraft.util.dwarf.bounty;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.sievert.jolcraft.data.JolCraftDataComponents;
 import net.sievert.jolcraft.item.JolCraftItems;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.function.IntSupplier;
 
 public class BountyGenerator {
 
-    // Tier 1 - Novice items
-    private static final List<ResourceLocation> TIER_1_ITEMS = List.of(
-            BuiltInRegistries.ITEM.getKey(Items.COAL),
-            BuiltInRegistries.ITEM.getKey(Items.FLINT),
-            BuiltInRegistries.ITEM.getKey(Items.COPPER_INGOT),
-            BuiltInRegistries.ITEM.getKey(Items.COBBLED_DEEPSLATE),
-            BuiltInRegistries.ITEM.getKey(Items.TORCH),
-            BuiltInRegistries.ITEM.getKey(Items.CLAY_BALL),
-            BuiltInRegistries.ITEM.getKey(Items.IRON_NUGGET)
-    );
+    /** Holds all data for a given item in a bounty pool. */
+    public record BountyEntry(Item item, IntSupplier count) {}
 
-    // Tier 2 - Apprentice items
-    private static final List<ResourceLocation> TIER_2_ITEMS = List.of(
-            BuiltInRegistries.ITEM.getKey(Items.IRON_INGOT),
-            BuiltInRegistries.ITEM.getKey(Items.LAPIS_LAZULI),
-            BuiltInRegistries.ITEM.getKey(Items.REDSTONE),
-            BuiltInRegistries.ITEM.getKey(Items.GLOW_INK_SAC),
-            BuiltInRegistries.ITEM.getKey(Items.SPIDER_EYE),
-            BuiltInRegistries.ITEM.getKey(Items.GUNPOWDER),
-            BuiltInRegistries.ITEM.getKey(Items.BONE)
-    );
+    /** Pool for a single tier: a list of entries. */
+    public record BountyPool(List<BountyEntry> entries) {}
 
-    // Tier 3 - Journeyman items
-    private static final List<ResourceLocation> TIER_3_ITEMS = List.of(
-            BuiltInRegistries.ITEM.getKey(Items.GOLD_INGOT),
-            BuiltInRegistries.ITEM.getKey(Items.EMERALD),
-            BuiltInRegistries.ITEM.getKey(Items.AMETHYST_SHARD),
-            BuiltInRegistries.ITEM.getKey(Items.BLAZE_POWDER),
-            BuiltInRegistries.ITEM.getKey(Items.INK_SAC)
+    public enum BountyType {
+        MERCHANT(List.of(
+                // T1
+                new BountyPool(List.of(
+                        new BountyEntry(Items.COAL, () -> 5 + RandomSource.create().nextInt(8)),
+                        new BountyEntry(Items.FLINT, () -> 5 + RandomSource.create().nextInt(8)),
+                        new BountyEntry(Items.COPPER_INGOT, () -> 5 + RandomSource.create().nextInt(8)),
+                        new BountyEntry(Items.COBBLED_DEEPSLATE, () -> 5 + RandomSource.create().nextInt(8)),
+                        new BountyEntry(Items.TORCH, () -> 5 + RandomSource.create().nextInt(8)),
+                        new BountyEntry(Items.CLAY_BALL, () -> 5 + RandomSource.create().nextInt(8)),
+                        new BountyEntry(Items.IRON_NUGGET, () -> 5 + RandomSource.create().nextInt(8))
+                )),
+                // T2
+                new BountyPool(List.of(
+                        new BountyEntry(Items.IRON_INGOT, () -> 4 + RandomSource.create().nextInt(5)),
+                        new BountyEntry(Items.LAPIS_LAZULI, () -> 4 + RandomSource.create().nextInt(5)),
+                        new BountyEntry(Items.REDSTONE, () -> 4 + RandomSource.create().nextInt(5)),
+                        new BountyEntry(Items.GLOW_INK_SAC, () -> 3 + RandomSource.create().nextInt(4)),
+                        new BountyEntry(Items.SPIDER_EYE, () -> 3 + RandomSource.create().nextInt(4)),
+                        new BountyEntry(Items.GUNPOWDER, () -> 3 + RandomSource.create().nextInt(4)),
+                        new BountyEntry(Items.BONE, () -> 5 + RandomSource.create().nextInt(5))
+                )),
+                // T3
+                new BountyPool(List.of(
+                        new BountyEntry(Items.GOLD_INGOT, () -> 3 + RandomSource.create().nextInt(4)),
+                        new BountyEntry(Items.EMERALD, () -> 2 + RandomSource.create().nextInt(4)),
+                        new BountyEntry(Items.AMETHYST_SHARD, () -> 3 + RandomSource.create().nextInt(4)),
+                        new BountyEntry(Items.BLAZE_POWDER, () -> 3 + RandomSource.create().nextInt(4)),
+                        new BountyEntry(Items.INK_SAC, () -> 3 + RandomSource.create().nextInt(4))
+                )),
+                // T4
+                new BountyPool(List.of(
+                        new BountyEntry(Items.ANVIL, () -> 1),
+                        new BountyEntry(Items.GOLDEN_APPLE, () -> 1 + RandomSource.create().nextInt(2)),
+                        new BountyEntry(Items.BOOK, () -> 1 + RandomSource.create().nextInt(2)),
+                        new BountyEntry(Items.CAULDRON, () -> 1),
+                        new BountyEntry(Items.ITEM_FRAME, () -> 1 + RandomSource.create().nextInt(3)),
+                        new BountyEntry(Items.ENDER_PEARL, () -> 1)
+                )),
+                // T5 (Master) — just add JolCraftItems here directly if desired
+                new BountyPool(List.of(
+                        new BountyEntry(Items.NETHERITE_SCRAP, () -> 1 + RandomSource.create().nextInt(2)),
+                        new BountyEntry(Items.HEART_OF_THE_SEA, () -> 1),
+                        new BountyEntry(Items.DRAGON_BREATH, () -> 1 + RandomSource.create().nextInt(2))
+                        // To add JolCraft gems: new BountyEntry(JolCraftItems.YOUR_GEM.get(), () -> 1),
+                ))
+        )),
+        MINER(List.of(
+                new BountyPool(List.of(
+                        new BountyEntry(Items.STONE, () -> 8 + RandomSource.create().nextInt(8)),
+                        new BountyEntry(Items.GRANITE, () -> 8 + RandomSource.create().nextInt(8)),
+                        new BountyEntry(Items.DIORITE, () -> 8 + RandomSource.create().nextInt(8)),
+                        new BountyEntry(Items.ANDESITE, () -> 8 + RandomSource.create().nextInt(8)),
+                        new BountyEntry(Items.TUFF, () -> 8 + RandomSource.create().nextInt(8))
+                )),
+                new BountyPool(List.of(
+                        new BountyEntry(Items.IRON_ORE, () -> 4 + RandomSource.create().nextInt(5)),
+                        new BountyEntry(Items.COPPER_ORE, () -> 4 + RandomSource.create().nextInt(5)),
+                        new BountyEntry(Items.DEEPSLATE_IRON_ORE, () -> 4 + RandomSource.create().nextInt(5))
+                )),
+                new BountyPool(List.of(
+                        new BountyEntry(Items.GOLD_ORE, () -> 3 + RandomSource.create().nextInt(4)),
+                        new BountyEntry(Items.EMERALD_ORE, () -> 2 + RandomSource.create().nextInt(3))
+                )),
+                new BountyPool(List.of(
+                        new BountyEntry(Items.DIAMOND_ORE, () -> 1 + randomInt(2)),
+                        new BountyEntry(Items.DEEPSLATE_DIAMOND_ORE, () -> 1 + randomInt(2))
+                )),
+                new BountyPool(List.of(
+                        new BountyEntry(Items.NETHERITE_SCRAP, () -> 1)
+                ))
+        ));
 
-            );
-
-    // Tier 4 - Expert items
-    private static final List<ResourceLocation> TIER_4_ITEMS = List.of(
-            BuiltInRegistries.ITEM.getKey(Items.ANVIL),
-            BuiltInRegistries.ITEM.getKey(Items.GOLDEN_APPLE),
-            BuiltInRegistries.ITEM.getKey(Items.BOOK),
-            BuiltInRegistries.ITEM.getKey(Items.CAULDRON),
-            BuiltInRegistries.ITEM.getKey(Items.ITEM_FRAME),
-            BuiltInRegistries.ITEM.getKey(Items.ENDER_PEARL)
-
-    );
-
-    // Tier 5 - Master items (without gems)
-    private static final List<ResourceLocation> TIER_5_ITEMS = List.of(
-            BuiltInRegistries.ITEM.getKey(Items.NETHERITE_SCRAP),
-            BuiltInRegistries.ITEM.getKey(Items.HEART_OF_THE_SEA),
-            BuiltInRegistries.ITEM.getKey(Items.DRAGON_BREATH)
-    );
-
-    // Your custom gems from JolCraftItems
-    private static final List<ResourceLocation> CUSTOM_GEMS = List.of(
-            BuiltInRegistries.ITEM.getKey(JolCraftItems.AEGISCORE.get()),
-            BuiltInRegistries.ITEM.getKey(JolCraftItems.ASHFANG.get()),
-            BuiltInRegistries.ITEM.getKey(JolCraftItems.DEEPMARROW.get()),
-            BuiltInRegistries.ITEM.getKey(JolCraftItems.EARTHBLOOD.get()),
-            BuiltInRegistries.ITEM.getKey(JolCraftItems.EMBERGLASS.get()),
-            BuiltInRegistries.ITEM.getKey(JolCraftItems.FROSTVEIN.get()),
-            BuiltInRegistries.ITEM.getKey(JolCraftItems.GRIMSTONE.get()),
-            BuiltInRegistries.ITEM.getKey(JolCraftItems.IRONHEART.get()),
-            BuiltInRegistries.ITEM.getKey(JolCraftItems.LUMIERE.get()),
-            BuiltInRegistries.ITEM.getKey(JolCraftItems.MOONSHARD.get()),
-            BuiltInRegistries.ITEM.getKey(JolCraftItems.RUSTAGATE.get()),
-            BuiltInRegistries.ITEM.getKey(JolCraftItems.SKYBURROW.get()),
-            BuiltInRegistries.ITEM.getKey(JolCraftItems.SUNGLEAM.get()),
-            BuiltInRegistries.ITEM.getKey(JolCraftItems.VERDANITE.get()),
-            BuiltInRegistries.ITEM.getKey(JolCraftItems.WOECRYSTAL.get())
-    );
-
-    public static BountyData generate(RandomSource random, int tier)
-    {
-        return switch (tier) {
-            case 1 -> generateTier1(random);
-            case 2 -> generateTier2(random);
-            case 3 -> generateTier3(random);
-            case 4 -> generateTier4(random);
-            case 5 -> generateTier5(random);
-            default -> throw new IllegalArgumentException("Invalid bounty tier: " + tier);
-        };
-    }
-
-    private static BountyData generateTier1(RandomSource random) {
-        ResourceLocation targetItem = TIER_1_ITEMS.get(random.nextInt(TIER_1_ITEMS.size()));
-        int requiredCount = 5 + random.nextInt(8); // 5–12
-        return new BountyData(targetItem, requiredCount, 1);
-    }
-
-    private static BountyData generateTier2(RandomSource random) {
-        ResourceLocation targetItem = TIER_2_ITEMS.get(random.nextInt(TIER_2_ITEMS.size()));
-        int requiredCount = switch (targetItem.toString()) {
-            case "minecraft:gunpowder", "minecraft:spider_eye", "minecraft:glow_ink_sac" -> 3 + random.nextInt(4); // 3–6
-            case "minecraft:bone" -> 5 + random.nextInt(5); // 5–9
-            default -> 4 + random.nextInt(5); // 4–8 for others
-        };
-        return new BountyData(targetItem, requiredCount, 2);
-    }
-
-    private static BountyData generateTier3(RandomSource random) {
-        ResourceLocation targetItem = TIER_3_ITEMS.get(random.nextInt(TIER_3_ITEMS.size()));
-        int requiredCount = switch (targetItem.toString()) {
-            case "minecraft:emerald" -> 2 + random.nextInt(4); // 2–5
-            case "minecraft:porkchop" -> 5 + random.nextInt(6); // 5–10
-            default -> 3 + random.nextInt(4); // 3–6 for others
-        };
-        return new BountyData(targetItem, requiredCount, 3);
-    }
-
-    private static BountyData generateTier4(RandomSource random) {
-        ResourceLocation targetItem = TIER_4_ITEMS.get(random.nextInt(TIER_4_ITEMS.size()));
-        int requiredCount = switch (targetItem.toString()) {
-            case "minecraft:golden_apple", "minecraft:book", "minecraft:paper", "minecraft:ink_sac", "minecraft:feather" -> 1 + random.nextInt(2); // 1–2
-            case "minecraft:item_frame" -> 1 + random.nextInt(3); // 1–3
-            default -> 1; // Anvil, cauldron etc. single items
-        };
-        return new BountyData(targetItem, requiredCount, 4);
-    }
-
-    private static BountyData generateTier5(RandomSource random) {
-        // 50% chance for a JolCraft gem, else from normal master pool
-        boolean giveGem = !CUSTOM_GEMS.isEmpty() && random.nextBoolean();
-        if (giveGem) {
-            ResourceLocation gem = CUSTOM_GEMS.get(random.nextInt(CUSTOM_GEMS.size()));
-            return new BountyData(gem, 1, 5);
-        } else {
-            ResourceLocation targetItem = TIER_5_ITEMS.get(random.nextInt(TIER_5_ITEMS.size()));
-            int requiredCount = switch (targetItem.toString()) {
-                case "minecraft:netherite_scrap", "minecraft:dragon_breath" -> 1 + random.nextInt(2); // 1–2
-                default -> 1; // Heart of the sea etc.
-            };
-            return new BountyData(targetItem, requiredCount, 5);
+        private final List<BountyPool> pools;
+        BountyType(List<BountyPool> pools) { this.pools = pools; }
+        public BountyPool getPool(int tier) {
+            if (tier < 1 || tier > pools.size()) throw new IllegalArgumentException("Invalid tier: " + tier);
+            return pools.get(tier - 1);
         }
+    }
+
+    public static List<ItemStack> getReward(BountyData data, RandomSource random) {
+        BountyType type = BountyType.valueOf(data.type().toUpperCase());
+        int tier = data.tier();
+        List<ItemStack> rewards = new ArrayList<>();
+
+        switch (type) {
+            case MERCHANT -> {
+                int coins = switch (tier) {
+                    case 1 -> 4 + random.nextInt(3);
+                    case 2 -> 7 + random.nextInt(4);
+                    case 3 -> 12 + random.nextInt(5);
+                    case 4 -> 20 + random.nextInt(8);
+                    case 5 -> 30 + random.nextInt(10);
+                    default -> 0;
+                };
+                if (coins > 0) rewards.add(new ItemStack(JolCraftItems.GOLD_COIN.get(), coins));
+                float crateChance = switch (tier) {
+                    case 2 -> 0.125f;
+                    case 3 -> 0.25f;
+                    case 4 -> 0.5f;
+                    case 5 -> 0.7f;
+                    default -> 0f;
+                };
+                if (crateChance > 0 && random.nextFloat() < crateChance) {
+                    boolean restock = random.nextBoolean();
+                    rewards.add(new ItemStack(
+                            restock ? JolCraftItems.RESTOCK_CRATE.get() : JolCraftItems.REROLL_CRATE.get()
+                    ));
+                }
+            }
+
+            case MINER -> {
+                int num = switch (tier) {
+                    case 1 -> 1;
+                    case 2 -> 1 + random.nextInt(2);
+                    case 3 -> 1 + random.nextInt(3);
+                    case 4 -> 1 + random.nextInt(4);
+                    case 5 -> 1 + random.nextInt(5);
+                    default -> 0;
+                };
+                for (int i = 0; i < num; i++) {
+                    rewards.add(new ItemStack(getWeightedGeode(random, tier)));
+                }
+            }
+
+
+        }
+
+        return rewards;
+    }
+
+    private static Item getWeightedGeode(RandomSource random, int tier) {
+        // Each array: [small, medium, large]
+        int[] weights = switch (tier) {
+            case 1, 2 -> new int[]{4, 2, 1}; // Novice/Apprentice
+            case 3    -> new int[]{2, 2, 2}; // Journeyman
+            case 5    -> new int[]{1, 2, 4}; // Master
+            default   -> new int[]{2, 2, 1}; // Expert/other (customize as needed)
+        };
+        int total = weights[0] + weights[1] + weights[2];
+        int roll = random.nextInt(total);
+
+        if (roll < weights[0]) return JolCraftItems.GEODE_SMALL.get();
+        else if (roll < weights[0] + weights[1]) return JolCraftItems.GEODE_MEDIUM.get();
+        else return JolCraftItems.GEODE_LARGE.get();
+    }
+
+    /** Main and only method. */
+    public static BountyData generate(ItemStack stack, RandomSource random) {
+        String typeStr = stack.get(JolCraftDataComponents.BOUNTY_TYPE.get());
+        int tier = stack.getOrDefault(JolCraftDataComponents.BOUNTY_TIER.get(), 1);
+
+        BountyType type;
+        try {
+            type = BountyType.valueOf(typeStr.toUpperCase());
+        } catch (Exception e) {
+            type = BountyType.MERCHANT;
+        }
+
+        List<BountyPool> pools = type.pools;
+        if (tier < 1 || tier > pools.size()) throw new IllegalArgumentException("Invalid tier: " + tier);
+        BountyPool pool = pools.get(tier - 1);
+        List<BountyEntry> entries = pool.entries();
+        BountyEntry entry = entries.get(random.nextInt(entries.size()));
+        int count = entry.count().getAsInt();
+
+        return new BountyData(
+                BuiltInRegistries.ITEM.getKey(entry.item()),
+                count,
+                tier,
+                type.name().toLowerCase()
+        );
+    }
+
+
+
+    /** Helper for static lambdas */
+    private static int randomInt(int bound) {
+        return RandomSource.create().nextInt(bound);
     }
 }

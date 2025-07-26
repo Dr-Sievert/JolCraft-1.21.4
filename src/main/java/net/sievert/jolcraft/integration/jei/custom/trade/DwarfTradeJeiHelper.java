@@ -1,11 +1,11 @@
-package net.sievert.jolcraft.util.dwarf.trade;
+package net.sievert.jolcraft.integration.jei.custom.trade;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.sievert.jolcraft.entity.custom.dwarf.*;
-import net.sievert.jolcraft.integration.jei.custom.DwarfTradeRecipe;
 import net.sievert.jolcraft.item.JolCraftItems;
+import net.sievert.jolcraft.util.dwarf.trade.DwarfTrades;
 
 import java.util.ArrayList;
 import java.util.List;

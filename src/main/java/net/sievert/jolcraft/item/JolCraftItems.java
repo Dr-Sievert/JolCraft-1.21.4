@@ -12,6 +12,8 @@ import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.block.JolCraftBlocks;
 import net.sievert.jolcraft.entity.JolCraftEntities;
 import net.sievert.jolcraft.item.armor.JolCraftArmorMaterials;
+import net.sievert.jolcraft.item.bounty.BountyCrateItem;
+import net.sievert.jolcraft.item.bounty.BountyItem;
 import net.sievert.jolcraft.item.custom.*;
 import net.sievert.jolcraft.item.custom.contract.ProfessionContractItem;
 import net.sievert.jolcraft.item.custom.QuillItem;
@@ -72,6 +74,12 @@ public class JolCraftItems {
             "lockpick",
             props -> new SimpleTooltipItem(props, "lockpick")
     );
+
+    public static final DeferredItem<Item> EMPTY_DEEPSLATE_COMPASS = ITEMS.registerItem("empty_deepslate_compass",
+            Item::new, new Item.Properties().stacksTo(1));
+
+    public static final DeferredItem<Item> DEEPSLATE_COMPASS = ITEMS.registerItem("deepslate_compass",
+            Item::new, new Item.Properties().stacksTo(1));
 
     //Materials, Armors, Trims, Tools and Weapons
     public static final DeferredItem<Item> IMPURE_MITHRIL = ITEMS.registerItem("impure_mithril",

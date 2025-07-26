@@ -3,10 +3,12 @@ package net.sievert.jolcraft.data;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.codec.ByteBufCodecs;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.sievert.jolcraft.JolCraft;
+import net.sievert.jolcraft.client.DialItemColor;
 import net.sievert.jolcraft.util.dwarf.bounty.BountyData;
 
 import java.util.function.UnaryOperator;
@@ -70,8 +72,13 @@ public class JolCraftDataComponents {
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> COIN_POUCH_AMOUNT =
             register("coin_pouch_amount", builder -> builder.persistent(Codec.INT));
 
-    private static <T>DeferredHolder<DataComponentType<?>, DataComponentType<T>> register(String name,
-                                                                                          UnaryOperator<DataComponentType.Builder<T>> builderOperator) {
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<DialItemColor>> DIAL_COLOR =
+            register("dial_color", builder -> builder
+                    .persistent(DialItemColor.CODEC)
+                    .networkSynchronized(DialItemColor.STREAM_CODEC)
+            );
+
+    private static <T>DeferredHolder<DataComponentType<?>, DataComponentType<T>> register(String name, UnaryOperator<DataComponentType.Builder<T>> builderOperator) {
         return DATA_COMPONENT_TYPES.register(name, () -> builderOperator.apply(DataComponentType.builder()).build());
     }
 

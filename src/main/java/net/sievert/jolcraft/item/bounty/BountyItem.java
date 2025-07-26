@@ -1,4 +1,4 @@
-package net.sievert.jolcraft.item.custom.merchant;
+package net.sievert.jolcraft.item.bounty;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;

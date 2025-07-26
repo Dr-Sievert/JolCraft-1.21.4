@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "jolcraft:empty_deepslate_compass",
+    "minecraft:magenta_dye"
+  ],
+  "result": {
+    "components": {
+      "minecraft:dyed_color": {
+        "rgb": 2651799
+      }
+    },
+    "count": 1,
+    "id": "jolcraft:empty_deepslate_compass"
+  }
+}

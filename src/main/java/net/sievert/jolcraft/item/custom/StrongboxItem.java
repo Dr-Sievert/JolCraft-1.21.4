@@ -22,10 +22,6 @@ public class StrongboxItem extends BlockItem {
 
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext ctx, List<Component> tooltip, TooltipFlag flag) {
-        if (Screen.hasShiftDown()) {
-            tooltip.add(Component.translatable("tooltip.jolcraft.strongbox")
-                    .withStyle(ChatFormatting.GRAY));
-        } else {
             // Check if it is locked
             if (stack.has(JolCraftDataComponents.LOCKED)) {
                 tooltip.add(Component.translatable("tooltip.jolcraft.strongbox.locked")
@@ -44,11 +40,7 @@ public class StrongboxItem extends BlockItem {
                 tooltip.add(Component.translatable("tooltip.jolcraft.strongbox.not_empty")
                         .withStyle(ChatFormatting.GRAY));
             }
-            // Shift hint
-            Component shiftKey = Component.literal("Shift").withStyle(ChatFormatting.BLUE);
-            tooltip.add(Component.translatable("tooltip.jolcraft.shift", shiftKey)
-                    .withStyle(ChatFormatting.DARK_GRAY));
-        }
+
         // Call super to retain any default hover text functionality
         super.appendHoverText(stack, ctx, tooltip, flag);
     }

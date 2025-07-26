@@ -85,7 +85,18 @@ public class JolCraftItemTagProvider extends ItemTagsProvider {
                 .add(JolCraftItems.DEEPSLATE_PLATE.get())
                 .add(JolCraftItems.MITHRIL_INGOT.get());
 
+        tag(ItemTags.DYEABLE)
+                .add(JolCraftItems.EMPTY_DEEPSLATE_COMPASS.get())
+                .add(JolCraftItems.DEEPSLATE_COMPASS.get());
+
         //Common Neoforge
+
+        tag(Tags.Items.SEEDS)
+                .add(JolCraftItems.BARLEY_SEEDS.get())
+                .add(JolCraftItems.ASGARNIAN_SEEDS.get())
+                .add(JolCraftItems.DUSKHOLD_SEEDS.get())
+                .add(JolCraftItems.KRANDONIAN_SEEDS.get())
+                .add(JolCraftItems.YANILLIAN_SEEDS.get());
 
         tag(Tags.Items.SEEDS)
                 .add(JolCraftItems.BARLEY_SEEDS.get())

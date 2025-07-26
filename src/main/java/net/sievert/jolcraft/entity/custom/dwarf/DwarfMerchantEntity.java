@@ -37,7 +37,6 @@ import net.sievert.jolcraft.util.dwarf.bounty.BountyData;
 import net.sievert.jolcraft.entity.ai.goal.*;
 import net.sievert.jolcraft.item.JolCraftItems;
 import net.sievert.jolcraft.util.dwarf.bounty.BountyGenerator;
-import net.sievert.jolcraft.util.dwarf.bounty.BountyReward;
 import net.sievert.jolcraft.util.dwarf.trade.DwarfMerchantOffer;
 import net.sievert.jolcraft.util.dwarf.trade.DwarfTrades;
 
@@ -129,17 +128,20 @@ public class DwarfMerchantEntity extends AbstractDwarfEntity {
             Boolean complete = itemstack.get(JolCraftDataComponents.BOUNTY_COMPLETE.get());
             String type = itemstack.get(JolCraftDataComponents.BOUNTY_TYPE.get());
             boolean isMerchant = "merchant".equals(type);
-            if (complete == null || !complete) {
-                JolCraftSoundHelper.playDwarfNo(this);
-                player.displayClientMessage(Component.translatable("tooltip.jolcraft.bounty_crate.not_complete").withStyle(ChatFormatting.GRAY), true);
-                return InteractionResult.SUCCESS;
-            }
 
             if(!isMerchant){
                 JolCraftSoundHelper.playDwarfNo(this);
                 player.displayClientMessage(Component.translatable("tooltip.jolcraft.bounty_crate.wrong_type").withStyle(ChatFormatting.GRAY), true);
                 return InteractionResult.SUCCESS;
             }
+
+            if (complete == null || !complete) {
+                JolCraftSoundHelper.playDwarfNo(this);
+                player.displayClientMessage(Component.translatable("tooltip.jolcraft.bounty_crate.not_complete").withStyle(ChatFormatting.GRAY), true);
+                return InteractionResult.SUCCESS;
+            }
+
+
 
             // Both sides: hand swap and animation sync
             ItemStack prevMainHand = this.getMainHandItem().copy();
@@ -163,7 +165,7 @@ public class DwarfMerchantEntity extends AbstractDwarfEntity {
                             Vec3 start = this.position().add(0.0, this.getEyeHeight(), 0.0);
                             Vec3 target = this.currentActionPlayer.position().add(0.0, this.currentActionPlayer.getBbHeight() * 0.5, 0.0);
                             Vec3 velocity = target.subtract(start).normalize().scale(0.4);
-                            List<ItemStack> rewards = BountyReward.getReward(data, this.getRandom());
+                            List<ItemStack> rewards = BountyGenerator.getReward(data, this.getRandom());
                             for (ItemStack reward : rewards) {
                                 if (!reward.isEmpty()) {
                                     ItemEntity thrownReward = new ItemEntity(this.level(), start.x, start.y, start.z, reward);
@@ -225,10 +227,10 @@ public class DwarfMerchantEntity extends AbstractDwarfEntity {
                         ItemStack crate = this.getBountyCrateItem();
                         int merchantTier = this.getVillagerData().getLevel();
 
-                        crate.set(JolCraftDataComponents.BOUNTY_DATA.get(),
-                                BountyGenerator.generate(this.getRandom(), merchantTier));
-
                         crate.set(JolCraftDataComponents.BOUNTY_TYPE.get(), "merchant");
+                        crate.set(JolCraftDataComponents.BOUNTY_TIER.get(), merchantTier);
+                        crate.set(JolCraftDataComponents.BOUNTY_DATA.get(), BountyGenerator.generate(crate, random));
+
 
                         ItemEntity thrown = new ItemEntity(this.level(), start.x, start.y, start.z, crate);
                         thrown.setDeltaMovement(velocity);

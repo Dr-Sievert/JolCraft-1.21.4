@@ -1,6 +1,8 @@
 package net.sievert.jolcraft.datagen.recipe;
 
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentPatch;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
@@ -8,8 +10,11 @@ import net.minecraft.data.recipes.packs.VanillaRecipeProvider;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.DyedItemColor;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.ItemLike;
@@ -25,6 +30,7 @@ import net.sievert.jolcraft.item.JolCraftItems;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 public class JolCraftRecipeProvider extends RecipeProvider {
@@ -542,8 +548,6 @@ public class JolCraftRecipeProvider extends RecipeProvider {
                 .define('A', JolCraftItems.DEEPSLATE_PLATE.get())
                 .unlockedBy("has_forge_armor_trim_smithing_template", has(JolCraftItems.FORGE_ARMOR_TRIM_SMITHING_TEMPLATE.get())).save(output, "forge_armor_trim_smithing_template");
 
-
-
         customTrimTemplates().forEach(trim ->
                 trimSmithing(trim.template(), trim.id())
         );
@@ -551,6 +555,48 @@ public class JolCraftRecipeProvider extends RecipeProvider {
         allBonusTrimTemplates().forEach(trim ->
                 bonusTrimSmithing(trim.template(), trim.id())
         );
+
+        for (int i = 0; i < DYES.size(); i++) {
+            Item dyeItem = DYES.get(i);
+            DyeColor dyeColor = DyeColor.values()[i];
+            int colorInt = dyeColor.getFireworkColor(); // vanilla color
+
+            // Create a result ItemStack with the DataComponent attached
+            ItemStack dyedCompass = new ItemStack(
+                    JolCraftItems.EMPTY_DEEPSLATE_COMPASS.get().builtInRegistryHolder(),
+                    1,
+                    DataComponentPatch.builder().set(DataComponents.DYED_COLOR, new DyedItemColor(colorInt, true)).build()
+            );
+
+            this.shapeless(RecipeCategory.MISC, dyedCompass)
+                    .requires(JolCraftItems.EMPTY_DEEPSLATE_COMPASS.get())
+                    .requires(dyeItem)
+                    .unlockedBy("has_empty_deepslate_compass", has(JolCraftItems.EMPTY_DEEPSLATE_COMPASS.get()))
+                    .unlockedBy("has_" + dyeColor.getName() + "_dye", has(dyeItem))
+                    .save(this.output, "jolcraft:empty_deepslate_compass_" + dyeColor.getName());
+        }
+
+        for (int i = 0; i < DYES.size(); i++) {
+            Item dyeItem = DYES.get(i);
+            DyeColor dyeColor = DyeColor.values()[i];
+            int colorInt = dyeColor.getFireworkColor(); // vanilla color
+
+            // Create a result ItemStack with the DataComponent attached
+            ItemStack dyedCompass = new ItemStack(
+                    JolCraftItems.DEEPSLATE_COMPASS.get().builtInRegistryHolder(),
+                    1,
+                    DataComponentPatch.builder().set(DataComponents.DYED_COLOR, new DyedItemColor(colorInt, true)).build()
+            );
+
+            this.shapeless(RecipeCategory.MISC, dyedCompass)
+                    .requires(JolCraftItems.DEEPSLATE_COMPASS.get())
+                    .requires(dyeItem)
+                    .unlockedBy("has_deepslate_compass", has(JolCraftItems.DEEPSLATE_COMPASS.get()))
+                    .unlockedBy("has_" + dyeColor.getName() + "_dye", has(dyeItem))
+                    .save(this.output, "jolcraft:deepslate_compass_" + dyeColor.getName());
+        }
+
+
 
     }
 
@@ -684,6 +730,25 @@ public class JolCraftRecipeProvider extends RecipeProvider {
                 .unlockedBy(getHasName(unpacked), this.has(unpacked))
                 .save(this.output, ResourceKey.create(Registries.RECIPE, packedRL));
     }
+
+    private static final List<Item> DYES = List.of(
+            Items.BLACK_DYE,
+            Items.BLUE_DYE,
+            Items.BROWN_DYE,
+            Items.CYAN_DYE,
+            Items.GRAY_DYE,
+            Items.GREEN_DYE,
+            Items.LIGHT_BLUE_DYE,
+            Items.LIGHT_GRAY_DYE,
+            Items.LIME_DYE,
+            Items.MAGENTA_DYE,
+            Items.ORANGE_DYE,
+            Items.PINK_DYE,
+            Items.PURPLE_DYE,
+            Items.RED_DYE,
+            Items.YELLOW_DYE,
+            Items.WHITE_DYE
+    );
 
 
 
