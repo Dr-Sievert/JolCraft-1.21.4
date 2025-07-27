@@ -19,6 +19,8 @@ import net.sievert.jolcraft.item.custom.contract.ProfessionContractItem;
 import net.sievert.jolcraft.item.custom.QuillItem;
 import net.sievert.jolcraft.item.custom.contract.SignedContractItem;
 import net.sievert.jolcraft.item.custom.contract.WrittenContractItem;
+import net.sievert.jolcraft.item.custom.explorer.DeepslateCompassDialItem;
+import net.sievert.jolcraft.item.custom.explorer.DeepslateCompassItem;
 import net.sievert.jolcraft.item.custom.scrapper.*;
 import net.sievert.jolcraft.item.custom.merchant.*;
 import net.sievert.jolcraft.item.custom.book.*;
@@ -76,10 +78,13 @@ public class JolCraftItems {
     );
 
     public static final DeferredItem<Item> EMPTY_DEEPSLATE_COMPASS = ITEMS.registerItem("empty_deepslate_compass",
-            Item::new, new Item.Properties().stacksTo(1));
+            Item::new, new Item.Properties().stacksTo(16));
 
     public static final DeferredItem<Item> DEEPSLATE_COMPASS = ITEMS.registerItem("deepslate_compass",
-            Item::new, new Item.Properties().stacksTo(1));
+            DeepslateCompassItem::new, new Item.Properties().stacksTo(1));
+
+    public static final DeferredItem<Item> DEEPSLATE_COMPASS_DIAL = ITEMS.registerItem("deepslate_compass_dial",
+            DeepslateCompassDialItem::new, new Item.Properties().stacksTo(1));
 
     //Materials, Armors, Trims, Tools and Weapons
     public static final DeferredItem<Item> IMPURE_MITHRIL = ITEMS.registerItem("impure_mithril",

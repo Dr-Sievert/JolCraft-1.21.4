@@ -11,6 +11,7 @@
   "item.jolcraft.lockpick": "Lockpick",
   "item.jolcraft.empty_deepslate_compass": "Empty Deepslate Compass",
   "item.jolcraft.deepslate_compass": "Deepslate Compass",
+  "item.jolcraft.deepslate_compass_dial": "Deepslate Compass Dial",
 
   "block.jolcraft.deepslate_mithril_ore": "Deepslate Mithril Ore",
   "block.jolcraft.pure_mithril_block": "Pure Mithril Block",
@@ -378,6 +379,21 @@
   "tooltip.jolcraft.dwarven_tome.unlocked": "A dwarven tome.",
   "tooltip.jolcraft.ancient_dwarven_tome.unlocked": "An ancient dwarven tome.",
 
+  "tooltip.jolcraft.deepslate_compass_dial.unknown": "Unknown",
+  "tooltip.jolcraft.deepslate_compass_dial.dwarven_structures": "Dwarven Structures",
+  "tooltip.jolcraft.deepslate_compass_dial.ancient_structures": "Ancient Structures",
+  "tooltip.jolcraft.deepslate_compass.no_structure": "No structures found!",
+  "tooltip.jolcraft.deepslate_compass.locate": "The tracked %s is at %s (%s blocks away)",
+  "tooltip.jolcraft.deepslate_compass": "Currently tracking: ",
+  "tooltip.jolcraft.structure.unknown": "Unknown",
+  "tooltip.jolcraft.structure.jolcraft:forge": "Dwarven Forge",
+  "tooltip.jolcraft.structure.jolcraft:dwarven_trail_ruin": "Dwarven Trail Ruin",
+  "tooltip.jolcraft.structure.minecraft:ancient_city": "Ancient City",
+  "tooltip.jolcraft.structure.minecraft:trail_ruins": "Trail Ruins",
+
+  "tooltip.jolcraft.structure.discovered": "Discovered: ",
+
+
   "tooltip.jolcraft.tome_unlock.empty": "This tome lacks knowledge that you find useful.",
   "tooltip.jolcraft.tome_unlock.brew": "You can now brew using multiple hops!",
   "tooltip.jolcraft.tome_unlock.gems": "You can now cut gems using a chisel!",
@@ -454,7 +470,6 @@
   "tooltip.jolcraft.tablet.advance_info": "To advance in reputation level you need endorsements from dwarves with professions. When you have enough, hand over your tablet to a guildmaster to update it.",
   "tooltip.jolcraft.tablet": "To advance in reputation level you need endorsements from dwarves that have professions. There are three professions per reputation level. When you have enough endorsements hand over your tablet to a guildmaster and he will update it. To gain endorsements you give your reputation tablet to a dwarf with a profession and master level. Endorsements are unique per profession and can only be gained once.",
 
-
   "tooltip.jolcraft.brewing.hops": "You already added this hops type to the brew.",
   "tooltip.jolcraft.brewing.locked_hops": "Adding more hops without proper knowledge would ruin the brew.",
   "tooltip.jolcraft.brew.no_hops_added": "No hops added.",
@@ -465,6 +480,7 @@
   "tooltip.jolcraft.hops.yanillian": "Yanillian",
 
   "tooltip.jolcraft.guard.promotion": "Guard promoted to %s!",
+
 
   "itemGroup.jolcraft.jolcraft_items_tab": "JolCraft",
   "itemGroup.jolcraft.jolcraft_egg_tab": "JolCraft Spawn Eggs",
@@ -558,5 +574,9 @@
   "jei.jolcraft.dwarf_trades": "Dwarf Trades",
   "jei.jolcraft.info_page": "Information",
 
-  "jei.jolcraft.info_page.strongbox": "Strongboxes are chests that can generate with locks that needs to be picked. Breaking a locked strongbox also breaks the lock but removes any ungenerated loot. Breaking a strongbox with silk touch retains all of its contents."
+  "jei.jolcraft.info_page.strongbox": "Strongboxes are chests that can generate with locks that needs to be picked. Breaking a locked strongbox also breaks the lock but removes any ungenerated loot. Breaking a strongbox with silk touch retains all of its contents.",
+  "jei.jolcraft.info_page.empty_deepslate_compass": "Needs to be combined with a deepslate compass dial. Hold the empty compass and the dial one in each hand then right-click to combine them. Can be dyed multiple times to blend color. Shapeless craft to remove dye.",
+  "jei.jolcraft.info_page.deepslate_compass_dial": "Needs to be combined with an empty deepslate compass. Hold the empty compass and the dial one in each hand then right-click to combine them. Sold by explorer or found as loot.",
+  "jei.jolcraft.info_page.deepslate_compass": "Points to a structure from a pool based on the dial in the compass. Can be dyed multiple times to blend color. Shapeless craft to remove the dial."
+
 }

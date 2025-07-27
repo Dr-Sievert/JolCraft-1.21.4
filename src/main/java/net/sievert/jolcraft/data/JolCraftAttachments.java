@@ -6,6 +6,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.data.custom.attachment.block.HearthImpl;
+import net.sievert.jolcraft.data.custom.attachment.compass.DiscoveredStructuresImpl;
 import net.sievert.jolcraft.data.custom.attachment.lang.AncientDwarvenLanguageImpl;
 import net.sievert.jolcraft.data.custom.attachment.lang.DwarvenLanguageImpl;
 import net.sievert.jolcraft.data.custom.attachment.rep.DwarvenReputationImpl;
@@ -49,6 +50,13 @@ public class JolCraftAttachments {
     public static final Supplier<AttachmentType<HearthImpl>> HEARTH =
             ATTACHMENT_TYPES.register("hearth", () ->
                     AttachmentType.serializable(HearthImpl::new)
+                            .copyOnDeath()
+                            .build()
+            );
+
+    public static final Supplier<AttachmentType<DiscoveredStructuresImpl>> DISCOVERED_STRUCTURES =
+            ATTACHMENT_TYPES.register("discovered_structures", () ->
+                    AttachmentType.serializable(DiscoveredStructuresImpl::new)
                             .copyOnDeath()
                             .build()
             );

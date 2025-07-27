@@ -92,6 +92,10 @@ public class JolCraftTags {
     public interface Structures {
         public static final TagKey<Structure> ON_FORGE_EXPLORER_MAPS = create("on_forge_explorer_maps");
 
+        public static final TagKey<Structure> DWARVEN_STRUCTURES = create("dwarven_structures");
+
+        public static final TagKey<Structure> ANCIENT_STRUCTURES = create("ancient_structures");
+
         private static TagKey<Structure> create(String name) {
             return TagKey.create(Registries.STRUCTURE, locate(name));
         }

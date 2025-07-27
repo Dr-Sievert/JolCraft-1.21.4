@@ -59,23 +59,52 @@ public class JolCraftNetworking {
                         JolCraftNetworking::handleSyncEndorsements
                 )
                 .playToClient(
-                ClientboundTomeUnlocksPacket.TYPE,
-                ClientboundTomeUnlocksPacket.CODEC,
-                JolCraftNetworking::handleSyncTomeUnlocks
+                        ClientboundTomeUnlocksPacket.TYPE,
+                        ClientboundTomeUnlocksPacket.CODEC,
+                        JolCraftNetworking::handleSyncTomeUnlocks
                 )
                 .playToClient(
-                ClientboundDwarfMerchantOffersPacket.TYPE,
-                ClientboundDwarfMerchantOffersPacket.CODEC,
-                JolCraftNetworking::handleDwarfMerchantOffers
+                        ClientboundDwarfMerchantOffersPacket.TYPE,
+                        ClientboundDwarfMerchantOffersPacket.CODEC,
+                        JolCraftNetworking::handleDwarfMerchantOffers
                 )
                 .playToServer(
                         ServerboundDwarfSelectTradePacket.TYPE,
                         ServerboundDwarfSelectTradePacket.CODEC,
                         JolCraftNetworking::handleServerboundDwarfSelectTrade
+                )
+                .playToClient(
+                        ClientboundPlaySoundPacket.TYPE,
+                        ClientboundPlaySoundPacket.CODEC,
+                        JolCraftNetworking::handlePlaySound
                 );
 
 
     }
+
+    @OnlyIn(Dist.CLIENT)
+    private static void handlePlaySound(ClientboundPlaySoundPacket packet, IPayloadContext context) {
+        context.enqueueWork(() -> {
+            var mc = Minecraft.getInstance();
+            var player = mc.player;
+            if (player == null) return;
+
+            // 1.21+ registry access
+            var optHolder = net.minecraft.core.registries.BuiltInRegistries.SOUND_EVENT.get(packet.soundId());
+            if (optHolder.isEmpty()) return;
+            var sound = optHolder.get().value();
+
+            player.level().playLocalSound(
+                    packet.x(), packet.y(), packet.z(),
+                    sound,
+                    packet.source(),
+                    packet.volume(),
+                    packet.pitch(),
+                    false
+            );
+        });
+    }
+
 
     public static void handleServerboundDwarfSelectTrade(ServerboundDwarfSelectTradePacket packet, net.neoforged.neoforge.network.handling.IPayloadContext context) {
         // Ensure on server thread

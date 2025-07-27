@@ -17,15 +17,13 @@ import net.sievert.jolcraft.block.custom.FermentingStage;
 import net.sievert.jolcraft.block.custom.crop.HopsType;
 import net.sievert.jolcraft.block.entity.JolCraftBlockEntities;
 import net.sievert.jolcraft.client.CoinPouchTooltipRenderer;
-import net.sievert.jolcraft.client.DialColor;
-import net.sievert.jolcraft.client.DialItemColor;
+import net.sievert.jolcraft.client.compass.DialColor;
 import net.sievert.jolcraft.data.custom.item.CoinPouchTooltip;
 import net.sievert.jolcraft.entity.JolCraftEntities;
 import net.sievert.jolcraft.entity.client.render.animal.MuffhornRenderer;
 import net.sievert.jolcraft.entity.client.render.block.StrongboxRenderer;
 import net.sievert.jolcraft.entity.client.render.dwarf.*;
 import net.sievert.jolcraft.entity.client.render.object.RadiantRenderer;
-import net.sievert.jolcraft.item.JolCraftItems;
 import net.sievert.jolcraft.screen.JolCraftMenuTypes;
 import net.sievert.jolcraft.screen.custom.dwarf.DwarfMerchantScreen;
 import net.sievert.jolcraft.screen.custom.lapidary_bench.LapidaryBenchScreen;
@@ -33,6 +31,8 @@ import net.sievert.jolcraft.screen.custom.strongbox.LockScreen;
 import net.sievert.jolcraft.screen.custom.strongbox.StrongboxScreen;
 import net.sievert.jolcraft.util.component.CoinPouchAmountProperty;
 import net.sievert.jolcraft.util.component.LoreLineIdProperty;
+import net.sievert.jolcraft.client.compass.DeepslateCompassAngle;
+
 
 @EventBusSubscriber(modid = JolCraft.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class JolCraftClientModEvents {
@@ -118,6 +118,14 @@ public class JolCraftClientModEvents {
         );
     }
 
+    @SubscribeEvent
+    public static void onRegisterRangeSelectItemModelProperty(RegisterRangeSelectItemModelPropertyEvent event) {
+        event.register(
+                ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "deepslate_compass_angle"),
+                DeepslateCompassAngle.MAP_CODEC
+        );
+    }
+
     @SubscribeEvent(priority = EventPriority.NORMAL)
     public static void registerTintSources(RegisterColorHandlersEvent.ItemTintSources event) {
         event.register(
@@ -125,6 +133,7 @@ public class JolCraftClientModEvents {
                 DialColor.MAP_CODEC
         );
     }
+
     private static final int YEAST_FERMENTING_START = 0xFF8EE8AA; // Light green
     private static final int YEAST_FERMENTING_END = 0xFF40B14A; // Dark green
     private static final int MALT_COLOR = 0xFFB16A1D; // Brown/orange malt

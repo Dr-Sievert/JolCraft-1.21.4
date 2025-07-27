@@ -30,7 +30,6 @@ import net.sievert.jolcraft.item.JolCraftItems;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 public class JolCraftRecipeProvider extends RecipeProvider {
@@ -556,19 +555,25 @@ public class JolCraftRecipeProvider extends RecipeProvider {
                 bonusTrimSmithing(trim.template(), trim.id())
         );
 
+        modShaped(RecipeCategory.MISC, JolCraftItems.EMPTY_DEEPSLATE_COMPASS.get())
+                .pattern(" B ")
+                .pattern("BBB")
+                .pattern(" B ")
+                .define('B', JolCraftItems.DEEPSLATE_PLATE.get())
+                .unlockedBy("has_deepslate_plate", has(JolCraftItems.DEEPSLATE_PLATE.get())).save(output);
+
         for (int i = 0; i < DYES.size(); i++) {
             Item dyeItem = DYES.get(i);
             DyeColor dyeColor = DyeColor.values()[i];
-            int colorInt = dyeColor.getFireworkColor(); // vanilla color
+            int colorInt = dyeColor.getFireworkColor();
 
-            // Create a result ItemStack with the DataComponent attached
             ItemStack dyedCompass = new ItemStack(
                     JolCraftItems.EMPTY_DEEPSLATE_COMPASS.get().builtInRegistryHolder(),
                     1,
                     DataComponentPatch.builder().set(DataComponents.DYED_COLOR, new DyedItemColor(colorInt, true)).build()
             );
 
-            this.shapeless(RecipeCategory.MISC, dyedCompass)
+            modShapeless(RecipeCategory.MISC, dyedCompass.getItem())
                     .requires(JolCraftItems.EMPTY_DEEPSLATE_COMPASS.get())
                     .requires(dyeItem)
                     .unlockedBy("has_empty_deepslate_compass", has(JolCraftItems.EMPTY_DEEPSLATE_COMPASS.get()))
@@ -576,25 +581,40 @@ public class JolCraftRecipeProvider extends RecipeProvider {
                     .save(this.output, "jolcraft:empty_deepslate_compass_" + dyeColor.getName());
         }
 
+        modShapeless(RecipeCategory.MISC, JolCraftItems.EMPTY_DEEPSLATE_COMPASS.get())
+                .requires(JolCraftItems.EMPTY_DEEPSLATE_COMPASS.get())
+                .unlockedBy("has_empty_deepslate_compass", has(JolCraftItems.EMPTY_DEEPSLATE_COMPASS.get()))
+                .save(this.output, "jolcraft:empty_deepslate_compass_remove_dye");
+
         for (int i = 0; i < DYES.size(); i++) {
             Item dyeItem = DYES.get(i);
             DyeColor dyeColor = DyeColor.values()[i];
-            int colorInt = dyeColor.getFireworkColor(); // vanilla color
+            int colorInt = dyeColor.getFireworkColor();
 
-            // Create a result ItemStack with the DataComponent attached
             ItemStack dyedCompass = new ItemStack(
                     JolCraftItems.DEEPSLATE_COMPASS.get().builtInRegistryHolder(),
                     1,
                     DataComponentPatch.builder().set(DataComponents.DYED_COLOR, new DyedItemColor(colorInt, true)).build()
             );
 
-            this.shapeless(RecipeCategory.MISC, dyedCompass)
+            modShapeless(RecipeCategory.MISC, dyedCompass.getItem())
                     .requires(JolCraftItems.DEEPSLATE_COMPASS.get())
                     .requires(dyeItem)
                     .unlockedBy("has_deepslate_compass", has(JolCraftItems.DEEPSLATE_COMPASS.get()))
                     .unlockedBy("has_" + dyeColor.getName() + "_dye", has(dyeItem))
                     .save(this.output, "jolcraft:deepslate_compass_" + dyeColor.getName());
         }
+
+        modShapeless(RecipeCategory.MISC, JolCraftItems.EMPTY_DEEPSLATE_COMPASS.get())
+                .requires(JolCraftItems.DEEPSLATE_COMPASS.get())
+                .unlockedBy("has_deepslate_compass", has(JolCraftItems.DEEPSLATE_COMPASS.get()))
+                .save(this.output, "jolcraft:deepslate_compass_remove_dial");
+
+
+
+
+
+
 
 
 

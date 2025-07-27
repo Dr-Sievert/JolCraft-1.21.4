@@ -2,11 +2,11 @@ package net.sievert.jolcraft.event;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.core.HolderSet;
+import net.minecraft.core.*;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
@@ -56,7 +56,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.Structure;
+import net.minecraft.world.level.levelgen.structure.StructureStart;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
@@ -75,6 +77,7 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.event.village.VillagerTradesEvent;
 import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.advancement.JolCraftCriteriaTriggers;
+import net.sievert.jolcraft.data.JolCraftDataComponents;
 import net.sievert.jolcraft.data.custom.attachment.block.Hearth;
 import net.sievert.jolcraft.block.custom.FermentingCauldronBlock;
 import net.sievert.jolcraft.block.custom.FermentingStage;
@@ -95,12 +98,13 @@ import net.sievert.jolcraft.sound.JolCraftSounds;
 import net.sievert.jolcraft.util.attachment.AncientDwarvenLanguageHelper;
 import net.sievert.jolcraft.util.attachment.DwarvenLanguageHelper;
 import net.sievert.jolcraft.util.attachment.DwarvenReputationHelper;
+import net.sievert.jolcraft.util.compass.DeepslateCompassHelper;
 import net.sievert.jolcraft.util.dwarf.trade.DwarfMerchantOffer;
 import net.sievert.jolcraft.util.vanilla.JolCraftAnvilHelper;
 import net.sievert.jolcraft.util.dwarf.SalvageLootHelper;
 import net.sievert.jolcraft.block.JolCraftBlocks;
 import net.sievert.jolcraft.effect.JolCraftEffects;
-
+import net.sievert.jolcraft.util.attachment.DiscoveredStructuresHelper;
 import java.util.*;
 
 @EventBusSubscriber(modid = JolCraft.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
@@ -132,26 +136,211 @@ public class JolCraftGameEvents {
     }
 
     @SubscribeEvent
-    public static void onStructureTick(PlayerTickEvent.Post event) {
-        var player = event.getEntity();
-        if (!(player.level() instanceof ServerLevel serverLevel)) return;
-
-        BlockPos pos = player.blockPosition();
-        var structureManager = serverLevel.structureManager();
-
-        var structureLookup = serverLevel.registryAccess().lookupOrThrow(Registries.STRUCTURE);
-        var forgeKey = ResourceKey.create(Registries.STRUCTURE, ResourceLocation.fromNamespaceAndPath("jolcraft", "forge"));
-        var forgeHolder = structureLookup.get(forgeKey).orElse(null);
-        if (forgeHolder == null) return;
-
-        HolderSet<Structure> forgeSet = HolderSet.direct(forgeHolder);
-        var ref = structureManager.getStructureWithPieceAt(pos, forgeSet);
-        if (ref.isValid()) {
-            player.displayClientMessage(Component.literal("You discovered the Forge!"), true);
+    public static void onItemCrafted(PlayerEvent.ItemCraftedEvent event) {
+        ItemStack output = event.getCrafting();
+        if (output.is(JolCraftItems.EMPTY_DEEPSLATE_COMPASS.get())) {
+            // Find the input compass (only one in a valid craft)
+            ItemStack input = ItemStack.EMPTY;
+            for (int i = 0; i < event.getInventory().getContainerSize(); i++) {
+                ItemStack stack = event.getInventory().getItem(i);
+                if (stack.is(JolCraftItems.DEEPSLATE_COMPASS.get())) {
+                    input = stack;
+                    break;
+                }
+            }
+            if (!input.isEmpty()) {
+                var dye = input.get(DataComponents.DYED_COLOR);
+                if (dye != null) {
+                    output.set(DataComponents.DYED_COLOR, dye);
+                }
+            }
         }
     }
 
+    @SubscribeEvent
+    public static void onDialCombine(PlayerInteractEvent.RightClickItem event) {
+        Player player = event.getEntity();
+        Level level = event.getLevel();
+        ItemStack main = event.getItemStack();
+        ItemStack offhand = player.getOffhandItem();
 
+        boolean mainIsDial = main.is(JolCraftItems.DEEPSLATE_COMPASS_DIAL.get());
+        boolean offIsDial = offhand.is(JolCraftItems.DEEPSLATE_COMPASS_DIAL.get());
+        boolean mainIsEmpty = main.is(JolCraftItems.EMPTY_DEEPSLATE_COMPASS.get());
+        boolean offIsEmpty = offhand.is(JolCraftItems.EMPTY_DEEPSLATE_COMPASS.get());
+
+        if (!((mainIsDial && offIsEmpty) || (offIsDial && mainIsEmpty))) return;
+
+        if (!level.isClientSide) {
+            ItemStack dial = mainIsDial ? main : offhand;
+            ItemStack empty = mainIsEmpty ? main : offhand;
+            InteractionHand swingHand = mainIsDial ? event.getHand()
+                    : (event.getHand() == InteractionHand.MAIN_HAND ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND);
+
+            // 1. Get group from dial
+            String group = dial.get(JolCraftDataComponents.STRUCTURE_GROUP);
+            if (group == null) return;
+
+            TagKey<Structure> structureTag = DeepslateCompassHelper.getStructureTagForGroup(group);
+
+            GlobalPos targetPos = null;
+            String foundStructureFullId = "unknown";
+
+            if (structureTag != null && player.level() instanceof ServerLevel serverLevel) {
+                try {
+                    targetPos = DiscoveredStructuresHelper.findNearestUndiscoveredStructure(
+                            serverLevel,
+                            structureTag,
+                            player.blockPosition(),
+                            100,
+                            player
+                    );
+
+                    if (targetPos != null) {
+                        // Find the full structure id for tooltip (match first structure at target position)
+                        var registry = serverLevel.registryAccess().lookupOrThrow(Registries.STRUCTURE);
+                        var allRefs = serverLevel.structureManager().getAllStructuresAt(targetPos.pos());
+
+                        for (Structure structure : allRefs.keySet()) {
+                            for (Holder<Structure> holder : registry.getTagOrEmpty(structureTag)) {
+                                if (holder.value() == structure) {
+                                    ResourceLocation id = registry.getKey(structure);
+                                    if (id != null) {
+                                        foundStructureFullId = id.toString();
+                                    }
+                                    break;
+                                }
+                            }
+                            if (!foundStructureFullId.equals("unknown")) break;
+                        }
+
+                        // fallback: use group as the id if still unknown
+                        if (foundStructureFullId.equals("unknown")) {
+                            foundStructureFullId = group;
+                        }
+                    }
+                } catch (Exception e) {
+                    targetPos = null;
+                }
+            }
+
+            if (targetPos == null) {
+                // Optionally, notify player: no undiscovered structures found
+                return;
+            }
+
+            // 3. Create new compass
+            ItemStack result = new ItemStack(JolCraftItems.DEEPSLATE_COMPASS.get());
+
+            // a) Dye color
+            var dyeColor = empty.get(DataComponents.DYED_COLOR);
+            if (dyeColor != null) {
+                result.set(DataComponents.DYED_COLOR, dyeColor);
+            }
+            // b) Structure group (full id)
+            result.set(JolCraftDataComponents.STRUCTURE_GROUP, foundStructureFullId);
+
+            // c) Dial color
+            var dialColor = dial.get(JolCraftDataComponents.DIAL_COLOR.get());
+            if (dialColor != null) {
+                result.set(JolCraftDataComponents.DIAL_COLOR, dialColor);
+            }
+
+            // d) Target pos (with correct Y)
+            result.set(JolCraftDataComponents.DEEPSLATE_COMPASS_TARGET, targetPos);
+
+            // 4. Consume and give result
+            dial.shrink(1);
+            empty.shrink(1);
+
+            if (!player.addItem(result)) {
+                player.drop(result, false);
+            }
+
+            player.swing(swingHand, true);
+            level.playSound(null, player.blockPosition(), SoundEvents.METAL_HIT, SoundSource.PLAYERS, 1.0F, 1.4F);
+        }
+
+        event.setCancellationResult(InteractionResult.SUCCESS);
+        event.setCanceled(true);
+    }
+
+    @SubscribeEvent
+    public static void onPlayerTick(PlayerTickEvent.Post event) {
+        Player player = event.getEntity();
+        if (!(player.level() instanceof ServerLevel serverLevel)) return;
+        if (player.tickCount % 5 != 0) return;
+
+        for (ItemStack stack : player.getInventory().items) {
+            if (!stack.is(JolCraftItems.DEEPSLATE_COMPASS.get())) continue;
+
+            GlobalPos tracked = stack.get(JolCraftDataComponents.DEEPSLATE_COMPASS_TARGET);
+            String trackedStructureId = stack.get(JolCraftDataComponents.STRUCTURE_GROUP);
+            if (tracked == null || trackedStructureId == null || trackedStructureId.isEmpty()) continue;
+            if (!player.level().dimension().equals(tracked.dimension())) continue;
+
+            var structureRegistry = serverLevel.registryAccess().lookupOrThrow(Registries.STRUCTURE);
+            ResourceLocation trackedStructureKey = ResourceLocation.tryParse(trackedStructureId);
+            if (trackedStructureKey == null) continue;
+            var trackedStructureHolder = structureRegistry.get(trackedStructureKey).orElse(null);
+            if (trackedStructureHolder == null) continue;
+
+            // --- Use the *tracked* structure entrance X/Z, but use player Y for the check
+            BlockPos trackedPosXZ = BlockPos.containing(tracked.pos().getX(), player.blockPosition().getY(), tracked.pos().getZ());
+            StructureManager structureManager = serverLevel.structureManager();
+            StructureStart start = structureManager.getStructureAt(trackedPosXZ, trackedStructureHolder.value());
+
+            if (start == null || !start.isValid()) {
+                System.out.println("No valid StructureStart at: " + trackedPosXZ + " for " + trackedStructureId);
+                continue;
+            }
+            BoundingBox box = start.getBoundingBox();
+
+            // 1. Only trigger if player is inside this *specific* structure bounding box (all XYZ)
+            if (!box.isInside(player.blockPosition())) {
+                // Uncomment to debug position issues:
+                // System.out.println("Player at " + player.blockPosition() + " not in bounding box " + box + " for structure at " + trackedPosXZ);
+                continue;
+            }
+
+            // 2. Use entrance XZ and the bounding box's center Y for what gets saved (to prevent dupe)
+            BlockPos patchedEntrance = BlockPos.containing(tracked.pos().getX(), box.getCenter().getY(), tracked.pos().getZ());
+
+            boolean alreadyDiscovered = DiscoveredStructuresHelper.getDiscoveredStructures(player).stream()
+                    .anyMatch(gp -> gp.dimension().equals(tracked.dimension()) && gp.pos().equals(patchedEntrance));
+            if (alreadyDiscovered) continue;
+
+            // --- Discovery action ---
+            DiscoveredStructuresHelper.addDiscoveredStructureServer(player, GlobalPos.of(tracked.dimension(), patchedEntrance));
+
+            ItemStack emptyCompass = new ItemStack(JolCraftItems.EMPTY_DEEPSLATE_COMPASS.get());
+            var dye = stack.get(DataComponents.DYED_COLOR);
+            if (dye != null) emptyCompass.set(DataComponents.DYED_COLOR, dye);
+
+            int idx = player.getInventory().items.indexOf(stack);
+            player.getInventory().items.set(idx, emptyCompass);
+
+            player.displayClientMessage(
+                    Component.translatable("tooltip.jolcraft.structure.discovered")
+                            .withStyle(ChatFormatting.GRAY)
+                            .append(Component.translatable("tooltip.jolcraft.structure." + trackedStructureId)
+                                    .withStyle(ChatFormatting.BLUE)), true
+            );
+
+            if (player instanceof ServerPlayer serverPlayer) {
+                JolCraftNetworking.sendToClient(serverPlayer,
+                        new ClientboundPlaySoundPacket(SoundEvents.ITEM_BREAK.location(),
+                                player.getX(), player.getY(), player.getZ(),
+                                SoundSource.PLAYERS, 1.0F, 1.5F));
+                JolCraftNetworking.sendToClient(serverPlayer,
+                        new ClientboundPlaySoundPacket(JolCraftSounds.LEVEL_UP.get().location(),
+                                player.getX(), player.getY(), player.getZ(),
+                                SoundSource.PLAYERS, 1.0F, 1.0F));
+            }
+
+            break;
+        }
+    }
 
 
     @SubscribeEvent
@@ -1089,7 +1278,7 @@ public class JolCraftGameEvents {
     }
 
     @SubscribeEvent
-    public static void onRightClickItem(PlayerInteractEvent.RightClickItem event) {
+    public static void onSpannerRightClickItem(PlayerInteractEvent.RightClickItem event) {
         Player player = event.getEntity();
         Level level = event.getLevel();
         ItemStack main = event.getItemStack();

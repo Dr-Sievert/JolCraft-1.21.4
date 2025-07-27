@@ -4,7 +4,6 @@ import com.google.gson.JsonObject;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.client.color.item.Dye;
-import net.minecraft.client.color.item.ItemTintSource;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.client.data.models.ModelProvider;
@@ -19,7 +18,6 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.component.DyedItemColor;
 import net.minecraft.world.item.equipment.EquipmentAsset;
 import net.minecraft.world.item.equipment.EquipmentAssets;
 import net.minecraft.world.item.equipment.trim.TrimMaterial;
@@ -34,7 +32,7 @@ import net.sievert.jolcraft.block.custom.crop.BarleyCropBlock;
 import net.sievert.jolcraft.block.custom.crop.FesterlingCropBlock;
 import net.sievert.jolcraft.block.custom.crop.HopsCropBottomBlock;
 import net.sievert.jolcraft.block.custom.crop.HopsCropTopBlock;
-import net.sievert.jolcraft.client.DialColor;
+import net.sievert.jolcraft.client.compass.DialColor;
 import net.sievert.jolcraft.item.armor.JolCraftEquipmentAssets;
 import net.sievert.jolcraft.item.JolCraftItems;
 import net.sievert.jolcraft.item.trim.JolCraftTrimMaterials;
@@ -71,7 +69,6 @@ public class JolCraftModelProvider extends ModelProvider {
                 JolCraftItems.EMPTY_DEEPSLATE_COMPASS.get(),
                 new Dye(0xD3D3D3)
         );
-
         createHearth(JolCraftBlocks.HEARTH.get(), blockModels);
 
         //Mithril
@@ -944,7 +941,8 @@ public class JolCraftModelProvider extends ModelProvider {
         return BuiltInRegistries.ITEM.listElements()
                 .filter(holder -> holder.getKey().location().getNamespace().equals(modId))
                 .filter(holder -> !holder.value().equals(JolCraftItems.STRONGBOX_ITEM.get()))
-                .filter(holder -> !holder.value().equals(JolCraftItems.DEEPSLATE_COMPASS.get()));
+                .filter(holder -> !holder.value().equals(JolCraftItems.DEEPSLATE_COMPASS.get()))
+                .filter(holder -> !holder.value().equals(JolCraftItems.DEEPSLATE_COMPASS_DIAL.get()));
 
     }
 

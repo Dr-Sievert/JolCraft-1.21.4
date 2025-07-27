@@ -1,0 +1,16 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "jolcraft:item/deepslate_compass_dial",
+    "tints": [
+      {
+        "type": "minecraft:constant",
+        "value": -1
+      },
+      {
+        "type": "jolcraft:dial_color",
+        "default": 13882323
+      }
+    ]
+  }
+}

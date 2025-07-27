@@ -17,6 +17,9 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.saveddata.maps.MapDecorationTypes;
 import net.sievert.jolcraft.JolCraft;
+import net.sievert.jolcraft.client.compass.DialItemColor;
+import net.sievert.jolcraft.client.compass.StructureGroupColorHelper;
+import net.sievert.jolcraft.data.JolCraftDataComponents;
 import net.sievert.jolcraft.data.JolCraftTags;
 import net.sievert.jolcraft.entity.ai.goal.*;
 import net.sievert.jolcraft.entity.ai.goal.dwarf.*;
@@ -27,7 +30,7 @@ public class DwarfExplorerEntity extends AbstractDwarfEntity {
 
     public DwarfExplorerEntity(EntityType<? extends AbstractDwarfEntity> entityType, Level level) {
         super(entityType, level);
-        this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(Items.FILLED_MAP));
+        this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(JolCraftItems.EMPTY_DEEPSLATE_COMPASS.get()));
         this.setItemSlot(EquipmentSlot.LEGS, new ItemStack(Items.LEATHER_LEGGINGS));
         this.setItemSlot(EquipmentSlot.FEET, new ItemStack(Items.LEATHER_BOOTS));
         this.instanceTrades = createRandomizedExplorerTrades();
@@ -91,17 +94,33 @@ public class DwarfExplorerEntity extends AbstractDwarfEntity {
         return AbstractDwarfEntity.toIntMap(ImmutableMap.of(
                 // Novice
                 1, new DwarfTrades.ItemListing[] {
-                        new DwarfTrades.ItemsForGold(Items.STICK, 1, 4, 2, 8, 6, 500),
+                        new DwarfTrades.ItemsForGold(JolCraftItems.EMPTY_DEEPSLATE_COMPASS.get(), 5, 10,  1, 3, 1),
+                        new DwarfTrades.ItemsAndGoldToItemsWithData(
+                                Items.IRON_NUGGET, 1,
+                                5,
+                                JolCraftItems.DEEPSLATE_COMPASS_DIAL.get(), 1,
+                                3, 1, 0F,
+                                (stack) -> {
+                                    String group = "dwarven_structures";
+                                    stack.set(JolCraftDataComponents.STRUCTURE_GROUP, group);
+                                    stack.set(JolCraftDataComponents.DIAL_COLOR, new DialItemColor(StructureGroupColorHelper.getColor(group)));
+                                }
+                        ),
+                        new DwarfTrades.ItemsAndGoldToItemsWithData(
+                                Items.IRON_NUGGET, 1,
+                                5,
+                                JolCraftItems.DEEPSLATE_COMPASS_DIAL.get(), 1,
+                                3, 0, 0F,
+                                (stack) -> {
+                                    String group = "ancient_structures";
+                                    stack.set(JolCraftDataComponents.STRUCTURE_GROUP, group);
+                                    stack.set(JolCraftDataComponents.DIAL_COLOR, new DialItemColor(StructureGroupColorHelper.getColor(group)));
+                                }
+                        ),
+
                 },
                 // Apprentice
                 2, new DwarfTrades.ItemListing[] {
-                        new DwarfTrades.TreasureMapForGold(
-                                8, // min cost
-                                JolCraftTags.Structures.ON_FORGE_EXPLORER_MAPS,
-                                "filled_map.forge",
-                                MapDecorationTypes.TARGET_X,
-                                1, 10
-                        )
                 },
                 // Journeyman
                 3, new DwarfTrades.ItemListing[] {

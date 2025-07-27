@@ -1,15 +1,16 @@
 package net.sievert.jolcraft.data;
 
 import com.mojang.serialization.Codec;
+import net.minecraft.core.GlobalPos;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.network.codec.ByteBufCodecs;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.sievert.jolcraft.JolCraft;
-import net.sievert.jolcraft.client.DialItemColor;
+import net.sievert.jolcraft.client.compass.DialItemColor;
 import net.sievert.jolcraft.util.dwarf.bounty.BountyData;
+import net.minecraft.network.codec.ByteBufCodecs;
 
 import java.util.function.UnaryOperator;
 
@@ -51,6 +52,26 @@ public class JolCraftDataComponents {
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Boolean>> BOUNTY_COMPLETE =
             register("bounty_complete", builder -> builder.persistent(Codec.BOOL));
 
+    //Compass
+
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<String>> STRUCTURE_GROUP =
+            register("structure_group", builder -> builder
+                    .persistent(Codec.STRING)
+                    .networkSynchronized(ByteBufCodecs.STRING_UTF8)
+            );
+
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<DialItemColor>> DIAL_COLOR =
+            register("dial_color", builder -> builder
+                    .persistent(DialItemColor.CODEC)
+                    .networkSynchronized(DialItemColor.STREAM_CODEC)
+            );
+
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<GlobalPos>> DEEPSLATE_COMPASS_TARGET =
+            register("deepslate_compass_target", builder -> builder
+                    .persistent(GlobalPos.CODEC)
+                    .networkSynchronized(GlobalPos.STREAM_CODEC)
+            );
+
     //Brewing
 
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<String>> HOPS =
@@ -72,11 +93,6 @@ public class JolCraftDataComponents {
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> COIN_POUCH_AMOUNT =
             register("coin_pouch_amount", builder -> builder.persistent(Codec.INT));
 
-    public static final DeferredHolder<DataComponentType<?>, DataComponentType<DialItemColor>> DIAL_COLOR =
-            register("dial_color", builder -> builder
-                    .persistent(DialItemColor.CODEC)
-                    .networkSynchronized(DialItemColor.STREAM_CODEC)
-            );
 
     private static <T>DeferredHolder<DataComponentType<?>, DataComponentType<T>> register(String name, UnaryOperator<DataComponentType.Builder<T>> builderOperator) {
         return DATA_COMPONENT_TYPES.register(name, () -> builderOperator.apply(DataComponentType.builder()).build());

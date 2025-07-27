@@ -32,7 +32,6 @@ public class JolCraftCreativeModeTabs {
                         pOutput.accept(JolCraftItems.DEV_KEY);
 
                         pOutput.accept(JolCraftItems.EMPTY_DEEPSLATE_COMPASS);
-                        pOutput.accept(JolCraftItems.DEEPSLATE_COMPASS);
 
                         //pOutput.accept(PotionContents.createItemStack(Items.POTION, JolCraftPotions.CURSE));
 

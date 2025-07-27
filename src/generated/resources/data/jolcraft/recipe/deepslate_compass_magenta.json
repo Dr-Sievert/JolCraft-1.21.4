@@ -6,11 +6,6 @@
     "minecraft:brown_dye"
   ],
   "result": {
-    "components": {
-      "minecraft:dyed_color": {
-        "rgb": 12801229
-      }
-    },
     "count": 1,
     "id": "jolcraft:deepslate_compass"
   }

@@ -12,6 +12,18 @@ public class InfoPageHelper {
                 new InfoPageRecipe(
                         new ItemStack(JolCraftItems.STRONGBOX_ITEM.get()),
                         Component.translatable("jei.jolcraft.info_page.strongbox")
+                ),
+                new InfoPageRecipe(
+                        new ItemStack(JolCraftItems.EMPTY_DEEPSLATE_COMPASS.get()),
+                        Component.translatable("jei.jolcraft.info_page.empty_deepslate_compass")
+                ),
+                new InfoPageRecipe(
+                        new ItemStack(JolCraftItems.DEEPSLATE_COMPASS_DIAL.get()),
+                        Component.translatable("jei.jolcraft.info_page.deepslate_compass_dial")
+                ),
+                new InfoPageRecipe(
+                        new ItemStack(JolCraftItems.DEEPSLATE_COMPASS.get()),
+                        Component.translatable("jei.jolcraft.info_page.deepslate_compass")
                 )
         );
     }
