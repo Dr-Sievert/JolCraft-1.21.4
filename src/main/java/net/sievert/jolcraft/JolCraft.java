@@ -15,6 +15,7 @@ import net.sievert.jolcraft.block.entity.JolCraftBlockEntities;
 import net.sievert.jolcraft.client.CoinPouchTooltipRenderer;
 import net.sievert.jolcraft.data.JolCraftAttachments;
 import net.sievert.jolcraft.data.JolCraftDataComponents;
+import net.sievert.jolcraft.data.JolCraftStats;
 import net.sievert.jolcraft.data.custom.item.CoinPouchTooltip;
 import net.sievert.jolcraft.effect.JolCraftEffects;
 import net.sievert.jolcraft.entity.JolCraftEntities;
@@ -84,19 +85,25 @@ public class JolCraft
         JolCraftProcessors.register(modEventBus);
         JolCraftBlockPredicateTypes.register(modEventBus);
         JolCraftAttachments.register(modEventBus);
+        JolCraftStats.register(modEventBus);
         JolCraftEquipmentAssets.register(modEventBus);
         JolCraftRecipes.register(modEventBus);
         JolCraftAttributes.register(modEventBus);
         JolCraftStructures.DEFERRED_REGISTRY_STRUCTURE.register(modEventBus);
 
-        //Server tick
-        ServerTickHandler.register();
-
+        modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(JolCraftNetworking::register);
         modEventBus.addListener(JolCraftCriteriaTriggers::register);
 
+        //Server tick
+        ServerTickHandler.register();
+
         // Register the config file
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+    }
+
+    private void commonSetup(final FMLCommonSetupEvent event) {
+        event.enqueueWork(JolCraftStats::initializeStats);
     }
 
     public static ResourceLocation locate(String path) {

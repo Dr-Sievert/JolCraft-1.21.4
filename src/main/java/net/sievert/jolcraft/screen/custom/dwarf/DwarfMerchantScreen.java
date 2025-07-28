@@ -94,21 +94,32 @@ public class DwarfMerchantScreen extends AbstractContainerScreen<DwarfMerchantMe
     }
 
     @Override
-    protected void renderLabels(GuiGraphics p_283337_, int p_282009_, int p_283691_) {
-        int i = this.menu.getTraderLevel();
-        if (i > 0 && i <= 5 && this.menu.showProgressBar()) {
-            Component component = Component.translatable("merchant.title", this.title, Component.translatable("merchant.level." + i));
-            int j = this.font.width(component);
-            int k = 49 + this.imageWidth / 2 - j / 2;
-            p_283337_.drawString(this.font, component, k, 6, 0xDDDDDD, false);
-        } else {
-            p_283337_.drawString(this.font, this.title, 49 + this.imageWidth / 2 - this.font.width(this.title) / 2, 6, 0xDDDDDD, false);
-        }
+    protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
+        int level = this.menu.getTraderLevel();
+        boolean showLvl = this.menu.showLevel();
 
-        p_283337_.drawString(this.font, this.playerInventoryTitle, this.inventoryLabelX, this.inventoryLabelY, 0xDDDDDD, false);
-        int l = this.font.width(TRADES_LABEL);
-        p_283337_.drawString(this.font, TRADES_LABEL, 5 - l / 2 + 48, 6, 0xDDDDDD, false);
+        // Always show mob's title/name, possibly with rank
+        Component displayTitle;
+        if (showLvl && level > 0 && level <= 5) {
+            // Show "Dwarf - Master", etc
+            Component rank = Component.translatable("merchant.level." + level);
+            displayTitle = Component.translatable("merchant.title", this.title, rank);
+        } else {
+            // Only show "Dwarf"
+            displayTitle = this.title;
+        }
+        int titleX = 49 + this.imageWidth / 2 - this.font.width(displayTitle) / 2;
+        graphics.drawString(this.font, displayTitle, titleX, 6, 0xDDDDDD, false);
+
+        // Player inventory
+        graphics.drawString(this.font, this.playerInventoryTitle, this.inventoryLabelX, this.inventoryLabelY, 0xDDDDDD, false);
+
+        // Trades label
+        int tradesLabelWidth = this.font.width(TRADES_LABEL);
+        graphics.drawString(this.font, TRADES_LABEL, 5 - tradesLabelWidth / 2 + 48, 6, 0xDDDDDD, false);
+
     }
+
 
     @Override
     protected void renderBg(GuiGraphics p_283072_, float p_281275_, int p_282312_, int p_282984_) {

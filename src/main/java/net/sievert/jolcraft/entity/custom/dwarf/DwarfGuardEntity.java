@@ -76,6 +76,11 @@ public class DwarfGuardEntity extends AbstractDwarfEntity {
     }
 
     @Override
+    protected int getRequiredTier() {
+        return 1;
+    }
+
+    @Override
     public ResourceLocation getProfessionId() {
         return ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "dwarf_guard");
     }
@@ -123,7 +128,7 @@ public class DwarfGuardEntity extends AbstractDwarfEntity {
         }
 
         // Reputation check
-        InteractionResult repCheck = this.reputationCheck(player, 1);
+        InteractionResult repCheck = this.reputationCheck(player, getRequiredTier());
         if (repCheck != InteractionResult.SUCCESS) {
             return repCheck;
         }

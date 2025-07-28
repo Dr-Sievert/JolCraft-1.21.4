@@ -88,6 +88,10 @@ public class JolCraftBlockTagProvider extends BlockTagsProvider {
                 .add(JolCraftBlocks.DUSKHOLD_CROP_TOP.get())
                 .add(JolCraftBlocks.KRANDONIAN_CROP_TOP.get())
                 .add(JolCraftBlocks.YANILLIAN_CROP_TOP.get());
+
+        tag(JolCraftTags.Blocks.VERDANT)
+                .add(JolCraftBlocks.VERDANT_SOIL.get())
+                .add(JolCraftBlocks.VERDANT_FARMLAND.get());
     }
 
 }

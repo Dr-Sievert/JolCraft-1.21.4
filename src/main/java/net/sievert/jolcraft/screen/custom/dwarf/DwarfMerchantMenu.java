@@ -20,6 +20,7 @@ public class DwarfMerchantMenu extends AbstractContainerMenu {
     private final DwarfMerchantContainer tradeContainer;
     private int merchantLevel;
     private boolean showProgressBar;
+    private boolean showLevel;
     private boolean canRestock;
 
     public DwarfMerchantMenu(int containerId, Inventory inventory, FriendlyByteBuf buf) {
@@ -205,6 +206,14 @@ public class DwarfMerchantMenu extends AbstractContainerMenu {
 
     public boolean showProgressBar() {
         return this.showProgressBar;
+    }
+
+    public void setshowLevel(boolean showLevel) {
+        this.showLevel = showLevel;
+    }
+
+    public boolean showLevel() {
+        return this.showLevel;
     }
 
     @Override

@@ -223,6 +223,13 @@ public class JolCraftItemTagProvider extends ItemTagsProvider {
 
         //Custom
 
+        tag(JolCraftTags.Items.REPUTATION_TABLETS)
+                .add(JolCraftItems.REPUTATION_TABLET_0.get())
+                .add(JolCraftItems.REPUTATION_TABLET_1.get())
+                .add(JolCraftItems.REPUTATION_TABLET_2.get())
+                .add(JolCraftItems.REPUTATION_TABLET_3.get())
+                .add(JolCraftItems.REPUTATION_TABLET_4.get());
+
         tag(JolCraftTags.Items.INK_AND_QUILLS)
                 .add(JolCraftItems.QUILL_FULL.get())
                 .add(JolCraftItems.QUILL_HALF.get())

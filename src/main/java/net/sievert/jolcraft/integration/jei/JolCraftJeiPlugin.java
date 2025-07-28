@@ -6,10 +6,12 @@ import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import net.sievert.jolcraft.integration.jei.custom.trade.DwarfTradeCategory;
 import net.sievert.jolcraft.integration.jei.custom.info.InfoPageCategory;
 import net.sievert.jolcraft.integration.jei.custom.trade.DwarfTradeJeiHelper;
 import net.sievert.jolcraft.integration.jei.custom.info.InfoPageHelper;
+import net.sievert.jolcraft.item.JolCraftItems;
 import org.jetbrains.annotations.NotNull;
 
 @JeiPlugin
@@ -45,8 +47,6 @@ public class JolCraftJeiPlugin implements IModPlugin {
             );
         }
     }
-
-
 
 
 

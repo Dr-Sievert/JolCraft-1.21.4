@@ -55,17 +55,6 @@ public class DwarvenLexiconItem extends Item {
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         boolean knows = DwarvenLanguageHelper.knowsDwarvishClient();
-
-        if (Screen.hasShiftDown()) {
-            // Detailed (Shift) tooltip
-            if (knows) {
-                tooltip.add(Component.translatable("tooltip.jolcraft.dwarven_lexicon.shift")
-                        .withStyle(ChatFormatting.GRAY));
-            } else {
-                tooltip.add(Component.translatable("tooltip.jolcraft.dwarven_lexicon.locked")
-                        .withStyle(ChatFormatting.GRAY));
-            }
-        } else {
             // Normal summary
             if (knows) {
                 tooltip.add(Component.translatable("tooltip.jolcraft.dwarven_lexicon.unlocked")
@@ -74,12 +63,7 @@ public class DwarvenLexiconItem extends Item {
                 tooltip.add(Component.translatable("tooltip.jolcraft.dwarven_lexicon.locked")
                         .withStyle(ChatFormatting.GRAY));
             }
-            Component shiftKey = Component.literal("Shift").withStyle(ChatFormatting.BLUE);
-            tooltip.add(Component.translatable("tooltip.jolcraft.shift", shiftKey)
-                    .withStyle(ChatFormatting.DARK_GRAY));
-        }
-
-        super.appendHoverText(stack, context, tooltip, flag);
+            super.appendHoverText(stack, context, tooltip, flag);
     }
 
 }

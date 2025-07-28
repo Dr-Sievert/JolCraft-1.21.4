@@ -73,7 +73,6 @@ public class DwarfGuildmasterEntity extends AbstractDwarfEntity {
         this.lastUnlockedLevel = tag.getInt("LastUnlockedLevel");
     }
 
-
     //Attributes
     public static AttributeSupplier.Builder createAttributes() {
         return DwarfEntity.createLivingAttributes()
@@ -101,6 +100,11 @@ public class DwarfGuildmasterEntity extends AbstractDwarfEntity {
     @Override
     public boolean neverEndorse(Player player) {
         return true;
+    }
+
+    @Override
+    public boolean showProgressBar() {
+        return false;
     }
 
     @Override
@@ -318,7 +322,7 @@ public class DwarfGuildmasterEntity extends AbstractDwarfEntity {
                         //Novice
                         1,
                         new DwarfTrades.ItemListing[]{
-                                new DwarfTrades.ItemsForGold(JolCraftItems.REPUTATION_TABLET_0.get(), 15, 1, 5, 1),
+                                new DwarfTrades.ItemsForGold(JolCraftItems.REPUTATION_TABLET_0.get(), 15, 1, 5, 0),
                                 new DwarfTrades.ItemsAndGoldToItems(JolCraftItems.CONTRACT_SIGNED.get(), 1, 30, JolCraftItems.CONTRACT_MERCHANT.get(), 1, 1, 0, 0.05F),
                                 new DwarfTrades.ItemsAndGoldToItems(JolCraftItems.CONTRACT_SIGNED.get(), 1, 30, JolCraftItems.CONTRACT_HISTORIAN.get(), 1, 1, 0, 0.05F),
                                 new DwarfTrades.ItemsAndGoldToItems(JolCraftItems.CONTRACT_SIGNED.get(), 1, 30, JolCraftItems.CONTRACT_SCRAPPER.get(), 1, 1, 0, 0.05F)

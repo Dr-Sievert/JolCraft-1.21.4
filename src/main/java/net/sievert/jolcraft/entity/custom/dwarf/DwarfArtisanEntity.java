@@ -6,6 +6,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -57,6 +59,11 @@ public class DwarfArtisanEntity extends AbstractDwarfEntity {
     }
 
     @Override
+    protected int getRequiredTier() {
+        return 2;
+    }
+
+    @Override
     public ResourceLocation getProfessionId() {
         return ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "dwarf_artisan");
     }
@@ -98,6 +105,25 @@ public class DwarfArtisanEntity extends AbstractDwarfEntity {
                 return level.getBlockState(pos).is(Blocks.COBBLED_DEEPSLATE);
             }
         });
+    }
+
+    @Override
+    public InteractionResult mobInteract(Player player, InteractionHand hand) {
+
+        // 🧠 Language check
+        InteractionResult langCheck = this.languageCheck(player);
+        if (langCheck != InteractionResult.SUCCESS) {
+            return langCheck;
+        }
+
+        // Reputation check
+        InteractionResult repCheck = this.reputationCheck(player, getRequiredTier());
+        if (repCheck != InteractionResult.SUCCESS) {
+            return repCheck;
+        }
+
+        // Call parent for all other interactions (contracts, trades, etc)
+        return super.mobInteract(player, hand);
     }
 
     //Trades

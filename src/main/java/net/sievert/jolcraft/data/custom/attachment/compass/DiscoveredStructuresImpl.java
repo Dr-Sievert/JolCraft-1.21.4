@@ -33,6 +33,17 @@ public class DiscoveredStructuresImpl implements DiscoveredStructures {
         return List.copyOf(discovered); // immutable list
     }
 
+    private int discoveryScore = 0;
+
+    public int getScore() {
+        return discoveryScore;
+    }
+
+    public void addScore(int amount) {
+        this.discoveryScore += amount;
+    }
+
+
     // --- Serialization ---
     @Override
     public CompoundTag serializeNBT(HolderLookup.Provider provider) {
@@ -45,6 +56,7 @@ public class DiscoveredStructuresImpl implements DiscoveredStructures {
             list.add(t);
         }
         tag.put("discovered", list);
+        tag.putInt("score", discoveryScore);
         return tag;
     }
 
@@ -56,13 +68,12 @@ public class DiscoveredStructuresImpl implements DiscoveredStructures {
             CompoundTag t = (CompoundTag) base;
             String dimStr = t.getString("dim");
             long posLong = t.getLong("pos");
-
             ResourceLocation dimRL = ResourceLocation.tryParse(dimStr);
             if (dimRL == null) continue;
-
             ResourceKey<Level> dimKey = ResourceKey.create(Registries.DIMENSION, dimRL);
-            BlockPos pos = BlockPos.of(posLong);
-            discovered.add(GlobalPos.of(dimKey, pos));
+            discovered.add(GlobalPos.of(dimKey, BlockPos.of(posLong)));
         }
+        discoveryScore = tag.getInt("score");
     }
+
 }

@@ -5,6 +5,7 @@ import net.minecraft.core.GlobalPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Player;
@@ -12,10 +13,13 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement;
+import net.sievert.jolcraft.data.JolCraftStats;
 import net.sievert.jolcraft.data.custom.attachment.compass.DiscoveredStructures;
+import net.sievert.jolcraft.data.custom.attachment.compass.DiscoveredStructuresImpl;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -46,12 +50,41 @@ public class DiscoveredStructuresHelper {
     }
 
     /**
-     * SERVER-SIDE: Add a structure location
+     * SERVER-SIDE: Add a structure location and structure-based discovery score.
      */
-    public static void addDiscoveredStructureServer(Player player, GlobalPos pos) {
-        if (player == null || pos == null) return;
+    public static void addDiscoveredStructureServer(Player player, GlobalPos pos, ResourceLocation structureId) {
+        if (player == null || pos == null || structureId == null) return;
+
         DiscoveredStructures ds = DiscoveredStructures.get(player);
-        if (ds != null) ds.addDiscovered(pos);
+        if (ds == null) return;
+
+        // Only act if this is a new discovery
+        if (ds.addDiscovered(pos)) {
+            JolCraftStats.awardStructureDiscovery(player);
+
+            int score = STRUCTURE_SCORES.getOrDefault(structureId, 50);
+            if (ds instanceof DiscoveredStructuresImpl impl) {
+                impl.addScore(score);
+            }
+        }
+    }
+
+    private static final Map<ResourceLocation, Integer> STRUCTURE_SCORES = Map.of(
+            ResourceLocation.fromNamespaceAndPath("minecraft", "trail_ruins"), 25,
+            ResourceLocation.fromNamespaceAndPath("minecraft", "ancient_city"), 100,
+            ResourceLocation.fromNamespaceAndPath("jolcraft", "dwarven_trail_ruin"), 25,
+            ResourceLocation.fromNamespaceAndPath("jolcraft", "forge"), 100
+    );
+
+    /**
+     * Get the player's current structure discovery score (for Explorer dwarf leveling).
+     */
+    public static int getDiscoveryScore(Player player) {
+        DiscoveredStructures ds = DiscoveredStructures.get(player);
+        if (ds instanceof DiscoveredStructuresImpl impl) {
+            return impl.getScore();
+        }
+        return 0;
     }
 
     @Nullable

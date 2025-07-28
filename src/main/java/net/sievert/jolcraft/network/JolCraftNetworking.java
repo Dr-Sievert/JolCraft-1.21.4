@@ -128,6 +128,7 @@ public class JolCraftNetworking {
                 dwarfMenu.setXp(packet.dwarfXp());
                 dwarfMenu.setMerchantLevel(packet.dwarfLevel());
                 dwarfMenu.setShowProgressBar(packet.showProgress());
+                dwarfMenu.setshowLevel(packet.showLevel());
                 dwarfMenu.setCanRestock(packet.canRestock());
             }
         });

@@ -1,4 +1,4 @@
-// 1.21.4	2025-07-26T21:49:39.0955872	Tags for minecraft:item mod id jolcraft
+// 1.21.4	2025-07-28T21:29:37.5195988	Tags for minecraft:item mod id jolcraft
 408625162012b71b4ebe01382789c1cb4648c851 data/c/tags/item/crops.json
 5964f0cd5f51d73982612239044d1c95430b5c1e data/c/tags/item/drinks.json
 d2f15c155e30f0429ba5bcea12b2853f30b27a90 data/c/tags/item/drinks/milk.json
@@ -36,7 +36,7 @@ a2020a4c90516c8149f8c48d50bfbf44662a9e4b data/jolcraft/tags/item/mithril_salvage
 53e3575a480034fde8e41051fa01a3dcdacb589b data/jolcraft/tags/item/redstone_salvage.json
 3ce79c2d874265007b52b4c31903e5a95c5ca8a3 data/jolcraft/tags/item/repairs_deepslate.json
 1e48b47117300da60f201cd262fec0c2bf1ca530 data/jolcraft/tags/item/repairs_mithril.json
-c166a84829dcb4ff9faa0c8206c02f58e0b1a869 data/jolcraft/tags/item/reputation_tablets.json
+bdf74ab9566c687311ebdf93149d4d42e477ee89 data/jolcraft/tags/item/reputation_tablets.json
 fd2ae1027d835a34c3913a9c9bf3e54219403b0d data/jolcraft/tags/item/signed_contracts.json
 d93fe5c56c7aa54d5fe4fe63e5df038319fbd62f data/jolcraft/tags/item/spanners.json
 19065951723629a3aed519ea845029fca03db563 data/jolcraft/tags/item/spawn_eggs.json

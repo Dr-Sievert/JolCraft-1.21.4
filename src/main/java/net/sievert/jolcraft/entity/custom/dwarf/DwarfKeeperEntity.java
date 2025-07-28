@@ -56,6 +56,11 @@ public class DwarfKeeperEntity extends AbstractDwarfEntity {
     }
 
     @Override
+    protected int getRequiredTier() {
+        return 1;
+    }
+
+    @Override
     public ResourceLocation getProfessionId() {
         return ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "dwarf_keeper");
     }
@@ -91,8 +96,6 @@ public class DwarfKeeperEntity extends AbstractDwarfEntity {
 
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
-        ItemStack itemstack = player.getItemInHand(hand);
-        boolean client = this.level().isClientSide;
 
         // 🧠 Language check
         InteractionResult langCheck = this.languageCheck(player);
@@ -101,11 +104,10 @@ public class DwarfKeeperEntity extends AbstractDwarfEntity {
         }
 
         // Reputation check
-        InteractionResult repCheck = this.reputationCheck(player, 1);
+        InteractionResult repCheck = this.reputationCheck(player, getRequiredTier());
         if (repCheck != InteractionResult.SUCCESS) {
             return repCheck;
         }
-
 
         // Call parent for all other interactions (contracts, trades, etc)
         return super.mobInteract(player, hand);

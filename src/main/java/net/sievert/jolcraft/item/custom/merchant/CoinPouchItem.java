@@ -199,22 +199,6 @@ public class CoinPouchItem extends Item {
         stack.set(JolCraftDataComponents.COIN_POUCH_AMOUNT.get(), 0);
     }
 
-    //Tooltip
-
-    @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-        if (net.minecraft.client.gui.screens.Screen.hasShiftDown()) {
-            tooltip.add(net.minecraft.network.chat.Component.translatable("tooltip.jolcraft.coin_pouch")
-                    .withStyle(net.minecraft.ChatFormatting.GRAY));
-        } else {
-            net.minecraft.network.chat.Component shiftKey = net.minecraft.network.chat.Component.literal("Shift")
-                    .withStyle(net.minecraft.ChatFormatting.BLUE);
-            tooltip.add(net.minecraft.network.chat.Component.translatable("tooltip.jolcraft.shift", shiftKey)
-                    .withStyle(net.minecraft.ChatFormatting.DARK_GRAY));
-        }
-        super.appendHoverText(stack, context, tooltip, flag);
-    }
-
 
 
 }

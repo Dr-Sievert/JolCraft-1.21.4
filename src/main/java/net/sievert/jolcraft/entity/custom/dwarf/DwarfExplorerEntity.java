@@ -3,12 +3,18 @@ package net.sievert.jolcraft.entity.custom.dwarf;
 import com.google.common.collect.ImmutableMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.npc.VillagerData;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -24,7 +30,12 @@ import net.sievert.jolcraft.data.JolCraftTags;
 import net.sievert.jolcraft.entity.ai.goal.*;
 import net.sievert.jolcraft.entity.ai.goal.dwarf.*;
 import net.sievert.jolcraft.item.JolCraftItems;
+import net.sievert.jolcraft.sound.JolCraftSoundHelper;
+import net.sievert.jolcraft.util.attachment.DiscoveredStructuresHelper;
+import net.sievert.jolcraft.util.dwarf.trade.DwarfMerchantOffer;
 import net.sievert.jolcraft.util.dwarf.trade.DwarfTrades;
+
+import javax.annotation.Nullable;
 
 public class DwarfExplorerEntity extends AbstractDwarfEntity {
 
@@ -55,6 +66,28 @@ public class DwarfExplorerEntity extends AbstractDwarfEntity {
     @Override
     public ItemStack getSignedContractItem() {
         return new ItemStack(JolCraftItems.CONTRACT_EXPLORER.get());
+    }
+
+    @Override
+    protected int getRequiredTier() {
+        return 2;
+    }
+
+    @Override
+    public boolean showProgressBar() {
+        return false;
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getRestockSound() {
+        return SoundEvents.VILLAGER_WORK_CARTOGRAPHER;
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getRerollSound() {
+        return SoundEvents.VILLAGER_WORK_CARTOGRAPHER;
     }
 
     @Override
@@ -89,23 +122,89 @@ public class DwarfExplorerEntity extends AbstractDwarfEntity {
         });
     }
 
+    //Data
+
+    private int lastUnlockedLevel = 0;
+
+    @Override
+    public void addAdditionalSaveData(CompoundTag tag) {
+        super.addAdditionalSaveData(tag);
+        tag.putInt("LastUnlockedLevel", lastUnlockedLevel);
+    }
+
+    @Override
+    public void readAdditionalSaveData(CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+        this.lastUnlockedLevel = tag.getInt("LastUnlockedLevel");
+    }
+
+    @Override
+    public InteractionResult mobInteract(Player player, InteractionHand hand) {
+        ItemStack itemstack = player.getItemInHand(hand);
+
+        // Language check
+        InteractionResult langCheck = this.languageCheck(player);
+        if (langCheck != InteractionResult.SUCCESS) {
+            return langCheck;
+        }
+
+        // Reputation check
+        InteractionResult repCheck = this.reputationCheck(player, getRequiredTier());
+        if (repCheck != InteractionResult.SUCCESS) {
+            return repCheck;
+        }
+
+        // *** SERVER SIDE ONLY for offers, levels, trades ***
+        if (!this.level().isClientSide) {
+            int playerScore = DiscoveredStructuresHelper.getDiscoveryScore(player);
+            int currentLevel = this.getVillagerData().getLevel();
+            int targetLevel = getLevelForScore(playerScore);
+
+            if (targetLevel > currentLevel) {
+                this.setVillagerData(this.getVillagerData().setLevel(targetLevel));
+                this.updateTrades();
+                JolCraftSoundHelper.playDwarfYes(this);
+            }
+
+        }
+
+        return super.mobInteract(player, hand);
+    }
+
+    // Vanilla-like structure discovery thresholds for Explorer Dwarf
+    public static final int[] SCORE_THRESHOLDS = { 0, 10, 70, 150, 250 };
+
+    public static int getLevelForScore(int score) {
+        for (int i = SCORE_THRESHOLDS.length - 1; i >= 0; i--) {
+            if (score >= SCORE_THRESHOLDS[i]) {
+                return i + 1; // Levels are 1-based
+            }
+        }
+        return 1;
+    }
+
     //Trades
     public static Int2ObjectMap<DwarfTrades.ItemListing[]> createRandomizedExplorerTrades() {
         return AbstractDwarfEntity.toIntMap(ImmutableMap.of(
                 // Novice
                 1, new DwarfTrades.ItemListing[] {
-                        new DwarfTrades.ItemsForGold(JolCraftItems.EMPTY_DEEPSLATE_COMPASS.get(), 5, 10,  1, 3, 1),
+                        new DwarfTrades.ItemsForGold(JolCraftItems.EMPTY_DEEPSLATE_COMPASS.get(), 5, 10,  1, 3, 0),
                         new DwarfTrades.ItemsAndGoldToItemsWithData(
                                 Items.REDSTONE, 1,
                                 5,
                                 JolCraftItems.DEEPSLATE_COMPASS_DIAL.get(), 1,
-                                3, 1, 0F,
+                                3, 0, 0F,
                                 (stack) -> {
                                     String group = "dwarven_structures";
                                     stack.set(JolCraftDataComponents.STRUCTURE_GROUP, group);
                                     stack.set(JolCraftDataComponents.DIAL_COLOR, new DialItemColor(StructureGroupColorHelper.getColor(group)));
                                 }
                         ),
+
+
+                },
+                // Apprentice
+                2, new DwarfTrades.ItemListing[] {
                         new DwarfTrades.ItemsAndGoldToItemsWithData(
                                 Items.REDSTONE, 1,
                                 5,
@@ -117,10 +216,6 @@ public class DwarfExplorerEntity extends AbstractDwarfEntity {
                                     stack.set(JolCraftDataComponents.DIAL_COLOR, new DialItemColor(StructureGroupColorHelper.getColor(group)));
                                 }
                         ),
-
-                },
-                // Apprentice
-                2, new DwarfTrades.ItemListing[] {
                 },
                 // Journeyman
                 3, new DwarfTrades.ItemListing[] {
@@ -133,6 +228,47 @@ public class DwarfExplorerEntity extends AbstractDwarfEntity {
                 }
         ));
     }
+
+    @Override
+    protected void updateTrades() {
+        int level = this.getVillagerData().getLevel();
+
+        if (instanceTrades == null) return;
+
+        // If this is the very first time (lastUnlockedLevel == 0, i.e. fresh dwarf)
+        // or if you ever want to forcibly re-initialize (e.g. world load)
+        if (lastUnlockedLevel == 0 || this.getOffers().isEmpty()) {
+            this.getOffers().clear(); // Wipe just in case
+            // Full sweep: add ALL trades up to current level
+            for (int i = 1; i <= level; i++) {
+                DwarfTrades.ItemListing[] listings = instanceTrades.get(i);
+                if (listings != null) {
+                    for (DwarfTrades.ItemListing trade : listings) {
+                        DwarfMerchantOffer offer = trade.getOffer(this, this.random);
+                        if (offer != null) {
+                            this.getOffers().add(offer);
+                        }
+                    }
+                }
+            }
+        } else {
+            // Otherwise, only add new level's trades
+            for (int i = lastUnlockedLevel + 1; i <= level; i++) {
+                DwarfTrades.ItemListing[] listings = instanceTrades.get(i);
+                if (listings != null) {
+                    for (DwarfTrades.ItemListing trade : listings) {
+                        DwarfMerchantOffer offer = trade.getOffer(this, this.random);
+                        if (offer != null) {
+                            this.getOffers().add(offer);
+                        }
+                    }
+                }
+            }
+        }
+
+        lastUnlockedLevel = level;
+    }
+
 
 
 

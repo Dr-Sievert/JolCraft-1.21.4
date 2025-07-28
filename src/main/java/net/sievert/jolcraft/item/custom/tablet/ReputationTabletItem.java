@@ -95,34 +95,6 @@ public class ReputationTabletItem extends Item {
             int statictier = stack.getOrDefault(JolCraftDataComponents.REP_TIER.get(), 0);
             int staticendorsements = stack.getOrDefault(JolCraftDataComponents.REP_ENDORSEMENTS.get(), 0);
             int staticneeded = statictier < ENDORSEMENT_THRESHOLDS.length ? ENDORSEMENT_THRESHOLDS[statictier] : -1;
-
-            if (Screen.hasShiftDown()) {
-                int tier = DwarvenReputationHelper.getClientTier();
-                int endorsements = DwarvenReputationHelper.getClientEndorsementCount();
-                int needed = tier < ENDORSEMENT_THRESHOLDS.length ? ENDORSEMENT_THRESHOLDS[tier] : -1;
-
-                if (endorsements == 0 && tier == 0) {
-                    // Only show how to gain endorsements
-                    tooltip.add(Component.translatable("tooltip.jolcraft.tablet.endorsements_info")
-                            .withStyle(ChatFormatting.GRAY));
-                } else if (endorsements > 0 && tier == 0) {
-                    // Only show how to advance when you have some endorsements
-                    tooltip.add(Component.translatable("tooltip.jolcraft.tablet.advance_info")
-                            .withStyle(ChatFormatting.GRAY));
-                }
-                // Show progress or max
-                if (needed > -1) {
-                    MutableComponent progressPrefix = Component.translatable("tooltip.jolcraft.tablet.progress.prefix")
-                            .withStyle(ChatFormatting.GRAY);
-                    Component progressValue = Component.literal(endorsements + "/" + needed)
-                            .withStyle(ChatFormatting.BLUE);
-                    tooltip.add(progressPrefix.append(progressValue));
-                } else {
-                    tooltip.add(Component.translatable("tooltip.jolcraft.reputation.max_tier")
-                            .withStyle(ChatFormatting.GRAY));
-                }
-            }
-            else {
                 tooltip.add(Component.translatable("tooltip.jolcraft.rep_owner", ownerName)
                         .withStyle(ChatFormatting.GRAY));
                 tooltip.add(Component.translatable("tooltip.jolcraft.reputation_tier")
@@ -130,15 +102,10 @@ public class ReputationTabletItem extends Item {
                         .withStyle(ChatFormatting.GRAY));
                 tooltip.add(Component.translatable("tooltip.jolcraft.endorsement_count", staticendorsements)
                         .withStyle(ChatFormatting.GRAY));
-                Component shiftKey = Component.literal("Shift").withStyle(ChatFormatting.BLUE);
-                tooltip.add(Component.translatable("tooltip.jolcraft.shift", shiftKey)
-                        .withStyle(ChatFormatting.DARK_GRAY));
-            }
         } else {
             tooltip.add(Component.translatable("tooltip.jolcraft.tablet.locked")
                     .withStyle(ChatFormatting.GRAY));
         }
-
         super.appendHoverText(stack, context, tooltip, flag);
     }
 

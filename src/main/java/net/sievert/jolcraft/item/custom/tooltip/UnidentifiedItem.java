@@ -22,6 +22,10 @@ public abstract class UnidentifiedItem extends Item {
         super(properties);
     }
 
+    protected boolean hasShift() {
+        return false;
+    }
+
     @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         if (!level.isClientSide && player instanceof ServerPlayer serverPlayer) {
@@ -69,8 +73,12 @@ public abstract class UnidentifiedItem extends Item {
     /** Must define in subclasses: which item to return upon identification. */
     protected abstract ItemStack getRandomIdentifiedItem(ServerPlayer player, ItemStack original);
 
-    /** Subclass provides all lines shown when holding Shift. */
-    protected abstract List<Component> getShiftTooltip(ItemStack stack, Player player, List<Component> tooltip, TooltipFlag flag);
+    /**
+     * Subclass provides all lines shown when holding Shift.
+     */
+    protected List<Component> getShiftTooltip(ItemStack stack, Player player, List<Component> tooltip, TooltipFlag flag) {
+        return null;
+    }
 
     /** Subclass provides lines shown when NOT holding Shift (before the "Hold Shift" line). */
     protected abstract List<Component> getNoShiftTooltip(ItemStack stack, Player player, List<Component> tooltip, TooltipFlag flag);
@@ -93,13 +101,16 @@ public abstract class UnidentifiedItem extends Item {
         if (context.level() != null && context.level().isClientSide()) {
             Player player = net.minecraft.client.Minecraft.getInstance().player;
             if (player != null) {
-                if (net.minecraft.client.gui.screens.Screen.hasShiftDown()) {
+                if (net.minecraft.client.gui.screens.Screen.hasShiftDown() && hasShift()) {
                     tooltip.addAll(getShiftTooltip(stack, player, tooltip, flag));
                 } else {
                     tooltip.addAll(getNoShiftTooltip(stack, player, tooltip, flag));
-                    Component shiftKey = Component.literal("Shift").withStyle(ChatFormatting.BLUE);
-                    tooltip.add(Component.translatable("tooltip.jolcraft.shift", shiftKey)
-                            .withStyle(ChatFormatting.DARK_GRAY));
+                    if(hasShift()){
+                        Component shiftKey = Component.literal("Shift").withStyle(ChatFormatting.BLUE);
+                        tooltip.add(Component.translatable("tooltip.jolcraft.shift", shiftKey)
+                                .withStyle(ChatFormatting.DARK_GRAY));
+                    }
+
                 }
             }
         }

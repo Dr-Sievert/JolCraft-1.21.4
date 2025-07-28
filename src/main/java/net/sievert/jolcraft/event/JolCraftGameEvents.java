@@ -291,7 +291,6 @@ public class JolCraftGameEvents {
             StructureStart start = structureManager.getStructureAt(trackedPosXZ, trackedStructureHolder.value());
 
             if (start == null || !start.isValid()) {
-                System.out.println("No valid StructureStart at: " + trackedPosXZ + " for " + trackedStructureId);
                 continue;
             }
             BoundingBox box = start.getBoundingBox();
@@ -311,7 +310,7 @@ public class JolCraftGameEvents {
             if (alreadyDiscovered) continue;
 
             // --- Discovery action ---
-            DiscoveredStructuresHelper.addDiscoveredStructureServer(player, GlobalPos.of(tracked.dimension(), patchedEntrance));
+            DiscoveredStructuresHelper.addDiscoveredStructureServer(player, GlobalPos.of(tracked.dimension(), patchedEntrance), trackedStructureKey);
 
             ItemStack emptyCompass = new ItemStack(JolCraftItems.EMPTY_DEEPSLATE_COMPASS.get());
             var dye = stack.get(DataComponents.DYED_COLOR);

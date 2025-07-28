@@ -67,10 +67,14 @@ public class DwarfMinerEntity extends AbstractDwarfEntity {
     @Override
     public boolean canReroll() { return false; }
 
-
     @Override
     public ItemStack getSignedContractItem() {
         return new ItemStack(JolCraftItems.CONTRACT_MINER.get());
+    }
+
+    @Override
+    protected int getRequiredTier() {
+        return 2;
     }
 
     @Override
@@ -130,6 +134,12 @@ public class DwarfMinerEntity extends AbstractDwarfEntity {
         InteractionResult langCheck = this.languageCheck(player);
         if (langCheck != InteractionResult.SUCCESS) {
             return langCheck;
+        }
+
+        // Reputation check
+        InteractionResult repCheck = this.reputationCheck(player, getRequiredTier());
+        if (repCheck != InteractionResult.SUCCESS) {
+            return repCheck;
         }
 
 

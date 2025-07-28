@@ -18,13 +18,17 @@ public abstract class AncientItemBase extends Item {
         super(properties);
     }
 
+    protected boolean hasShift() {
+        return false;
+    }
+
     @OnlyIn(Dist.CLIENT)
     @Override
     public final void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         if (context.level() != null && context.level().isClientSide()) {
             Player player = net.minecraft.client.Minecraft.getInstance().player;
             if (player != null) {
-                if (net.minecraft.client.gui.screens.Screen.hasShiftDown()) {
+                if (net.minecraft.client.gui.screens.Screen.hasShiftDown() && hasShift()) {
                     if (AncientEffectHelper.hasAncientMemoryClient()) {
                         if (DwarvenLanguageHelper.knowsDwarvishClient()) {
                             tooltip.addAll(getFullyReadableTooltip(stack, player, tooltip, flag));
@@ -50,23 +54,36 @@ public abstract class AncientItemBase extends Item {
                                 .withStyle(ChatFormatting.GRAY));
                     }
                 } else {
-                    if(DwarvenLanguageHelper.knowsDwarvishClient()) {
-                        tooltip.addAll(getNoShiftTooltip(stack, player, tooltip, flag));
-                    }else{
-                        tooltip.addAll(getLockedTooltip(stack, player, tooltip, flag));
+                    if (AncientEffectHelper.hasAncientMemoryClient()) {
+                        if (DwarvenLanguageHelper.knowsDwarvishClient()) {
+                            tooltip.addAll(getNoShiftTooltip(stack, player, tooltip, flag));
+                        } else {
+                            tooltip.addAll(getLockedTooltip(stack, player, tooltip, flag));
+                        }
+                    } else if (DwarvenLanguageHelper.knowsDwarvishClient()) {
+                        tooltip.addAll(getPartialUnderstandingTooltip(stack, player, tooltip, flag));
+                    } else {
+                        tooltip.addAll(AncientEffectHelper.getAncientText(player,
+                                getUnreadableTooltipSGA(stack, player, tooltip, flag)));
                     }
-                    Component shiftKey = Component.literal("Shift").withStyle(ChatFormatting.BLUE);
-                    tooltip.add(Component.translatable("tooltip.jolcraft.shift", shiftKey)
-                            .withStyle(ChatFormatting.DARK_GRAY));
+                    if(hasShift()){
+                        Component shiftKey = Component.literal("Shift").withStyle(ChatFormatting.BLUE);
+                        tooltip.add(Component.translatable("tooltip.jolcraft.shift", shiftKey)
+                                .withStyle(ChatFormatting.DARK_GRAY));
+                    }
                 }
             }
         }
         super.appendHoverText(stack, context, tooltip, flag);
     }
 
+    /**
+     * Subclass provides the fully readable tooltip for this item.
+     */
 
-    /** Subclass provides the fully readable tooltip for this item. */
-    protected abstract List<Component> getFullyReadableTooltip(ItemStack stack, Player player, List<Component> tooltip, TooltipFlag flag);
+    protected List<Component> getFullyReadableTooltip(ItemStack stack, Player player, List<Component> tooltip, TooltipFlag flag) {
+        return null;
+    }
 
     /** Subclass provides lines shown when NOT holding Shift (before the "Hold Shift" line). */
     protected abstract List<Component> getNoShiftTooltip(ItemStack stack, Player player, List<Component> tooltip, TooltipFlag flag);

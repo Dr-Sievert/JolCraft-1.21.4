@@ -75,9 +75,9 @@ public class JolCraftTags {
 
     public final class Blocks {
 
-        public static final TagKey<Block> NEEDS_NETHERITE_TOOL = createTag("needs_netherite_tool");
-
         public static final TagKey<Block> DEEPSLATE_BULBS_PLANTABLE = createTag("deepslate_bulbs_plantable");
+
+        public static final TagKey<Block> VERDANT = createTag("verdant");
 
         public static final TagKey<Block> HOPS_BOTTOM = createTag("hops_bottom");
 

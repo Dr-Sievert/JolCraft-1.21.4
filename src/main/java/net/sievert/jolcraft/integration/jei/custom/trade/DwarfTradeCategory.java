@@ -23,7 +23,6 @@ import net.sievert.jolcraft.entity.custom.dwarf.*;
 import net.sievert.jolcraft.item.JolCraftItems;
 
 public class DwarfTradeCategory implements IRecipeCategory<DwarfTradeRecipe> {
-    public static final ResourceLocation UID = ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "dwarf_trades");
     public static final IRecipeType<DwarfTradeRecipe> RECIPE_TYPE = IRecipeType.create(JolCraft.MOD_ID, "dwarf_trades", DwarfTradeRecipe.class);
     private static final java.util.Map<String, LivingEntity> DWARF_RENDER_CACHE = new java.util.HashMap<>();
     private final IDrawable background;

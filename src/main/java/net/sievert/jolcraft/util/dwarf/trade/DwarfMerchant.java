@@ -37,6 +37,8 @@ public interface DwarfMerchant {
 
     boolean showProgressBar();
 
+    boolean showLevel();
+
     SoundEvent getNotifyTradeSound();
 
     default boolean canRestock() {
@@ -61,6 +63,7 @@ public interface DwarfMerchant {
                         level,
                         this.getVillagerXp(),
                         this.showProgressBar(),
+                        this.showLevel(),
                         this.canRestock()
                 );
             }
@@ -74,6 +77,7 @@ public interface DwarfMerchant {
             int dwarfLevel,
             int dwarfXp,
             boolean showProgress,
+            boolean showLevel,
             boolean canRestock
     ) {
         ClientboundDwarfMerchantOffersPacket packet = new ClientboundDwarfMerchantOffersPacket(
@@ -82,6 +86,7 @@ public interface DwarfMerchant {
                 dwarfLevel,
                 dwarfXp,
                 showProgress,
+                showLevel,
                 canRestock
         );
         JolCraftNetworking.sendToClient(player, packet);

@@ -63,6 +63,11 @@ public class DwarfBrewmasterEntity extends AbstractDwarfEntity {
     }
 
     @Override
+    protected int getRequiredTier() {
+        return 1;
+    }
+
+    @Override
     public ResourceLocation getProfessionId() {
         return ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "dwarf_brewmaster");
     }
@@ -108,13 +113,18 @@ public class DwarfBrewmasterEntity extends AbstractDwarfEntity {
 
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
+
         // 🧠 Language check
         InteractionResult langCheck = this.languageCheck(player);
-        if (langCheck != InteractionResult.SUCCESS) return langCheck;
+        if (langCheck != InteractionResult.SUCCESS) {
+            return langCheck;
+        }
 
         // Reputation check
-        InteractionResult repCheck = this.reputationCheck(player, 1);
-        if (repCheck != InteractionResult.SUCCESS) return repCheck;
+        InteractionResult repCheck = this.reputationCheck(player, getRequiredTier());
+        if (repCheck != InteractionResult.SUCCESS) {
+            return repCheck;
+        }
 
         // Call parent for all other interactions (contracts, trades, etc)
         return super.mobInteract(player, hand);

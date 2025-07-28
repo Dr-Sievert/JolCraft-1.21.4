@@ -72,6 +72,11 @@ public class DwarfClientSideMerchant implements DwarfMerchant {
     }
 
     @Override
+    public boolean showLevel() {
+        return true;
+    }
+
+    @Override
     public SoundEvent getNotifyTradeSound() {
         return JolCraftSounds.DWARF_YES.get();
     }

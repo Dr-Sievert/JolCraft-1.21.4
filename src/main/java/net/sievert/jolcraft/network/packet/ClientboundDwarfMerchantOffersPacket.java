@@ -13,6 +13,7 @@ public record ClientboundDwarfMerchantOffersPacket(
         int dwarfLevel,
         int dwarfXp,
         boolean showProgress,
+        boolean showLevel,
         boolean canRestock
 ) implements CustomPacketPayload {
     public static final Type<ClientboundDwarfMerchantOffersPacket> TYPE =
@@ -27,8 +28,9 @@ public record ClientboundDwarfMerchantOffersPacket(
         int dwarfLevel = buf.readVarInt();
         int dwarfXp = buf.readVarInt();
         boolean showProgress = buf.readBoolean();
+        boolean showLevel = buf.readBoolean();
         boolean canRestock = buf.readBoolean();
-        return new ClientboundDwarfMerchantOffersPacket(containerId, offers, dwarfLevel, dwarfXp, showProgress, canRestock);
+        return new ClientboundDwarfMerchantOffersPacket(containerId, offers, dwarfLevel, dwarfXp, showProgress, showLevel, canRestock);
     }
 
     public void write(RegistryFriendlyByteBuf buf) {
@@ -37,6 +39,7 @@ public record ClientboundDwarfMerchantOffersPacket(
         buf.writeVarInt(dwarfLevel);
         buf.writeVarInt(dwarfXp);
         buf.writeBoolean(showProgress);
+        buf.writeBoolean(showLevel);
         buf.writeBoolean(canRestock);
     }
 

@@ -323,14 +323,9 @@
   "tooltip.jolcraft.guild_sigil": "Can be bought from a master dwarf without a profession.",
   "tooltip.jolcraft.legendary_page": "Salvaged from ancient tomes by historians. Can be used to restore ancient legendary tomes by certain dwarven professions.",
   "tooltip.jolcraft.trim_material": "Can be used to trim armor.",
-  "tooltip.jolcraft.coin_pouch": "Stores up to 999 coins. Can be used in trades. Right-click when held to deposit all coins in inventory. Left-click with coins in inventory to deposit up to a stack. Right-click in inventory to withdraw up to a stack.",
-  "tooltip.jolcraft.hearth": "Can be activated if placed within 10 blocks of a claimed bed. Need to sleep in a bed to activate a hearth again. Multiple players can be bound to a hearth. Provides Homestead effect to bound players within range.",
-  "tooltip.jolcraft.verdant": "JolCraft crops ignores growing conditions and also grow faster on this. Other crops can be planted but no extra effects.",
   "tooltip.jolcraft.vanilla_crop": "Grows like vanilla crops.",
   "tooltip.jolcraft.hops_seed": "Needs two blocks height and a light level of 8 or less to grow.",
   "tooltip.jolcraft.deepslate_bulbs": "Needs a light level of 8 or less to grow. Can only be planted on Deepslate, Tuff or Verdant Soil.",
-  "tooltip.jolcraft.mushroom": "Planted and spreads like vanilla mushrooms. No giant variant.",
-  "tooltip.jolcraft.festerling": "Can be cultivated with rotten flesh. Planted on top of log ends. Spreads like vanilla mushrooms. No giant variant.",
   "tooltip.jolcraft.malt": "Can be used on a water cauldron as a first step in brewing.",
   "tooltip.jolcraft.hops": "Can be used on a cauldron with malt to add effects to a brew.",
   "tooltip.jolcraft.yeast": "Can be used on a fermenting cauldron with malt/hops to start the brewing process. Created by using sugar on a water cauldron and extracted using glass bottles.",
@@ -356,13 +351,11 @@
 
   "tooltip.jolcraft.dwarven_lexicon.locked": "The pages are filled with unfamiliar symbols.",
   "tooltip.jolcraft.dwarven_lexicon.unlocked": "The key to dwarven speech lies within.",
-  "tooltip.jolcraft.dwarven_lexicon.shift": "Can be used to learn dwarvish. Found in mineshafts or stronghold libraries. Can be bought from master librarians.",
   "tooltip.jolcraft.dwarven_lexicon.use": "You have learned to understand the dwarven language!",
   "tooltip.jolcraft.dwarven_lexicon.knows": "You already understand the dwarven language.",
 
   "tooltip.jolcraft.ancient_dwarven_lexicon.locked": "The pages are filled with unfamiliar symbols.",
   "tooltip.jolcraft.ancient_dwarven_lexicon.unlocked": "What was once silent may now speak again.",
-  "tooltip.jolcraft.ancient_dwarven_lexicon.shift": "Can be used to learn ancient dwarvish. Found in ancient dwarven ruins.",
   "tooltip.jolcraft.ancient_dwarven_lexicon.use": "You have learned to understand the ancient dwarven language!",
   "tooltip.jolcraft.ancient_dwarven_lexicon.cant_read": "You have no idea how to decipher this.",
   "tooltip.jolcraft.ancient_dwarven_lexicon.cant_use": "The text is clearly dwarvish, but you cannot decipher its secrets.",
@@ -468,7 +461,6 @@
   "tooltip.jolcraft.tablet.progress.prefix": "Endorsements for reputation advancement: ",
   "tooltip.jolcraft.tablet.endorsements_info": "To gain endorsements, give your reputation tablet to a master-level dwarf with a profession. Endorsements are unique per profession and can only be gained once.",
   "tooltip.jolcraft.tablet.advance_info": "To advance in reputation level you need endorsements from dwarves with professions. When you have enough, hand over your tablet to a guildmaster to update it.",
-  "tooltip.jolcraft.tablet": "To advance in reputation level you need endorsements from dwarves that have professions. There are three professions per reputation level. When you have enough endorsements hand over your tablet to a guildmaster and he will update it. To gain endorsements you give your reputation tablet to a dwarf with a profession and master level. Endorsements are unique per profession and can only be gained once.",
 
   "tooltip.jolcraft.brewing.hops": "You already added this hops type to the brew.",
   "tooltip.jolcraft.brewing.locked_hops": "Adding more hops without proper knowledge would ruin the brew.",
@@ -562,6 +554,8 @@
 
   "entity.jolcraft.radiant": "Radiant",
 
+  "stat.jolcraft.structures_discovered": "Structures Discovered",
+
   "subtitles.jolcraft.entity.dwarf_ambient": "Dwarf mumbles",
   "subtitles.jolcraft.entity.dwarf_hit": "Dwarf hurts",
   "subtitles.jolcraft.entity.dwarf_death": "Dwarf dies",
@@ -574,9 +568,14 @@
   "jei.jolcraft.dwarf_trades": "Dwarf Trades",
   "jei.jolcraft.info_page": "Information",
 
+  "jei.jolcraft.info_page.reputation_tablet": "To gain endorsements, give your reputation tablet to a master-level dwarf with a profession. Endorsements are unique per profession and can only be gained once. To advance in reputation level you need endorsements from dwarves with professions. When you have enough, hand over your tablet to a guildmaster to update it.",
   "jei.jolcraft.info_page.strongbox": "Strongboxes are chests that can generate with locks that needs to be picked. Breaking a locked strongbox also breaks the lock but removes any ungenerated loot. Breaking a strongbox with silk touch retains all of its contents.",
-  "jei.jolcraft.info_page.empty_deepslate_compass": "Needs to be combined with a deepslate compass dial. Hold the empty compass and the dial one in each hand then right-click to combine them. Can be dyed multiple times to blend color. Shapeless craft to remove dye.",
-  "jei.jolcraft.info_page.deepslate_compass_dial": "Needs to be combined with an empty deepslate compass. Hold the empty compass and the dial one in each hand then right-click to combine them. Sold by explorer or found as loot.",
-  "jei.jolcraft.info_page.deepslate_compass": "Points to a structure from a pool based on the dial in the compass. Can be dyed multiple times to blend color. Shapeless craft to remove the dial."
-
+  "jei.jolcraft.info_page.deepslate_compass": "Empty deepslate compass needs to be combined with a deepslate compass dial. Hold the empty compass and the dial one in each hand then right-click to combine them. Dials are sold by explorers or found as loot. Combined compass points to a structure from a pool based on the dial in the compass. Compass can be dyed multiple times to blend color. Shapeless craft empty compass to to remove dye and combined compass to remove the dial.",
+  "jei.jolcraft.info_page.coin_pouch": "Stores up to 999 coins. Can be used in trades. Right-click when held to deposit all coins in inventory. Left-click with coins in inventory to deposit up to a stack. Right-click in inventory to withdraw up to a stack.",
+  "jei.jolcraft.info_page.dwarven_lexicon": "Can be used to learn dwarvish. Found in mineshafts or stronghold libraries. Can be bought from master librarians.",
+  "jei.jolcraft.info_page.ancient_dwarven_lexicon": "Can be used to learn ancient dwarvish. Found in ancient dwarven ruins.",
+  "jei.jolcraft.info_page.hearth": "Can be activated if placed within 10 blocks of a claimed bed. Need to sleep in a bed to activate a hearth again. Multiple players can be bound to a hearth. Provides Homestead effect to bound players within range.",
+  "jei.jolcraft.info_page.verdant": "JolCraft crops ignores growing conditions and also grow faster on these. Other crops can be planted but no extra effects.",
+  "jei.jolcraft.info_page.mushroom": "Planted and spreads like vanilla mushrooms. No giant variant.",
+  "jei.jolcraft.info_page.festerling": "Can be cultivated with rotten flesh. Planted on top of log ends. Spreads like vanilla mushrooms. No giant variant."
 }

@@ -315,7 +315,6 @@ public class AbstractDwarfEntity extends AgeableMob implements Npc, DwarfMerchan
     public static final ResourceLocation ACTION_BOUNTY_NOTE_SUBMIT =
             ResourceLocation.fromNamespaceAndPath(JolCraft.MOD_ID, "bounty_note_submit");
 
-
     public ItemStack getSignedContractItem() {
         return new ItemStack(JolCraftItems.CONTRACT_SIGNED.get());
     }
@@ -372,6 +371,10 @@ public class AbstractDwarfEntity extends AgeableMob implements Npc, DwarfMerchan
         return InteractionResult.SUCCESS;
     }
 
+    protected int getRequiredTier() {
+        return 0; // Default to tier 0, override in subclasses
+    }
+
     public InteractionResult reputationCheck(Player player, int requiredTier) {
         boolean client = this.level().isClientSide;
         boolean hasTier = client
@@ -383,18 +386,16 @@ public class AbstractDwarfEntity extends AgeableMob implements Npc, DwarfMerchan
 
             if (client) {
                 player.displayClientMessage(
-                        Component.translatable("tooltip.jolcraft.reputation.locked", requiredTier).withStyle(ChatFormatting.RED), true
+                        Component.translatable("tooltip.jolcraft.reputation.locked", requiredTier)
+                                .withStyle(ChatFormatting.RED),
+                        true
                 );
                 return InteractionResult.CONSUME;
             }
-
             return InteractionResult.FAIL;
         }
-
         return InteractionResult.SUCCESS;
     }
-
-
 
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
@@ -406,6 +407,12 @@ public class AbstractDwarfEntity extends AgeableMob implements Npc, DwarfMerchan
         if (langCheck != InteractionResult.SUCCESS) {
             return langCheck;
         }
+
+        InteractionResult repCheck = this.reputationCheck(player, getRequiredTier());
+        if (repCheck != InteractionResult.SUCCESS) {
+            return repCheck;
+        }
+
 
         // 🛑 Block if dwarf is dead, trading, holding a spawn egg, or performing an action
         if (this.isBusyOrBlacklisted(player, itemstack)) {
@@ -1353,6 +1360,10 @@ public class AbstractDwarfEntity extends AgeableMob implements Npc, DwarfMerchan
         return true;
     }
 
+    public boolean showLevel() {
+        return true;
+    }
+
     public VillagerData getVillagerData() {
         return this.entityData.get(DATA_VILLAGER_DATA);
     }
@@ -1434,6 +1445,7 @@ public class AbstractDwarfEntity extends AgeableMob implements Npc, DwarfMerchan
                             this.getVillagerData().getLevel(),
                             this.getVillagerXp(),
                             this.showProgressBar(),
+                            this.showLevel(),
                             this.canRestock()
                     )
             );
@@ -1469,14 +1481,13 @@ public class AbstractDwarfEntity extends AgeableMob implements Npc, DwarfMerchan
                                 level,                   // Pass level argument as dwarfLevel
                                 this.getVillagerXp(),
                                 this.showProgressBar(),
+                                this.showLevel(),
                                 this.canRestock()
                         )
                 );
             }
         }
     }
-
-
 
     @Override
     public void notifyTrade(DwarfMerchantOffer offer) {
