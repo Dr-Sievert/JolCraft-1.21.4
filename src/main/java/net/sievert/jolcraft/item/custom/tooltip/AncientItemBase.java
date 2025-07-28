@@ -1,13 +1,13 @@
 package net.sievert.jolcraft.item.custom.tooltip;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.sievert.jolcraft.util.attachment.DwarvenLanguageHelper;
 import net.sievert.jolcraft.util.attachment.AncientEffectHelper;
 
@@ -18,12 +18,13 @@ public abstract class AncientItemBase extends Item {
         super(properties);
     }
 
+    @OnlyIn(Dist.CLIENT)
     @Override
     public final void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         if (context.level() != null && context.level().isClientSide()) {
-            Player player = Minecraft.getInstance().player;
+            Player player = net.minecraft.client.Minecraft.getInstance().player;
             if (player != null) {
-                if (Screen.hasShiftDown()) {
+                if (net.minecraft.client.gui.screens.Screen.hasShiftDown()) {
                     if (AncientEffectHelper.hasAncientMemoryClient()) {
                         if (DwarvenLanguageHelper.knowsDwarvishClient()) {
                             tooltip.addAll(getFullyReadableTooltip(stack, player, tooltip, flag));

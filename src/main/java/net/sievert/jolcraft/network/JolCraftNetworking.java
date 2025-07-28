@@ -8,8 +8,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.Level;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.sievert.jolcraft.JolCraft;
@@ -19,7 +17,6 @@ import net.sievert.jolcraft.network.client.data.ClientLanguageData;
 import net.sievert.jolcraft.network.client.data.ClientReputationData;
 import net.sievert.jolcraft.network.packet.*;
 import net.sievert.jolcraft.screen.custom.dwarf.DwarfMerchantMenu;
-import net.sievert.jolcraft.screen.custom.dwarf.DwarfMerchantScreen;
 
 import java.util.Set;
 
@@ -82,8 +79,7 @@ public class JolCraftNetworking {
 
     }
 
-    @OnlyIn(Dist.CLIENT)
-    private static void handlePlaySound(ClientboundPlaySoundPacket packet, IPayloadContext context) {
+    public static void handlePlaySound(ClientboundPlaySoundPacket packet, IPayloadContext context) {
         context.enqueueWork(() -> {
             var mc = Minecraft.getInstance();
             var player = mc.player;
@@ -123,8 +119,7 @@ public class JolCraftNetworking {
     }
 
 
-    @OnlyIn(Dist.CLIENT)
-    private static void handleDwarfMerchantOffers(ClientboundDwarfMerchantOffersPacket packet, IPayloadContext context) {
+    public static void handleDwarfMerchantOffers(ClientboundDwarfMerchantOffersPacket packet, IPayloadContext context) {
         context.enqueueWork(() -> {
             Minecraft mc = Minecraft.getInstance();
             AbstractContainerMenu abstractContainerMenu = mc.player.containerMenu;
@@ -138,51 +133,44 @@ public class JolCraftNetworking {
         });
     }
 
-    @OnlyIn(Dist.CLIENT)
-    private static void handleSyncTomeUnlocks(ClientboundTomeUnlocksPacket packet, IPayloadContext context) {
+    public static void handleSyncTomeUnlocks(ClientboundTomeUnlocksPacket packet, IPayloadContext context) {
         context.enqueueWork(() -> {
             net.sievert.jolcraft.network.client.data.ClientTomeUnlocksData.setUnlocks(packet.unlocks());
         });
     }
 
-    @OnlyIn(Dist.CLIENT)
-    private static void handleDelirium(ClientboundDeliriumPacket packet, IPayloadContext context) {
+    public static void handleDelirium(ClientboundDeliriumPacket packet, IPayloadContext context) {
         context.enqueueWork(() -> {
             ClientDeliriumData.setMuffleTicks(packet.durationTicks());
         });
     }
 
 
-    @OnlyIn(Dist.CLIENT)
-    private static void handleSyncLanguage(ClientboundLanguagePacket packet, IPayloadContext context) {
+    public static void handleSyncLanguage(ClientboundLanguagePacket packet, IPayloadContext context) {
         context.enqueueWork(() -> {
             ClientLanguageData.setKnows(packet.knowsLanguage());
         });
     }
 
-    @OnlyIn(Dist.CLIENT)
-    private static void handleSyncAncientLanguage(ClientboundAncientLanguagePacket packet, IPayloadContext context) {
+    public static void handleSyncAncientLanguage(ClientboundAncientLanguagePacket packet, IPayloadContext context) {
         context.enqueueWork(() -> {
             ClientAncientLanguageData.setKnows(packet.knowsLanguage());
         });
     }
 
-    @OnlyIn(Dist.CLIENT)
-    private static void handleSyncReputation(ClientboundReputationPacket packet, IPayloadContext context) {
+    public static void handleSyncReputation(ClientboundReputationPacket packet, IPayloadContext context) {
         context.enqueueWork(() -> {
             ClientReputationData.setTier(packet.tier());
         });
     }
 
-    @OnlyIn(Dist.CLIENT)
-    private static void handleDwarfEndorseAnimation(ClientboundDwarfEndorseAnimationPacket packet, IPayloadContext context) {
+    public static void handleDwarfEndorseAnimation(ClientboundDwarfEndorseAnimationPacket packet, IPayloadContext context) {
         context.enqueueWork(() -> {
             ClientReputationData.setEndorsementAnimation(packet.entityId(), true);
         });
     }
 
-    @OnlyIn(Dist.CLIENT)
-    private static void handleSyncEndorsements(ClientboundEndorsementsPacket packet, IPayloadContext context) {
+    public static void handleSyncEndorsements(ClientboundEndorsementsPacket packet, IPayloadContext context) {
         context.enqueueWork(() -> {
             Set<ResourceLocation> set = packet.endorsements();
             ClientReputationData.setEndorsements(set);

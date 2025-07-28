@@ -20,6 +20,10 @@ import net.sievert.jolcraft.client.CoinPouchTooltipRenderer;
 import net.sievert.jolcraft.client.compass.DialColor;
 import net.sievert.jolcraft.data.custom.item.CoinPouchTooltip;
 import net.sievert.jolcraft.entity.JolCraftEntities;
+import net.sievert.jolcraft.entity.client.model.animal.MuffhornModel;
+import net.sievert.jolcraft.entity.client.model.blockentity.StrongboxModel;
+import net.sievert.jolcraft.entity.client.model.dwarf.*;
+import net.sievert.jolcraft.entity.client.model.object.RadiantModel;
 import net.sievert.jolcraft.entity.client.render.animal.MuffhornRenderer;
 import net.sievert.jolcraft.entity.client.render.block.StrongboxRenderer;
 import net.sievert.jolcraft.entity.client.render.dwarf.*;
@@ -36,7 +40,6 @@ import net.sievert.jolcraft.client.compass.DeepslateCompassAngle;
 
 @EventBusSubscriber(modid = JolCraft.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class JolCraftClientModEvents {
-
 
     @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event)
@@ -82,6 +85,38 @@ public class JolCraftClientModEvents {
         ItemBlockRenderTypes.setRenderLayer(JolCraftBlocks.FESTERLING_CROP.get(), RenderType.cutout());
         ItemBlockRenderTypes.setRenderLayer(JolCraftBlocks.FESTERLING.get(), RenderType.cutout());
         ItemBlockRenderTypes.setRenderLayer(JolCraftBlocks.POTTED_FESTERLING.get(), RenderType.cutout());
+
+    }
+
+    //Register Model Layers
+    @SubscribeEvent
+    public static void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
+
+        //Dwarves
+        event.registerLayerDefinition(DwarfModel.LAYER_LOCATION, DwarfModel::createBodyLayer);
+        event.registerLayerDefinition(DwarfGuildmasterModel.LAYER_LOCATION, DwarfGuildmasterModel::createBodyLayer);
+        event.registerLayerDefinition(DwarfHistorianModel.LAYER_LOCATION, DwarfHistorianModel::createBodyLayer);
+        event.registerLayerDefinition(DwarfMerchantModel.LAYER_LOCATION, DwarfMerchantModel::createBodyLayer);
+        event.registerLayerDefinition(DwarfScrapperModel.LAYER_LOCATION, DwarfScrapperModel::createBodyLayer);
+        event.registerLayerDefinition(DwarfBrewmasterModel.LAYER_LOCATION, DwarfBrewmasterModel::createBodyLayer);
+        event.registerLayerDefinition(DwarfGuardModel.LAYER_LOCATION, DwarfGuardModel::createBodyLayer);
+        event.registerLayerDefinition(DwarfKeeperModel.LAYER_LOCATION, DwarfKeeperModel::createBodyLayer);
+        event.registerLayerDefinition(DwarfArtisanModel.LAYER_LOCATION, DwarfArtisanModel::createBodyLayer);
+        event.registerLayerDefinition(DwarfExplorerModel.LAYER_LOCATION, DwarfExplorerModel::createBodyLayer);
+        event.registerLayerDefinition(DwarfMinerModel.LAYER_LOCATION, DwarfMinerModel::createBodyLayer);
+
+        //Animals
+        event.registerLayerDefinition(MuffhornModel.LAYER_LOCATION, MuffhornModel::createBodyLayer);
+        event.registerLayerDefinition(
+                MuffhornModel.BABY_LAYER_LOCATION,
+                () -> MuffhornModel.createBodyLayer().apply(MuffhornModel.BABY_TRANSFORMER)
+        );
+
+        //Objects
+        event.registerLayerDefinition(RadiantModel.LAYER_LOCATION, RadiantModel::createBodyLayer);
+
+        //Blocks
+        event.registerLayerDefinition(StrongboxModel.LAYER_LOCATION, StrongboxModel::createBodyLayer);
 
     }
 

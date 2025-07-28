@@ -31,8 +31,6 @@ public class JolCraftCreativeModeTabs {
                         //Testing
                         pOutput.accept(JolCraftItems.DEV_KEY);
 
-                        pOutput.accept(JolCraftItems.EMPTY_DEEPSLATE_COMPASS);
-
                         //pOutput.accept(PotionContents.createItemStack(Items.POTION, JolCraftPotions.CURSE));
 
                         //Real
@@ -46,6 +44,7 @@ public class JolCraftCreativeModeTabs {
                         pOutput.accept(JolCraftItems.REPUTATION_TABLET_3);
                         pOutput.accept(JolCraftItems.REPUTATION_TABLET_4);
 
+                        pOutput.accept(JolCraftItems.EMPTY_DEEPSLATE_COMPASS);
                         pOutput.accept(JolCraftBlocks.HEARTH);
                         pOutput.accept(JolCraftItems.STRONGBOX_ITEM);
                         pOutput.accept(JolCraftItems.LOCKPICK);

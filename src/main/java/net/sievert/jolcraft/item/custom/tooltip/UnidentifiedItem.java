@@ -12,6 +12,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 import java.util.List;
 
@@ -85,12 +87,13 @@ public abstract class UnidentifiedItem extends Item {
     /** Must define in subclasses: sound to play on fail. */
     protected abstract void playIdentifyFailSound(Level level, Player player);
 
+    @OnlyIn(Dist.CLIENT)
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         if (context.level() != null && context.level().isClientSide()) {
-            Player player = Minecraft.getInstance().player;
+            Player player = net.minecraft.client.Minecraft.getInstance().player;
             if (player != null) {
-                if (Screen.hasShiftDown()) {
+                if (net.minecraft.client.gui.screens.Screen.hasShiftDown()) {
                     tooltip.addAll(getShiftTooltip(stack, player, tooltip, flag));
                 } else {
                     tooltip.addAll(getNoShiftTooltip(stack, player, tooltip, flag));

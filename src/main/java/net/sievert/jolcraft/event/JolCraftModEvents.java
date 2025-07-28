@@ -19,38 +19,6 @@ import net.sievert.jolcraft.entity.custom.dwarf.*;
 @EventBusSubscriber(modid = JolCraft.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class JolCraftModEvents {
 
-   //Register Model Layers
-    @SubscribeEvent
-    public static void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
-
-        //Dwarves
-        event.registerLayerDefinition(DwarfModel.LAYER_LOCATION, DwarfModel::createBodyLayer);
-        event.registerLayerDefinition(DwarfGuildmasterModel.LAYER_LOCATION, DwarfGuildmasterModel::createBodyLayer);
-        event.registerLayerDefinition(DwarfHistorianModel.LAYER_LOCATION, DwarfHistorianModel::createBodyLayer);
-        event.registerLayerDefinition(DwarfMerchantModel.LAYER_LOCATION, DwarfMerchantModel::createBodyLayer);
-        event.registerLayerDefinition(DwarfScrapperModel.LAYER_LOCATION, DwarfScrapperModel::createBodyLayer);
-        event.registerLayerDefinition(DwarfBrewmasterModel.LAYER_LOCATION, DwarfBrewmasterModel::createBodyLayer);
-        event.registerLayerDefinition(DwarfGuardModel.LAYER_LOCATION, DwarfGuardModel::createBodyLayer);
-        event.registerLayerDefinition(DwarfKeeperModel.LAYER_LOCATION, DwarfKeeperModel::createBodyLayer);
-        event.registerLayerDefinition(DwarfArtisanModel.LAYER_LOCATION, DwarfArtisanModel::createBodyLayer);
-        event.registerLayerDefinition(DwarfExplorerModel.LAYER_LOCATION, DwarfExplorerModel::createBodyLayer);
-        event.registerLayerDefinition(DwarfMinerModel.LAYER_LOCATION, DwarfMinerModel::createBodyLayer);
-
-        //Animals
-        event.registerLayerDefinition(MuffhornModel.LAYER_LOCATION, MuffhornModel::createBodyLayer);
-        event.registerLayerDefinition(
-                MuffhornModel.BABY_LAYER_LOCATION,
-                () -> MuffhornModel.createBodyLayer().apply(MuffhornModel.BABY_TRANSFORMER)
-        );
-
-        //Objects
-        event.registerLayerDefinition(RadiantModel.LAYER_LOCATION, RadiantModel::createBodyLayer);
-
-        //Blocks
-        event.registerLayerDefinition(StrongboxModel.LAYER_LOCATION, StrongboxModel::createBodyLayer);
-
-    }
-
     //Register Attributes
     @SubscribeEvent
     public static void registerAttributes(EntityAttributeCreationEvent event) {

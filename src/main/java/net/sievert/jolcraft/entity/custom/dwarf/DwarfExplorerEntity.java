@@ -96,7 +96,7 @@ public class DwarfExplorerEntity extends AbstractDwarfEntity {
                 1, new DwarfTrades.ItemListing[] {
                         new DwarfTrades.ItemsForGold(JolCraftItems.EMPTY_DEEPSLATE_COMPASS.get(), 5, 10,  1, 3, 1),
                         new DwarfTrades.ItemsAndGoldToItemsWithData(
-                                Items.IRON_NUGGET, 1,
+                                Items.REDSTONE, 1,
                                 5,
                                 JolCraftItems.DEEPSLATE_COMPASS_DIAL.get(), 1,
                                 3, 1, 0F,
@@ -107,7 +107,7 @@ public class DwarfExplorerEntity extends AbstractDwarfEntity {
                                 }
                         ),
                         new DwarfTrades.ItemsAndGoldToItemsWithData(
-                                Items.IRON_NUGGET, 1,
+                                Items.REDSTONE, 1,
                                 5,
                                 JolCraftItems.DEEPSLATE_COMPASS_DIAL.get(), 1,
                                 3, 0, 0F,
