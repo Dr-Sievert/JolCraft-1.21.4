@@ -188,7 +188,7 @@ public class HearthBlock extends BaseEntityBlock {
             Hearth hearthAttachment = Hearth.get(player);
             if (hearthAttachment.hasLitThisDay()) {
                 player.displayClientMessage(
-                        net.minecraft.network.chat.Component.translatable("block.jolcraft.hearth.cooldown").withStyle(ChatFormatting.GRAY), true
+                        net.minecraft.network.chat.Component.translatable("tooltip.jolcraft.hearth.cooldown").withStyle(ChatFormatting.GRAY), true
                 );
                 return InteractionResult.SUCCESS;
             }
@@ -199,7 +199,7 @@ public class HearthBlock extends BaseEntityBlock {
         // Only show message if not holding coal/charcoal and the hearth is not lit
         if (!isCoal && !state.getValue(LIT)) {
             player.displayClientMessage(
-                    Component.translatable("block.jolcraft.hearth.need_coal").withStyle(ChatFormatting.GRAY), true
+                    Component.translatable("tooltip.jolcraft.hearth.need_coal").withStyle(ChatFormatting.GRAY), true
             );
             return InteractionResult.CONSUME;
         }
@@ -217,7 +217,7 @@ public class HearthBlock extends BaseEntityBlock {
 
             if (monstersNearby) {
                 player.displayClientMessage(
-                        net.minecraft.network.chat.Component.translatable("block.jolcraft.hearth.not_safe").withStyle(ChatFormatting.RED), true
+                        net.minecraft.network.chat.Component.translatable("tooltip.jolcraft.hearth.not_safe").withStyle(ChatFormatting.RED), true
                 );
                 return InteractionResult.SUCCESS;
             }
@@ -238,7 +238,7 @@ public class HearthBlock extends BaseEntityBlock {
 
             if (!bedNearby) {
                 player.displayClientMessage(
-                        net.minecraft.network.chat.Component.translatable("block.jolcraft.hearth.no_bed_nearby").withStyle(ChatFormatting.GRAY), true
+                        net.minecraft.network.chat.Component.translatable("tooltip.jolcraft.hearth.no_bed_nearby").withStyle(ChatFormatting.GRAY), true
                 );
                 return InteractionResult.SUCCESS;
             }
