@@ -31,6 +31,7 @@ import net.sievert.jolcraft.item.custom.food.DwarvenBrewItem;
 import net.sievert.jolcraft.item.custom.scrapper.SpannerItem;
 import net.sievert.jolcraft.item.custom.tablet.LegendaryReputationTabletItem;
 import net.sievert.jolcraft.item.custom.tablet.ReputationTabletItem;
+import net.sievert.jolcraft.item.custom.tooltip.LegendaryItem;
 import net.sievert.jolcraft.item.custom.tooltip.SimpleTooltipBlockItem;
 import net.sievert.jolcraft.item.custom.tooltip.SimpleTooltipItem;
 import net.sievert.jolcraft.item.custom.tooltip.SimpleTooltipLegendaryItem;
@@ -613,9 +614,8 @@ public class JolCraftItems {
 
     public static final DeferredItem<Item> LEGENDARY_PAGE = ITEMS.registerItem(
             "legendary_page",
-            props -> new SimpleTooltipLegendaryItem(props, "legendary_page")
+            props -> new LegendaryItem(props)
     );
-
 
     public static final DeferredItem<Item> LEGENDARY_ANCIENT_UNIDENTIFIED_DWARVEN_TOME =
             ITEMS.registerItem("legendary_unidentified_ancient_dwarven_tome", properties -> new LegendaryAncientUnidentifiedTomeItem(properties) {

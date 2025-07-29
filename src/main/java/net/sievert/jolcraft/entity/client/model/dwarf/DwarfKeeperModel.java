@@ -94,7 +94,7 @@ public class DwarfKeeperModel extends DwarfModel{
         if (side == HumanoidArm.LEFT) {
             this.root.translateAndRotate(poseStack);
             this.getArm(side).translateAndRotate(poseStack);
-            poseStack.translate(-0.15F, -0.15F, -0.15F); // your custom left-hand offset
+            poseStack.translate(0.05F, -0.05F, 0.05F); // your custom left-hand offset
         } else {
             super.translateToHand(side, poseStack); // use default right-hand behavior
         }

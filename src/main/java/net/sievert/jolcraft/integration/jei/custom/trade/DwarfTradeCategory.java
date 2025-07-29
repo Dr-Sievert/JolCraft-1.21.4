@@ -79,16 +79,13 @@ public class DwarfTradeCategory implements IRecipeCategory<DwarfTradeRecipe> {
         int x = ((getWidth() - Minecraft.getInstance().font.width(displayStr)) / 2) + offsetX;
 
         // Draw merged string
-        graphics.drawString(Minecraft.getInstance().font, displayStr, x, textY, 0x888888, false);
+        graphics.drawString(Minecraft.getInstance().font, displayStr, x+3, textY, 0x888888, false);
 
         // Input slots: always A, maybe B
         boolean hasB = recipe.getInputB() != null && !recipe.getInputB().isEmpty();
-        int slotAX = 2, slotBX = 24, slotAY = 36, slotBY = 36;
-        int plusX = 16, plusY = 38;
+        int plusX = 16, plusY = 27;
         int arrowX = hasB ? 45 : 21;
-        int arrowY = 35;
-        int outputX = hasB ? 66 : 44;
-        int outputY = 36;
+        int arrowY = 24;
 
         // Draw plus if two inputs
         if (hasB) {
@@ -129,33 +126,95 @@ public class DwarfTradeCategory implements IRecipeCategory<DwarfTradeRecipe> {
             );
         }
 
+        // --- DRAW THE COUNT/RANGE OVERLAYS ---
+        float scale = 0.75f;
+        int overlayY = 43; // y under item slot, tweak as needed
+
+// Slot X and width definitions (slot width is always 18 for JEI slots)
+        final int slotWidth = 18;
+        final int slotAX = 2;
+        final int slotBX = 28;
+        final int outputX = (recipe.getInputB() != null && !recipe.getInputB().isEmpty()) ? 68 : 45;
+
+// --- Input A ---
+        if (recipe.getInputAMin() != 1 || recipe.getInputAMax() != 1) {
+            String aText = (recipe.getInputAMin() == recipe.getInputAMax())
+                    ? String.valueOf(recipe.getInputAMin())
+                    : (recipe.getInputAMin() + "-" + recipe.getInputAMax());
+            int strW = Minecraft.getInstance().font.width(aText);
+            // Center under slot: (slot center) - (half string width at scale)
+            float centerX = slotAX + (slotWidth / 2f) - (strW * scale / 2f);
+
+            graphics.pose().pushPose();
+            graphics.pose().translate(centerX, overlayY, 0);
+            graphics.pose().scale(scale, scale, 1.0f);
+            graphics.drawString(Minecraft.getInstance().font, aText, 0, 0, 0x888888, false);
+            graphics.pose().popPose();
+        }
+
+// --- Input B ---
+        if (recipe.getInputB() != null && !recipe.getInputB().isEmpty()
+                && (recipe.getInputBMin() != 1 || recipe.getInputBMax() != 1)) {
+            String bText = (recipe.getInputBMin() == recipe.getInputBMax())
+                    ? String.valueOf(recipe.getInputBMin())
+                    : (recipe.getInputBMin() + "-" + recipe.getInputBMax());
+            int strW = Minecraft.getInstance().font.width(bText);
+            float centerX = slotBX + (slotWidth / 2f) - (strW * scale / 2f);
+
+            graphics.pose().pushPose();
+            graphics.pose().translate(centerX, overlayY, 0);
+            graphics.pose().scale(scale, scale, 1.0f);
+            graphics.drawString(Minecraft.getInstance().font, bText, 0, 0, 0x888888, false);
+            graphics.pose().popPose();
+        }
+
+// --- Output ---
+        if (recipe.getOutputMin() != 1 || recipe.getOutputMax() != 1) {
+            String oText = (recipe.getOutputMin() == recipe.getOutputMax())
+                    ? String.valueOf(recipe.getOutputMin())
+                    : (recipe.getOutputMin() + "-" + recipe.getOutputMax());
+            int strW = Minecraft.getInstance().font.width(oText);
+            float outSlotX = outputX;
+            float centerX = outSlotX + (slotWidth / 2f) - (strW * scale / 2f);
+
+            graphics.pose().pushPose();
+            graphics.pose().translate(centerX, overlayY, 0);
+            graphics.pose().scale(scale, scale, 1.0f);
+            graphics.drawString(Minecraft.getInstance().font, oText, 0, 0, 0x888888, false);
+            graphics.pose().popPose();
+        }
+
+
+
+
     }
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, DwarfTradeRecipe recipe, IFocusGroup focuses) {
+        int sloty = 25;
         // Profession egg slot (always first)
         builder.addSlot(RecipeIngredientRole.INPUT, 95, 42)
                 .add(recipe.getSpawnEgg());
         if(recipe.getInputA().is(JolCraftItems.GOLD_COIN.get())){
             // Input A (coin pouch or gold coin)
-            builder.addSlot(RecipeIngredientRole.INPUT, 2, 36).add(new ItemStack(JolCraftItems.GOLD_COIN.get())).add(new ItemStack(JolCraftItems.COIN_POUCH.get()));
+            builder.addSlot(RecipeIngredientRole.INPUT, 2, sloty).add(new ItemStack(JolCraftItems.GOLD_COIN.get())).add(new ItemStack(JolCraftItems.COIN_POUCH.get()));
         }else{
-            builder.addSlot(RecipeIngredientRole.INPUT, 2, 36).add(recipe.getInputA());
+            builder.addSlot(RecipeIngredientRole.INPUT, 2, sloty).add(recipe.getInputA());
         }
 
         // Input B if present (for recipes requiring two inputs)
         if (recipe.getInputB() != null && !recipe.getInputB().isEmpty()) {
             if(recipe.getInputB().is(JolCraftItems.GOLD_COIN.get())){
                 // Input B (coin pouch or gold coin)
-                builder.addSlot(RecipeIngredientRole.INPUT, 27, 36).add(new ItemStack(JolCraftItems.GOLD_COIN.get())).add(new ItemStack(JolCraftItems.COIN_POUCH.get()));
+                builder.addSlot(RecipeIngredientRole.INPUT, 28, sloty).add(new ItemStack(JolCraftItems.GOLD_COIN.get())).add(new ItemStack(JolCraftItems.COIN_POUCH.get()));
             }else{
-                builder.addSlot(RecipeIngredientRole.INPUT, 27, 36).add(recipe.getInputB());
+                builder.addSlot(RecipeIngredientRole.INPUT, 28, sloty).add(recipe.getInputB());
             }
             // Output farther right for double input
-            builder.addSlot(RecipeIngredientRole.OUTPUT, 68, 36).add(recipe.getOutput());
+            builder.addSlot(RecipeIngredientRole.OUTPUT, 68, sloty).add(recipe.getOutput());
         } else {
             // Output closer for single input
-            builder.addSlot(RecipeIngredientRole.OUTPUT, 45, 36).add(recipe.getOutput());
+            builder.addSlot(RecipeIngredientRole.OUTPUT, 45, sloty).add(recipe.getOutput());
         }
     }
 

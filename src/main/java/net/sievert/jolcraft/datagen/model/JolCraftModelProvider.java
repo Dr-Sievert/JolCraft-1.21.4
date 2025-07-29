@@ -134,7 +134,7 @@ public class JolCraftModelProvider extends ModelProvider {
         blockModels.createTrivialCube(JolCraftBlocks.MUFFHORN_FUR_BLOCK.get());
 
         //Brewing
-        itemModels.generateFlatItem(JolCraftItems.BARLEY.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(JolCraftItems.BARLEY.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
         blockModels.createRotatedPillarWithHorizontalVariant(
                 JolCraftBlocks.BARLEY_BLOCK.get(),
                 TexturedModel.COLUMN,

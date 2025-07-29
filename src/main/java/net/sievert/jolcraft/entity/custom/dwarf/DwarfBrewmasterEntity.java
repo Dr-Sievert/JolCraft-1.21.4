@@ -169,7 +169,6 @@ public class DwarfBrewmasterEntity extends AbstractDwarfEntity {
                                 1, 0, 0F,
                                 (stack) -> stack.set(JolCraftDataComponents.LORE_LINE_ID, "forgotten_brew_formulas")
                         ),
-                        new DwarfTrades.GoldForItems(JolCraftItems.EMBERGLASS.get(), 1, 10, 0, 20, 40),
                         new DwarfTrades.ItemsAndGoldToItems(
                                 JolCraftItems.EMBERGLASS_CUT.get(), 2, 20, 40,
                                 JolCraftBlocks.HEARTH.get(), 1, 1, 0, 0F

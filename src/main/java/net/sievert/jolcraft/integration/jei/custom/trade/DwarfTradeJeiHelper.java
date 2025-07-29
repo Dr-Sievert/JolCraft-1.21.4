@@ -25,9 +25,15 @@ public class DwarfTradeJeiHelper {
                     var inputB = DwarfTrades.getExampleInputB(listing);
                     var output = DwarfTrades.getExampleOutput(listing);
 
+                    // --- NEW: get min/max for each input/output
+                    int[] a = getInputAMinMax(listing);
+                    int[] b = getInputBMinMax(listing);
+                    int[] o = getOutputMinMax(listing);
+
                     if ((!inputA.isEmpty() || (inputB != null && !inputB.isEmpty())) && !output.isEmpty()) {
                         recipes.add(new DwarfTradeRecipe(
-                                prof.displayName(), level, inputA, inputB, output, prof.spawnEgg()
+                                prof.displayName(), level, inputA, inputB, output, prof.spawnEgg(),
+                                a[0], a[1], b[0], b[1], o[0], o[1]
                         ));
                     }
                 }
@@ -35,6 +41,7 @@ public class DwarfTradeJeiHelper {
         }
         return recipes;
     }
+
 
 
     public record DwarfProfession(
@@ -112,5 +119,58 @@ public class DwarfTradeJeiHelper {
                     JolCraftItems.DWARF_MINER_SPAWN_EGG
             )
     );
+
+    private static int[] getInputAMinMax(DwarfTrades.ItemListing listing) {
+        // [min, max] for inputA
+        if (listing instanceof DwarfTrades.ItemsForGold t) {
+            return new int[]{t.minGoldCost, t.maxGoldCost};
+        } else if (listing instanceof DwarfTrades.GoldForItems t) {
+            return new int[]{t.minInputCount, t.maxInputCount};
+        } else if (listing instanceof DwarfTrades.ItemsAndGoldToItems t) {
+            return new int[]{t.minGoldCost, t.maxGoldCost};
+        } else if (listing instanceof DwarfTrades.ItemsWithDataForGold t) {
+            return new int[]{t.minGoldCost, t.maxGoldCost};
+        } else if (listing instanceof DwarfTrades.ItemsAndGoldToItemsWithData t) {
+            return new int[]{t.minGoldCost, t.maxGoldCost};
+        } else if (listing instanceof DwarfTrades.ItemForItemWithData t) {
+            return new int[]{t.minInputCount, t.maxInputCount};
+        } else if (listing instanceof DwarfTrades.TreasureMapForGold t) {
+            return new int[]{t.goldCost, t.goldCost};
+        }
+        return new int[]{1, 1};
+    }
+
+    private static int[] getInputBMinMax(DwarfTrades.ItemListing listing) {
+        // [min, max] for inputB (usually the item part for double-input trades)
+        if (listing instanceof DwarfTrades.ItemsAndGoldToItems t) {
+            return new int[]{t.minInputCount, t.maxInputCount};
+        } else if (listing instanceof DwarfTrades.ItemsAndGoldToItemsWithData t) {
+            return new int[]{t.minInputCount, t.maxInputCount};
+        } else if (listing instanceof DwarfTrades.TreasureMapForGold) {
+            return new int[]{1, 1};
+        }
+        return new int[]{0, 0};
+    }
+
+    private static int[] getOutputMinMax(DwarfTrades.ItemListing listing) {
+        // [min, max] for output
+        if (listing instanceof DwarfTrades.ItemsForGold t) {
+            return new int[]{t.minItemCount, t.maxItemCount};
+        } else if (listing instanceof DwarfTrades.GoldForItems t) {
+            return new int[]{t.minGoldAmount, t.maxGoldAmount};
+        } else if (listing instanceof DwarfTrades.ItemsAndGoldToItems t) {
+            return new int[]{t.minOutputCount, t.maxOutputCount};
+        } else if (listing instanceof DwarfTrades.ItemsWithDataForGold t) {
+            return new int[]{t.minItemCount, t.maxItemCount};
+        } else if (listing instanceof DwarfTrades.ItemsAndGoldToItemsWithData t) {
+            return new int[]{t.minOutputCount, t.maxOutputCount};
+        } else if (listing instanceof DwarfTrades.ItemForItemWithData t) {
+            return new int[]{t.minOutputCount, t.maxOutputCount};
+        } else if (listing instanceof DwarfTrades.TreasureMapForGold) {
+            return new int[]{1, 1};
+        }
+        return new int[]{1, 1};
+    }
+
 
 }

@@ -17,6 +17,11 @@ public class AncientDwarvenTomeItem extends AncientItemBase {
     }
 
     @Override
+    protected boolean hasShift() {
+        return true;
+    }
+
+    @Override
     protected List<Component> getFullyReadableTooltip(ItemStack stack, Player player, List<Component> tooltip, TooltipFlag flag) {
         return List.of(Component.translatable("tooltip.jolcraft.dwarven_tome.shift").withStyle(ChatFormatting.GRAY));
     }

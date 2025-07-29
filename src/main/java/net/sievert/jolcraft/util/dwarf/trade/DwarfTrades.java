@@ -33,8 +33,10 @@ public class DwarfTrades {
 
     public static class ItemsForGold implements ItemListing {
         private final Item item;
-        private final int minItemCount, maxItemCount;
-        private final int minGoldCost, maxGoldCost;
+        public final int minItemCount;
+        public final int maxItemCount;
+        public final int minGoldCost;
+        public final int maxGoldCost;
         private final int maxUses, villagerXp;
         private final float priceMultiplier;
         private final Optional<ResourceKey<EnchantmentProvider>> enchantmentProvider;
@@ -112,10 +114,13 @@ public class DwarfTrades {
 
     public static class ItemsAndGoldToItems implements ItemListing {
         private final Item inputItem;
-        private final int minInputCount, maxInputCount;
-        private final int minGoldCost, maxGoldCost;
+        public final int minInputCount;
+        public final int maxInputCount;
+        public final int minGoldCost;
+        public final int maxGoldCost;
         private final Item outputItem;
-        private final int minOutputCount, maxOutputCount;
+        public final int minOutputCount;
+        public final int maxOutputCount;
         private final int maxUses, villagerXp;
         private final float priceMultiplier;
         private final Optional<ResourceKey<EnchantmentProvider>> enchantmentProvider;
@@ -200,8 +205,10 @@ public class DwarfTrades {
 
     public static class ItemsWithDataForGold implements ItemListing {
         private final Item item;
-        private final int minItemCount, maxItemCount;
-        private final int minGoldCost, maxGoldCost;
+        public final int minItemCount;
+        public final int maxItemCount;
+        public final int minGoldCost;
+        public final int maxGoldCost;
         private final int maxUses, villagerXp;
         private final float priceMultiplier;
         private final Consumer<ItemStack> stackModifier;
@@ -252,10 +259,13 @@ public class DwarfTrades {
 
     public static class ItemsAndGoldToItemsWithData implements ItemListing {
         private final Item inputItem;
-        private final int minInputCount, maxInputCount;
-        private final int minGoldCost, maxGoldCost;
+        public final int minInputCount;
+        public final int maxInputCount;
+        public final int minGoldCost;
+        public final int maxGoldCost;
         private final Item outputItem;
-        private final int minOutputCount, maxOutputCount;
+        public final int minOutputCount;
+        public final int maxOutputCount;
         private final int maxUses, villagerXp;
         private final float priceMultiplier;
         private final Consumer<ItemStack> stackModifier;
@@ -313,9 +323,11 @@ public class DwarfTrades {
 
     public static class ItemForItemWithData implements ItemListing {
         private final Item inputItem;
-        private final int minInputCount, maxInputCount;
+        public final int minInputCount;
+        public final int maxInputCount;
         private final Item outputItem;
-        private final int minOutputCount, maxOutputCount;
+        public final int minOutputCount;
+        public final int maxOutputCount;
         private final int maxUses, villagerXp;
         private final float priceMultiplier;
         private final Consumer<ItemStack> stackModifier;
@@ -368,9 +380,11 @@ public class DwarfTrades {
 
     public static class GoldForItems implements ItemListing {
         private final ItemLike item;
-        private final int minInputCount, maxInputCount;
+        public final int minInputCount;
+        public final int maxInputCount;
         private final int maxUses, villagerXp;
-        private final int minGoldAmount, maxGoldAmount;
+        public final int minGoldAmount;
+        public final int maxGoldAmount;
         private final float priceMultiplier;
         // Full constructor
         public GoldForItems(ItemLike item, int minInputCount, int maxInputCount, int maxUses, int villagerXp, int minGoldAmount, int maxGoldAmount) {
@@ -408,7 +422,7 @@ public class DwarfTrades {
     // -- MAPS (special) --
 
     public static class TreasureMapForGold implements ItemListing {
-        private final int goldCost;
+        public final int goldCost;
         private final TagKey<Structure> destinationTag;
         private final String displayName;
         private final Holder<MapDecorationType> destinationType;

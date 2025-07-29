@@ -89,7 +89,7 @@ public class DwarfArtisanModel extends DwarfModel{
         if (side == HumanoidArm.LEFT) {
             this.root.translateAndRotate(poseStack);
             this.getArm(side).translateAndRotate(poseStack);
-            poseStack.translate(0.1F, -0.15F, 0.0F); // your custom left-hand offset
+            poseStack.translate(0.05F, -0.03F, 0.0F); // your custom left-hand offset
         } else {
             super.translateToHand(side, poseStack); // use default right-hand behavior
         }

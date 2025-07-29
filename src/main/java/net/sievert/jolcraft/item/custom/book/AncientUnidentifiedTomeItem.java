@@ -25,6 +25,11 @@ public class AncientUnidentifiedTomeItem extends AncientUnidentifiedItem {
     }
 
     @Override
+    protected boolean hasShift() {
+        return true;
+    }
+
+    @Override
     protected boolean canIdentify(ServerPlayer player) {
         return DwarvenLanguageHelper.knowsDwarvishServer(player)
                 && AncientEffectHelper.hasAncientMemoryServer(player);

@@ -28,6 +28,11 @@ public class LegendaryAncientDwarvenTomeItem extends AncientDwarvenTomeItem {
     }
 
     @Override
+    protected boolean hasShift() {
+        return true;
+    }
+
+    @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         if (!level.isClientSide && player instanceof ServerPlayer serverPlayer) {
             // === GATE: Language + Ancient Memory ===

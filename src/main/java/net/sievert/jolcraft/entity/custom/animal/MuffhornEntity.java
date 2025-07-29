@@ -44,6 +44,9 @@ import java.util.List;
 
 public class MuffhornEntity extends Animal implements IShearable {
 
+    private long nextMilkTick = 0;
+    private int regrowTicks = 0;
+
     private static final EntityDimensions BABY_DIMENSIONS = JolCraftEntities.MUFFHORN.get().getDimensions().scale(0.5F).withEyeHeight(0.665F);
 
     public MuffhornEntity(EntityType<? extends MuffhornEntity> entityType, Level level) {
@@ -65,7 +68,6 @@ public class MuffhornEntity extends Animal implements IShearable {
         this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
     }
 
-    private int regrowTicks = 0;
     private static final EntityDataAccessor<Boolean> SHEARED =
             SynchedEntityData.defineId(MuffhornEntity.class, EntityDataSerializers.BOOLEAN);
 
@@ -95,6 +97,7 @@ public class MuffhornEntity extends Animal implements IShearable {
         super.addAdditionalSaveData(tag);
         tag.putBoolean("Sheared", this.isSheared());
         tag.putInt("RegrowTicks", this.regrowTicks);
+        tag.putLong("NextMilkTick", this.nextMilkTick);
     }
 
     @Override
@@ -102,6 +105,7 @@ public class MuffhornEntity extends Animal implements IShearable {
         super.readAdditionalSaveData(tag);
         this.setSheared(tag.getBoolean("Sheared"));
         this.regrowTicks = tag.getInt("RegrowTicks");
+        this.nextMilkTick = tag.getLong("NextMilkTick");
     }
 
     @Override
@@ -186,9 +190,20 @@ public class MuffhornEntity extends Animal implements IShearable {
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         if (itemstack.is(Items.BUCKET) && !this.isBaby()) {
-            player.playSound(SoundEvents.COW_MILK, 1.0F, 1.0F);
-            ItemStack itemstack1 = ItemUtils.createFilledResult(itemstack, player, JolCraftItems.MUFFHORN_MILK_BUCKET.get().getDefaultInstance());
-            player.setItemInHand(hand, itemstack1);
+            if (!this.level().isClientSide) {
+                long gameTime = this.level().getGameTime();
+                int cooldownTicks = 12000;
+                if (gameTime >= this.nextMilkTick) {
+                    this.nextMilkTick = gameTime + cooldownTicks;
+                    player.playSound(SoundEvents.COW_MILK, 1.0F, 0.9F);
+                    ItemStack result = ItemUtils.createFilledResult(itemstack, player, JolCraftItems.MUFFHORN_MILK_BUCKET.get().getDefaultInstance());
+                    player.setItemInHand(hand, result);
+                    return InteractionResult.SUCCESS;
+                } else {
+                    // Optional: Feedback (see below)
+                    return InteractionResult.FAIL;
+                }
+            }
             return InteractionResult.SUCCESS;
         }
         if (itemstack.is(JolCraftItems.BARLEY.get()) && this.isSheared() && !this.isBaby()) {

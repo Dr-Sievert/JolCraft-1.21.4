@@ -1684,6 +1684,7 @@ public class AbstractDwarfEntity extends AgeableMob implements Npc, DwarfMerchan
         // Return different values based on held item
         if (this.getMainHandItem().is(JolCraftItems.DEEPSLATE_WARHAMMER.get())) return 16.5D;
         if (this.getMainHandItem().is(JolCraftItems.DEEPSLATE_AXE.get())) return 9.5D;
+        if (this.getMainHandItem().is(JolCraftItems.DEEPSLATE_PICKAXE.get())) return 4.5D;
         return  3.0D; // default (unarmed, or whatever else)
     }
 

@@ -24,6 +24,11 @@ public class UnidentifiedDwarvenTomeItem extends UnidentifiedItem {
     }
 
     @Override
+    protected boolean hasShift() {
+        return true;
+    }
+
+    @Override
     protected boolean canIdentify(ServerPlayer player) {
         return DwarvenLanguageHelper.knowsDwarvishServer(player);
     }
