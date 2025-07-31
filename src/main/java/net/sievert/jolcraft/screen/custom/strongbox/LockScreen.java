@@ -194,10 +194,6 @@ public class LockScreen extends AbstractContainerScreen<LockMenu> {
                 int btnW = 16, btnH = 16;
 
                 if (mouseX >= btnX && mouseY >= btnY && mouseX < btnX + btnW && mouseY < btnY + btnH && this.menu.isActive()) {
-                    // Play instant client-only click sound for feedback
-                    if (minecraft != null && minecraft.getSoundManager() != null) {
-                        minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
-                    }
                     // Notify the server (let server do real action/check)
                     this.minecraft.gameMode.handleInventoryButtonClick(this.menu.containerId, idx);
                     return true;

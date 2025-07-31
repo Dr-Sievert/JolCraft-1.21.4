@@ -3,6 +3,7 @@ package net.sievert.jolcraft.screen.custom.strongbox;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -16,6 +17,7 @@ import net.sievert.jolcraft.effect.JolCraftEffects;
 import net.sievert.jolcraft.screen.JolCraftMenuTypes;
 import net.sievert.jolcraft.screen.custom.slot.LockpickSlot;
 import net.sievert.jolcraft.sound.JolCraftSounds;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Random;
 
@@ -40,7 +42,8 @@ public class LockMenu extends AbstractContainerMenu {
         this.addDataSlots(data);
 
         // Add the lockpick slot
-        this.addSlot(new LockpickSlot(this.blockEntity, 0, 16, 16, this.blockEntity));  // Lockpick slot
+        SimpleContainer lockpickContainer = new SimpleContainer(1);
+        this.addSlot(new LockpickSlot(lockpickContainer, 0, 16, 16));
 
         // Add Player inventory slots
         for (int row = 0; row < 3; ++row) {
@@ -63,6 +66,7 @@ public class LockMenu extends AbstractContainerMenu {
         Player player = blockEntity.currentInteractingPlayer;
 
         if (!level.isClientSide) {
+            assert player != null;
             var effect = player.getEffect(JolCraftEffects.LOCKPICKING);
             if (effect != null) {
                 // Player has the effect, so use the boosted values
@@ -124,7 +128,7 @@ public class LockMenu extends AbstractContainerMenu {
     }
 
     @Override
-    public boolean clickMenuButton(Player player, int buttonId) {
+    public boolean clickMenuButton(@NotNull Player player, int buttonId) {
         int correctButton = getCorrectButtonId();
         int unlockSlot = getUnlockSlotId();
         ItemStack lockpick = getLockpickSlotItem();
@@ -180,22 +184,20 @@ public class LockMenu extends AbstractContainerMenu {
 
 
     @Override
-    public ItemStack quickMoveStack(Player player, int index) {
+    public @NotNull ItemStack quickMoveStack(@NotNull Player player, int index) {
         Slot slot = this.slots.get(index);
-        if (slot == null || !slot.hasItem()) return ItemStack.EMPTY;
+        if (!slot.hasItem()) return ItemStack.EMPTY;
 
         ItemStack stack = slot.getItem();
         ItemStack copy = stack.copy();
 
         int lockSize = 1;
-        int invStart = lockSize;
-        int invEnd = invStart + 27;
-        int hotbarStart = invEnd;
-        int hotbarEnd = hotbarStart + 9;
+        int invEnd = lockSize + 27;
+        int hotbarEnd = invEnd + 9;
 
         // Shift-click from Lock to Player
         if (index < lockSize) {
-            if (!moveItemStackTo(stack, invStart, hotbarEnd, true)) return ItemStack.EMPTY;
+            if (!moveItemStackTo(stack, lockSize, hotbarEnd, true)) return ItemStack.EMPTY;
         } else {
             // Shift-click from Player to Lock
             if (!moveItemStackTo(stack, 0, lockSize, false)) return ItemStack.EMPTY;
@@ -204,14 +206,6 @@ public class LockMenu extends AbstractContainerMenu {
         // Handle placing the lockpick into the lock slot (normal or shift-click)
         if (index == 0) {
             this.setCarried(stack);  // Set the carried item as the lockpick when placed in the lock slot
-
-            // Trigger button randomization when the lockpick is placed in the slot (normal or shift-click)
-            if (!stack.isEmpty()) {
-            }
-
-            // If the lockpick is removed from the slot, reset button states
-            if (stack.isEmpty()) {
-            }
         }
 
         if (stack.isEmpty()) slot.set(ItemStack.EMPTY);
@@ -222,13 +216,13 @@ public class LockMenu extends AbstractContainerMenu {
 
     // Check if the menu is still valid (if the Strongbox is still there)
     @Override
-    public boolean stillValid(Player player) {
+    public boolean stillValid(@NotNull Player player) {
         return stillValid(ContainerLevelAccess.create(level, blockEntity.getBlockPos()),
                 player, blockEntity.getBlockState().getBlock());
     }
 
     @Override
-    public void removed(Player player) {
+    public void removed(@NotNull Player player) {
         super.removed(player);  // Ensure the carried item is returned to the player's inventory
         // Reset the current interacting player when the menu is removed
         if (blockEntity instanceof StrongboxBlockEntity strongbox) {
@@ -243,7 +237,7 @@ public class LockMenu extends AbstractContainerMenu {
         }
 
         // Optionally clear the lockpick slot manually
-        Slot lockpickSlot = this.slots.get(0);  // Lockpick slot
+        Slot lockpickSlot = this.slots.getFirst();  // Lockpick slot
         if (lockpickSlot != null) {
             ItemStack lockpick = lockpickSlot.getItem();
             if (!lockpick.isEmpty()) {
