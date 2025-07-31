@@ -15,6 +15,9 @@ import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.sievert.jolcraft.JolCraft;
 import net.sievert.jolcraft.block.JolCraftBlocks;
+import net.sievert.jolcraft.client.compass.DialItemColor;
+import net.sievert.jolcraft.client.compass.StructureGroupColorHelper;
+import net.sievert.jolcraft.data.JolCraftDataComponents;
 import net.sievert.jolcraft.item.potion.JolCraftPotions;
 
 import java.util.function.Supplier;
@@ -45,6 +48,9 @@ public class JolCraftCreativeModeTabs {
                         pOutput.accept(JolCraftItems.REPUTATION_TABLET_4);
 
                         pOutput.accept(JolCraftItems.EMPTY_DEEPSLATE_COMPASS);
+                        addCompassDialVariant(pOutput, "dwarven_structures");
+                        addCompassDialVariant(pOutput, "ancient_structures");
+
                         pOutput.accept(JolCraftBlocks.HEARTH);
                         pOutput.accept(JolCraftItems.STRONGBOX_ITEM);
                         pOutput.accept(JolCraftItems.LOCKPICK);
@@ -245,6 +251,13 @@ public class JolCraftCreativeModeTabs {
                         pOutput.accept(JolCraftItems.DWARF_MINER_SPAWN_EGG);
                         pOutput.accept(JolCraftItems.MUFFHORN_SPAWN_EGG);
                     }).build());
+
+    private static void addCompassDialVariant(CreativeModeTab.Output output, String group) {
+        ItemStack stack = new ItemStack(JolCraftItems.DEEPSLATE_COMPASS_DIAL.get());
+        stack.set(JolCraftDataComponents.STRUCTURE_GROUP, group);
+        stack.set(JolCraftDataComponents.DIAL_COLOR, new DialItemColor(StructureGroupColorHelper.getColor(group)));
+        output.accept(stack);
+    }
 
     public static void register(IEventBus eventBus) {
         CREATIVE_MODE_TABS.register(eventBus);
